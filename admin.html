@@ -185,13 +185,20 @@ function guardarCanal(key){
     var msg=document.getElementById('msg-'+key);
     var btn=document.getElementById('btn-'+key);
     if(!url)return;
-    btn.disabled=true; btn.textContent='⏳ Guardando...'; msg.className='msg';
+    btn.disabled=true; btn.textContent='⏳ Obteniendo SHA...'; msg.className='msg';
     canalesData[key]=url;
     var enc=btoa(unescape(encodeURIComponent(JSON.stringify(canalesData,null,2))));
+    // Obtener SHA fresco antes de guardar
     fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
-        method:'PUT',
-        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-        body:JSON.stringify({message:'Actualizar '+key,content:enc,sha:fileSha})
+        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
+    }).then(function(r){return r.json();}).then(function(fileData){
+        fileSha=fileData.sha;
+        btn.textContent='⏳ Guardando...';
+        return fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
+            method:'PUT',
+            headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+            body:JSON.stringify({message:'Actualizar '+key,content:enc,sha:fileSha})
+        });
     }).then(function(r){return r.json();}).then(function(data){
         if(data.content){
             fileSha=data.content.sha;
