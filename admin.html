@@ -192,7 +192,7 @@
 </div>
 
 <script>
-var GITHUB_TOKEN = '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';
+var GITHUB_TOKEN = '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';
 var REPO = 'jcarlos2028/tv-camaras';
 var FILE = 'canales.json';
 var fileSha = '';
@@ -254,8 +254,8 @@ function setStatus(tipo, texto) {
 
 function cargarCanales() {
     setStatus('loading', 'Cargando canales desde GitHub...');
-    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FILE + '?t=' + Date.now() + '&access_token=' + GITHUB_TOKEN, {
-        headers: { 'Accept': 'application/vnd.github.v3+json' }
+    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FILE + '?t=' + Date.now(), {
+        headers: { 'Authorization': 'Bearer ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -341,8 +341,8 @@ function guardarCanal(key) {
     msgEl.className = 'msg';
 
     // Primero obtener el SHA fresco del archivo
-    var apiUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FILE + '?access_token=' + GITHUB_TOKEN;
-    fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+    var apiUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FILE;
+    fetch(apiUrl, { headers: { 'Authorization': 'Bearer ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json' } })
     .then(function(r) { return r.json(); })
     .then(function(fileData) {
         fileSha = fileData.sha;
@@ -356,6 +356,7 @@ function guardarCanal(key) {
         return fetch(apiUrl, {
             method: 'PUT',
             headers: {
+                'Authorization': 'Bearer ' + GITHUB_TOKEN,
                 'Accept': 'application/vnd.github.v3+json',
                 'Content-Type': 'application/json'
             },
