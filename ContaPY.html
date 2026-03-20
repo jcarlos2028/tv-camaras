@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContaPY — Sistema Contable Paraguay</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0f2f5;
+  --sidebar: #0f1923;
+  --sidebar-hover: #1a2535;
+  --accent: #e63946;
+  --accent2: #2196f3;
+  --white: #ffffff;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px; background: var(--sidebar); display: flex; flex-direction: column;
+  flex-shrink: 0; height: 100vh; overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.logo-mark { display: flex; align-items: center; gap: 10px; }
+.logo-icon {
+  width: 36px; height: 36px; background: var(--accent); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+}
+.logo-text { color: white; font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+.logo-sub { color: rgba(255,255,255,0.35); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+.sidebar-section { padding: 16px 12px 4px; }
+.sidebar-label { color: rgba(255,255,255,0.25); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 0 8px; margin-bottom: 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
+  color: rgba(255,255,255,0.55); font-size: 13.5px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; margin-bottom: 1px;
+}
+.nav-item:hover { background: var(--sidebar-hover); color: rgba(255,255,255,0.85); }
+.nav-item.active { background: var(--accent); color: white; }
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); font-size: 10px; padding: 1px 6px; border-radius: 20px; }
+.nav-item.active .nav-badge { background: rgba(255,255,255,0.25); color: white; }
+
+.sidebar-footer { margin-top: auto; padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.06); }
+.user-card {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px;
+  cursor: pointer; transition: background 0.15s;
+}
+.user-card:hover { background: var(--sidebar-hover); }
+.user-avatar {
+  width: 32px; height: 32px; background: var(--accent); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 600; flex-shrink: 0;
+}
+.user-name { color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 500; }
+.user-role { color: rgba(255,255,255,0.3); font-size: 11px; }
+
+/* MAIN */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 16px; flex-shrink: 0;
+}
+.topbar-title { font-size: 17px; font-weight: 700; color: var(--text); flex: 1; }
+.topbar-empresa {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 14px; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+}
+.topbar-empresa .dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; }
+.btn-icon { width: 36px; height: 36px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: all 0.15s; }
+.btn-icon:hover { background: var(--border); }
+
+.content { flex: 1; overflow-y: auto; padding: 24px; }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* DASHBOARD */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow);
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
+.stat-card.blue::before { background: var(--accent2); }
+.stat-card.green::before { background: var(--success); }
+.stat-card.orange::before { background: var(--warning); }
+.stat-label { font-size: 12px; color: var(--text-light); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-value { font-size: 26px; font-weight: 700; color: var(--text); margin: 8px 0 4px; letter-spacing: -1px; }
+.stat-sub { font-size: 12px; color: var(--text-light); }
+.stat-icon { position: absolute; right: 16px; top: 16px; font-size: 28px; opacity: 0.12; }
+
+.grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+
+.card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.card-title .badge { background: var(--bg); color: var(--text-light); font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+
+/* TABLA */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+tbody td { padding: 12px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+tbody tr:hover { background: #fafafa; }
+tbody tr:last-child td { border-bottom: none; }
+.badge-status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.badge-status.ok { background: #d1fae5; color: #065f46; }
+.badge-status.pend { background: #fef3c7; color: #92400e; }
+.badge-status.err { background: #fee2e2; color: #991b1b; }
+
+/* FORMULARIOS */
+.form-section { background: var(--card); border-radius: 12px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px; }
+.form-section-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.form-grid.col2 { grid-template-columns: repeat(2, 1fr); }
+.form-grid.col4 { grid-template-columns: repeat(4, 1fr); }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 12px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+input, select, textarea {
+  padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: var(--text);
+  background: var(--white); outline: none; transition: border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent2); }
+textarea { resize: vertical; min-height: 80px; }
+.input-prefix { display: flex; }
+.input-prefix span { background: var(--bg); border: 1.5px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; padding: 9px 10px; font-size: 13px; color: var(--text-light); white-space: nowrap; }
+.input-prefix input { border-radius: 0 8px 8px 0; flex: 1; }
+
+/* BOTONES */
+.btn { padding: 9px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #c1121f; }
+.btn-secondary { background: var(--accent2); color: white; }
+.btn-secondary:hover { background: #1976d2; }
+.btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+.btn-outline:hover { background: var(--bg); }
+.btn-success { background: var(--success); color: white; }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+
+/* MODALS */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 16px; padding: 28px; width: 90%; max-width: 560px; box-shadow: var(--shadow-lg); }
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
+
+/* DECLARACIONES */
+.decl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.decl-card {
+  background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow);
+  border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
+}
+.decl-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--accent2); }
+.decl-icon { font-size: 32px; margin-bottom: 12px; }
+.decl-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.decl-desc { font-size: 12px; color: var(--text-light); margin-bottom: 12px; }
+.decl-vence { font-size: 11px; font-weight: 600; color: var(--warning); background: #fef3c7; padding: 3px 8px; border-radius: 20px; display: inline-block; }
+
+/* CLIENTES */
+.search-bar { display: flex; gap: 10px; margin-bottom: 16px; }
+.search-bar input { flex: 1; }
+
+/* RESUMEN IVA */
+.iva-resumen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+.iva-box { background: var(--bg); border-radius: 10px; padding: 16px; text-align: center; }
+.iva-box .val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; }
+.iva-box .lbl { font-size: 11px; color: var(--text-light); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.iva-box.azul .val { color: var(--accent2); }
+.iva-box.verde .val { color: var(--success); }
+.iva-box.rojo .val { color: var(--accent); }
+
+/* NOTIF */
+.notif { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; margin-bottom: 16px; font-size: 13px; color: #1e40af; }
+
+/* PAGE HEADER */
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.page-header h2 { font-size: 22px; font-weight: 700; }
+.page-header p { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+
+/* TABS */
+.tabs { display: flex; gap: 2px; background: var(--bg); border-radius: 10px; padding: 3px; margin-bottom: 20px; width: fit-content; }
+.tab { padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-light); transition: all 0.15s; }
+.tab.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-weight: 600; }
+
+/* LIBROS */
+.libro-row { display: grid; grid-template-columns: 100px 1fr 2fr 140px 140px 140px; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: center; font-size: 13px; }
+.libro-row.header { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; background: none; border-bottom: 2px solid var(--border); }
+.monto { font-family: 'DM Mono', monospace; text-align: right; }
+.monto.debe { color: var(--accent); }
+.monto.haber { color: var(--success); }
+
+/* USUARIOS */
+.users-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.user-card-full { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+.ucf-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.ucf-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; }
+.ucf-name { font-size: 15px; font-weight: 700; }
+.ucf-email { font-size: 12px; color: var(--text-light); }
+.ucf-role { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.role-admin { background: #fee2e2; color: #991b1b; }
+.role-senior { background: #dbeafe; color: #1e40af; }
+.role-junior { background: #d1fae5; color: #065f46; }
+.ucf-perms { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+.perm-tag { background: var(--bg); color: var(--text-light); font-size: 11px; padding: 3px 8px; border-radius: 6px; }
+.ucf-actions { margin-top: 16px; display: flex; gap: 8px; }
+
+/* LOGIN */
+.login-wrap { position: fixed; inset: 0; background: linear-gradient(135deg, #0f1923 0%, #1a2535 50%, #0f1923 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+.login-card { background: white; border-radius: 20px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 24px 64px rgba(0,0,0,0.3); }
+.login-logo { text-align: center; margin-bottom: 32px; }
+.login-logo .icon { width: 60px; height: 60px; background: var(--accent); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 12px; }
+.login-logo h1 { font-size: 26px; font-weight: 800; letter-spacing: -1px; }
+.login-logo p { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+.login-card .form-group { margin-bottom: 16px; }
+.login-card label { font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--text); font-weight: 600; }
+.login-card input { width: 100%; }
+.login-btn { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; font-family: 'DM Sans', sans-serif; }
+.login-btn:hover { background: #c1121f; }
+.login-error { background: #fee2e2; color: #991b1b; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 12px; display: none; }
+
+/* EMPRESA SELECTOR */
+.empresa-modal .empresa-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; margin-bottom: 8px; transition: all 0.15s;
+}
+.empresa-modal .empresa-item:hover, .empresa-modal .empresa-item.sel { border-color: var(--accent2); background: #eff6ff; }
+.emp-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.emp-ruc { font-size: 11px; color: var(--text-light); }
+
+/* SIFEN */
+.sifen-steps { display: flex; gap: 0; margin-bottom: 24px; }
+.sifen-step { flex: 1; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); font-size: 12px; font-weight: 600; color: var(--text-light); text-align: center; cursor: pointer; transition: all 0.15s; }
+.sifen-step:first-child { border-radius: 8px 0 0 8px; }
+.sifen-step:last-child { border-radius: 0 8px 8px 0; }
+.sifen-step.active { background: var(--accent); color: white; border-color: var(--accent); }
+.sifen-step.done { background: var(--success); color: white; border-color: var(--success); }
+
+/* SCROLL */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="icon">🧾</div>
+      <h1>ContaPY</h1>
+      <p>Sistema Contable Paraguay</p>
+    </div>
+    <div class="form-group">
+      <label>Usuario</label>
+      <input type="text" id="login-user" placeholder="usuario@estudio.com.py" value="admin@contapy.py">
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="login-pass" placeholder="••••••••" value="admin123">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Ingresar al Sistema</button>
+    <div class="login-error" id="login-error">Usuario o contraseña incorrectos</div>
+    <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:20px;">ContaPY v1.0 — SET Paraguay Compatible</p>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">
+      <div class="logo-icon">🧾</div>
+      <div>
+        <div class="logo-text">ContaPY</div>
+        <div class="logo-sub">Sistema Contable</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Principal</div>
+    <div class="nav-item active" onclick="showPage('dashboard', this)">
+      <span class="icon">🏠</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('clientes', this)">
+      <span class="icon">🏢</span> Clientes
+      <span class="nav-badge">12</span>
+    </div>
+    <div class="nav-item" onclick="showPage('proveedores', this)">
+      <span class="icon">🚚</span> Proveedores
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Facturación</div>
+    <div class="nav-item" onclick="showPage('sifen', this)">
+      <span class="icon">⚡</span> SIFEN
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" onclick="showPage('facturas', this)">
+      <span class="icon">📄</span> Facturas
+    </div>
+    <div class="nav-item" onclick="showPage('notas', this)">
+      <span class="icon">📋</span> Notas / NC
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Impuestos</div>
+    <div class="nav-item" onclick="showPage('iva', this)">
+      <span class="icon">📊</span> IVA
+    </div>
+    <div class="nav-item" onclick="showPage('declaraciones', this)">
+      <span class="icon">📑</span> Declaraciones
+      <span class="nav-badge" style="background:#e63946;color:white;">2</span>
+    </div>
+    <div class="nav-item" onclick="showPage('ire', this)">
+      <span class="icon">💼</span> IRE / IRP
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Contabilidad</div>
+    <div class="nav-item" onclick="showPage('libros', this)">
+      <span class="icon">📚</span> Libros Contables
+    </div>
+    <div class="nav-item" onclick="showPage('asientos', this)">
+      <span class="icon">✍️</span> Asientos
+    </div>
+    <div class="nav-item" onclick="showPage('reportes', this)">
+      <span class="icon">📈</span> Reportes
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Administración</div>
+    <div class="nav-item" onclick="showPage('usuarios', this)">
+      <span class="icon">👥</span> Usuarios
+    </div>
+    <div class="nav-item" onclick="showPage('empresas', this)">
+      <span class="icon">🏛️</span> Empresas
+    </div>
+    <div class="nav-item" onclick="showPage('configuracion', this)">
+      <span class="icon">⚙️</span> Configuración
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">JC</div>
+      <div>
+        <div class="user-name">Juan Carlos</div>
+        <div class="user-role">Administrador</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-empresa" onclick="openModal('empresa-modal')">
+      <div class="dot"></div>
+      <span id="empresa-activa">Empresa ABC S.A. — RUC 80012345-6</span>
+      <span>▾</span>
+    </div>
+    <div class="btn-icon" title="Notificaciones">🔔</div>
+    <div class="btn-icon" title="Salir" onclick="doLogout()">🚪</div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <div>
+          <h2>Bienvenido, Juan Carlos 👋</h2>
+          <p>Marzo 2026 — Período fiscal activo</p>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('sifen', document.querySelector('[onclick*=sifen]'))">+ Nueva Factura</button>
+      </div>
+
+      <div class="notif">
+        ⚠️ <span><strong>Vencimiento próximo:</strong> Declaración IVA (Formulario 120) vence el <strong>10 de Abril 2026</strong>. Faltan 21 días.</span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Ventas del Mes</div>
+          <div class="stat-value">₲ 48.2M</div>
+          <div class="stat-sub">↑ 12% vs mes anterior</div>
+          <div class="stat-icon">💰</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-label">IVA Débito</div>
+          <div class="stat-value">₲ 4.8M</div>
+          <div class="stat-sub">10% sobre ventas gravadas</div>
+          <div class="stat-icon">📊</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Facturas Emitidas</div>
+          <div class="stat-value">127</div>
+          <div class="stat-sub">34 electrónicas SIFEN</div>
+          <div class="stat-icon">📄</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-label">Clientes Activos</div>
+          <div class="stat-value">12</div>
+          <div class="stat-sub">3 con vencimientos hoy</div>
+          <div class="stat-icon">🏢</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Últimas Facturas <span class="badge">Este mes</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>N° Factura</th><th>Cliente</th><th>Fecha</th><th>Monto</th><th>Estado</th></tr></thead>
+              <tbody>
+                <tr><td style="font-family:'DM Mono',monospace">001-001-0000127</td><td>Supermercado Día</td><td>20/03/2026</td><td style="font-family:'DM Mono',monospace">₲ 2.500.000</td><td><span class="badge-status ok">✓ SIFEN</span></td></tr>
+                <tr><td style="font-family:'DM Mono',monospace">001-001-0000126</td><td>Ferretería Central</td><td>19/03/2026</td><td style="font-family:'DM Mono',monospace">₲ 850.000</td><td><span class="badge-status ok">✓ SIFEN</span></td></tr>
+                <tr><td style="font-family:'DM Mono',monospace">001-001-0000125</td><td>Comercial Norte</td><td>18/03/2026</td><td style="font-family:'DM Mono',monospace">₲ 4.200.000</td><td><span class="badge-status pend">⏳ Pendiente</span></td></tr>
+                <tr><td style="font-family:'DM Mono',monospace">001-001-0000124</td><td>Distribuidora Sur</td><td>17/03/2026</td><td style="font-family:'DM Mono',monospace">₲ 1.100.000</td><td><span class="badge-status ok">✓ SIFEN</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Vencimientos <span class="badge">Próximos 30 días</span></div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fef3c7;border-radius:8px;">
+              <div><div style="font-size:13px;font-weight:600;">Form. 120 — IVA Marzo</div><div style="font-size:11px;color:#92400e;">Todas las empresas</div></div>
+              <div style="font-size:12px;font-weight:700;color:#92400e;">10 Abr</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#eff6ff;border-radius:8px;">
+              <div><div style="font-size:13px;font-weight:600;">Form. 500 — IRE Anual</div><div style="font-size:11px;color:#1e40af;">Empresa ABC S.A.</div></div>
+              <div style="font-size:12px;font-weight:700;color:#1e40af;">30 Abr</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#f0fdf4;border-radius:8px;">
+              <div><div style="font-size:13px;font-weight:600;">IRACIS Anticipos</div><div style="font-size:11px;color:#065f46;">Comercial Norte SRL</div></div>
+              <div style="font-size:12px;font-weight:700;color:#065f46;">15 Abr</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENTES -->
+    <div class="page" id="page-clientes">
+      <div class="page-header">
+        <div><h2>Clientes</h2><p>Gestión de clientes del estudio contable</p></div>
+        <button class="btn btn-primary" onclick="openModal('cliente-modal')">+ Nuevo Cliente</button>
+      </div>
+      <div class="search-bar">
+        <input type="text" placeholder="🔍 Buscar por nombre, RUC...">
+        <select><option>Todos los estados</option><option>Activos</option><option>Inactivos</option></select>
+        <button class="btn btn-outline">Exportar</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>RUC</th><th>Razón Social</th><th>Tipo</th><th>Régimen</th><th>Contador Asig.</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:'DM Mono',monospace">80012345-6</td><td>Empresa ABC S.A.</td><td>SA</td><td>IRE General</td><td>María González</td><td><span class="badge-status ok">Activo</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+              <tr><td style="font-family:'DM Mono',monospace">4512678-9</td><td>Comercial Norte SRL</td><td>SRL</td><td>IRE ReSiMo</td><td>Carlos Pérez</td><td><span class="badge-status ok">Activo</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+              <tr><td style="font-family:'DM Mono',monospace">2234567-1</td><td>Ferretería Central</td><td>Unipersonal</td><td>IRS</td><td>Ana López</td><td><span class="badge-status ok">Activo</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+              <tr><td style="font-family:'DM Mono',monospace">5678901-2</td><td>Distribuidora Sur SA</td><td>SA</td><td>IRE General</td><td>María González</td><td><span class="badge-status pend">Pendiente</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIFEN -->
+    <div class="page" id="page-sifen">
+      <div class="page-header">
+        <div><h2>Facturación Electrónica — SIFEN</h2><p>Sistema Integrado de Facturación Electrónica Nacional</p></div>
+        <button class="btn btn-primary" onclick="showSifenForm()">+ Nueva Factura</button>
+      </div>
+
+      <div class="sifen-steps" id="sifen-steps" style="display:none;">
+        <div class="sifen-step active" id="step-1">1. Datos Generales</div>
+        <div class="sifen-step" id="step-2">2. Ítems</div>
+        <div class="sifen-step" id="step-3">3. Totales</div>
+        <div class="sifen-step" id="step-4">4. Generar XML</div>
+      </div>
+
+      <div id="sifen-lista">
+        <div class="card" style="margin-bottom:16px;">
+          <div class="card-title">Estado SIFEN <span class="badge">Conectado</span></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+            <div style="background:#f0fdf4;padding:14px;border-radius:10px;text-align:center;">
+              <div style="font-size:22px;font-weight:700;color:#10b981;">34</div>
+              <div style="font-size:11px;color:#065f46;text-transform:uppercase;">Aprobadas</div>
+            </div>
+            <div style="background:#fef3c7;padding:14px;border-radius:10px;text-align:center;">
+              <div style="font-size:22px;font-weight:700;color:#f59e0b;">3</div>
+              <div style="font-size:11px;color:#92400e;text-transform:uppercase;">Pendientes</div>
+            </div>
+            <div style="background:#fee2e2;padding:14px;border-radius:10px;text-align:center;">
+              <div style="font-size:22px;font-weight:700;color:#ef4444;">1</div>
+              <div style="font-size:11px;color:#991b1b;text-transform:uppercase;">Rechazadas</div>
+            </div>
+            <div style="background:#eff6ff;padding:14px;border-radius:10px;text-align:center;">
+              <div style="font-size:22px;font-weight:700;color:#2196f3;">38</div>
+              <div style="font-size:11px;color:#1e40af;text-transform:uppercase;">Total Mes</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Documentos Electrónicos Recientes</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>N° DE</th><th>Tipo</th><th>RUC Receptor</th><th>Receptor</th><th>Monto Total</th><th>IVA</th><th>Estado SET</th><th>CDC</th></tr></thead>
+              <tbody>
+                <tr><td style="font-family:'DM Mono',monospace">001-001-0000127</td><td>Factura</td><td>80012345-6</td><td>Empresa ABC</td><td style="font-family:'DM Mono',monospace">₲ 2.500.000</td><td style="font-family:'DM Mono',monospace">₲ 227.272</td><td><span class="badge-status ok">Aprobado</span></td><td><button class="btn btn-outline btn-sm">XML</button></td></tr>
+                <tr><td style="font-family:'DM Mono',monospace">001-001-0000126</td><td>Factura</td><td>4512678-9</td><td>Comercial Norte</td><td style="font-family:'DM Mono',monospace">₲ 850.000</td><td style="font-family:'DM Mono',monospace">₲ 77.272</td><td><span class="badge-status ok">Aprobado</span></td><td><button class="btn btn-outline btn-sm">XML</button></td></tr>
+                <tr><td style="font-family:'DM Mono',monospace">001-001-0000125</td><td>Factura</td><td>2234567-1</td><td>Ferretería Central</td><td style="font-family:'DM Mono',monospace">₲ 4.200.000</td><td style="font-family:'DM Mono',monospace">₲ 381.818</td><td><span class="badge-status pend">Pendiente</span></td><td><button class="btn btn-outline btn-sm">XML</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="sifen-form" style="display:none;">
+        <div class="form-section">
+          <div class="form-section-title">📄 Datos del Documento Electrónico</div>
+          <div class="form-grid col4">
+            <div class="form-group">
+              <label>Tipo DE</label>
+              <select><option>Factura Electrónica (01)</option><option>Nota de Crédito (05)</option><option>Nota de Débito (06)</option><option>Nota de Remisión (07)</option></select>
+            </div>
+            <div class="form-group">
+              <label>Timbrado</label>
+              <input type="text" placeholder="12345678" value="12345678">
+            </div>
+            <div class="form-group">
+              <label>N° Establecimiento</label>
+              <input type="text" value="001">
+            </div>
+            <div class="form-group">
+              <label>N° Punto Emisión</label>
+              <input type="text" value="001">
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top:16px;">
+            <div class="form-group">
+              <label>Fecha Emisión</label>
+              <input type="date" value="2026-03-20">
+            </div>
+            <div class="form-group">
+              <label>Condición de Venta</label>
+              <select><option>Contado</option><option>Crédito</option></select>
+            </div>
+            <div class="form-group">
+              <label>Moneda</label>
+              <select><option>PYG — Guaraní</option><option>USD — Dólar</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">🏢 Receptor</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>RUC / CI Receptor</label>
+              <input type="text" placeholder="80012345-6">
+            </div>
+            <div class="form-group">
+              <label>Razón Social</label>
+              <input type="text" placeholder="Empresa ABC S.A.">
+            </div>
+            <div class="form-group">
+              <label>Tipo Contribuyente</label>
+              <select><option>Persona Jurídica</option><option>Persona Física</option><option>Sin RUC</option></select>
+            </div>
+          </div>
+          <div class="form-grid" style="margin-top:16px;">
+            <div class="form-group">
+              <label>Dirección</label>
+              <input type="text" placeholder="Av. Mariscal López 1234">
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="text" placeholder="021-000000">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="contacto@empresa.com.py">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">📦 Ítems</div>
+          <table style="width:100%;font-size:13px;margin-bottom:12px;">
+            <thead><tr style="background:var(--bg);">
+              <th style="padding:8px;text-align:left;">Descripción</th>
+              <th style="padding:8px;text-align:left;">Unidad</th>
+              <th style="padding:8px;text-align:right;">Cantidad</th>
+              <th style="padding:8px;text-align:right;">P. Unitario</th>
+              <th style="padding:8px;text-align:left;">IVA</th>
+              <th style="padding:8px;text-align:right;">Total</th>
+              <th style="padding:8px;"></th>
+            </tr></thead>
+            <tbody id="items-tabla">
+              <tr>
+                <td style="padding:6px;"><input type="text" placeholder="Descripción del bien/servicio" style="width:100%"></td>
+                <td style="padding:6px;"><select style="width:80px;"><option>UND</option><option>KG</option><option>LT</option><option>SVC</option></select></td>
+                <td style="padding:6px;"><input type="number" value="1" style="width:70px;text-align:right;" onchange="calcTotal()"></td>
+                <td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;" onchange="calcTotal()"></td>
+                <td style="padding:6px;"><select style="width:80px;" onchange="calcTotal()"><option>10%</option><option>5%</option><option>Exenta</option></select></td>
+                <td style="padding:6px;text-align:right;font-family:'DM Mono',monospace;" id="total-row-0">₲ 0</td>
+                <td style="padding:6px;"><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcTotal()">✕</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="btn btn-outline btn-sm" onclick="agregarItem()">+ Agregar ítem</button>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">💰 Totales</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+            <div></div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>Subtotal Gravado 10%:</span><span style="font-family:'DM Mono',monospace;" id="sub10">₲ 0</span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>Subtotal Gravado 5%:</span><span style="font-family:'DM Mono',monospace;" id="sub5">₲ 0</span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>Exento:</span><span style="font-family:'DM Mono',monospace;" id="subex">₲ 0</span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>IVA 10%:</span><span style="font-family:'DM Mono',monospace;" id="iva10">₲ 0</span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>IVA 5%:</span><span style="font-family:'DM Mono',monospace;" id="iva5">₲ 0</span></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:16px;font-weight:700;"><span>TOTAL:</span><span style="font-family:'DM Mono',monospace;color:var(--accent);" id="total-gral">₲ 0</span></div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-outline" onclick="cancelarSifen()">Cancelar</button>
+            <button class="btn btn-outline">Guardar Borrador</button>
+            <button class="btn btn-secondary">Vista Previa PDF</button>
+            <button class="btn btn-primary">⚡ Enviar a SIFEN</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IVA -->
+    <div class="page" id="page-iva">
+      <div class="page-header">
+        <div><h2>IVA — Impuesto al Valor Agregado</h2><p>Formulario 120 — Período Marzo 2026</p></div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline">Exportar TXT</button>
+          <button class="btn btn-primary">Generar Form. 120</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active">Ventas (Débito)</div>
+        <div class="tab">Compras (Crédito)</div>
+        <div class="tab">Liquidación</div>
+      </div>
+
+      <div class="iva-resumen">
+        <div class="iva-box azul"><div class="val">₲ 48.200.000</div><div class="lbl">Total Ventas Gravadas</div></div>
+        <div class="iva-box rojo"><div class="val">₲ 4.381.818</div><div class="lbl">IVA Débito (a pagar)</div></div>
+        <div class="iva-box verde"><div class="val">₲ 2.100.000</div><div class="lbl">IVA Crédito (compras)</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Registro de Ventas — Marzo 2026</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>N° Factura</th><th>RUC Cliente</th><th>Cliente</th><th>Base Grav. 10%</th><th>Base Grav. 5%</th><th>Exento</th><th>IVA 10%</th><th>IVA 5%</th><th>Total</th></tr></thead>
+            <tbody>
+              <tr><td>20/03</td><td style="font-family:'DM Mono',monospace">001-001-0000127</td><td>80012345-6</td><td>Empresa ABC</td><td style="font-family:'DM Mono',monospace;text-align:right;">2.272.728</td><td style="text-align:right;">—</td><td style="text-align:right;">—</td><td style="font-family:'DM Mono',monospace;text-align:right;">227.272</td><td style="text-align:right;">—</td><td style="font-family:'DM Mono',monospace;text-align:right;font-weight:600;">2.500.000</td></tr>
+              <tr><td>19/03</td><td style="font-family:'DM Mono',monospace">001-001-0000126</td><td>4512678-9</td><td>Comercial Norte</td><td style="font-family:'DM Mono',monospace;text-align:right;">772.728</td><td style="text-align:right;">—</td><td style="text-align:right;">—</td><td style="font-family:'DM Mono',monospace;text-align:right;">77.272</td><td style="text-align:right;">—</td><td style="font-family:'DM Mono',monospace;text-align:right;font-weight:600;">850.000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- DECLARACIONES -->
+    <div class="page" id="page-declaraciones">
+      <div class="page-header">
+        <div><h2>Declaraciones Juradas</h2><p>Formularios de la SET — Paraguay</p></div>
+      </div>
+
+      <div class="decl-grid">
+        <div class="decl-card">
+          <div class="decl-icon">📊</div>
+          <div class="decl-name">Formulario 120</div>
+          <div class="decl-desc">Liquidación Mensual del IVA. Declaración de ventas y compras gravadas.</div>
+          <div class="decl-vence">⏰ Vence 10 Abril</div>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">💼</div>
+          <div class="decl-name">Formulario 500</div>
+          <div class="decl-desc">IRE — Impuesto a la Renta Empresarial. Declaración anual de rentas.</div>
+          <div class="decl-vence">⏰ Vence 30 Abril</div>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">👤</div>
+          <div class="decl-name">Formulario IRP</div>
+          <div class="decl-desc">Impuesto a la Renta Personal. Para personas físicas con rentas gravadas.</div>
+          <div class="decl-vence" style="background:#d1fae5;color:#065f46;">✓ Al día</div>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">🌾</div>
+          <div class="decl-name">IMAGRO</div>
+          <div class="decl-desc">Impuesto a las rentas de actividades agropecuarias.</div>
+          <div class="decl-vence" style="background:#d1fae5;color:#065f46;">✓ Al día</div>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">📦</div>
+          <div class="decl-name">IRE ReSiMo</div>
+          <div class="decl-desc">Régimen Simplificado y Módulos para pequeños contribuyentes.</div>
+          <div class="decl-vence">⏰ Vence 15 Abril</div>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">🔄</div>
+          <div class="decl-name">Anticipos IRE</div>
+          <div class="decl-desc">Pago de anticipos mensuales del Impuesto a la Renta Empresarial.</div>
+          <div class="decl-vence">⏰ Vence 15 Abril</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIBROS -->
+    <div class="page" id="page-libros">
+      <div class="page-header">
+        <div><h2>Libros Contables</h2><p>Libro Diario — Marzo 2026</p></div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline" onclick="openModal('asiento-modal')">+ Nuevo Asiento</button>
+          <button class="btn btn-primary">Exportar Excel</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active">Libro Diario</div>
+        <div class="tab">Libro Mayor</div>
+        <div class="tab">Balance de Sumas</div>
+        <div class="tab">Estado de Resultados</div>
+      </div>
+
+      <div class="card">
+        <div class="libro-row header">
+          <div>Fecha</div><div>N° Asiento</div><div>Concepto</div>
+          <div class="monto">Debe</div><div class="monto">Haber</div><div class="monto">Saldo</div>
+        </div>
+        <div class="libro-row">
+          <div>20/03/2026</div><div style="font-family:'DM Mono',monospace">A-0127</div><div>Venta a Empresa ABC S.A. - Fact. 127</div>
+          <div class="monto debe">₲ 2.500.000</div><div class="monto">—</div><div class="monto">₲ 2.500.000</div>
+        </div>
+        <div class="libro-row">
+          <div>20/03/2026</div><div style="font-family:'DM Mono',monospace">A-0127</div><div>IVA Débito 10% - Fact. 127</div>
+          <div class="monto">—</div><div class="monto haber">₲ 227.272</div><div class="monto">₲ 2.272.728</div>
+        </div>
+        <div class="libro-row">
+          <div>19/03/2026</div><div style="font-family:'DM Mono',monospace">A-0126</div><div>Venta a Comercial Norte - Fact. 126</div>
+          <div class="monto debe">₲ 850.000</div><div class="monto">—</div><div class="monto">₲ 850.000</div>
+        </div>
+        <div class="libro-row">
+          <div>18/03/2026</div><div style="font-family:'DM Mono',monospace">A-0125</div><div>Compra materiales - Prov. ABC</div>
+          <div class="monto">—</div><div class="monto haber">₲ 1.200.000</div><div class="monto" style="color:var(--accent);">₲ -1.200.000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USUARIOS -->
+    <div class="page" id="page-usuarios">
+      <div class="page-header">
+        <div><h2>Usuarios del Sistema</h2><p>Gestión de accesos y permisos</p></div>
+        <button class="btn btn-primary" onclick="openModal('user-modal')">+ Nuevo Usuario</button>
+      </div>
+      <div class="users-grid">
+        <div class="user-card-full">
+          <div class="ucf-header">
+            <div class="ucf-avatar" style="background:#e63946;">JC</div>
+            <div>
+              <div class="ucf-name">Juan Carlos López</div>
+              <div class="ucf-email">admin@contapy.py</div>
+            </div>
+          </div>
+          <span class="ucf-role role-admin">Administrador</span>
+          <div class="ucf-perms">
+            <span class="perm-tag">Todos los módulos</span>
+            <span class="perm-tag">Gestión usuarios</span>
+            <span class="perm-tag">Configuración</span>
+          </div>
+          <div class="ucf-actions"><button class="btn btn-outline btn-sm">Editar</button></div>
+        </div>
+        <div class="user-card-full">
+          <div class="ucf-header">
+            <div class="ucf-avatar" style="background:#2196f3;">MG</div>
+            <div>
+              <div class="ucf-name">María González</div>
+              <div class="ucf-email">mgonzalez@contapy.py</div>
+            </div>
+          </div>
+          <span class="ucf-role role-senior">Contador Senior</span>
+          <div class="ucf-perms">
+            <span class="perm-tag">Facturación</span>
+            <span class="perm-tag">IVA / IRE</span>
+            <span class="perm-tag">Libros</span>
+            <span class="perm-tag">Declaraciones</span>
+          </div>
+          <div class="ucf-actions"><button class="btn btn-outline btn-sm">Editar</button></div>
+        </div>
+        <div class="user-card-full">
+          <div class="ucf-header">
+            <div class="ucf-avatar" style="background:#10b981;">CP</div>
+            <div>
+              <div class="ucf-name">Carlos Pérez</div>
+              <div class="ucf-email">cperez@contapy.py</div>
+            </div>
+          </div>
+          <span class="ucf-role role-junior">Contador Jr</span>
+          <div class="ucf-perms">
+            <span class="perm-tag">Facturas (solo ver)</span>
+            <span class="perm-tag">Clientes asignados</span>
+          </div>
+          <div class="ucf-actions"><button class="btn btn-outline btn-sm">Editar</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTES -->
+    <div class="page" id="page-reportes">
+      <div class="page-header">
+        <div><h2>Reportes</h2><p>Generación de informes y exportaciones</p></div>
+      </div>
+      <div class="grid-3">
+        <div class="decl-card" style="cursor:pointer;">
+          <div class="decl-icon">📊</div>
+          <div class="decl-name">Libro IVA Ventas</div>
+          <div class="decl-desc">Registro de ventas con detalle de IVA para presentar a la SET.</div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar TXT</button>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">🛒</div>
+          <div class="decl-name">Libro IVA Compras</div>
+          <div class="decl-desc">Registro de compras con crédito fiscal deducible.</div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar TXT</button>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">📈</div>
+          <div class="decl-name">Estado de Resultados</div>
+          <div class="decl-desc">Informe de ingresos y egresos del período seleccionado.</div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar PDF</button>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">⚖️</div>
+          <div class="decl-name">Balance General</div>
+          <div class="decl-desc">Activos, pasivos y patrimonio al cierre del período.</div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar PDF</button>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">📋</div>
+          <div class="decl-name">Retenciones</div>
+          <div class="decl-desc">Comprobantes de retención del IVA e IRE emitidos.</div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar</button>
+        </div>
+        <div class="decl-card">
+          <div class="decl-icon">🏦</div>
+          <div class="decl-name">Conciliación Bancaria</div>
+          <div class="decl-desc">Comparación entre registros contables y extractos bancarios.</div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPRESAS -->
+    <div class="page" id="page-empresas">
+      <div class="page-header">
+        <div><h2>Empresas</h2><p>Contribuyentes gestionados por el estudio</p></div>
+        <button class="btn btn-primary">+ Nueva Empresa</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>RUC</th><th>Razón Social</th><th>Tipo Soc.</th><th>Régimen</th><th>Timbrado Vigente</th><th>Venc. Timbrado</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:'DM Mono',monospace">80012345-6</td><td>Empresa ABC S.A.</td><td>SA</td><td>IRE General</td><td style="font-family:'DM Mono',monospace">12345678</td><td>31/12/2026</td><td><span class="badge-status ok">Vigente</span></td></tr>
+              <tr><td style="font-family:'DM Mono',monospace">4512678-9</td><td>Comercial Norte SRL</td><td>SRL</td><td>IRE ReSiMo</td><td style="font-family:'DM Mono',monospace">87654321</td><td>30/06/2026</td><td><span class="badge-status ok">Vigente</span></td></tr>
+              <tr><td style="font-family:'DM Mono',monospace">2234567-1</td><td>Ferretería Central</td><td>Unipersonal</td><td>IRS</td><td style="font-family:'DM Mono',monospace">11223344</td><td>15/04/2026</td><td><span class="badge-status pend">Por vencer</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROVEEDORES -->
+    <div class="page" id="page-proveedores">
+      <div class="page-header">
+        <div><h2>Proveedores</h2><p>Registro de proveedores y compras</p></div>
+        <button class="btn btn-primary">+ Nuevo Proveedor</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>RUC</th><th>Razón Social</th><th>Rubro</th><th>Teléfono</th><th>Crédito Fiscal</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:'DM Mono',monospace">5567890-1</td><td>Distribuidora Central SA</td><td>Mayorista</td><td>021-555000</td><td style="font-family:'DM Mono',monospace;color:var(--success);">₲ 340.000</td><td><span class="badge-status ok">Activo</span></td></tr>
+              <tr><td style="font-family:'DM Mono',monospace">3345678-2</td><td>Importadora XYZ</td><td>Importación</td><td>021-666000</td><td style="font-family:'DM Mono',monospace;color:var(--success);">₲ 890.000</td><td><span class="badge-status ok">Activo</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIGURACION -->
+    <div class="page" id="page-configuracion">
+      <div class="page-header">
+        <div><h2>Configuración</h2><p>Parámetros del sistema</p></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">⚙️ Parámetros Generales</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nombre del Estudio</label><input type="text" value="Estudio Contable ContaPY"></div>
+          <div class="form-group"><label>RUC del Estudio</label><input type="text" value="1234567-8"></div>
+          <div class="form-group"><label>Email Principal</label><input type="email" value="admin@contapy.py"></div>
+          <div class="form-group"><label>Teléfono</label><input type="text" value="021-000000"></div>
+          <div class="form-group"><label>Dirección</label><input type="text" value="Asunción, Paraguay"></div>
+          <div class="form-group"><label>Moneda por Defecto</label><select><option>PYG — Guaraní</option></select></div>
+        </div>
+        <div class="form-actions"><button class="btn btn-primary">Guardar Cambios</button></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">🔗 Conexión SIFEN — SET</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Ambiente</label><select><option>Producción</option><option>Test</option></select></div>
+          <div class="form-group"><label>Certificado Digital</label><input type="file"></div>
+          <div class="form-group"><label>Contraseña Cert.</label><input type="password" placeholder="••••••••"></div>
+        </div>
+        <div class="form-actions"><button class="btn btn-secondary">Probar Conexión</button></div>
+      </div>
+    </div>
+
+    <!-- FACTURAS / NOTAS / IRE / ASIENTOS -->
+    <div class="page" id="page-facturas">
+      <div class="page-header"><div><h2>Facturas</h2><p>Registro de facturas emitidas y recibidas</p></div><button class="btn btn-primary">+ Nueva Factura</button></div>
+      <div class="card"><p style="color:var(--text-light);padding:20px;text-align:center;">Módulo en desarrollo — disponible próximamente</p></div>
+    </div>
+    <div class="page" id="page-notas">
+      <div class="page-header"><div><h2>Notas de Crédito / Débito</h2></div><button class="btn btn-primary">+ Nueva Nota</button></div>
+      <div class="card"><p style="color:var(--text-light);padding:20px;text-align:center;">Módulo en desarrollo</p></div>
+    </div>
+    <div class="page" id="page-ire">
+      <div class="page-header"><div><h2>IRE / IRP</h2><p>Impuesto a la Renta</p></div></div>
+      <div class="card"><p style="color:var(--text-light);padding:20px;text-align:center;">Módulo en desarrollo</p></div>
+    </div>
+    <div class="page" id="page-asientos">
+      <div class="page-header"><div><h2>Asientos Contables</h2></div><button class="btn btn-primary" onclick="openModal('asiento-modal')">+ Nuevo Asiento</button></div>
+      <div class="card"><p style="color:var(--text-light);padding:20px;text-align:center;">Módulo en desarrollo</p></div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- MODALES -->
+<div class="modal-overlay" id="empresa-modal">
+  <div class="modal empresa-modal" style="max-width:480px;">
+    <div class="modal-title">🏛️ Seleccionar Empresa</div>
+    <div class="empresa-item sel" onclick="selectEmpresa('Empresa ABC S.A.','80012345-6')">
+      <div class="emp-icon" style="background:#fee2e2;">🏭</div>
+      <div><div style="font-weight:600;">Empresa ABC S.A.</div><div class="emp-ruc">RUC: 80012345-6 — IRE General</div></div>
+    </div>
+    <div class="empresa-item" onclick="selectEmpresa('Comercial Norte SRL','4512678-9')">
+      <div class="emp-icon" style="background:#dbeafe;">🏪</div>
+      <div><div style="font-weight:600;">Comercial Norte SRL</div><div class="emp-ruc">RUC: 4512678-9 — IRE ReSiMo</div></div>
+    </div>
+    <div class="empresa-item" onclick="selectEmpresa('Ferretería Central','2234567-1')">
+      <div class="emp-icon" style="background:#d1fae5;">🔧</div>
+      <div><div style="font-weight:600;">Ferretería Central</div><div class="emp-ruc">RUC: 2234567-1 — IRS</div></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('empresa-modal')">Cerrar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="cliente-modal">
+  <div class="modal">
+    <div class="modal-title">🏢 Nuevo Cliente</div>
+    <div class="form-grid col2">
+      <div class="form-group"><label>RUC</label><input type="text" placeholder="00000000-0"></div>
+      <div class="form-group"><label>Razón Social</label><input type="text" placeholder="Empresa S.A."></div>
+      <div class="form-group"><label>Tipo Sociedad</label><select><option>SA</option><option>SRL</option><option>Unipersonal</option></select></div>
+      <div class="form-group"><label>Régimen</label><select><option>IRE General</option><option>IRE ReSiMo</option><option>IRS</option><option>IMAGRO</option></select></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="contacto@empresa.com.py"></div>
+      <div class="form-group"><label>Teléfono</label><input type="text" placeholder="021-000000"></div>
+      <div class="form-group full"><label>Dirección</label><input type="text" placeholder="Dirección completa"></div>
+      <div class="form-group"><label>Contador Asignado</label><select><option>María González</option><option>Carlos Pérez</option><option>Ana López</option></select></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('cliente-modal')">Cancelar</button><button class="btn btn-primary">Guardar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="user-modal">
+  <div class="modal">
+    <div class="modal-title">👤 Nuevo Usuario</div>
+    <div class="form-grid col2">
+      <div class="form-group"><label>Nombre completo</label><input type="text" placeholder="Nombre Apellido"></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="usuario@contapy.py"></div>
+      <div class="form-group"><label>Contraseña</label><input type="password" placeholder="••••••••"></div>
+      <div class="form-group"><label>Rol</label><select><option>Administrador</option><option>Contador Senior</option><option>Contador Jr</option></select></div>
+    </div>
+    <div style="margin-top:16px;">
+      <label style="font-size:12px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Permisos</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:13px;">
+        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox" checked> Facturación</label>
+        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox" checked> IVA / Declaraciones</label>
+        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox" checked> Libros Contables</label>
+        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox"> Gestión Usuarios</label>
+        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox"> Configuración</label>
+        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox" checked> Reportes</label>
+      </div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('user-modal')">Cancelar</button><button class="btn btn-primary">Crear Usuario</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="asiento-modal">
+  <div class="modal" style="max-width:680px;">
+    <div class="modal-title">✍️ Nuevo Asiento Contable</div>
+    <div class="form-grid col2" style="margin-bottom:16px;">
+      <div class="form-group"><label>Fecha</label><input type="date" value="2026-03-20"></div>
+      <div class="form-group"><label>Concepto</label><input type="text" placeholder="Descripción del asiento"></div>
+    </div>
+    <table style="width:100%;font-size:13px;margin-bottom:12px;">
+      <thead><tr style="background:var(--bg);"><th style="padding:8px;text-align:left;">Cuenta</th><th style="padding:8px;text-align:right;">Debe</th><th style="padding:8px;text-align:right;">Haber</th><th style="padding:8px;"></th></tr></thead>
+      <tbody>
+        <tr><td style="padding:6px;"><input type="text" placeholder="Cód. o nombre de cuenta" style="width:100%"></td><td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;"></td><td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;"></td><td><button class="btn btn-outline btn-sm">✕</button></td></tr>
+        <tr><td style="padding:6px;"><input type="text" placeholder="Cód. o nombre de cuenta" style="width:100%"></td><td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;"></td><td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;"></td><td><button class="btn btn-outline btn-sm">✕</button></td></tr>
+      </tbody>
+    </table>
+    <button class="btn btn-outline btn-sm">+ Agregar línea</button>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('asiento-modal')">Cancelar</button><button class="btn btn-primary">Guardar Asiento</button></div>
+  </div>
+</div>
+
+<script>
+var usuarios = {
+  'admin@contapy.py': { pass: 'admin123', nombre: 'Juan Carlos', rol: 'Administrador', iniciales: 'JC' },
+  'mgonzalez@contapy.py': { pass: '1234', nombre: 'María González', rol: 'Contador Senior', iniciales: 'MG' },
+  'cperez@contapy.py': { pass: '1234', nombre: 'Carlos Pérez', rol: 'Contador Jr', iniciales: 'CP' }
+};
+
+function doLogin() {
+  var u = document.getElementById('login-user').value;
+  var p = document.getElementById('login-pass').value;
+  if (usuarios[u] && usuarios[u].pass === p) {
+    document.getElementById('login-wrap').style.display = 'none';
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  document.getElementById('login-wrap').style.display = 'flex';
+}
+
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  var pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  if (el) el.classList.add('active');
+  var titles = {
+    'dashboard':'Dashboard','clientes':'Clientes','proveedores':'Proveedores',
+    'sifen':'SIFEN — Facturación Electrónica','facturas':'Facturas','notas':'Notas de Crédito/Débito',
+    'iva':'IVA','declaraciones':'Declaraciones Juradas','ire':'IRE / IRP',
+    'libros':'Libros Contables','asientos':'Asientos Contables','reportes':'Reportes',
+    'usuarios':'Usuarios','empresas':'Empresas','configuracion':'Configuración'
+  };
+  document.getElementById('topbar-title').textContent = titles[name] || name;
+}
+
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(function(m){
+  m.addEventListener('click', function(e){ if(e.target===m) m.classList.remove('open'); });
+});
+
+function selectEmpresa(nombre, ruc) {
+  document.getElementById('empresa-activa').textContent = nombre + ' — RUC ' + ruc;
+  closeModal('empresa-modal');
+}
+
+function showSifenForm() {
+  document.getElementById('sifen-lista').style.display = 'none';
+  document.getElementById('sifen-form').style.display = 'block';
+  document.getElementById('sifen-steps').style.display = 'flex';
+}
+
+function cancelarSifen() {
+  document.getElementById('sifen-lista').style.display = 'block';
+  document.getElementById('sifen-form').style.display = 'none';
+  document.getElementById('sifen-steps').style.display = 'none';
+}
+
+var itemCount = 1;
+function agregarItem() {
+  var tbody = document.getElementById('items-tabla');
+  var tr = document.createElement('tr');
+  var id = itemCount++;
+  tr.innerHTML = '<td style="padding:6px;"><input type="text" placeholder="Descripción" style="width:100%"></td>' +
+    '<td style="padding:6px;"><select style="width:80px;"><option>UND</option><option>KG</option><option>LT</option><option>SVC</option></select></td>' +
+    '<td style="padding:6px;"><input type="number" value="1" style="width:70px;text-align:right;" onchange="calcTotal()"></td>' +
+    '<td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;" onchange="calcTotal()"></td>' +
+    '<td style="padding:6px;"><select style="width:80px;" onchange="calcTotal()"><option>10%</option><option>5%</option><option>Exenta</option></select></td>' +
+    '<td style="padding:6px;text-align:right;font-family:\'DM Mono\',monospace;" id="total-row-'+id+'">₲ 0</td>' +
+    '<td style="padding:6px;"><button class="btn btn-outline btn-sm" onclick="this.closest(\'tr\').remove();calcTotal()">✕</button></td>';
+  tbody.appendChild(tr);
+}
+
+function calcTotal() {
+  var rows = document.querySelectorAll('#items-tabla tr');
+  var tot10=0, tot5=0, totEx=0;
+  rows.forEach(function(row,i){
+    var inputs = row.querySelectorAll('input[type=number]');
+    var sel = row.querySelector('select');
+    if(inputs.length < 2) return;
+    var qty = parseFloat(inputs[0].value)||0;
+    var price = parseFloat(inputs[1].value)||0;
+    var total = qty * price;
+    var ivaType = sel ? sel.value : '10%';
+    var cell = row.querySelector('td:nth-child(6)');
+    if(cell) cell.textContent = '₲ ' + total.toLocaleString('es-PY');
+    if(ivaType==='10%') tot10+=total;
+    else if(ivaType==='5%') tot5+=total;
+    else totEx+=total;
+  });
+  var iva10 = Math.round(tot10/11);
+  var iva5 = Math.round(tot5/21);
+  var base10 = tot10 - iva10;
+  var base5 = tot5 - iva5;
+  var totalGral = tot10 + tot5 + totEx;
+  document.getElementById('sub10').textContent = '₲ ' + base10.toLocaleString('es-PY');
+  document.getElementById('sub5').textContent = '₲ ' + base5.toLocaleString('es-PY');
+  document.getElementById('subex').textContent = '₲ ' + totEx.toLocaleString('es-PY');
+  document.getElementById('iva10').textContent = '₲ ' + iva10.toLocaleString('es-PY');
+  document.getElementById('iva5').textContent = '₲ ' + iva5.toLocaleString('es-PY');
+  document.getElementById('total-gral').textContent = '₲ ' + totalGral.toLocaleString('es-PY');
+}
+
+document.getElementById('login-pass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+</script>
+</body>
+</html>
