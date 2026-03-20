@@ -129,14 +129,18 @@ function setStatus(t,x){document.getElementById('status-dot').className='dot '+t
 
 function cargarCanales() {
     setStatus('loading','Cargando canales desde GitHub...');
-    fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
-        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
-    }).then(function(r){return r.json();}).then(function(data){
-        fileSha=data.sha;
-        canalesData=JSON.parse(atob(data.content.replace(/\n/g,'')));
+    // Usar jsDelivr para leer (sin CORS) y API GitHub para obtener SHA
+    fetch('https://cdn.jsdelivr.net/gh/'+REPO+'@main/'+FILE+'?t='+Date.now())
+    .then(function(r){return r.json();})
+    .then(function(data){
+        canalesData=data;
         renderCanales();
-        setStatus('ok','Conectado — '+Object.keys(canalesData).length+' canales cargados');
-    }).catch(function(){setStatus('error','Error al conectar con GitHub');});
+        setStatus('ok','Conectado — '+Object.keys(canalesData).length+' canales cargados. Listo para editar.');
+        // Obtener SHA para poder guardar
+        fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
+            headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
+        }).then(function(r){return r.json();}).then(function(d){fileSha=d.sha;}).catch(function(){});
+    }).catch(function(){setStatus('error','Error al cargar canales');});
 }
 
 function renderCanales() {
