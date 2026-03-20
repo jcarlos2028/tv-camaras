@@ -7,452 +7,231 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; background: #0f0f1a; color: #eee; min-height: 100vh; }
-
-        .header {
-            background: linear-gradient(135deg, #0b5394, #1a1a2e);
-            padding: 18px 20px; display: flex; align-items: center; gap: 14px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        .header h1 { font-size: 20px; font-weight: bold; color: white; }
-        .header .sub { font-size: 12px; color: #7ec8ff; margin-top: 2px; }
-
-        .status-bar {
-            background: #1a1a2e; padding: 10px 20px;
-            display: flex; align-items: center; gap: 10px;
-            border-bottom: 1px solid #2a2a3e; font-size: 13px;
-        }
+        .header { background: linear-gradient(135deg, #0b5394, #1a1a2e); padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        .header-title { font-size: 20px; font-weight: bold; color: white; }
+        .header-sub { font-size: 12px; color: #7ec8ff; margin-top: 2px; }
+        .status-bar { background: #1a1a2e; padding: 10px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #2a2a3e; font-size: 13px; }
         .dot { width: 10px; height: 10px; border-radius: 50%; background: #555; flex-shrink: 0; }
         .dot.ok { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; }
         .dot.error { background: #e74c3c; box-shadow: 0 0 6px #e74c3c; }
         .dot.loading { background: #f39c12; animation: pulse 1s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-
-        .section-title {
-            font-size: 13px; font-weight: bold; color: #4fa6ff;
-            text-transform: uppercase; letter-spacing: 1px;
-            margin: 24px 0 10px; border-bottom: 1px solid #2a2a3e; padding-bottom: 6px;
-        }
-
-        .canal-card {
-            background: #1c1c2e; border: 1px solid #2a2a3e; border-radius: 10px;
-            padding: 14px; margin-bottom: 10px; transition: all 0.2s;
-        }
+        .section-title { font-size: 13px; font-weight: bold; color: #4fa6ff; text-transform: uppercase; letter-spacing: 1px; margin: 24px 0 10px; border-bottom: 1px solid #2a2a3e; padding-bottom: 6px; }
+        .canal-card { background: #1c1c2e; border: 1px solid #2a2a3e; border-radius: 10px; padding: 14px; margin-bottom: 10px; transition: border-color 0.2s; }
         .canal-card:hover { border-color: #4fa6ff; }
         .canal-card.editando { border-color: #f39c12; background: #1e1e10; }
         .canal-card.guardado { border-color: #2ecc71; }
-
         .canal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
         .canal-nombre { font-size: 15px; font-weight: bold; color: #fff; flex: 1; }
         .canal-key { font-size: 10px; color: #555; background: #111; padding: 2px 6px; border-radius: 4px; }
-
-        .canal-url {
-            font-size: 11px; color: #888; background: #111; padding: 8px 10px;
-            border-radius: 6px; word-break: break-all; cursor: pointer;
-            transition: all 0.2s; border: 1px solid transparent;
-        }
-        .canal-url:hover { color: #aaa; border-color: #333; }
-
+        .canal-url { font-size: 11px; color: #888; background: #111; padding: 8px 10px; border-radius: 6px; word-break: break-all; }
         .edit-area { display: none; margin-top: 10px; }
-        .edit-area textarea {
-            width: 100%; padding: 10px; background: #111; border: 1px solid #4fa6ff;
-            border-radius: 6px; color: #fff; font-size: 12px; resize: vertical;
-            min-height: 80px; font-family: monospace; outline: none;
-        }
+        .edit-area textarea { width: 100%; padding: 10px; background: #111; border: 1px solid #4fa6ff; border-radius: 6px; color: #fff; font-size: 12px; resize: vertical; min-height: 80px; font-family: monospace; outline: none; }
         .edit-buttons { display: flex; gap: 8px; margin-top: 8px; }
-        .btn-guardar {
-            background: #0b5394; color: white; border: none; padding: 8px 18px;
-            border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold;
-            transition: all 0.2s; flex: 1;
-        }
+        .btn-guardar { background: #0b5394; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; flex: 1; }
         .btn-guardar:hover { background: #1a6ab5; }
         .btn-guardar:disabled { background: #333; cursor: not-allowed; }
-        .btn-cancelar {
-            background: #2a2a3e; color: #aaa; border: none; padding: 8px 14px;
-            border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s;
-        }
-        .btn-cancelar:hover { background: #333; color: white; }
-        .btn-editar {
-            background: #2a2a3e; color: #4fa6ff; border: 1px solid #4fa6ff;
-            padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;
-            transition: all 0.2s;
-        }
+        .btn-cancelar { background: #2a2a3e; color: #aaa; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+        .btn-editar { background: #2a2a3e; color: #4fa6ff; border: 1px solid #4fa6ff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
         .btn-editar:hover { background: #0b5394; color: white; }
-
         .msg { font-size: 12px; margin-top: 6px; padding: 6px 10px; border-radius: 4px; display: none; }
         .msg.ok { background: #0d3a1a; color: #2ecc71; border: 1px solid #2ecc71; display: block; }
         .msg.error { background: #3a0d0d; color: #e74c3c; border: 1px solid #e74c3c; display: block; }
-
-        /* CHAT CON CLAUDE */
-        .claude-section {
-            background: #1c1c2e; border: 1px solid #2a2a3e; border-radius: 10px;
-            margin-top: 10px; overflow: hidden;
-        }
-        .claude-header {
-            background: linear-gradient(135deg, #1a1a2e, #0d0d1a);
-            padding: 14px 16px; display: flex; align-items: center; gap: 10px;
-            border-bottom: 1px solid #2a2a3e;
-        }
-        .claude-avatar {
-            width: 36px; height: 36px; background: linear-gradient(135deg, #cc7a00, #ff9500);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 18px; flex-shrink: 0;
-        }
-        .claude-title { font-weight: bold; color: #fff; font-size: 15px; }
-        .claude-sub { font-size: 11px; color: #888; }
-
-        .chat-messages {
-            height: 300px; overflow-y: auto; padding: 14px;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        .msg-bubble {
-            max-width: 85%; padding: 10px 14px; border-radius: 12px;
-            font-size: 13px; line-height: 1.5; word-break: break-word;
-        }
-        .msg-user { background: #0b5394; color: white; align-self: flex-end; border-bottom-right-radius: 3px; }
-        .msg-claude { background: #2a2a3e; color: #eee; align-self: flex-start; border-bottom-left-radius: 3px; }
+        .reload-btn { background: #2a2a3e; color: #4fa6ff; border: 1px solid #4fa6ff; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        .claude-section { background: #1c1c2e; border: 1px solid #2a2a3e; border-radius: 10px; margin-top: 10px; overflow: hidden; }
+        .claude-header { background: linear-gradient(135deg, #1a1a2e, #0d0d1a); padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #2a2a3e; }
+        .claude-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, #cc7a00, #ff9500); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .chat-messages { height: 300px; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; word-break: break-word; }
+        .msg-user { background: #0b5394; color: white; align-self: flex-end; }
+        .msg-claude { background: #2a2a3e; color: #eee; align-self: flex-start; }
         .msg-claude.loading { color: #888; font-style: italic; }
-
-        .chat-input-area {
-            padding: 12px; border-top: 1px solid #2a2a3e;
-            display: flex; gap: 8px;
-        }
-        .chat-input {
-            flex: 1; padding: 10px 14px; background: #111; border: 1px solid #333;
-            border-radius: 20px; color: white; font-size: 13px; outline: none;
-            transition: border-color 0.2s;
-        }
-        .chat-input:focus { border-color: #4fa6ff; }
-        .chat-send {
-            background: #0b5394; color: white; border: none; padding: 10px 16px;
-            border-radius: 20px; cursor: pointer; font-size: 14px; transition: all 0.2s;
-        }
-        .chat-send:hover { background: #1a6ab5; }
+        .chat-input-area { padding: 12px; border-top: 1px solid #2a2a3e; display: flex; gap: 8px; }
+        .chat-input { flex: 1; padding: 10px 14px; background: #111; border: 1px solid #333; border-radius: 20px; color: white; font-size: 13px; outline: none; }
+        .chat-send { background: #0b5394; color: white; border: none; padding: 10px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; }
         .chat-send:disabled { background: #333; cursor: not-allowed; }
-
-        .reload-btn {
-            background: #2a2a3e; color: #4fa6ff; border: 1px solid #4fa6ff;
-            padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px;
-            transition: all 0.2s; margin-left: auto;
-        }
-        .reload-btn:hover { background: #0b5394; color: white; }
     </style>
 </head>
 <body>
-
 <div class="header">
     <div>
-        <div class="h1">📺 Panel de Administración</div>
-        <div class="sub">TV & Cámaras — github.com/jcarlos2028/tv-camaras</div>
+        <div class="header-title">📺 Panel de Administración</div>
+        <div class="header-sub">TV & Cámaras — github.com/jcarlos2028/tv-camaras</div>
     </div>
     <button class="reload-btn" onclick="cargarCanales()">🔄 Recargar</button>
 </div>
-
 <div class="status-bar">
     <div class="dot loading" id="status-dot"></div>
     <span id="status-text">Conectando con GitHub...</span>
 </div>
-
 <div class="container">
-
     <div class="section-title">📡 Canales Abiertos — Paraguay</div>
     <div id="lista-abiertos"></div>
-
     <div class="section-title">🎬 Entretenimiento — Paraguay</div>
     <div id="lista-entretenimiento"></div>
-
     <div class="section-title">🏆 Eventos PY</div>
     <div id="lista-eventos"></div>
-
     <div class="section-title">🇧🇴 Bolivia</div>
     <div id="lista-bolivia"></div>
-
     <div class="section-title">📻 Radios</div>
     <div id="lista-radios"></div>
-
     <div class="section-title">💬 Consultar a Claude</div>
     <div class="claude-section">
         <div class="claude-header">
             <div class="claude-avatar">🤖</div>
             <div>
-                <div class="claude-title">Claude — Asistente</div>
-                <div class="claude-sub">Consultá sobre canales, links, problemas técnicos</div>
+                <div style="font-weight:bold;color:#fff;font-size:15px;">Claude — Asistente</div>
+                <div style="font-size:11px;color:#888;">Consultá sobre canales, links, problemas técnicos</div>
             </div>
         </div>
         <div class="chat-messages" id="chat-messages">
-            <div class="msg-bubble msg-claude">¡Hola! Soy Claude. Podés consultarme sobre los canales, cómo actualizar links, problemas técnicos o cualquier cosa relacionada con tu app. ¿En qué te puedo ayudar?</div>
+            <div class="msg-bubble msg-claude">¡Hola! Soy Claude. Podés consultarme sobre los canales, cómo actualizar links, problemas técnicos o cualquier cosa relacionada con tu app.</div>
         </div>
         <div class="chat-input-area">
-            <input type="text" class="chat-input" id="chat-input" placeholder="Escribí tu consulta..." onkeydown="if(event.key==='Enter') enviarMensaje()">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Escribí tu consulta..." onkeydown="if(event.key==='Enter')enviarMensaje()">
             <button class="chat-send" id="chat-send" onclick="enviarMensaje()">➤</button>
         </div>
     </div>
-
 </div>
 
 <script>
-var GITHUB_TOKEN = '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';
+var GITHUB_TOKEN = 'PEGAR_TOKEN_AQUI';
 var REPO = 'jcarlos2028/tv-camaras';
 var FILE = 'canales.json';
 var fileSha = '';
 var canalesData = {};
 
-var nombresCanales = {
-    // 🇵🇾 Paraguay — Abiertos
-    'telefuturo':   '📺 Telefuturo',
-    'npy':          '📺 NPY',
-    'mega':         '📺 Mega TV',
-    'latele':       '📺 LaTele',
-    'abctv720':     '📺 ABC TV (720p)',
-    'abctv480':     '📺 ABC TV (480p)',
-    'rcctv':        '📺 RCC TV',
-    // 🇵🇾 Paraguay — Entretenimiento
-    'canalpro':     '📺 Canal Pro',
-    'poputv':       '🌐 Popu TV',
-    'launion':      '🙏 La Unión',
-    'nandutitv':    '📡 Ñanduti TV',
-    'chaquena':     '🌵 Chaqueña TV',
-    'gen':          '📡 GEN',
-    'nandejaranee': '🗣️ Ñande Jara Ñe\'e',
-    'lacosta':      '🌊 La Costa TV',
-    'productiva':   '📰 Productiva',
-    'venus':        '💫 Venus TV',
-    // 🏆 Eventos
-    'eventopy1':    '⚽ Tigo Sports 1',
-    'eventopy2':    '⚽ Tigo Sports 2',
-    'eventopy3':    '⚽ Tigo Sports 3',
-    // 🇧🇴 Bolivia
-    'btv':          '📺 BTV',
-    'atb':          '📺 ATB',
-    'reduno':       '📺 Red Uno',
-    // 📻 Radios
-    'r_montecarlo': '📻 Montecarlo 100.9',
-    'r_farra':      '📻 Farra 101.3',
-    'r_emisoras':   '📻 Emisoras PY',
-    'r_itapiru':    '📻 Radio Itapiru',
-    'r_transcontinental': '📻 Transcontinental',
-    'r_altoparana': '📻 Alto Paraná',
-    'r_mingaguazu': '📻 Minga Guazú',
-    'r_maxima':     '📻 Máxima FM',
-    'r_natalio':    '📻 Radio Natalio',
-    'r_libertad':   '📻 Radio Libertad',
-    'r_caaguazu':   '📻 Radio Caaguazú',
-    'r_horizonte':  '📻 Radio Horizonte',
-    'r_naranjal':   '📻 Radio Naranjal',
-    'r_progresos':  '📻 Progresos',
-    'r_latina':     '📻 Radio Latina',
-    'r_integracion':'📻 Integración',
+var secciones = {
+    'lista-abiertos': {
+        keys: ['telefuturo','npy','mega','latele','abctv720','abctv480','rcctv'],
+        nombres: {'telefuturo':'📺 Telefuturo','npy':'📺 NPY','mega':'📺 Mega TV','latele':'📺 LaTele','abctv720':'📺 ABC TV (720p)','abctv480':'📺 ABC TV (480p)','rcctv':'📺 RCC TV'}
+    },
+    'lista-entretenimiento': {
+        keys: ['canalpro','poputv','launion','nandutitv','chaquena','gen','nandejaranee','lacosta','productiva','venus'],
+        nombres: {'canalpro':'📺 Canal Pro','poputv':'🌐 Popu TV','launion':'🙏 La Unión','nandutitv':'📡 Ñanduti TV','chaquena':'🌵 Chaqueña TV','gen':'📡 GEN','nandejaranee':'🗣️ Ñande Jara Ñee','lacosta':'🌊 La Costa TV','productiva':'📰 Productiva','venus':'💫 Venus TV'}
+    },
+    'lista-eventos': {
+        keys: ['eventopy1','eventopy2','eventopy3'],
+        nombres: {'eventopy1':'⚽ Tigo Sports 1','eventopy2':'⚽ Tigo Sports 2','eventopy3':'⚽ Tigo Sports 3'}
+    },
+    'lista-bolivia': {
+        keys: ['btv','atb','reduno'],
+        nombres: {'btv':'📺 BTV','atb':'📺 ATB','reduno':'📺 Red Uno'}
+    },
+    'lista-radios': {
+        keys: ['r_montecarlo','r_farra','r_emisoras','r_itapiru','r_transcontinental','r_altoparana','r_mingaguazu','r_maxima','r_natalio','r_libertad','r_caaguazu','r_horizonte','r_naranjal','r_progresos','r_latina','r_integracion'],
+        nombres: {'r_montecarlo':'📻 Montecarlo','r_farra':'📻 Farra','r_emisoras':'📻 Emisoras PY','r_itapiru':'📻 Radio Itapiru','r_transcontinental':'📻 Transcontinental','r_altoparana':'📻 Alto Paraná','r_mingaguazu':'📻 Minga Guazú','r_maxima':'📻 Máxima FM','r_natalio':'📻 Radio Natalio','r_libertad':'📻 Radio Libertad','r_caaguazu':'📻 Radio Caaguazú','r_horizonte':'📻 Radio Horizonte','r_naranjal':'📻 Radio Naranjal','r_progresos':'📻 Progresos','r_latina':'📻 Radio Latina','r_integracion':'📻 Integración'}
+    }
 };
 
-function setStatus(tipo, texto) {
-    var dot = document.getElementById('status-dot');
-    var txt = document.getElementById('status-text');
-    dot.className = 'dot ' + tipo;
-    txt.textContent = texto;
-}
+function setStatus(t,x){document.getElementById('status-dot').className='dot '+t;document.getElementById('status-text').textContent=x;}
 
 function cargarCanales() {
-    setStatus('loading', 'Cargando canales desde GitHub...');
-    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FILE + '?t=' + Date.now(), {
-        headers: { 'Authorization': 'Bearer ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        fileSha = data.sha;
-        var json = atob(data.content.replace(/\n/g,''));
-        canalesData = JSON.parse(json);
+    setStatus('loading','Cargando canales desde GitHub...');
+    fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
+        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
+    }).then(function(r){return r.json();}).then(function(data){
+        fileSha=data.sha;
+        canalesData=JSON.parse(atob(data.content.replace(/\n/g,'')));
         renderCanales();
-        setStatus('ok', 'Conectado — ' + Object.keys(canalesData).length + ' canales cargados');
-    })
-    .catch(function(e) {
-        setStatus('error', 'Error al conectar con GitHub');
-    });
+        setStatus('ok','Conectado — '+Object.keys(canalesData).length+' canales cargados');
+    }).catch(function(){setStatus('error','Error al conectar con GitHub');});
 }
-
-var secciones = {
-    'lista-abiertos':       ['telefuturo','npy','mega','latele','abctv720','abctv480','rcctv'],
-    'lista-entretenimiento':['canalpro','poputv','launion','nandutitv','chaquena','gen','nandejaranee','lacosta','productiva','venus'],
-    'lista-eventos':        ['eventopy1','eventopy2','eventopy3'],
-    'lista-bolivia':        ['btv','atb','reduno'],
-    'lista-radios':         ['r_montecarlo','r_farra','r_emisoras','r_itapiru','r_transcontinental','r_altoparana','r_mingaguazu','r_maxima','r_natalio','r_libertad','r_caaguazu','r_horizonte','r_naranjal','r_progresos','r_latina','r_integracion']
-};
 
 function renderCanales() {
-    Object.keys(secciones).forEach(function(secId) {
-        var lista = document.getElementById(secId);
-        if (!lista) return;
-        lista.innerHTML = '';
-        secciones[secId].forEach(function(key) {
-            var nombre = nombresCanales[key] || key;
-            var url = canalesData[key] || '(sin link)';
-            var card = document.createElement('div');
-            card.className = 'canal-card';
-            card.id = 'card-' + key;
-            card.innerHTML =
-                '<div class="canal-header">' +
-                    '<span class="canal-nombre">' + nombre + '</span>' +
-                    '<span class="canal-key">' + key + '</span>' +
-                    '<button class="btn-editar" onclick="editarCanal(\'' + key + '\')">✏️ Editar</button>' +
-                '</div>' +
-                '<div class="canal-url" id="url-' + key + '" onclick="editarCanal(\'' + key + '\')" title="Click para editar">' + url + '</div>' +
-                '<div class="edit-area" id="edit-' + key + '">' +
-                    '<textarea id="ta-' + key + '">' + url + '</textarea>' +
-                    '<div class="edit-buttons">' +
-                        '<button class="btn-guardar" onclick="guardarCanal(\'' + key + '\')">💾 Guardar</button>' +
-                        '<button class="btn-cancelar" onclick="cancelarEdicion(\'' + key + '\')">✕ Cancelar</button>' +
-                    '</div>' +
-                    '<div class="msg" id="msg-' + key + '"></div>' +
-                '</div>';
-            lista.appendChild(card);
+    Object.keys(secciones).forEach(function(secId){
+        var lista=document.getElementById(secId);
+        if(!lista)return;
+        lista.innerHTML='';
+        var sec=secciones[secId];
+        sec.keys.forEach(function(key){
+            var nombre=sec.nombres[key]||key;
+            var url=canalesData[key]||'(sin link)';
+            var d=document.createElement('div');
+            d.className='canal-card';
+            d.id='card-'+key;
+            d.innerHTML='<div class="canal-header"><span class="canal-nombre">'+nombre+'</span><span class="canal-key">'+key+'</span><button class="btn-editar" onclick="editarCanal(\''+key+'\')">✏️ Editar</button></div>'+
+                '<div class="canal-url" id="url-'+key+'">'+url+'</div>'+
+                '<div class="edit-area" id="edit-'+key+'"><textarea id="ta-'+key+'">'+url+'</textarea>'+
+                '<div class="edit-buttons"><button class="btn-guardar" id="btn-'+key+'" onclick="guardarCanal(\''+key+'\')">💾 Guardar</button>'+
+                '<button class="btn-cancelar" onclick="cancelarEdicion(\''+key+'\')">✕ Cancelar</button></div>'+
+                '<div class="msg" id="msg-'+key+'"></div></div>';
+            lista.appendChild(d);
         });
     });
 }
 
-function editarCanal(key) {
-    document.querySelectorAll('.canal-card').forEach(function(c) {
-        c.classList.remove('editando');
-        c.querySelector('.edit-area').style.display = 'none';
-    });
-    var card = document.getElementById('card-' + key);
-    card.classList.add('editando');
-    document.getElementById('edit-' + key).style.display = 'block';
-    var ta = document.getElementById('ta-' + key);
-    ta.focus();
-    ta.select();
+function editarCanal(key){
+    document.querySelectorAll('.canal-card').forEach(function(c){c.classList.remove('editando');c.querySelector('.edit-area').style.display='none';});
+    document.getElementById('card-'+key).classList.add('editando');
+    document.getElementById('edit-'+key).style.display='block';
+    document.getElementById('ta-'+key).focus();
+    document.getElementById('ta-'+key).select();
 }
 
-function cancelarEdicion(key) {
-    var card = document.getElementById('card-' + key);
-    card.classList.remove('editando');
-    document.getElementById('edit-' + key).style.display = 'none';
-    document.getElementById('ta-' + key).value = canalesData[key] || '';
+function cancelarEdicion(key){
+    document.getElementById('card-'+key).classList.remove('editando');
+    document.getElementById('edit-'+key).style.display='none';
+    document.getElementById('ta-'+key).value=canalesData[key]||'';
 }
 
-function guardarCanal(key) {
-    var nuevoUrl = document.getElementById('ta-' + key).value.trim();
-    var msgEl = document.getElementById('msg-' + key);
-    var btn = document.querySelector('#card-' + key + ' .btn-guardar');
-
-    if (!nuevoUrl) { return; }
-
-    btn.disabled = true;
-    btn.textContent = '⏳ Guardando...';
-    msgEl.className = 'msg';
-
-    // Primero obtener el SHA fresco del archivo
-    var apiUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FILE;
-    fetch(apiUrl, { headers: { 'Authorization': 'Bearer ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json' } })
-    .then(function(r) { return r.json(); })
-    .then(function(fileData) {
-        fileSha = fileData.sha;
-        var jsonActual = JSON.parse(atob(fileData.content.replace(/\n/g,'')));
-        jsonActual[key] = nuevoUrl;
-        canalesData = jsonActual;
-
-        var nuevoJson = JSON.stringify(jsonActual, null, 2);
-        var encoded = btoa(unescape(encodeURIComponent(nuevoJson)));
-
-        return fetch(apiUrl, {
-            method: 'PUT',
-            headers: {
-                'Authorization': 'Bearer ' + GITHUB_TOKEN,
-                'Accept': 'application/vnd.github.v3+json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: 'Actualizar ' + key,
-                content: encoded,
-                sha: fileSha
-            })
-        });
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        if (data.content) {
-            fileSha = data.content.sha;
-            document.getElementById('url-' + key).textContent = nuevoUrl;
-            var card = document.getElementById('card-' + key);
-            card.classList.remove('editando');
-            card.classList.add('guardado');
-            document.getElementById('edit-' + key).style.display = 'none';
-            setTimeout(function() { card.classList.remove('guardado'); }, 3000);
-            setStatus('ok', '✅ ' + nombresCanales[key] + ' actualizado correctamente');
+function guardarCanal(key){
+    var url=document.getElementById('ta-'+key).value.trim();
+    var msg=document.getElementById('msg-'+key);
+    var btn=document.getElementById('btn-'+key);
+    if(!url)return;
+    btn.disabled=true; btn.textContent='⏳ Guardando...'; msg.className='msg';
+    canalesData[key]=url;
+    var enc=btoa(unescape(encodeURIComponent(JSON.stringify(canalesData,null,2))));
+    fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
+        method:'PUT',
+        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+        body:JSON.stringify({message:'Actualizar '+key,content:enc,sha:fileSha})
+    }).then(function(r){return r.json();}).then(function(data){
+        if(data.content){
+            fileSha=data.content.sha;
+            document.getElementById('url-'+key).textContent=url;
+            document.getElementById('card-'+key).classList.remove('editando');
+            document.getElementById('card-'+key).classList.add('guardado');
+            document.getElementById('edit-'+key).style.display='none';
+            setTimeout(function(){document.getElementById('card-'+key).classList.remove('guardado');},3000);
+            setStatus('ok','✅ Guardado correctamente');
         } else {
-            msgEl.className = 'msg error';
-            msgEl.textContent = 'Error: ' + (data.message || 'Intentá de nuevo.');
+            msg.className='msg error'; msg.textContent='Error: '+(data.message||'Intentá de nuevo');
         }
-        btn.disabled = false;
-        btn.textContent = '💾 Guardar';
-    })
-    .catch(function(e) {
-        msgEl.className = 'msg error';
-        msgEl.textContent = 'Error de conexión: ' + e.message;
-        btn.disabled = false;
-        btn.textContent = '💾 Guardar';
+        btn.disabled=false; btn.textContent='💾 Guardar';
+    }).catch(function(){
+        msg.className='msg error'; msg.textContent='Error de conexión';
+        btn.disabled=false; btn.textContent='💾 Guardar';
     });
 }
 
-// ── CHAT CON CLAUDE ──
-var chatHistory = [];
-
-function enviarMensaje() {
-    var input = document.getElementById('chat-input');
-    var texto = input.value.trim();
-    if (!texto) return;
-
-    agregarMensaje(texto, 'user');
-    input.value = '';
-    document.getElementById('chat-send').disabled = true;
-
-    var loadingId = agregarMensaje('Escribiendo...', 'claude loading');
-
-    chatHistory.push({ role: 'user', content: texto });
-
-    fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 1000,
-            system: 'Sos un asistente técnico especializado en la app de TV y Cámaras de Paraguay. Ayudás al administrador con actualizaciones de links de canales, problemas técnicos, streams m3u8, y cualquier consulta relacionada con la app. Respondé de forma concisa y práctica en español.',
-            messages: chatHistory
-        })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-        var respuesta = data.content && data.content[0] ? data.content[0].text : 'No pude obtener respuesta.';
-        eliminarMensaje(loadingId);
-        agregarMensaje(respuesta, 'claude');
-        chatHistory.push({ role: 'assistant', content: respuesta });
-        document.getElementById('chat-send').disabled = false;
-    })
-    .catch(function() {
-        eliminarMensaje(loadingId);
-        agregarMensaje('Error de conexión con Claude.', 'claude');
-        document.getElementById('chat-send').disabled = false;
-    });
+// CHAT
+var chatHistory=[];var msgC=0;
+function enviarMensaje(){
+    var input=document.getElementById('chat-input');
+    var texto=input.value.trim();
+    if(!texto)return;
+    agregarMsg(texto,'user'); input.value='';
+    document.getElementById('chat-send').disabled=true;
+    var lid=agregarMsg('Escribiendo...','claude loading');
+    chatHistory.push({role:'user',content:texto});
+    fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+            system:'Sos un asistente técnico de la app TV y Cámaras Paraguay. Ayudás con links de canales, streams m3u8 y problemas técnicos. Respondé conciso en español.',
+            messages:chatHistory})
+    }).then(function(r){return r.json();}).then(function(data){
+        var resp=data.content&&data.content[0]?data.content[0].text:'Sin respuesta.';
+        eliminarMsg(lid); agregarMsg(resp,'claude');
+        chatHistory.push({role:'assistant',content:resp});
+        document.getElementById('chat-send').disabled=false;
+    }).catch(function(){eliminarMsg(lid);agregarMsg('Error de conexión.','claude');document.getElementById('chat-send').disabled=false;});
 }
+function agregarMsg(t,tipo){var id='mc-'+(++msgC);var d=document.createElement('div');d.className='msg-bubble msg-'+tipo;d.id=id;d.textContent=t;var c=document.getElementById('chat-messages');c.appendChild(d);c.scrollTop=c.scrollHeight;return id;}
+function eliminarMsg(id){var e=document.getElementById(id);if(e)e.remove();}
 
-var msgCounter = 0;
-function agregarMensaje(texto, tipo) {
-    var id = 'msg-chat-' + (++msgCounter);
-    var div = document.createElement('div');
-    div.className = 'msg-bubble msg-' + tipo;
-    div.id = id;
-    div.textContent = texto;
-    var container = document.getElementById('chat-messages');
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-    return id;
-}
-
-function eliminarMensaje(id) {
-    var el = document.getElementById(id);
-    if (el) el.remove();
-}
-
-// Iniciar
 cargarCanales();
 </script>
 </body>
