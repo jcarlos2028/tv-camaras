@@ -52,6 +52,7 @@ tbody tr:hover{background:#fafafa}
 .badge-status{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600}
 .badge-status.ok{background:#d1fae5;color:#065f46}
 .badge-status.pend{background:#fef3c7;color:#92400e}
+.badge-status.err{background:#fee2e2;color:#991b1b}
 .form-section{background:var(--card);border-radius:10px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:14px}
 .form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .form-grid.col2{grid-template-columns:repeat(2,1fr)}
@@ -187,6 +188,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
           <p id="cdet_ruc" style="font-weight:600;color:var(--text);font-size:13px">RUC: --- | Contacto: ---</p>
         </div>
         <div style="display:flex;gap:10px;margin-top:10px;margin-right:40px">
+          <button class="btn btn-outline" style="background:var(--white)" onclick="abrirImportadorPerfil()">📥 Importar (Excel/IA)</button>
           <button class="btn btn-primary" onclick="openWizardFromProfile()">➕ Cargar Asiento / Documento</button>
         </div>
       </div>
@@ -276,7 +278,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       <div class="page-header">
         <div><h2>Centro de Carga y SIFEN</h2><p>Carga manual asistida, Búsqueda SIFEN e Importación Inteligente</p></div>
         <div style="display:flex;gap:10px">
-          <button class="btn btn-outline" onclick="openModal('modal-import')">📥 Importar Excel / IA</button>
+          <button class="btn btn-outline" onclick="abrirImportadorGeneral()">📥 Importar Excel / IA</button>
           <button class="btn btn-primary" onclick="openWizard()">➕ Carga Manual</button>
         </div>
       </div>
@@ -338,7 +340,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
 <!-- MODAL: CONTROL HONORARIOS -->
 <div class="modal-overlay" id="modal-honorarios">
-  <div class="modal" style="max-width:700px">
+  <div class="modal" style="max-width:850px">
     <div class="close-btn" onclick="closeModal('modal-honorarios')">✕</div>
     <div class="modal-title">💰 Control de Honorarios Mensuales</div>
     <div style="display:flex;justify-content:space-between;margin-bottom:10px">
@@ -346,8 +348,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       <button class="btn btn-outline" onclick="exportToCSV('tbl_honorarios', 'Reporte_Honorarios')">📥 Exportar a Excel</button>
     </div>
     <div class="table-wrap" style="max-height:350px;overflow-y:auto;border:1px solid var(--border);border-radius:8px">
-        <table id="tbl_honorarios" style="width:100%"><thead style="position:sticky;top:0;background:var(--bg)"><tr><th>Cliente</th><th>Mes</th><th>Vencimiento</th><th>Estado</th><th>Acción</th></tr></thead>
-        <tbody id="tabla-honorarios"></tbody></table>
+        <table id="tbl_honorarios" style="width:100%">
+          <thead style="position:sticky;top:0;background:var(--bg)">
+            <tr><th>Cliente</th><th>Mes</th><th>Vencimiento</th><th>Estado Honorario</th><th>Acción Honorario</th><th>Estado Cliente</th></tr>
+          </thead>
+          <tbody id="tabla-honorarios"></tbody>
+        </table>
     </div>
   </div>
 </div>
@@ -469,11 +475,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   <div class="modal" style="max-width:700px">
     <div class="close-btn" onclick="closeModal('modal-import')">✕</div>
     <div class="modal-title">📥 Importador Inteligente (Excel/CSV)</div>
-    <div class="form-group" style="margin-bottom:15px"><label>Seleccione el Cliente Destino</label><select id="imp_cli_sel" class="cli-select"></select></div>
+    <div class="form-group" id="imp_cli_group" style="margin-bottom:15px"><label>Seleccione el Cliente Destino</label><select id="imp_cli_sel" class="cli-select"></select></div>
     <div class="form-group"><label>Pegue los datos desde Excel (Columnas: Fecha | Tipo | Nro | Razón Social | Monto Total | Tasa IVA)</label>
         <textarea id="imp_data" style="height:150px;font-family:'DM Mono'" placeholder="Ejemplo:\n2026-03-21   Factura   001-001   Empresa XYZ   110000   10"></textarea>
     </div>
     <div id="imp_errores" style="margin-top:10px;font-size:12px;display:none;flex-direction:column;gap:5px"></div>
+    <div id="imp_descarga_errores" style="display:none;margin-top:15px;text-align:right"></div>
     <div class="modal-actions"><button class="btn btn-primary" onclick="procesarImportacion()">⚙️ Procesar Datos</button></div>
   </div>
 </div>
@@ -498,8 +505,8 @@ function exportToCSV(tableId, filename) {
 
 // ===== DB Y VARIABLES =====
 var dbClientes =[
-  {id:0, ruc:'80012345-6', nom:'Empresa ABC S.A.', tel:'0981 123 456', correo:'abc@gmail.com', tipo:'juridica', taxes:['IVA','IRE'], honorarios:{'03/2026':'pendiente'}, libros:{compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}},
-  {id:1, ruc:'4512678-9', nom:'Juan Pérez', tel:'0971 999 888', correo:'juanp@outlook.com', tipo:'fisica', taxes:['IVA','IRP'], honorarios:{'03/2026':'pagado'}, libros:{compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}}
+  {id:0, ruc:'80012345-6', nom:'Empresa ABC S.A.', tel:'0981 123 456', correo:'abc@gmail.com', tipo:'juridica', taxes:['IVA','IRE'], honorarios:{'03/2026':'pendiente'}, activo: true, libros:{compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}},
+  {id:1, ruc:'4512678-9', nom:'Juan Pérez', tel:'0971 999 888', correo:'juanp@outlook.com', tipo:'fisica', taxes:['IVA','IRP'], honorarios:{'03/2026':'pagado'}, activo: true, libros:{compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}}
 ];
 var totalDocs = 0; var editandoCliIdx = -1; var wizContext = null;
 
@@ -524,6 +531,7 @@ function renderClientes() {
   
   dbClientes.forEach((c, i) => {
     var tBadges = c.taxes.map(t => `<span class="badge-status ok">${t}</span>`).join(' ');
+    if(c.activo === false) tBadges += ' <span class="badge-status err">Inactivo</span>';
     var telMail = `${c.tel || 'S/T'} <br><span style="font-size:10px;color:var(--text-light)">${c.correo || 'S/C'}</span>`;
     if(tbody && (!s || c.ruc.toLowerCase().includes(s) || c.nom.toLowerCase().includes(s))) {
       tbody.innerHTML += `<tr><td style="font-family:'DM Mono'">${c.ruc}</td><td style="font-weight:700">${c.nom}</td><td>${telMail}</td>
@@ -535,7 +543,9 @@ function renderClientes() {
     }
     if(wizSel) wizSel.innerHTML += `<option value="${i}">${c.nom}</option>`;
   });
-  document.getElementById('dash_cli_count').textContent = dbClientes.length;
+  
+  var activos = dbClientes.filter(c => c.activo !== false).length;
+  document.getElementById('dash_cli_count').textContent = activos;
 }
 
 function openModalCliente(idx = -1) {
@@ -546,8 +556,7 @@ function openModalCliente(idx = -1) {
     document.getElementById('cli_tel').value = c.tel; document.getElementById('cli_correo').value = c.correo;
     document.getElementById('tax_iva').checked = c.taxes.includes('IVA'); document.getElementById('tax_ire_gen').checked = c.taxes.includes('IRE General');
   } else {
-    document.getElementById('m-cli-title').textContent = '🏢 Nuevo Cliente';
-    ['cli_ruc','cli_nom','cli_tel','cli_correo'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('m-cli-title').textContent = '🏢 Nuevo Cliente';['cli_ruc','cli_nom','cli_tel','cli_correo'].forEach(id => document.getElementById(id).value='');
   }
   openModal('modal-cliente');
 }
@@ -557,8 +566,11 @@ function guardarCliente() {
   if(document.getElementById('tax_iva').checked) taxes.push('IVA');
   if(document.getElementById('tax_ire_gen').checked) taxes.push('IRE General');
   if(document.getElementById('tax_irp').checked) taxes.push('IRP');
-  var obj = {ruc: document.getElementById('cli_ruc').value, nom: document.getElementById('cli_nom').value, tel: document.getElementById('cli_tel').value, correo: document.getElementById('cli_correo').value, tipo: document.getElementById('cli_tipo').value, taxes: taxes};
-  if(editandoCliIdx >= 0) { Object.assign(dbClientes[editandoCliIdx], obj); if(currentCli===editandoCliIdx) document.getElementById('cdet_nombre').textContent = obj.nom; }
+  var obj = {ruc: document.getElementById('cli_ruc').value, nom: document.getElementById('cli_nom').value, tel: document.getElementById('cli_tel').value, correo: document.getElementById('cli_correo').value, tipo: document.getElementById('cli_tipo').value, taxes: taxes, activo: true};
+  if(editandoCliIdx >= 0) { 
+    Object.assign(dbClientes[editandoCliIdx], {ruc: obj.ruc, nom: obj.nom, tel: obj.tel, correo: obj.correo, tipo: obj.tipo, taxes: obj.taxes}); 
+    if(currentCli===editandoCliIdx) document.getElementById('cdet_nombre').textContent = obj.nom; 
+  }
   else { obj.id = dbClientes.length; obj.honorarios={}; obj.libros={compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}; dbClientes.push(obj); }
   renderClientes(); closeModal('modal-cliente'); actualizarSelectsClientes();
 }
@@ -571,10 +583,17 @@ function renderHonorarios() {
     var bg = est==='pagado' ? '<span class="badge-status ok">Pagado</span>' : '<span class="badge-status pend">Pendiente</span>';
     var bA = est==='pagado' ? `<button class="btn btn-outline btn-sm" onclick="toggleCobro(${i},'${mes}','pendiente')">Desmarcar</button>` 
                             : `<button class="btn btn-success btn-sm" onclick="toggleCobro(${i},'${mes}','pagado')">Marcar</button>`;
-    tb.innerHTML += `<tr><td style="font-weight:600">${c.nom}</td><td>${mes}</td><td>10/${mes}</td><td>${bg}</td><td>${bA}</td></tr>`;
+                            
+    var estCli = c.activo !== false ? '<span class="badge-status ok">Activo</span>' : '<span class="badge-status err">Inactivo</span>';
+    var btnCli = c.activo !== false ? `<button class="btn btn-outline btn-sm" onclick="toggleEstadoCliente(${i})">Inactivar</button>` 
+                                    : `<button class="btn btn-success btn-sm" onclick="toggleEstadoCliente(${i})">Activar</button>`;
+
+    tb.innerHTML += `<tr><td style="font-weight:600">${c.nom}</td><td>${mes}</td><td>10/${mes}</td><td>${bg}</td><td>${bA}</td><td style="display:flex;gap:5px;align-items:center">${estCli} ${btnCli}</td></tr>`;
   });
 }
+
 function toggleCobro(cli, mes, est) { dbClientes[cli].honorarios[mes] = est; renderHonorarios(); }
+function toggleEstadoCliente(cliIdx) { dbClientes[cliIdx].activo = (dbClientes[cliIdx].activo === false) ? true : false; renderHonorarios(); renderClientes(); }
 
 // ===== PERFIL Y LIBROS DEL CLIENTE =====
 var currentCli = 0;
@@ -758,27 +777,55 @@ function cargarCdcWizard(monto, tercero) {
 }
 
 // ===== IMPORTACIÓN EXCEL =====
+function abrirImportadorGeneral() {
+    document.getElementById('imp_cli_group').style.display = 'block';
+    document.getElementById('imp_data').value = '';
+    document.getElementById('imp_errores').style.display = 'none';
+    document.getElementById('imp_descarga_errores').style.display = 'none';
+    openModal('modal-import');
+}
+
+function abrirImportadorPerfil() {
+    document.getElementById('imp_cli_group').style.display = 'none';
+    document.getElementById('imp_cli_sel').value = currentCli;
+    document.getElementById('imp_data').value = '';
+    document.getElementById('imp_errores').style.display = 'none';
+    document.getElementById('imp_descarga_errores').style.display = 'none';
+    openModal('modal-import');
+}
+
 function procesarImportacion() {
-    var txt = document.getElementById('imp_data').value, errBox = document.getElementById('imp_errores'); 
-    errBox.innerHTML = ''; errBox.style.display = 'none'; if(!txt) return alert("Pegue los datos para procesar.");
+    var txt = document.getElementById('imp_data').value, errBox = document.getElementById('imp_errores');
+    var downloadBox = document.getElementById('imp_descarga_errores');
+    errBox.innerHTML = ''; errBox.style.display = 'none'; downloadBox.style.display = 'none';
     
-    var filas = txt.trim().split('\n'), errores =[], parseados = [], cli = dbClientes[document.getElementById('imp_cli_sel').value];
+    if(!txt) return alert("Pegue los datos para procesar.");
+    
+    var filas = txt.trim().split('\n'), parseados = [], filasConErrores = [], cli = dbClientes[document.getElementById('imp_cli_sel').value];
 
     filas.forEach((f, idx) => {
         var col = f.split('\t'); if(col.length<2) col = f.split(',');
-        if(col.length < 6) { errores.push(`Fila ${idx+1}: Faltan columnas (Requiere 6).`); return; }
+        var errorMsg = "";
         
-        var fecha = col[0].trim(), tipo = col[1].trim().toLowerCase(), nro = col[2].trim(), terc = col[3].trim();
-        var monto = parseFloat(col[4].replace(/,/g,'').trim()), tasa = parseInt(col[5].trim());
+        if(col.length < 6) { 
+            errorMsg = "Faltan columnas (Requiere 6)."; 
+        } else {
+            var fecha = col[0].trim(), tipo = col[1].trim().toLowerCase(), nro = col[2].trim(), terc = col[3].trim();
+            var monto = parseFloat(col[4].replace(/,/g,'').trim()), tasa = parseInt(col[5].trim());
 
-        if(isNaN(monto) || monto <= 0) errores.push(`Fila ${idx+1}: Monto inválido.`);
-        if(!['factura','recibo'].includes(tipo)) errores.push(`Fila ${idx+1}: Tipo doc '${tipo}' no soportado.`);
-        if(errores.length === 0) parseados.push({fecha, tipo, nro, terc, monto, tasa});
+            if(isNaN(monto) || monto <= 0) errorMsg += "Monto inválido. ";
+            if(!['factura','recibo'].includes(tipo)) errorMsg += `Tipo doc '${tipo}' no soportado. `;
+        }
+        
+        if(errorMsg !== "") {
+            filasConErrores.push({ fila: f, error: errorMsg });
+        } else {
+            parseados.push({fecha, tipo, nro, terc, monto, tasa});
+        }
     });
 
-    if(errores.length > 0) {
-        errBox.style.display = 'flex'; errBox.innerHTML = `<strong style="color:var(--danger)">⚠️ Errores encontrados:</strong>` + errores.map(e => `<span class="notif err" style="padding:5px;margin:0">${e}</span>`).join('');
-    } else {
+    // Carga los asientos correctos
+    if(parseados.length > 0) {
         parseados.forEach(p => {
             var iva = p.tasa===10?Math.round(p.monto/11):(p.tasa===5?Math.round(p.monto/21):0);
             var obj = {fecha: p.fecha, tipo: p.tipo, nro: p.nro, tercero: p.terc, bruto: p.monto, neto: p.monto-iva, iva: iva, ref_asiento: "IMP-"+Math.floor(Math.random()*9000)};
@@ -788,8 +835,40 @@ function procesarImportacion() {
             totalDocs++;
         });
         document.getElementById('dash_doc_count').textContent = totalDocs;
-        alert(`✅ ${parseados.length} documentos importados.`); closeModal('modal-import');
+        alert(`✅ ${parseados.length} documentos importados correctamente.`);
+        if(document.getElementById('page-cliente-detalle').classList.contains('active')) { renderLibros(); renderMayorYBalance(); }
     }
+
+    // Gestiona las filas con errores
+    if(filasConErrores.length > 0) {
+        errBox.style.display = 'flex';
+        errBox.innerHTML = `<strong style="color:var(--danger)">⚠️ Se encontraron ${filasConErrores.length} filas con errores.</strong> Los documentos válidos han sido cargados. Descargue el archivo de los errores, corríjalos y vuelva a subirlos manualmente o pegarlos.`;
+        
+        var csvContent = "\uFEFFFila Original (Pegado),Error Encontrado por IA/Sistema\n";
+        filasConErrores.forEach(err => {
+            var filaEscapada = '"' + err.fila.replace(/"/g, '""') + '"';
+            var errorEscapado = '"' + err.error.replace(/"/g, '""') + '"';
+            csvContent += `${filaEscapada},${errorEscapado}\n`;
+        });
+        
+        window.lastErrorCSV = csvContent;
+        downloadBox.style.display = 'block';
+        downloadBox.innerHTML = `<button class="btn btn-outline" style="border-color:var(--danger);color:var(--danger)" onclick="descargarErroresCSV()">📥 Descargar Excel de Errores</button>`;
+    } else {
+        closeModal('modal-import');
+    }
+}
+
+function descargarErroresCSV() {
+    if(!window.lastErrorCSV) return;
+    var blob = new Blob([window.lastErrorCSV], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "Errores_Importacion_Contapy.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
 
 // ===== IMPUESTOS BUSCADORES =====
