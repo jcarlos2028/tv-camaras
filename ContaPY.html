@@ -157,12 +157,25 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label">Clientes Activos (Cobros)</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para marcar honorarios</div></div>
       </div>
       
-      <div class="card">
-        <div class="card-title">🏢 Acceso Rápido a Clientes (Toca para ver libros)</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Contacto</th><th>Impuestos Activos</th></tr></thead>
-          <tbody id="dash-clientes-list"></tbody>
-        </table></div>
+      <div class="grid-2">
+          <!-- LISTA CLIENTES RAPIDA -->
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title">🏢 Acceso Rápido a Clientes (Toca para ver libros)</div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Contacto</th><th>Impuestos Activos</th></tr></thead>
+              <tbody id="dash-clientes-list"></tbody>
+            </table></div>
+          </div>
+          
+          <!-- IFRAME BÚSQUEDA RUC -->
+          <div class="card" style="margin-bottom:0; padding:0; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="padding:15px 18px; border-bottom:1px solid var(--border); background:var(--bg); display:flex; align-items:center; justify-content:space-between">
+                <span style="font-size:14px; font-weight:700; color:var(--text)">🔍 Consulta Rápida de RUC</span>
+            </div>
+            <div style="flex:1; width:100%; min-height:400px;">
+                <iframe src="https://ruc.com.py/" style="width:100%; height:100%; border:none;"></iframe>
+            </div>
+          </div>
       </div>
     </div>
 
@@ -191,6 +204,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
           <p id="cdet_ruc" style="font-weight:600;color:var(--text);font-size:13px">RUC: --- | Contacto: ---</p>
         </div>
         <div style="display:flex;gap:10px;margin-top:10px;margin-right:40px">
+          <button class="btn btn-outline" style="background:#ecfdf5; border-color:#10b981; color:#065f46" onclick="openModal('modal-ekuatia')">🔍 Consultar SIFEN (e-Kuatia)</button>
           <button class="btn btn-outline" style="background:var(--white)" onclick="abrirImportadorPerfil()">📥 Importar (Excel/IA)</button>
           <button class="btn btn-primary" onclick="openWizardFromProfile()">➕ Cargar Asiento / Documento</button>
         </div>
@@ -343,6 +357,22 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
 </div>
 
+<!-- MODAL: CONSULTA E-KUATIA SIFEN (RECORTADO) -->
+<div class="modal-overlay" id="modal-ekuatia">
+  <div class="modal" style="max-width:850px; padding:0; overflow:hidden; position:relative; border-radius:12px;">
+    <div class="close-btn" onclick="closeModal('modal-ekuatia')" style="background:white; z-index:100; top:12px; right:15px; box-shadow:var(--shadow)">✕</div>
+    <div style="padding:15px 20px; background:var(--bg); border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+        <div class="modal-title" style="margin:0; font-size:15px">🔍 Búsqueda SIFEN (e-Kuatia)</div>
+        <a href="https://ekuatia.set.gov.py/consultas/" target="_blank" style="font-size:11px; color:var(--accent2); margin-right:45px; text-decoration:none; font-weight:600">Abrir en pestaña nueva ↗</a>
+    </div>
+    <!-- Contenedor con overflow hidden para recortar el iframe -->
+    <div style="width:100%; height:450px; overflow:hidden; position:relative; background:#f5f6f7;">
+        <!-- Desplazamos el iframe hacia arriba para ocultar el header y menú (aprox -110px a -120px) -->
+        <iframe src="https://ekuatia.set.gov.py/consultas/" style="position:absolute; top:-110px; left:0; width:100%; height:700px; border:none;"></iframe>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: CONTROL HONORARIOS -->
 <div class="modal-overlay" id="modal-honorarios">
   <div class="modal" style="max-width:850px">
@@ -427,7 +457,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
                 <div class="form-group" style="grid-column: span 2"><label>Tercero (Razón Social)</label><input type="text" id="wiz_tercero"></div>
             </div>
             
-            <!-- SE CAMBIÓ TYPE="NUMBER" A TYPE="TEXT" PARA FORMATEO MATEMÁTICO PRECISO -->
             <div class="form-grid col2" style="margin-bottom:12px">
                 <div class="form-group"><label>Monto Total (IVA Incluido) ₲</label>
                     <input type="text" id="wiz_monto" value="0" style="font-family:'DM Mono';font-size:15px;font-weight:700" oninput="calcWizIva()" onblur="formatCurrency(this)" onfocus="unformatCurrency(this)">
@@ -493,10 +522,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
 <script>
 // ===== UTILIDADES Y PARSEO MONETARIO ROBUSTO =====
-// Esta función lee el número y elimina puntos sin importar cómo lo escriba el usuario, asegurando cálculos exactos
 function parseMonto(val) {
     if(!val) return 0;
-    var mStr = val.toString().trim().replace(/\./g, '').replace(/,/g, '.'); // Removemos punto de miles, ajustamos coma si hubiera decimales
+    var mStr = val.toString().trim().replace(/\./g, '').replace(/,/g, '.'); 
     return parseFloat(mStr) || 0;
 }
 function formatCurrency(el) {
@@ -573,7 +601,7 @@ function renderClientes() {
   
   var activos = dbClientes.filter(c => c.activo !== false).length;
   document.getElementById('dash_cli_count').textContent = activos;
-  actualizarSelectsClientes(); // Actualiza el buscador general
+  actualizarSelectsClientes(); 
 }
 
 function openModalCliente(idx = -1) {
@@ -677,7 +705,7 @@ function renderMayorYBalance() {
 function openWizardFromProfile() { 
     wizContext = null; 
     document.getElementById('wiz-title').textContent = "🧾 Asistente de Carga (Nuevo)";
-    document.getElementById('fg_wiz_cliente').style.display = 'none'; // Ocultar
+    document.getElementById('fg_wiz_cliente').style.display = 'none'; 
     document.getElementById('wiz_cliente').value = `${dbClientes[currentCli].ruc} - ${dbClientes[currentCli].nom}`;
     document.getElementById('wiz_fecha').value = new Date().toISOString().split('T')[0];
     document.getElementById('wiz_monto').value = "0"; document.getElementById('wiz_glosa').value = ""; document.getElementById('wiz_nro').value = "";
@@ -704,7 +732,6 @@ function editarComprobante(cliIdx, libro, docIdx) {
   toggleWizardTipo();
   document.getElementById('wiz_nro').value = r.nro; document.getElementById('wiz_tercero').value = r.tercero;
   
-  // Asignamos el monto pre-formateado al input de texto
   document.getElementById('wiz_monto').value = r.bruto.toLocaleString('es-ES');
   
   document.getElementById('wiz_iva_tasa').value = r.iva > 0 ? (r.iva === Math.round(r.bruto/11) ? "10" : "5") : "0";
@@ -780,7 +807,6 @@ function guardarAsientoWizard() {
       var t_iva = parseInt(document.getElementById('wiz_iva_tasa').value)||0;
       var iva = 0;
       
-      // Aseguramos el IVA matematicamente limpio para el asiento
       if(tipo !== 'recibo') {
           if(t_iva === 10) iva = Math.round(tot / 11);
           else if(t_iva === 5) iva = Math.round(tot / 21);
@@ -871,7 +897,7 @@ function procesarImportacion() {
             errorMsg = "Faltan columnas (Requiere 6)."; 
         } else {
             var fecha = col[0].trim(), tipo = col[1].trim().toLowerCase(), nro = col[2].trim(), terc = col[3].trim();
-            var monto = parseMonto(col[4].trim()); // Ya manejamos el parseo de manera unificada
+            var monto = parseMonto(col[4].trim()); 
             var tasa = parseInt(col[5].trim());
 
             if(isNaN(monto) || monto <= 0) errorMsg += "Monto inválido. ";
@@ -935,11 +961,10 @@ function calcularImpuestos(tipo) {
     var inputVal = document.getElementById(tipo+'_cli_sel').value;
     var resDiv = document.getElementById(tipo+'_resultados');
     
-    // Buscar indice por el valor (RUC - Nombre)
     var cliIdx = dbClientes.findIndex(c => `${c.ruc} - ${c.nom}` === inputVal);
     
     if(cliIdx === -1) {
-        if(resDiv) resDiv.style.display = 'none'; // Se oculta si borra o no es válido
+        if(resDiv) resDiv.style.display = 'none'; 
         return;
     }
     
