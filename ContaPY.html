@@ -612,7 +612,7 @@ function switchClientTab(tabId, el) {
 
 function renderLibros() {
   var c = dbClientes[currentCli];
-  const drawRow = (r, libroStr, idx) => `<tr><td>${r.fecha}</td><td><span class="badge-status info">${r.tipo.toUpperCase()}</span></td><td style="font-family:'DM Mono'">${r.nro}</td><td>${r.tercero}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString()}</td><td class="monto" style="color:var(--accent)">${r.iva>0? r.iva.toLocaleString() : '-'}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${currentCli}, '${libroStr}', ${idx})">✏️ Editar</button></td></tr>`;
+  const drawRow = (r, libroStr, idx) => `<tr><td>${r.fecha}</td><td><span class="badge-status info">${r.tipo.toUpperCase()}</span></td><td style="font-family:'DM Mono'">${r.nro}</td><td>${r.tercero}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString('es-ES')}</td><td class="monto" style="color:var(--accent)">${r.iva>0? r.iva.toLocaleString('es-ES') : '-'}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${currentCli}, '${libroStr}', ${idx})">✏️ Editar</button></td></tr>`;
   document.getElementById('lista_lib_compras').innerHTML = c.libros.compras.map((r,i)=>drawRow(r,'compras',i)).join('');
   document.getElementById('lista_lib_ventas').innerHTML = c.libros.ventas.map((r,i)=>drawRow(r,'ventas',i)).join('');
   document.getElementById('lista_lib_recibos').innerHTML = c.libros.recibos.map((r,i)=>drawRow(r,'recibos',i)).join('');
@@ -621,7 +621,7 @@ function renderLibros() {
   var lDiario = document.getElementById('lista_lib_diario'); lDiario.innerHTML='';
   c.libros.diario.forEach((a, i) => {
     lDiario.innerHTML += `<div class="libro-row" style="background:#f8f9fa;border-bottom:none"><div><strong>${a.fecha}</strong></div><div style="font-family:'DM Mono'">${a.asiento}</div><div style="font-weight:600;color:var(--accent2)">Glosa: ${a.glosa}</div><div></div><div></div><div></div></div>`;
-    a.lineas.forEach(l => { lDiario.innerHTML += `<div class="libro-row"><div></div><div></div><div style="padding-left:20px">${l.cuenta}</div><div class="monto debe">${l.debe>0?l.debe.toLocaleString():''}</div><div class="monto haber">${l.haber>0?l.haber.toLocaleString():''}</div><div></div></div>`; });
+    a.lineas.forEach(l => { lDiario.innerHTML += `<div class="libro-row"><div></div><div></div><div style="padding-left:20px">${l.cuenta}</div><div class="monto debe">${l.debe>0?l.debe.toLocaleString('es-ES'):''}</div><div class="monto haber">${l.haber>0?l.haber.toLocaleString('es-ES'):''}</div><div></div></div>`; });
   });
 }
 
@@ -634,15 +634,15 @@ function renderMayorYBalance() {
   Object.keys(cuentas).sort().forEach(cta => {
       var d = cuentas[cta].debe, h = cuentas[cta].haber, cod = cta.split(' ')[0], clase = cod.charAt(0);
       var saldo = 0, nat = ""; if(clase==='1' || clase==='5'){ saldo = d - h; nat="Deudora"; } else { saldo = h - d; nat="Acreedora"; }
-      htmlMayor += `<tr><td><strong style="font-family:'DM Mono'">${cta}</strong></td><td class="monto">${d.toLocaleString()}</td><td class="monto">${h.toLocaleString()}</td><td class="monto" style="font-weight:700;color:var(--accent2)">${saldo.toLocaleString()}</td><td><span class="badge-status ok">${nat}</span></td></tr>`;
-      var balRow = `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px"><span>${cta}</span><span style="font-family:'DM Mono'">₲ ${saldo.toLocaleString()}</span></div>`;
+      htmlMayor += `<tr><td><strong style="font-family:'DM Mono'">${cta}</strong></td><td class="monto">${d.toLocaleString('es-ES')}</td><td class="monto">${h.toLocaleString('es-ES')}</td><td class="monto" style="font-weight:700;color:var(--accent2)">${saldo.toLocaleString('es-ES')}</td><td><span class="badge-status ok">${nat}</span></td></tr>`;
+      var balRow = `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px"><span>${cta}</span><span style="font-family:'DM Mono'">₲ ${saldo.toLocaleString('es-ES')}</span></div>`;
       if(clase==='1'){ tAct += saldo; actHtml+=balRow; } else if(clase==='2'){ tPas += saldo; pasHtml+=balRow; } else if(clase==='3'){ tPat += saldo; patHtml+=balRow; } else if(clase==='4'){ tIng += saldo; } else if(clase==='5'){ tEgr += saldo; }
   });
   document.getElementById('lista_lib_mayor').innerHTML = htmlMayor;
   var rdo = tIng - tEgr; tPat += rdo;
-  patHtml += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px"><span>3.x Resultado del Ejercicio</span><span style="font-family:'DM Mono';color:var(--success)">₲ ${rdo.toLocaleString()}</span></div>`;
-  document.getElementById('bal_activos').innerHTML = actHtml || "<i>Sin movimientos</i>"; document.getElementById('tot_activos').textContent = "Total Activos: ₲ " + tAct.toLocaleString();
-  document.getElementById('bal_pasivos').innerHTML = pasHtml || "<i>Sin movimientos</i>"; document.getElementById('bal_patri').innerHTML = patHtml; document.getElementById('tot_pas_pat').textContent = "Total Pas+Pat: ₲ " + (tPas+tPat).toLocaleString();
+  patHtml += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px"><span>3.x Resultado del Ejercicio</span><span style="font-family:'DM Mono';color:var(--success)">₲ ${rdo.toLocaleString('es-ES')}</span></div>`;
+  document.getElementById('bal_activos').innerHTML = actHtml || "<i>Sin movimientos</i>"; document.getElementById('tot_activos').textContent = "Total Activos: ₲ " + tAct.toLocaleString('es-ES');
+  document.getElementById('bal_pasivos').innerHTML = pasHtml || "<i>Sin movimientos</i>"; document.getElementById('bal_patri').innerHTML = patHtml; document.getElementById('tot_pas_pat').textContent = "Total Pas+Pat: ₲ " + (tPas+tPat).toLocaleString('es-ES');
 }
 
 // ===== WIZARD (CARGA) =====
@@ -704,16 +704,22 @@ function toggleWizardTipo() {
 function toggleBanco() { document.getElementById('blk_banco').style.display = document.getElementById('wiz_pago_tipo').value==='banco'?'block':'none'; }
 
 function calcWizIva() {
-  var tot = parseFloat(document.getElementById('wiz_monto').value)||0, t = parseInt(document.getElementById('wiz_iva_tasa').value);
+  var tot = parseFloat(document.getElementById('wiz_monto').value)||0;
+  var t = parseInt(document.getElementById('wiz_iva_tasa').value)||0;
   var iva = 0;
-  if(t===10) iva = Math.round(tot/11); else if(t===5) iva = Math.round(tot/21);
+  
+  if(t===10) iva = Math.round(tot/11); 
+  else if(t===5) iva = Math.round(tot/21);
+  
   var base = tot - iva;
-  document.getElementById('wiz_base').textContent = "₲ " + base.toLocaleString(); document.getElementById('wiz_iva').textContent = "₲ " + iva.toLocaleString();
+  
+  document.getElementById('wiz_base').textContent = "₲ " + base.toLocaleString('es-ES'); 
+  document.getElementById('wiz_iva').textContent = "₲ " + iva.toLocaleString('es-ES');
 }
 
 function calcRetencion() {
   var b = parseFloat(document.getElementById('ret_bruto').value)||0, t = parseFloat(document.getElementById('ret_tasa').value)||0;
-  document.getElementById('ret_neto').textContent = "₲ " + Math.round(b*(t/100)).toLocaleString();
+  document.getElementById('ret_neto').textContent = "₲ " + Math.round(b*(t/100)).toLocaleString('es-ES');
 }
 
 function guardarAsientoWizard() {
@@ -732,7 +738,17 @@ function guardarAsientoWizard() {
       lin.push({cuenta: oper==='compra'?'2.1.4.06 Ret. a Pagar':'1.1.5.04 Ret. a Favor', debe: oper==='venta'?rtN:0, haber: oper==='compra'?rtN:0});
       lin.push({cuenta: cta, debe: oper==='compra'?rtN:0, haber: oper==='venta'?rtN:0});
   } else {
-      var tot = parseFloat(document.getElementById('wiz_monto').value)||0, iva = tipo==='recibo'?0:parseInt(document.getElementById('wiz_iva').textContent.replace(/[^\d.-]/g, ''))||0;
+      var tot = parseFloat(document.getElementById('wiz_monto').value)||0;
+      var t_iva = parseInt(document.getElementById('wiz_iva_tasa').value)||0;
+      var iva = 0;
+      
+      // El cálculo original del IVA se rehace de manera correcta numéricamente, 
+      // evitando parsear de nuevo el texto formateado con puntos.
+      if(tipo !== 'recibo') {
+          if(t_iva === 10) iva = Math.round(tot / 11);
+          else if(t_iva === 5) iva = Math.round(tot / 21);
+      }
+      
       obj.tercero = document.getElementById('wiz_tercero').value || "Varios"; obj.nro = document.getElementById('wiz_nro').value || "S/N";
       obj.bruto = tot; obj.neto = tot-iva; obj.iva = iva;
       
@@ -766,7 +782,7 @@ function consultarSIFEN() {
     setTimeout(() => {
         var monto = Math.floor(Math.random() * 5000000) + 50000;
         res.innerHTML = `<strong>✅ Factura Electrónica Validada</strong><br><br>
-        Emisor: ALMACENES GENERALES S.A.<br>RUC: 80001112-3<br>Monto Total: ₲ ${monto.toLocaleString()}<br><br>
+        Emisor: ALMACENES GENERALES S.A.<br>RUC: 80001112-3<br>Monto Total: ₲ ${monto.toLocaleString('es-ES')}<br><br>
         <button class="btn btn-primary btn-sm" onclick="cargarCdcWizard(${monto}, 'ALMACENES GENERALES S.A.')">📥 Llevar al Asistente de Carga</button>`;
     }, 1200);
 }
@@ -801,7 +817,7 @@ function procesarImportacion() {
     
     if(!txt) return alert("Pegue los datos para procesar.");
     
-    var filas = txt.trim().split('\n'), parseados = [], filasConErrores = [], cli = dbClientes[document.getElementById('imp_cli_sel').value];
+    var filas = txt.trim().split('\n'), parseados = [], filasConErrores =[], cli = dbClientes[document.getElementById('imp_cli_sel').value];
 
     filas.forEach((f, idx) => {
         var col = f.split('\t'); if(col.length<2) col = f.split(',');
@@ -811,7 +827,15 @@ function procesarImportacion() {
             errorMsg = "Faltan columnas (Requiere 6)."; 
         } else {
             var fecha = col[0].trim(), tipo = col[1].trim().toLowerCase(), nro = col[2].trim(), terc = col[3].trim();
-            var monto = parseFloat(col[4].replace(/,/g,'').trim()), tasa = parseInt(col[5].trim());
+            
+            // Tratamiento robusto para puntos de miles y comas de decimales
+            var mStr = col[4].trim();
+            if(mStr.includes('.') && !mStr.includes(',')) mStr = mStr.replace(/\./g, '');
+            else if(mStr.includes(',') && !mStr.includes('.')) mStr = mStr.replace(/,/g, '');
+            else if(mStr.includes('.') && mStr.includes(',')) mStr = mStr.replace(/\./g, '').replace(/,/g, '.');
+            
+            var monto = parseFloat(mStr);
+            var tasa = parseInt(col[5].trim());
 
             if(isNaN(monto) || monto <= 0) errorMsg += "Monto inválido. ";
             if(!['factura','recibo'].includes(tipo)) errorMsg += `Tipo doc '${tipo}' no soportado. `;
@@ -883,19 +907,19 @@ function calcularImpuestos(tipo) {
         document.getElementById('iva_resultados').style.display = 'block';
         var tVent = 0, tDeb = 0, tCred = 0;
         cli.libros.ventas.forEach(v => { tVent+=v.neto; tDeb+=v.iva; }); cli.libros.compras.forEach(c => { tCred+=c.iva; });
-        document.getElementById('iva_ventas').textContent = "₲ " + tVent.toLocaleString(); document.getElementById('iva_debito').textContent = "₲ " + tDeb.toLocaleString(); document.getElementById('iva_credito').textContent = "₲ " + tCred.toLocaleString();
+        document.getElementById('iva_ventas').textContent = "₲ " + tVent.toLocaleString('es-ES'); document.getElementById('iva_debito').textContent = "₲ " + tDeb.toLocaleString('es-ES'); document.getElementById('iva_credito').textContent = "₲ " + tCred.toLocaleString('es-ES');
         var final = tDeb - tCred; var elFinal = document.getElementById('iva_final');
-        elFinal.textContent = final >= 0 ? "A Pagar: ₲ " + final.toLocaleString() : "Saldo a Favor: ₲ " + Math.abs(final).toLocaleString(); elFinal.style.color = final >= 0 ? "var(--accent)" : "var(--success)";
+        elFinal.textContent = final >= 0 ? "A Pagar: ₲ " + final.toLocaleString('es-ES') : "Saldo a Favor: ₲ " + Math.abs(final).toLocaleString('es-ES'); elFinal.style.color = final >= 0 ? "var(--accent)" : "var(--success)";
     }
     if(tipo === 'ire') {
         document.getElementById('ire_resultados').style.display = 'block'; var tIng = 0, tEgr = 0;
         cli.libros.ventas.forEach(v => { tIng+=v.neto; }); cli.libros.recibos.forEach(r => { tIng+=r.bruto; }); cli.libros.compras.forEach(c => { tEgr+=c.neto; });
-        document.getElementById('ire_ing').textContent = "₲ " + tIng.toLocaleString(); document.getElementById('ire_gas').textContent = "₲ " + tEgr.toLocaleString(); document.getElementById('ire_final').textContent = "₲ " + ((tIng-tEgr)*0.1).toLocaleString();
+        document.getElementById('ire_ing').textContent = "₲ " + tIng.toLocaleString('es-ES'); document.getElementById('ire_gas').textContent = "₲ " + tEgr.toLocaleString('es-ES'); document.getElementById('ire_final').textContent = "₲ " + ((tIng-tEgr)*0.1).toLocaleString('es-ES');
     }
     if(tipo === 'irp') {
         document.getElementById('irp_resultados').style.display = 'block'; var tIng = 0; cli.libros.ventas.forEach(v => { tIng+=v.neto; });
-        if(tIng > 80000000) document.getElementById('irp_final').innerHTML = `Supera el MNA. Ingresos: ₲ ${tIng.toLocaleString()}<br>IRP Estimado: ₲ ${(tIng*0.08).toLocaleString()}`;
-        else document.getElementById('irp_final').innerHTML = `El cliente no supera el rango incidido (Ingresos: ₲ ${tIng.toLocaleString()})`;
+        if(tIng > 80000000) document.getElementById('irp_final').innerHTML = `Supera el MNA. Ingresos: ₲ ${tIng.toLocaleString('es-ES')}<br>IRP Estimado: ₲ ${(tIng*0.08).toLocaleString('es-ES')}`;
+        else document.getElementById('irp_final').innerHTML = `El cliente no supera el rango incidido (Ingresos: ₲ ${tIng.toLocaleString('es-ES')})`;
     }
 }
 
