@@ -3,261 +3,173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY — Sistema Contable Paraguay</title>
+<title>ContaPY v2 — Sistema Contable Paraguay</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f0f2f5;
-  --sidebar: #0f1923;
-  --sidebar-hover: #1a2535;
-  --accent: #e63946;
-  --accent2: #2196f3;
-  --white: #ffffff;
-  --card: #ffffff;
-  --text: #1a1a2e;
-  --text-light: #6b7280;
-  --border: #e5e7eb;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --bg:#f0f2f5;--sidebar:#0f1923;--sidebar-hover:#1a2535;--accent:#e63946;
+  --accent2:#2196f3;--white:#fff;--card:#fff;--text:#1a1a2e;--text-light:#6b7280;
+  --border:#e5e7eb;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
-
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
 /* SIDEBAR */
-.sidebar {
-  width: 240px; background: var(--sidebar); display: flex; flex-direction: column;
-  flex-shrink: 0; height: 100vh; overflow-y: auto;
-}
-.sidebar-logo {
-  padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.logo-mark { display: flex; align-items: center; gap: 10px; }
-.logo-icon {
-  width: 36px; height: 36px; background: var(--accent); border-radius: 8px;
-  display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
-}
-.logo-text { color: white; font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
-.logo-sub { color: rgba(255,255,255,0.35); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
-
-.sidebar-section { padding: 16px 12px 4px; }
-.sidebar-label { color: rgba(255,255,255,0.25); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 0 8px; margin-bottom: 4px; }
-.nav-item {
-  display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px;
-  color: rgba(255,255,255,0.55); font-size: 13.5px; font-weight: 500; cursor: pointer;
-  transition: all 0.15s; margin-bottom: 1px;
-}
-.nav-item:hover { background: var(--sidebar-hover); color: rgba(255,255,255,0.85); }
-.nav-item.active { background: var(--accent); color: white; }
-.nav-item .icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
-.nav-badge { margin-left: auto; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); font-size: 10px; padding: 1px 6px; border-radius: 20px; }
-.nav-item.active .nav-badge { background: rgba(255,255,255,0.25); color: white; }
-
-.sidebar-footer { margin-top: auto; padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.06); }
-.user-card {
-  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px;
-  cursor: pointer; transition: background 0.15s;
-}
-.user-card:hover { background: var(--sidebar-hover); }
-.user-avatar {
-  width: 32px; height: 32px; background: var(--accent); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 600; flex-shrink: 0;
-}
-.user-name { color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 500; }
-.user-role { color: rgba(255,255,255,0.3); font-size: 11px; }
-
+.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.logo-text{color:white;font-size:17px;font-weight:700;letter-spacing:-.5px}
+.logo-sub{color:rgba(255,255,255,.3);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.sidebar-section{padding:12px 10px 2px}
+.sidebar-label{color:rgba(255,255,255,.25);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:0 8px;margin-bottom:3px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;color:rgba(255,255,255,.55);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;margin-bottom:1px}
+.nav-item:hover{background:var(--sidebar-hover);color:rgba(255,255,255,.85)}
+.nav-item.active{background:var(--accent);color:white}
+.nav-item .icon{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:rgba(255,255,255,.15);color:rgba(255,255,255,.7);font-size:10px;padding:1px 6px;border-radius:20px}
+.nav-item.active .nav-badge{background:rgba(255,255,255,.25);color:white}
+.sidebar-footer{margin-top:auto;padding:14px 10px;border-top:1px solid rgba(255,255,255,.06)}
+.user-card{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:7px;cursor:pointer;transition:background .15s}
+.user-card:hover{background:var(--sidebar-hover)}
+.user-avatar{width:30px;height:30px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:600;flex-shrink:0}
+.user-name{color:rgba(255,255,255,.8);font-size:12px;font-weight:500}
+.user-role{color:rgba(255,255,255,.3);font-size:10px}
 /* MAIN */
-.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.topbar {
-  background: var(--white); border-bottom: 1px solid var(--border);
-  padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 16px; flex-shrink: 0;
-}
-.topbar-title { font-size: 17px; font-weight: 700; color: var(--text); flex: 1; }
-.topbar-empresa {
-  background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
-  padding: 7px 14px; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer;
-  display: flex; align-items: center; gap: 8px;
-}
-.topbar-empresa .dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; }
-.btn-icon { width: 36px; height: 36px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: all 0.15s; }
-.btn-icon:hover { background: var(--border); }
-
-.content { flex: 1; overflow-y: auto; padding: 24px; }
-
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
+.topbar-empresa{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:7px}
+.topbar-empresa .dot{width:7px;height:7px;background:var(--success);border-radius:50%}
+.btn-icon{width:34px;height:34px;background:var(--bg);border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .15s}
+.btn-icon:hover{background:var(--border)}
+.content{flex:1;overflow-y:auto;padding:20px}
 /* PAGES */
-.page { display: none; }
-.page.active { display: block; }
-
-/* DASHBOARD */
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-.stat-card {
-  background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow);
-  border: 1px solid var(--border); position: relative; overflow: hidden;
-}
-.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
-.stat-card.blue::before { background: var(--accent2); }
-.stat-card.green::before { background: var(--success); }
-.stat-card.orange::before { background: var(--warning); }
-.stat-label { font-size: 12px; color: var(--text-light); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-.stat-value { font-size: 26px; font-weight: 700; color: var(--text); margin: 8px 0 4px; letter-spacing: -1px; }
-.stat-sub { font-size: 12px; color: var(--text-light); }
-.stat-icon { position: absolute; right: 16px; top: 16px; font-size: 28px; opacity: 0.12; }
-
-.grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-
-.card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-.card-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.card-title .badge { background: var(--bg); color: var(--text-light); font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
-
-/* TABLA */
-.table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-thead th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border); white-space: nowrap; }
-tbody td { padding: 12px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
-tbody tr:hover { background: #fafafa; }
-tbody tr:last-child td { border-bottom: none; }
-.badge-status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-.badge-status.ok { background: #d1fae5; color: #065f46; }
-.badge-status.pend { background: #fef3c7; color: #92400e; }
-.badge-status.err { background: #fee2e2; color: #991b1b; }
-
-/* FORMULARIOS */
-.form-section { background: var(--card); border-radius: 12px; padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px; }
-.form-section-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-.form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.form-grid.col2 { grid-template-columns: repeat(2, 1fr); }
-.form-grid.col4 { grid-template-columns: repeat(4, 1fr); }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group.full { grid-column: 1 / -1; }
-label { font-size: 12px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
-input, select, textarea {
-  padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px;
-  font-size: 13.5px; font-family: 'DM Sans', sans-serif; color: var(--text);
-  background: var(--white); outline: none; transition: border-color 0.15s;
-}
-input:focus, select:focus, textarea:focus { border-color: var(--accent2); }
-textarea { resize: vertical; min-height: 80px; }
-.input-prefix { display: flex; }
-.input-prefix span { background: var(--bg); border: 1.5px solid var(--border); border-right: none; border-radius: 8px 0 0 8px; padding: 9px 10px; font-size: 13px; color: var(--text-light); white-space: nowrap; }
-.input-prefix input { border-radius: 0 8px 8px 0; flex: 1; }
-
-/* BOTONES */
-.btn { padding: 9px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; }
-.btn-primary { background: var(--accent); color: white; }
-.btn-primary:hover { background: #c1121f; }
-.btn-secondary { background: var(--accent2); color: white; }
-.btn-secondary:hover { background: #1976d2; }
-.btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
-.btn-outline:hover { background: var(--bg); }
-.btn-success { background: var(--success); color: white; }
-.btn-sm { padding: 6px 12px; font-size: 12px; }
-.form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
-
-/* MODALS */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--white); border-radius: 16px; padding: 28px; width: 90%; max-width: 560px; box-shadow: var(--shadow-lg); }
-.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
-.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; }
-
-/* DECLARACIONES */
-.decl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-.decl-card {
-  background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow);
-  border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
-}
-.decl-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--accent2); }
-.decl-icon { font-size: 32px; margin-bottom: 12px; }
-.decl-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.decl-desc { font-size: 12px; color: var(--text-light); margin-bottom: 12px; }
-.decl-vence { font-size: 11px; font-weight: 600; color: var(--warning); background: #fef3c7; padding: 3px 8px; border-radius: 20px; display: inline-block; }
-
-/* CLIENTES */
-.search-bar { display: flex; gap: 10px; margin-bottom: 16px; }
-.search-bar input { flex: 1; }
-
-/* RESUMEN IVA */
-.iva-resumen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-.iva-box { background: var(--bg); border-radius: 10px; padding: 16px; text-align: center; }
-.iva-box .val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; }
-.iva-box .lbl { font-size: 11px; color: var(--text-light); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-.iva-box.azul .val { color: var(--accent2); }
-.iva-box.verde .val { color: var(--success); }
-.iva-box.rojo .val { color: var(--accent); }
-
-/* NOTIF */
-.notif { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; margin-bottom: 16px; font-size: 13px; color: #1e40af; }
-
-/* PAGE HEADER */
-.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.page-header h2 { font-size: 22px; font-weight: 700; }
-.page-header p { font-size: 13px; color: var(--text-light); margin-top: 2px; }
-
+.page{display:none}
+.page.active{display:block}
+/* CARDS */
+.card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card-title .badge{background:var(--bg);color:var(--text-light);font-size:11px;padding:2px 7px;border-radius:20px;font-weight:500}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.stat-card.blue::before{background:var(--accent2)}
+.stat-card.green::before{background:var(--success)}
+.stat-card.orange::before{background:var(--warning)}
+.stat-label{font-size:11px;color:var(--text-light);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.stat-value{font-size:22px;font-weight:700;color:var(--text);margin:6px 0 3px;letter-spacing:-1px}
+.stat-sub{font-size:11px;color:var(--text-light)}
+/* GRID */
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap}
+tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tbody tr:hover{background:#fafafa}
+tbody tr:last-child td{border-bottom:none}
+.badge-status{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600}
+.badge-status.ok{background:#d1fae5;color:#065f46}
+.badge-status.pend{background:#fef3c7;color:#92400e}
+.badge-status.err{background:#fee2e2;color:#991b1b}
+.badge-status.info{background:#dbeafe;color:#1e40af}
+/* FORM */
+.form-section{background:var(--card);border-radius:10px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:14px}
+.form-section-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.form-grid.col2{grid-template-columns:repeat(2,1fr)}
+.form-grid.col4{grid-template-columns:repeat(4,1fr)}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+label{font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px}
+input,select,textarea{padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
+textarea{resize:vertical;min-height:70px}
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif}
+.btn-primary{background:var(--accent);color:white}
+.btn-primary:hover{background:#c1121f}
+.btn-secondary{background:var(--accent2);color:white}
+.btn-secondary:hover{background:#1976d2}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+.btn-outline:hover{background:var(--bg)}
+.btn-success{background:var(--success);color:white}
+.btn-success:hover{background:#059669}
+.btn-warning{background:var(--warning);color:white}
+.btn-sm{padding:5px 10px;font-size:11px}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
 /* TABS */
-.tabs { display: flex; gap: 2px; background: var(--bg); border-radius: 10px; padding: 3px; margin-bottom: 20px; width: fit-content; }
-.tab { padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-light); transition: all 0.15s; }
-.tab.active { background: white; color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-weight: 600; }
-
-/* LIBROS */
-.libro-row { display: grid; grid-template-columns: 100px 1fr 2fr 140px 140px 140px; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: center; font-size: 13px; }
-.libro-row.header { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; background: none; border-bottom: 2px solid var(--border); }
-.monto { font-family: 'DM Mono', monospace; text-align: right; }
-.monto.debe { color: var(--accent); }
-.monto.haber { color: var(--success); }
-
-/* USUARIOS */
-.users-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.user-card-full { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
-.ucf-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-.ucf-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0; }
-.ucf-name { font-size: 15px; font-weight: 700; }
-.ucf-email { font-size: 12px; color: var(--text-light); }
-.ucf-role { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.role-admin { background: #fee2e2; color: #991b1b; }
-.role-senior { background: #dbeafe; color: #1e40af; }
-.role-junior { background: #d1fae5; color: #065f46; }
-.ucf-perms { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
-.perm-tag { background: var(--bg); color: var(--text-light); font-size: 11px; padding: 3px 8px; border-radius: 6px; }
-.ucf-actions { margin-top: 16px; display: flex; gap: 8px; }
-
+.tabs{display:flex;gap:2px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:16px;width:fit-content}
+.tab{padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--text-light);transition:all .15s}
+.tab.active{background:white;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
+/* PAGE HEADER */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.page-header h2{font-size:20px;font-weight:700}
+.page-header p{font-size:12px;color:var(--text-light);margin-top:2px}
+/* NOTIF */
+.notif{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;margin-bottom:14px;font-size:12.5px;color:#1e40af}
+.notif.warn{background:#fef3c7;border-color:#fde68a;color:#92400e}
+/* PLAN DE CUENTAS */
+.cuenta-nivel-1{font-weight:700;font-size:13px;background:#f8f9fa;border-left:4px solid var(--accent2)}
+.cuenta-nivel-2{font-weight:600;font-size:12.5px;padding-left:20px!important;background:#fafafa;border-left:4px solid #93c5fd}
+.cuenta-nivel-3{font-size:12px;padding-left:36px!important;color:var(--text)}
+.cuenta-nivel-4{font-size:11.5px;padding-left:52px!important;color:var(--text-light)}
+.cuenta-row{display:grid;grid-template-columns:120px 1fr 80px 80px;gap:8px;padding:7px 10px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;transition:background .1s}
+.cuenta-row:hover{background:#f0f7ff}
+/* ASIENTOS */
+.asiento-linea{display:grid;grid-template-columns:1fr 2fr 130px 130px 28px;gap:8px;align-items:center;margin-bottom:6px}
+.asiento-total{display:grid;grid-template-columns:1fr 2fr 130px 130px 28px;gap:8px;padding:8px 0;border-top:2px solid var(--border);font-weight:700;font-size:13px}
+/* COMPROBANTES */
+.comp-tipo{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.comp-sifen{background:#d1fae5;color:#065f46}
+.comp-virtual{background:#dbeafe;color:#1e40af}
+.comp-preimpresa{background:#fef3c7;color:#92400e}
+.comp-autofactura{background:#ede9fe;color:#5b21b6}
+.comp-retencion{background:#fee2e2;color:#991b1b}
+.comp-resimple{background:#fce7f3;color:#9d174d}
 /* LOGIN */
-.login-wrap { position: fixed; inset: 0; background: linear-gradient(135deg, #0f1923 0%, #1a2535 50%, #0f1923 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-.login-card { background: white; border-radius: 20px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 24px 64px rgba(0,0,0,0.3); }
-.login-logo { text-align: center; margin-bottom: 32px; }
-.login-logo .icon { width: 60px; height: 60px; background: var(--accent); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 12px; }
-.login-logo h1 { font-size: 26px; font-weight: 800; letter-spacing: -1px; }
-.login-logo p { font-size: 13px; color: var(--text-light); margin-top: 4px; }
-.login-card .form-group { margin-bottom: 16px; }
-.login-card label { font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--text); font-weight: 600; }
-.login-card input { width: 100%; }
-.login-btn { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; font-family: 'DM Sans', sans-serif; }
-.login-btn:hover { background: #c1121f; }
-.login-error { background: #fee2e2; color: #991b1b; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-top: 12px; display: none; }
-
-/* EMPRESA SELECTOR */
-.empresa-modal .empresa-item {
-  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-  border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; margin-bottom: 8px; transition: all 0.15s;
-}
-.empresa-modal .empresa-item:hover, .empresa-modal .empresa-item.sel { border-color: var(--accent2); background: #eff6ff; }
-.emp-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-.emp-ruc { font-size: 11px; color: var(--text-light); }
-
-/* SIFEN */
-.sifen-steps { display: flex; gap: 0; margin-bottom: 24px; }
-.sifen-step { flex: 1; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); font-size: 12px; font-weight: 600; color: var(--text-light); text-align: center; cursor: pointer; transition: all 0.15s; }
-.sifen-step:first-child { border-radius: 8px 0 0 8px; }
-.sifen-step:last-child { border-radius: 0 8px 8px 0; }
-.sifen-step.active { background: var(--accent); color: white; border-color: var(--accent); }
-.sifen-step.done { background: var(--success); color: white; border-color: var(--success); }
-
+.login-wrap{position:fixed;inset:0;background:linear-gradient(135deg,#0f1923 0%,#1a2535 50%,#0f1923 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-card{background:white;border-radius:18px;padding:36px;width:100%;max-width:380px;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo .icon{width:56px;height:56px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px}
+.login-logo h1{font-size:24px;font-weight:800;letter-spacing:-1px}
+.login-logo p{font-size:12px;color:var(--text-light);margin-top:3px}
+.login-card .form-group{margin-bottom:14px}
+.login-card label{font-size:12px;text-transform:none;letter-spacing:0;color:var(--text);font-weight:600}
+.login-card input{width:100%}
+.login-btn{width:100%;padding:11px;background:var(--accent);color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;font-family:'DM Sans',sans-serif}
+.login-btn:hover{background:#c1121f}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:14px;padding:24px;width:90%;max-width:580px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto}
+.modal-title{font-size:17px;font-weight:700;margin-bottom:18px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+/* IVA CALC */
+.iva-box{background:var(--bg);border-radius:9px;padding:14px;text-align:center}
+.iva-box .val{font-size:20px;font-weight:700;font-family:'DM Mono',monospace}
+.iva-box .lbl{font-size:10px;color:var(--text-light);margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+.iva-box.azul .val{color:var(--accent2)}
+.iva-box.verde .val{color:var(--success)}
+.iva-box.rojo .val{color:var(--accent)}
+/* DECLARACION CARD */
+.decl-card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);cursor:pointer;transition:all .2s}
+.decl-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--accent2)}
 /* SCROLL */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px}
+/* LIBRO DIARIO */
+.libro-header{display:grid;grid-template-columns:100px 80px 1fr 120px 120px;gap:8px;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border)}
+.libro-row{display:grid;grid-template-columns:100px 80px 1fr 120px 120px;gap:8px;padding:9px 10px;border-bottom:1px solid var(--border);font-size:12px;align-items:center}
+.libro-row:hover{background:#fafafa}
+.monto{font-family:'DM Mono',monospace;text-align:right}
+.debe{color:var(--accent)}
+.haber{color:var(--success)}
 </style>
 </head>
 <body>
@@ -268,19 +180,13 @@ textarea { resize: vertical; min-height: 80px; }
     <div class="login-logo">
       <div class="icon">🧾</div>
       <h1>ContaPY</h1>
-      <p>Sistema Contable Paraguay</p>
+      <p>Sistema Contable Paraguay — Ley N° 6380/2019</p>
     </div>
-    <div class="form-group">
-      <label>Usuario</label>
-      <input type="text" id="login-user" placeholder="usuario@estudio.com.py" value="admin@contapy.py">
-    </div>
-    <div class="form-group">
-      <label>Contraseña</label>
-      <input type="password" id="login-pass" placeholder="••••••••" value="admin123">
-    </div>
+    <div class="form-group"><label>Usuario</label><input type="text" id="lu" value="admin@contapy.py"></div>
+    <div class="form-group"><label>Contraseña</label><input type="password" id="lp" value="admin123" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="login-btn" onclick="doLogin()">Ingresar al Sistema</button>
-    <div class="login-error" id="login-error">Usuario o contraseña incorrectos</div>
-    <p style="text-align:center;font-size:12px;color:#9ca3af;margin-top:20px;">ContaPY v1.0 — SET Paraguay Compatible</p>
+    <div id="lerr" style="display:none;background:#fee2e2;color:#991b1b;padding:8px 12px;border-radius:7px;font-size:12px;margin-top:10px;">Usuario o contraseña incorrectos</div>
+    <p style="text-align:center;font-size:11px;color:#9ca3af;margin-top:16px;">ContaPY v2.0 — SET Paraguay Compatible</p>
   </div>
 </div>
 
@@ -289,88 +195,51 @@ textarea { resize: vertical; min-height: 80px; }
   <div class="sidebar-logo">
     <div class="logo-mark">
       <div class="logo-icon">🧾</div>
-      <div>
-        <div class="logo-text">ContaPY</div>
-        <div class="logo-sub">Sistema Contable</div>
-      </div>
+      <div><div class="logo-text">ContaPY</div><div class="logo-sub">v2.0</div></div>
     </div>
   </div>
-
   <div class="sidebar-section">
     <div class="sidebar-label">Principal</div>
-    <div class="nav-item active" onclick="showPage('dashboard', this)">
-      <span class="icon">🏠</span> Dashboard
-    </div>
-    <div class="nav-item" onclick="showPage('clientes', this)">
-      <span class="icon">🏢</span> Clientes
-      <span class="nav-badge">12</span>
-    </div>
-    <div class="nav-item" onclick="showPage('proveedores', this)">
-      <span class="icon">🚚</span> Proveedores
-    </div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span>Dashboard</div>
+    <div class="nav-item" onclick="showPage('empresas',this)"><span class="icon">🏛️</span>Empresas</div>
+    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span>Clientes<span class="nav-badge">12</span></div>
   </div>
-
-  <div class="sidebar-section">
-    <div class="sidebar-label">Facturación</div>
-    <div class="nav-item" onclick="showPage('sifen', this)">
-      <span class="icon">⚡</span> SIFEN
-      <span class="nav-badge">3</span>
-    </div>
-    <div class="nav-item" onclick="showPage('facturas', this)">
-      <span class="icon">📄</span> Facturas
-    </div>
-    <div class="nav-item" onclick="showPage('notas', this)">
-      <span class="icon">📋</span> Notas / NC
-    </div>
-  </div>
-
-  <div class="sidebar-section">
-    <div class="sidebar-label">Impuestos</div>
-    <div class="nav-item" onclick="showPage('iva', this)">
-      <span class="icon">📊</span> IVA
-    </div>
-    <div class="nav-item" onclick="showPage('declaraciones', this)">
-      <span class="icon">📑</span> Declaraciones
-      <span class="nav-badge" style="background:#e63946;color:white;">2</span>
-    </div>
-    <div class="nav-item" onclick="showPage('ire', this)">
-      <span class="icon">💼</span> IRE / IRP
-    </div>
-  </div>
-
   <div class="sidebar-section">
     <div class="sidebar-label">Contabilidad</div>
-    <div class="nav-item" onclick="showPage('libros', this)">
-      <span class="icon">📚</span> Libros Contables
-    </div>
-    <div class="nav-item" onclick="showPage('asientos', this)">
-      <span class="icon">✍️</span> Asientos
-    </div>
-    <div class="nav-item" onclick="showPage('reportes', this)">
-      <span class="icon">📈</span> Reportes
-    </div>
+    <div class="nav-item" onclick="showPage('plan_cuentas',this)"><span class="icon">📋</span>Plan de Cuentas</div>
+    <div class="nav-item" onclick="showPage('asientos',this)"><span class="icon">✍️</span>Asientos<span class="nav-badge">5</span></div>
+    <div class="nav-item" onclick="showPage('libro_diario',this)"><span class="icon">📚</span>Libro Diario</div>
+    <div class="nav-item" onclick="showPage('libro_mayor',this)"><span class="icon">📖</span>Libro Mayor</div>
   </div>
-
   <div class="sidebar-section">
-    <div class="sidebar-label">Administración</div>
-    <div class="nav-item" onclick="showPage('usuarios', this)">
-      <span class="icon">👥</span> Usuarios
-    </div>
-    <div class="nav-item" onclick="showPage('empresas', this)">
-      <span class="icon">🏛️</span> Empresas
-    </div>
-    <div class="nav-item" onclick="showPage('configuracion', this)">
-      <span class="icon">⚙️</span> Configuración
-    </div>
+    <div class="sidebar-label">Facturación</div>
+    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">🧾</span>Comprobantes<span class="nav-badge" style="background:#e63946;color:white;">3</span></div>
+    <div class="nav-item" onclick="showPage('sifen',this)"><span class="icon">⚡</span>SIFEN</div>
+    <div class="nav-item" onclick="showPage('retenciones',this)"><span class="icon">📎</span>Retenciones</div>
   </div>
-
+  <div class="sidebar-section">
+    <div class="sidebar-label">Impuestos</div>
+    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span>IVA — Form. 120</div>
+    <div class="nav-item" onclick="showPage('declaraciones',this)"><span class="icon">📑</span>Declaraciones<span class="nav-badge" style="background:#e63946;color:white;">2</span></div>
+    <div class="nav-item" onclick="showPage('ire',this)"><span class="icon">💼</span>IRE / IRACIS</div>
+    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span>IRP</div>
+    <div class="nav-item" onclick="showPage('inr',this)"><span class="icon">🌍</span>INR</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Reportes</div>
+    <div class="nav-item" onclick="showPage('balance',this)"><span class="icon">⚖️</span>Balance General</div>
+    <div class="nav-item" onclick="showPage('resultados',this)"><span class="icon">📈</span>Estado Result.</div>
+    <div class="nav-item" onclick="showPage('reportes',this)"><span class="icon">📁</span>Exportaciones</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Admin</div>
+    <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span>Usuarios</div>
+    <div class="nav-item" onclick="showPage('config',this)"><span class="icon">⚙️</span>Configuración</div>
+  </div>
   <div class="sidebar-footer">
     <div class="user-card">
       <div class="user-avatar">JC</div>
-      <div>
-        <div class="user-name">Juan Carlos</div>
-        <div class="user-role">Administrador</div>
-      </div>
+      <div><div class="user-name">Juan Carlos</div><div class="user-role">Administrador</div></div>
     </div>
   </div>
 </div>
@@ -379,13 +248,12 @@ textarea { resize: vertical; min-height: 80px; }
 <div class="main">
   <div class="topbar">
     <div class="topbar-title" id="topbar-title">Dashboard</div>
-    <div class="topbar-empresa" onclick="openModal('empresa-modal')">
+    <div class="topbar-empresa" onclick="openModal('modal-empresa')">
       <div class="dot"></div>
-      <span id="empresa-activa">Empresa ABC S.A. — RUC 80012345-6</span>
-      <span>▾</span>
+      <span id="empresa-activa">Empresa ABC S.A. — RUC 80012345-6</span>▾
     </div>
-    <div class="btn-icon" title="Notificaciones">🔔</div>
-    <div class="btn-icon" title="Salir" onclick="doLogout()">🚪</div>
+    <div class="btn-icon">🔔</div>
+    <div class="btn-icon" onclick="doLogout()">🚪</div>
   </div>
 
   <div class="content">
@@ -393,776 +261,787 @@ textarea { resize: vertical; min-height: 80px; }
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="page-header">
-        <div>
-          <h2>Bienvenido, Juan Carlos 👋</h2>
-          <p>Marzo 2026 — Período fiscal activo</p>
-        </div>
-        <button class="btn btn-primary" onclick="showPage('sifen', document.querySelector('[onclick*=sifen]'))">+ Nueva Factura</button>
+        <div><h2>Bienvenido 👋</h2><p>Período fiscal Marzo 2026 — Ley 6380/2019</p></div>
+        <button class="btn btn-primary" onclick="showPage('comprobantes',document.querySelector('[onclick*=comprobantes]'))">+ Nuevo Comprobante</button>
       </div>
-
-      <div class="notif">
-        ⚠️ <span><strong>Vencimiento próximo:</strong> Declaración IVA (Formulario 120) vence el <strong>10 de Abril 2026</strong>. Faltan 21 días.</span>
-      </div>
-
+      <div class="notif warn">⚠️ <span><strong>Vencimiento IVA:</strong> Formulario 120 vence según Calendario Perpetuo. RUC terminado en 6 → día <strong>19 del mes siguiente</strong>.</span></div>
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">Ventas del Mes</div>
-          <div class="stat-value">₲ 48.2M</div>
-          <div class="stat-sub">↑ 12% vs mes anterior</div>
-          <div class="stat-icon">💰</div>
-        </div>
-        <div class="stat-card blue">
-          <div class="stat-label">IVA Débito</div>
-          <div class="stat-value">₲ 4.8M</div>
-          <div class="stat-sub">10% sobre ventas gravadas</div>
-          <div class="stat-icon">📊</div>
-        </div>
-        <div class="stat-card green">
-          <div class="stat-label">Facturas Emitidas</div>
-          <div class="stat-value">127</div>
-          <div class="stat-sub">34 electrónicas SIFEN</div>
-          <div class="stat-icon">📄</div>
-        </div>
-        <div class="stat-card orange">
-          <div class="stat-label">Clientes Activos</div>
-          <div class="stat-value">12</div>
-          <div class="stat-sub">3 con vencimientos hoy</div>
-          <div class="stat-icon">🏢</div>
-        </div>
+        <div class="stat-card"><div class="stat-label">Ventas del Mes</div><div class="stat-value">₲ 48.2M</div><div class="stat-sub">↑ 12% vs mes anterior</div></div>
+        <div class="stat-card blue"><div class="stat-label">IVA Débito</div><div class="stat-value">₲ 4.38M</div><div class="stat-sub">IVA Débito 10% s/ventas</div></div>
+        <div class="stat-card green"><div class="stat-label">IVA Crédito</div><div class="stat-value">₲ 2.10M</div><div class="stat-sub">IVA Crédito en compras</div></div>
+        <div class="stat-card orange"><div class="stat-label">Saldo IVA</div><div class="stat-value">₲ 2.28M</div><div class="stat-sub">A pagar al Fisco</div></div>
       </div>
-
       <div class="grid-2">
         <div class="card">
-          <div class="card-title">Últimas Facturas <span class="badge">Este mes</span></div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>N° Factura</th><th>Cliente</th><th>Fecha</th><th>Monto</th><th>Estado</th></tr></thead>
-              <tbody>
-                <tr><td style="font-family:'DM Mono',monospace">001-001-0000127</td><td>Supermercado Día</td><td>20/03/2026</td><td style="font-family:'DM Mono',monospace">₲ 2.500.000</td><td><span class="badge-status ok">✓ SIFEN</span></td></tr>
-                <tr><td style="font-family:'DM Mono',monospace">001-001-0000126</td><td>Ferretería Central</td><td>19/03/2026</td><td style="font-family:'DM Mono',monospace">₲ 850.000</td><td><span class="badge-status ok">✓ SIFEN</span></td></tr>
-                <tr><td style="font-family:'DM Mono',monospace">001-001-0000125</td><td>Comercial Norte</td><td>18/03/2026</td><td style="font-family:'DM Mono',monospace">₲ 4.200.000</td><td><span class="badge-status pend">⏳ Pendiente</span></td></tr>
-                <tr><td style="font-family:'DM Mono',monospace">001-001-0000124</td><td>Distribuidora Sur</td><td>17/03/2026</td><td style="font-family:'DM Mono',monospace">₲ 1.100.000</td><td><span class="badge-status ok">✓ SIFEN</span></td></tr>
-              </tbody>
-            </table>
-          </div>
+          <div class="card-title">Últimos Comprobantes <span class="badge">Hoy</span></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>N° Doc</th><th>Tipo</th><th>Receptor</th><th>Total</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td style="font-family:'DM Mono',monospace">001-001-0000127</td><td><span class="comp-tipo comp-sifen">⚡ SIFEN</span></td><td>Empresa ABC</td><td style="font-family:'DM Mono',monospace">₲ 2.500.000</td><td><span class="badge-status ok">Aprobado</span></td></tr>
+              <tr><td style="font-family:'DM Mono',monospace">001-001-0000126</td><td><span class="comp-tipo comp-virtual">💻 Virtual</span></td><td>Comercial Norte</td><td style="font-family:'DM Mono',monospace">₲ 850.000</td><td><span class="badge-status ok">Ok</span></td></tr>
+              <tr><td style="font-family:'DM Mono',monospace">001-001-0000125</td><td><span class="comp-tipo comp-preimpresa">🖨️ Preimpresa</span></td><td>Ferretería Central</td><td style="font-family:'DM Mono',monospace">₲ 4.200.000</td><td><span class="badge-status pend">Pendiente</span></td></tr>
+            </tbody>
+          </table></div>
         </div>
-
         <div class="card">
-          <div class="card-title">Vencimientos <span class="badge">Próximos 30 días</span></div>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#fef3c7;border-radius:8px;">
-              <div><div style="font-size:13px;font-weight:600;">Form. 120 — IVA Marzo</div><div style="font-size:11px;color:#92400e;">Todas las empresas</div></div>
-              <div style="font-size:12px;font-weight:700;color:#92400e;">10 Abr</div>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#eff6ff;border-radius:8px;">
-              <div><div style="font-size:13px;font-weight:600;">Form. 500 — IRE Anual</div><div style="font-size:11px;color:#1e40af;">Empresa ABC S.A.</div></div>
-              <div style="font-size:12px;font-weight:700;color:#1e40af;">30 Abr</div>
-            </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:#f0fdf4;border-radius:8px;">
-              <div><div style="font-size:13px;font-weight:600;">IRACIS Anticipos</div><div style="font-size:11px;color:#065f46;">Comercial Norte SRL</div></div>
-              <div style="font-size:12px;font-weight:700;color:#065f46;">15 Abr</div>
-            </div>
-          </div>
+          <div class="card-title">Calendario Perpetuo IVA</div>
+          <div style="font-size:12px;color:var(--text-light);margin-bottom:10px;">Vencimiento Form. 120 según dígito del RUC</div>
+          <table><thead><tr><th>Dígito RUC</th><th>Vence día</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td style="font-weight:600;">7</td></tr>
+            <tr><td>1</td><td style="font-weight:600;">9</td></tr>
+            <tr><td>2</td><td style="font-weight:600;">11</td></tr>
+            <tr><td>3</td><td style="font-weight:600;">13</td></tr>
+            <tr><td>4</td><td style="font-weight:600;">15</td></tr>
+            <tr><td>5</td><td style="font-weight:600;">17</td></tr>
+            <tr><td>6</td><td style="font-weight:600;">19</td></tr>
+            <tr><td>7</td><td style="font-weight:600;">21</td></tr>
+            <tr><td>8</td><td style="font-weight:600;">23</td></tr>
+            <tr><td>9</td><td style="font-weight:600;">25</td></tr>
+          </tbody></table>
         </div>
       </div>
     </div>
 
-    <!-- CLIENTES -->
-    <div class="page" id="page-clientes">
+    <!-- PLAN DE CUENTAS -->
+    <div class="page" id="page-plan_cuentas">
       <div class="page-header">
-        <div><h2>Clientes</h2><p>Gestión de clientes del estudio contable</p></div>
-        <button class="btn btn-primary" onclick="openModal('cliente-modal')">+ Nuevo Cliente</button>
-      </div>
-      <div class="search-bar">
-        <input type="text" placeholder="🔍 Buscar por nombre, RUC...">
-        <select><option>Todos los estados</option><option>Activos</option><option>Inactivos</option></select>
-        <button class="btn btn-outline">Exportar</button>
+        <div><h2>Plan de Cuentas</h2><p>Basado en NIIF adaptado a Paraguay — Ley 6380/2019</p></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline" onclick="openModal('modal-cuenta')">+ Nueva Cuenta</button>
+          <input type="text" placeholder="🔍 Buscar cuenta..." style="width:200px" id="search-cuenta" onkeyup="filtrarCuentas()">
+        </div>
       </div>
       <div class="card">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>RUC</th><th>Razón Social</th><th>Tipo</th><th>Régimen</th><th>Contador Asig.</th><th>Estado</th><th>Acciones</th></tr></thead>
-            <tbody>
-              <tr><td style="font-family:'DM Mono',monospace">80012345-6</td><td>Empresa ABC S.A.</td><td>SA</td><td>IRE General</td><td>María González</td><td><span class="badge-status ok">Activo</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
-              <tr><td style="font-family:'DM Mono',monospace">4512678-9</td><td>Comercial Norte SRL</td><td>SRL</td><td>IRE ReSiMo</td><td>Carlos Pérez</td><td><span class="badge-status ok">Activo</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
-              <tr><td style="font-family:'DM Mono',monospace">2234567-1</td><td>Ferretería Central</td><td>Unipersonal</td><td>IRS</td><td>Ana López</td><td><span class="badge-status ok">Activo</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
-              <tr><td style="font-family:'DM Mono',monospace">5678901-2</td><td>Distribuidora Sur SA</td><td>SA</td><td>IRE General</td><td>María González</td><td><span class="badge-status pend">Pendiente</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
-            </tbody>
-          </table>
+        <div class="tabla-cuentas" id="tabla-cuentas">
+          <div style="display:grid;grid-template-columns:110px 1fr 80px 90px;gap:8px;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);">
+            <div>Código</div><div>Nombre</div><div>Tipo</div><div>Estado</div>
+          </div>
+          <!-- Generado por JS -->
         </div>
       </div>
     </div>
 
-    <!-- SIFEN -->
-    <div class="page" id="page-sifen">
+    <!-- ASIENTOS -->
+    <div class="page" id="page-asientos">
       <div class="page-header">
-        <div><h2>Facturación Electrónica — SIFEN</h2><p>Sistema Integrado de Facturación Electrónica Nacional</p></div>
-        <button class="btn btn-primary" onclick="showSifenForm()">+ Nueva Factura</button>
+        <div><h2>Asientos Contables</h2><p>Registro manual y automático de asientos</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-asiento')">+ Nuevo Asiento</button>
       </div>
-
-      <div class="sifen-steps" id="sifen-steps" style="display:none;">
-        <div class="sifen-step active" id="step-1">1. Datos Generales</div>
-        <div class="sifen-step" id="step-2">2. Ítems</div>
-        <div class="sifen-step" id="step-3">3. Totales</div>
-        <div class="sifen-step" id="step-4">4. Generar XML</div>
+      <div class="notif">💡 <span>Los asientos se generan automáticamente al registrar comprobantes. También podés crear asientos manuales.</span></div>
+      <div class="card">
+        <div class="table-wrap"><table>
+          <thead><tr><th>N° Asiento</th><th>Fecha</th><th>Concepto</th><th>Comprobante</th><th>Debe</th><th>Haber</th><th>Estado</th></tr></thead>
+          <tbody id="tabla-asientos">
+            <tr><td style="font-family:'DM Mono',monospace">A-0127</td><td>20/03/2026</td><td>Venta Empresa ABC — Fact. 127</td><td><span class="comp-tipo comp-sifen" style="font-size:10px">SIFEN</span></td><td class="monto debe">₲ 2.500.000</td><td class="monto haber">₲ 2.500.000</td><td><span class="badge-status ok">Balanceado</span></td></tr>
+            <tr><td style="font-family:'DM Mono',monospace">A-0126</td><td>19/03/2026</td><td>Venta Comercial Norte — Fact. 126</td><td><span class="comp-tipo comp-virtual" style="font-size:10px">Virtual</span></td><td class="monto debe">₲ 850.000</td><td class="monto haber">₲ 850.000</td><td><span class="badge-status ok">Balanceado</span></td></tr>
+            <tr><td style="font-family:'DM Mono',monospace">A-0125</td><td>18/03/2026</td><td>Compra materiales proveedor ABC</td><td><span class="comp-tipo comp-preimpresa" style="font-size:10px">Preimpresa</span></td><td class="monto debe">₲ 1.200.000</td><td class="monto haber">₲ 1.200.000</td><td><span class="badge-status ok">Balanceado</span></td></tr>
+          </tbody>
+        </table></div>
       </div>
+    </div>
 
-      <div id="sifen-lista">
-        <div class="card" style="margin-bottom:16px;">
-          <div class="card-title">Estado SIFEN <span class="badge">Conectado</span></div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
-            <div style="background:#f0fdf4;padding:14px;border-radius:10px;text-align:center;">
-              <div style="font-size:22px;font-weight:700;color:#10b981;">34</div>
-              <div style="font-size:11px;color:#065f46;text-transform:uppercase;">Aprobadas</div>
-            </div>
-            <div style="background:#fef3c7;padding:14px;border-radius:10px;text-align:center;">
-              <div style="font-size:22px;font-weight:700;color:#f59e0b;">3</div>
-              <div style="font-size:11px;color:#92400e;text-transform:uppercase;">Pendientes</div>
-            </div>
-            <div style="background:#fee2e2;padding:14px;border-radius:10px;text-align:center;">
-              <div style="font-size:22px;font-weight:700;color:#ef4444;">1</div>
-              <div style="font-size:11px;color:#991b1b;text-transform:uppercase;">Rechazadas</div>
-            </div>
-            <div style="background:#eff6ff;padding:14px;border-radius:10px;text-align:center;">
-              <div style="font-size:22px;font-weight:700;color:#2196f3;">38</div>
-              <div style="font-size:11px;color:#1e40af;text-transform:uppercase;">Total Mes</div>
-            </div>
-          </div>
+    <!-- LIBRO DIARIO -->
+    <div class="page" id="page-libro_diario">
+      <div class="page-header">
+        <div><h2>Libro Diario</h2><p>Registro cronológico de asientos — Marzo 2026</p></div>
+        <div style="display:flex;gap:8px;">
+          <select style="font-size:13px;padding:7px 10px;"><option>Marzo 2026</option><option>Febrero 2026</option></select>
+          <button class="btn btn-outline">Exportar Excel</button>
+          <button class="btn btn-secondary">Exportar PDF</button>
         </div>
-        <div class="card">
-          <div class="card-title">Documentos Electrónicos Recientes</div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>N° DE</th><th>Tipo</th><th>RUC Receptor</th><th>Receptor</th><th>Monto Total</th><th>IVA</th><th>Estado SET</th><th>CDC</th></tr></thead>
-              <tbody>
-                <tr><td style="font-family:'DM Mono',monospace">001-001-0000127</td><td>Factura</td><td>80012345-6</td><td>Empresa ABC</td><td style="font-family:'DM Mono',monospace">₲ 2.500.000</td><td style="font-family:'DM Mono',monospace">₲ 227.272</td><td><span class="badge-status ok">Aprobado</span></td><td><button class="btn btn-outline btn-sm">XML</button></td></tr>
-                <tr><td style="font-family:'DM Mono',monospace">001-001-0000126</td><td>Factura</td><td>4512678-9</td><td>Comercial Norte</td><td style="font-family:'DM Mono',monospace">₲ 850.000</td><td style="font-family:'DM Mono',monospace">₲ 77.272</td><td><span class="badge-status ok">Aprobado</span></td><td><button class="btn btn-outline btn-sm">XML</button></td></tr>
-                <tr><td style="font-family:'DM Mono',monospace">001-001-0000125</td><td>Factura</td><td>2234567-1</td><td>Ferretería Central</td><td style="font-family:'DM Mono',monospace">₲ 4.200.000</td><td style="font-family:'DM Mono',monospace">₲ 381.818</td><td><span class="badge-status pend">Pendiente</span></td><td><button class="btn btn-outline btn-sm">XML</button></td></tr>
-              </tbody>
-            </table>
+      </div>
+      <div class="card">
+        <div class="libro-header"><div>Fecha</div><div>N° Asiento</div><div>Descripción</div><div>Debe ₲</div><div>Haber ₲</div></div>
+        <div id="libro-diario-rows">
+          <div class="libro-row"><div>20/03/2026</div><div style="font-family:'DM Mono',monospace">A-0127</div><div><strong>Cuentas por Cobrar Comerciales</strong><br><span style="font-size:11px;color:var(--text-light)">Venta Empresa ABC — Fact. SIFEN 127</span></div><div class="monto debe">2.500.000</div><div></div></div>
+          <div class="libro-row"><div></div><div></div><div style="padding-left:20px">IVA Débito 10%</div><div></div><div class="monto haber">227.272</div></div>
+          <div class="libro-row"><div></div><div></div><div style="padding-left:20px">Ventas Gravadas 10%</div><div></div><div class="monto haber">2.272.728</div></div>
+          <div class="libro-row" style="background:#fafafa"><div>19/03/2026</div><div style="font-family:'DM Mono',monospace">A-0126</div><div><strong>Cuentas por Cobrar Comerciales</strong><br><span style="font-size:11px;color:var(--text-light)">Venta Comercial Norte — Fact. Virtual 126</span></div><div class="monto debe">850.000</div><div></div></div>
+          <div class="libro-row" style="background:#fafafa"><div></div><div></div><div style="padding-left:20px">IVA Débito 10%</div><div></div><div class="monto haber">77.272</div></div>
+          <div class="libro-row" style="background:#fafafa"><div></div><div></div><div style="padding-left:20px">Ventas Gravadas 10%</div><div></div><div class="monto haber">772.728</div></div>
+          <div class="libro-row"><div>18/03/2026</div><div style="font-family:'DM Mono',monospace">A-0125</div><div><strong>Inventario / Costo de Mercaderías</strong><br><span style="font-size:11px;color:var(--text-light)">Compra insumos — Fact. Preimpresa</span></div><div class="monto debe">1.090.909</div><div></div></div>
+          <div class="libro-row"><div></div><div></div><div style="padding-left:20px">IVA Crédito 10%</div><div class="monto debe">109.091</div><div></div></div>
+          <div class="libro-row"><div></div><div></div><div style="padding-left:20px">Cuentas por Pagar Comerciales</div><div></div><div class="monto haber">1.200.000</div></div>
+          <div style="display:grid;grid-template-columns:100px 80px 1fr 120px 120px;gap:8px;padding:10px 10px;border-top:2px solid var(--border);font-weight:700;font-size:13px;background:#f8f9fa;">
+            <div></div><div></div><div>TOTALES</div><div class="monto">4.550.000</div><div class="monto">4.550.000</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div id="sifen-form" style="display:none;">
-        <div class="form-section">
-          <div class="form-section-title">📄 Datos del Documento Electrónico</div>
-          <div class="form-grid col4">
-            <div class="form-group">
-              <label>Tipo DE</label>
-              <select><option>Factura Electrónica (01)</option><option>Nota de Crédito (05)</option><option>Nota de Débito (06)</option><option>Nota de Remisión (07)</option></select>
-            </div>
-            <div class="form-group">
-              <label>Timbrado</label>
-              <input type="text" placeholder="12345678" value="12345678">
-            </div>
-            <div class="form-group">
-              <label>N° Establecimiento</label>
-              <input type="text" value="001">
-            </div>
-            <div class="form-group">
-              <label>N° Punto Emisión</label>
-              <input type="text" value="001">
-            </div>
-          </div>
-          <div class="form-grid" style="margin-top:16px;">
-            <div class="form-group">
-              <label>Fecha Emisión</label>
-              <input type="date" value="2026-03-20">
-            </div>
-            <div class="form-group">
-              <label>Condición de Venta</label>
-              <select><option>Contado</option><option>Crédito</option></select>
-            </div>
-            <div class="form-group">
-              <label>Moneda</label>
-              <select><option>PYG — Guaraní</option><option>USD — Dólar</option></select>
-            </div>
-          </div>
-        </div>
+    <!-- LIBRO MAYOR -->
+    <div class="page" id="page-libro_mayor">
+      <div class="page-header">
+        <div><h2>Libro Mayor</h2><p>Movimientos por cuenta contable</p></div>
+        <select style="font-size:13px;padding:7px 10px;min-width:250px;" id="select-cuenta-mayor" onchange="mostrarMayor()">
+          <option value="">-- Seleccioná una cuenta --</option>
+          <option value="cxc">1.1.2.01 — Cuentas por Cobrar Comerciales</option>
+          <option value="ventas">4.1.1.01 — Ventas Gravadas 10%</option>
+          <option value="iva_debito">2.1.4.01 — IVA Débito 10%</option>
+          <option value="iva_credito">1.1.5.01 — IVA Crédito 10%</option>
+          <option value="cxp">2.1.1.01 — Cuentas por Pagar Comerciales</option>
+          <option value="caja">1.1.1.01 — Caja</option>
+        </select>
+      </div>
+      <div class="card" id="mayor-content">
+        <p style="color:var(--text-light);text-align:center;padding:20px;">Seleccioná una cuenta para ver sus movimientos</p>
+      </div>
+    </div>
 
-        <div class="form-section">
-          <div class="form-section-title">🏢 Receptor</div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label>RUC / CI Receptor</label>
-              <input type="text" placeholder="80012345-6">
-            </div>
-            <div class="form-group">
-              <label>Razón Social</label>
-              <input type="text" placeholder="Empresa ABC S.A.">
-            </div>
-            <div class="form-group">
-              <label>Tipo Contribuyente</label>
-              <select><option>Persona Jurídica</option><option>Persona Física</option><option>Sin RUC</option></select>
-            </div>
-          </div>
-          <div class="form-grid" style="margin-top:16px;">
-            <div class="form-group">
-              <label>Dirección</label>
-              <input type="text" placeholder="Av. Mariscal López 1234">
-            </div>
-            <div class="form-group">
-              <label>Teléfono</label>
-              <input type="text" placeholder="021-000000">
-            </div>
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="contacto@empresa.com.py">
-            </div>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <div class="form-section-title">📦 Ítems</div>
-          <table style="width:100%;font-size:13px;margin-bottom:12px;">
-            <thead><tr style="background:var(--bg);">
-              <th style="padding:8px;text-align:left;">Descripción</th>
-              <th style="padding:8px;text-align:left;">Unidad</th>
-              <th style="padding:8px;text-align:right;">Cantidad</th>
-              <th style="padding:8px;text-align:right;">P. Unitario</th>
-              <th style="padding:8px;text-align:left;">IVA</th>
-              <th style="padding:8px;text-align:right;">Total</th>
-              <th style="padding:8px;"></th>
-            </tr></thead>
-            <tbody id="items-tabla">
-              <tr>
-                <td style="padding:6px;"><input type="text" placeholder="Descripción del bien/servicio" style="width:100%"></td>
-                <td style="padding:6px;"><select style="width:80px;"><option>UND</option><option>KG</option><option>LT</option><option>SVC</option></select></td>
-                <td style="padding:6px;"><input type="number" value="1" style="width:70px;text-align:right;" onchange="calcTotal()"></td>
-                <td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;" onchange="calcTotal()"></td>
-                <td style="padding:6px;"><select style="width:80px;" onchange="calcTotal()"><option>10%</option><option>5%</option><option>Exenta</option></select></td>
-                <td style="padding:6px;text-align:right;font-family:'DM Mono',monospace;" id="total-row-0">₲ 0</td>
-                <td style="padding:6px;"><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcTotal()">✕</button></td>
-              </tr>
-            </tbody>
-          </table>
-          <button class="btn btn-outline btn-sm" onclick="agregarItem()">+ Agregar ítem</button>
-        </div>
-
-        <div class="form-section">
-          <div class="form-section-title">💰 Totales</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
-            <div></div>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>Subtotal Gravado 10%:</span><span style="font-family:'DM Mono',monospace;" id="sub10">₲ 0</span></div>
-              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>Subtotal Gravado 5%:</span><span style="font-family:'DM Mono',monospace;" id="sub5">₲ 0</span></div>
-              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>Exento:</span><span style="font-family:'DM Mono',monospace;" id="subex">₲ 0</span></div>
-              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>IVA 10%:</span><span style="font-family:'DM Mono',monospace;" id="iva10">₲ 0</span></div>
-              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>IVA 5%:</span><span style="font-family:'DM Mono',monospace;" id="iva5">₲ 0</span></div>
-              <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:16px;font-weight:700;"><span>TOTAL:</span><span style="font-family:'DM Mono',monospace;color:var(--accent);" id="total-gral">₲ 0</span></div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-outline" onclick="cancelarSifen()">Cancelar</button>
-            <button class="btn btn-outline">Guardar Borrador</button>
-            <button class="btn btn-secondary">Vista Previa PDF</button>
-            <button class="btn btn-primary">⚡ Enviar a SIFEN</button>
-          </div>
-        </div>
+    <!-- COMPROBANTES -->
+    <div class="page" id="page-comprobantes">
+      <div class="page-header">
+        <div><h2>Registro de Comprobantes</h2><p>Todos los tipos habilitados por la DNIT/SET</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-comprobante')">+ Registrar Comprobante</button>
+      </div>
+      <div class="notif">📋 <span>Tipos habilitados por la DNIT: Factura Preimpresa, Factura Virtual (Tesakã), Factura Electrónica (SIFEN/e-kuatia), Autofactura, Nota de Crédito/Débito, Comprobante de Retención, Boleta RESIMPLE, Nota de Remisión.</span></div>
+      <div class="tabs">
+        <div class="tab active" onclick="filtrarComprobantes('todos',this)">Todos</div>
+        <div class="tab" onclick="filtrarComprobantes('ventas',this)">Ventas</div>
+        <div class="tab" onclick="filtrarComprobantes('compras',this)">Compras</div>
+        <div class="tab" onclick="filtrarComprobantes('retenciones',this)">Retenciones</div>
+      </div>
+      <div class="card">
+        <div class="table-wrap"><table>
+          <thead><tr><th>N° Doc</th><th>Tipo</th><th>Fecha</th><th>RUC/CI</th><th>Nombre</th><th>Base 10%</th><th>Base 5%</th><th>Exento</th><th>IVA</th><th>Total</th><th>Acciones</th></tr></thead>
+          <tbody id="tabla-comprobantes">
+            <tr data-tipo="ventas"><td style="font-family:'DM Mono',monospace">001-001-0000127</td><td><span class="comp-tipo comp-sifen">⚡ SIFEN</span></td><td>20/03/26</td><td>80012345-6</td><td>Empresa ABC S.A.</td><td class="monto">2.272.728</td><td class="monto">—</td><td class="monto">—</td><td class="monto">227.272</td><td class="monto" style="font-weight:600">2.500.000</td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+            <tr data-tipo="ventas"><td style="font-family:'DM Mono',monospace">001-001-0000126</td><td><span class="comp-tipo comp-virtual">💻 Virtual</span></td><td>19/03/26</td><td>4512678-9</td><td>Comercial Norte</td><td class="monto">772.728</td><td class="monto">—</td><td class="monto">—</td><td class="monto">77.272</td><td class="monto" style="font-weight:600">850.000</td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+            <tr data-tipo="compras"><td style="font-family:'DM Mono',monospace">002-001-0000045</td><td><span class="comp-tipo comp-preimpresa">🖨️ Preimpresa</span></td><td>18/03/26</td><td>5567890-1</td><td>Distribuidora Central</td><td class="monto">1.090.909</td><td class="monto">—</td><td class="monto">—</td><td class="monto">109.091</td><td class="monto" style="font-weight:600">1.200.000</td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+            <tr data-tipo="retenciones"><td style="font-family:'DM Mono',monospace">RET-0023</td><td><span class="comp-tipo comp-retencion">📎 Retención</span></td><td>17/03/26</td><td>3345678-2</td><td>Importadora XYZ</td><td class="monto">—</td><td class="monto">—</td><td class="monto">—</td><td class="monto">50.000</td><td class="monto" style="font-weight:600">50.000</td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+            <tr data-tipo="compras"><td style="font-family:'DM Mono',monospace">AUTO-001</td><td><span class="comp-tipo comp-autofactura">🔄 Autofactura</span></td><td>15/03/26</td><td>1234567-8</td><td>Juan Pérez</td><td class="monto">—</td><td class="monto">—</td><td class="monto">200.000</td><td class="monto">—</td><td class="monto" style="font-weight:600">200.000</td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+            <tr data-tipo="ventas"><td style="font-family:'DM Mono',monospace">RESIMPLE-12</td><td><span class="comp-tipo comp-resimple">🟣 RESIMPLE</span></td><td>14/03/26</td><td>2234567-1</td><td>Ferretería Central</td><td class="monto">—</td><td class="monto">130.000</td><td class="monto">—</td><td class="monto">30.000</td><td class="monto" style="font-weight:600">160.000</td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+          </tbody>
+        </table></div>
       </div>
     </div>
 
     <!-- IVA -->
     <div class="page" id="page-iva">
       <div class="page-header">
-        <div><h2>IVA — Impuesto al Valor Agregado</h2><p>Formulario 120 — Período Marzo 2026</p></div>
-        <div style="display:flex;gap:10px;">
+        <div><h2>IVA — Formulario 120 V4</h2><p>Liquidación Mensual — Código Obligación 211 — Ley 6380/2019 Art. 80-101</p></div>
+        <div style="display:flex;gap:8px;">
+          <select style="font-size:13px;padding:7px 10px;"><option>Marzo 2026</option></select>
           <button class="btn btn-outline">Exportar TXT</button>
           <button class="btn btn-primary">Generar Form. 120</button>
         </div>
       </div>
-
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div class="iva-box azul"><div class="val">₲ 48.200.000</div><div class="lbl">Rubro 1 — Ventas Gravadas Total</div></div>
+        <div class="iva-box rojo"><div class="val">₲ 4.381.818</div><div class="lbl">IVA Débito (Col. II+III Rubro 1)</div></div>
+        <div class="iva-box verde"><div class="val">₲ 2.100.000</div><div class="lbl">IVA Crédito (Rubro 3 Inc. f)</div></div>
+      </div>
       <div class="tabs">
-        <div class="tab active">Ventas (Débito)</div>
-        <div class="tab">Compras (Crédito)</div>
-        <div class="tab">Liquidación</div>
+        <div class="tab active">Rubro 1 — Ventas</div>
+        <div class="tab">Rubro 3 — Compras</div>
+        <div class="tab">Rubro 4 — Liquidación</div>
       </div>
-
-      <div class="iva-resumen">
-        <div class="iva-box azul"><div class="val">₲ 48.200.000</div><div class="lbl">Total Ventas Gravadas</div></div>
-        <div class="iva-box rojo"><div class="val">₲ 4.381.818</div><div class="lbl">IVA Débito (a pagar)</div></div>
-        <div class="iva-box verde"><div class="val">₲ 2.100.000</div><div class="lbl">IVA Crédito (compras)</div></div>
+      <div class="form-section">
+        <div class="form-section-title">📊 Rubro 1 — Enajenación de Bienes y/o Prestación de Servicios del Período</div>
+        <table><thead><tr><th>Inc.</th><th>Concepto</th><th>Casilla</th><th>Monto Imponible</th><th>IVA 5%</th><th>IVA 10%</th></tr></thead>
+        <tbody>
+          <tr><td>a</td><td>Enajenación gravada al 10%</td><td style="font-family:'DM Mono',monospace">10/22</td><td class="monto">43.818.182</td><td></td><td class="monto" style="color:var(--accent)">4.381.818</td></tr>
+          <tr><td>b</td><td>Prod. agrícolas — tasa 5%</td><td style="font-family:'DM Mono',monospace">150/156</td><td class="monto">—</td><td class="monto" style="color:var(--accent)">—</td><td></td></tr>
+          <tr><td>c</td><td>Otros bienes/servicios — tasa 5%</td><td style="font-family:'DM Mono',monospace">151/157</td><td class="monto">—</td><td class="monto" style="color:var(--accent)">—</td><td></td></tr>
+          <tr><td>d</td><td>Exonerados / No alcanzados</td><td style="font-family:'DM Mono',monospace">12</td><td class="monto">4.381.818</td><td></td><td></td></tr>
+          <tr style="background:#f8f9fa;font-weight:700"><td></td><td>TOTAL (Inc. a+b+c+d)</td><td style="font-family:'DM Mono',monospace">18/21/24</td><td class="monto">48.200.000</td><td class="monto">—</td><td class="monto" style="color:var(--accent)">4.381.818</td></tr>
+        </tbody></table>
       </div>
-
-      <div class="card">
-        <div class="card-title">Registro de Ventas — Marzo 2026</div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Fecha</th><th>N° Factura</th><th>RUC Cliente</th><th>Cliente</th><th>Base Grav. 10%</th><th>Base Grav. 5%</th><th>Exento</th><th>IVA 10%</th><th>IVA 5%</th><th>Total</th></tr></thead>
-            <tbody>
-              <tr><td>20/03</td><td style="font-family:'DM Mono',monospace">001-001-0000127</td><td>80012345-6</td><td>Empresa ABC</td><td style="font-family:'DM Mono',monospace;text-align:right;">2.272.728</td><td style="text-align:right;">—</td><td style="text-align:right;">—</td><td style="font-family:'DM Mono',monospace;text-align:right;">227.272</td><td style="text-align:right;">—</td><td style="font-family:'DM Mono',monospace;text-align:right;font-weight:600;">2.500.000</td></tr>
-              <tr><td>19/03</td><td style="font-family:'DM Mono',monospace">001-001-0000126</td><td>4512678-9</td><td>Comercial Norte</td><td style="font-family:'DM Mono',monospace;text-align:right;">772.728</td><td style="text-align:right;">—</td><td style="text-align:right;">—</td><td style="font-family:'DM Mono',monospace;text-align:right;">77.272</td><td style="text-align:right;">—</td><td style="font-family:'DM Mono',monospace;text-align:right;font-weight:600;">850.000</td></tr>
-            </tbody>
-          </table>
+      <div class="form-section">
+        <div class="form-section-title">💰 Rubro 4 — Determinación del Impuesto o Saldo Técnico</div>
+        <div style="max-width:400px;">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>IVA Débito (Casilla 44)</span><span style="font-family:'DM Mono',monospace;color:var(--accent)">₲ 4.381.818</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>IVA Crédito (Casilla 45)</span><span style="font-family:'DM Mono',monospace;color:var(--success)">₲ 2.100.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Saldo anterior (Casilla 46)</span><span style="font-family:'DM Mono',monospace">₲ 0</span></div>
+          <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:15px;font-weight:700"><span>IMPUESTO DETERMINADO (Casilla 48)</span><span style="font-family:'DM Mono',monospace;color:var(--accent)">₲ 2.281.818</span></div>
         </div>
       </div>
     </div>
 
     <!-- DECLARACIONES -->
     <div class="page" id="page-declaraciones">
-      <div class="page-header">
-        <div><h2>Declaraciones Juradas</h2><p>Formularios de la SET — Paraguay</p></div>
-      </div>
-
-      <div class="decl-grid">
+      <div class="page-header"><div><h2>Declaraciones Juradas</h2><p>Formularios SET — Paraguay — Ley 6380/2019</p></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
         <div class="decl-card">
-          <div class="decl-icon">📊</div>
-          <div class="decl-name">Formulario 120</div>
-          <div class="decl-desc">Liquidación Mensual del IVA. Declaración de ventas y compras gravadas.</div>
-          <div class="decl-vence">⏰ Vence 10 Abril</div>
+          <div style="font-size:28px;margin-bottom:10px">📊</div>
+          <div style="font-size:14px;font-weight:700">Formulario 120 V4</div>
+          <div style="font-size:12px;color:var(--text-light);margin:6px 0 10px">IVA — Mensual<br>Cód. Obligación: <strong>211</strong></div>
+          <div style="font-size:11px;font-weight:600;color:var(--warning);background:#fef3c7;padding:3px 8px;border-radius:20px;display:inline-block">⏰ Vence por RUC</div>
         </div>
         <div class="decl-card">
-          <div class="decl-icon">💼</div>
-          <div class="decl-name">Formulario 500</div>
-          <div class="decl-desc">IRE — Impuesto a la Renta Empresarial. Declaración anual de rentas.</div>
-          <div class="decl-vence">⏰ Vence 30 Abril</div>
+          <div style="font-size:28px;margin-bottom:10px">💼</div>
+          <div style="font-size:14px;font-weight:700">Formulario 500</div>
+          <div style="font-size:12px;color:var(--text-light);margin:6px 0 10px">IRE — Anual<br>Cód. Obligación: <strong>811</strong></div>
+          <div style="font-size:11px;font-weight:600;color:var(--warning);background:#fef3c7;padding:3px 8px;border-radius:20px;display:inline-block">⏰ Vence 30 Abril</div>
         </div>
         <div class="decl-card">
-          <div class="decl-icon">👤</div>
-          <div class="decl-name">Formulario IRP</div>
-          <div class="decl-desc">Impuesto a la Renta Personal. Para personas físicas con rentas gravadas.</div>
-          <div class="decl-vence" style="background:#d1fae5;color:#065f46;">✓ Al día</div>
+          <div style="font-size:28px;margin-bottom:10px">👤</div>
+          <div style="font-size:14px;font-weight:700">Formulario 515 V1</div>
+          <div style="font-size:12px;color:var(--text-light);margin:6px 0 10px">IRP RSP — Anual<br>Cód. Obligación: <strong>715</strong></div>
+          <div style="font-size:11px;font-weight:600;color:var(--success);background:#d1fae5;padding:3px 8px;border-radius:20px;display:inline-block">✓ Al día</div>
         </div>
         <div class="decl-card">
-          <div class="decl-icon">🌾</div>
-          <div class="decl-name">IMAGRO</div>
-          <div class="decl-desc">Impuesto a las rentas de actividades agropecuarias.</div>
-          <div class="decl-vence" style="background:#d1fae5;color:#065f46;">✓ Al día</div>
+          <div style="font-size:28px;margin-bottom:10px">🌍</div>
+          <div style="font-size:14px;font-weight:700">Formulario 525 V1</div>
+          <div style="font-size:12px;color:var(--text-light);margin:6px 0 10px">INR — Mensual<br>Cód. Obligación: <strong>725</strong></div>
+          <div style="font-size:11px;font-weight:600;color:var(--text-light);background:var(--bg);padding:3px 8px;border-radius:20px;display:inline-block">Vence día 7</div>
         </div>
         <div class="decl-card">
-          <div class="decl-icon">📦</div>
-          <div class="decl-name">IRE ReSiMo</div>
-          <div class="decl-desc">Régimen Simplificado y Módulos para pequeños contribuyentes.</div>
-          <div class="decl-vence">⏰ Vence 15 Abril</div>
+          <div style="font-size:28px;margin-bottom:10px">🌾</div>
+          <div style="font-size:14px;font-weight:700">IMAGRO</div>
+          <div style="font-size:12px;color:var(--text-light);margin:6px 0 10px">Actividades Agropecuarias<br>Ley 6380/2019 Tít. I</div>
+          <div style="font-size:11px;font-weight:600;color:var(--success);background:#d1fae5;padding:3px 8px;border-radius:20px;display:inline-block">✓ Al día</div>
         </div>
         <div class="decl-card">
-          <div class="decl-icon">🔄</div>
-          <div class="decl-name">Anticipos IRE</div>
-          <div class="decl-desc">Pago de anticipos mensuales del Impuesto a la Renta Empresarial.</div>
-          <div class="decl-vence">⏰ Vence 15 Abril</div>
+          <div style="font-size:28px;margin-bottom:10px">📦</div>
+          <div style="font-size:14px;font-weight:700">IRE ReSiMo</div>
+          <div style="font-size:12px;color:var(--text-light);margin:6px 0 10px">Régimen Simplificado<br>Pequeños contribuyentes</div>
+          <div style="font-size:11px;font-weight:600;color:var(--warning);background:#fef3c7;padding:3px 8px;border-radius:20px;display:inline-block">⏰ Vence 15</div>
         </div>
       </div>
     </div>
 
-    <!-- LIBROS -->
-    <div class="page" id="page-libros">
-      <div class="page-header">
-        <div><h2>Libros Contables</h2><p>Libro Diario — Marzo 2026</p></div>
-        <div style="display:flex;gap:10px;">
-          <button class="btn btn-outline" onclick="openModal('asiento-modal')">+ Nuevo Asiento</button>
-          <button class="btn btn-primary">Exportar Excel</button>
-        </div>
-      </div>
-
-      <div class="tabs">
-        <div class="tab active">Libro Diario</div>
-        <div class="tab">Libro Mayor</div>
-        <div class="tab">Balance de Sumas</div>
-        <div class="tab">Estado de Resultados</div>
-      </div>
-
-      <div class="card">
-        <div class="libro-row header">
-          <div>Fecha</div><div>N° Asiento</div><div>Concepto</div>
-          <div class="monto">Debe</div><div class="monto">Haber</div><div class="monto">Saldo</div>
-        </div>
-        <div class="libro-row">
-          <div>20/03/2026</div><div style="font-family:'DM Mono',monospace">A-0127</div><div>Venta a Empresa ABC S.A. - Fact. 127</div>
-          <div class="monto debe">₲ 2.500.000</div><div class="monto">—</div><div class="monto">₲ 2.500.000</div>
-        </div>
-        <div class="libro-row">
-          <div>20/03/2026</div><div style="font-family:'DM Mono',monospace">A-0127</div><div>IVA Débito 10% - Fact. 127</div>
-          <div class="monto">—</div><div class="monto haber">₲ 227.272</div><div class="monto">₲ 2.272.728</div>
-        </div>
-        <div class="libro-row">
-          <div>19/03/2026</div><div style="font-family:'DM Mono',monospace">A-0126</div><div>Venta a Comercial Norte - Fact. 126</div>
-          <div class="monto debe">₲ 850.000</div><div class="monto">—</div><div class="monto">₲ 850.000</div>
-        </div>
-        <div class="libro-row">
-          <div>18/03/2026</div><div style="font-family:'DM Mono',monospace">A-0125</div><div>Compra materiales - Prov. ABC</div>
-          <div class="monto">—</div><div class="monto haber">₲ 1.200.000</div><div class="monto" style="color:var(--accent);">₲ -1.200.000</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- USUARIOS -->
-    <div class="page" id="page-usuarios">
-      <div class="page-header">
-        <div><h2>Usuarios del Sistema</h2><p>Gestión de accesos y permisos</p></div>
-        <button class="btn btn-primary" onclick="openModal('user-modal')">+ Nuevo Usuario</button>
-      </div>
-      <div class="users-grid">
-        <div class="user-card-full">
-          <div class="ucf-header">
-            <div class="ucf-avatar" style="background:#e63946;">JC</div>
-            <div>
-              <div class="ucf-name">Juan Carlos López</div>
-              <div class="ucf-email">admin@contapy.py</div>
-            </div>
-          </div>
-          <span class="ucf-role role-admin">Administrador</span>
-          <div class="ucf-perms">
-            <span class="perm-tag">Todos los módulos</span>
-            <span class="perm-tag">Gestión usuarios</span>
-            <span class="perm-tag">Configuración</span>
-          </div>
-          <div class="ucf-actions"><button class="btn btn-outline btn-sm">Editar</button></div>
-        </div>
-        <div class="user-card-full">
-          <div class="ucf-header">
-            <div class="ucf-avatar" style="background:#2196f3;">MG</div>
-            <div>
-              <div class="ucf-name">María González</div>
-              <div class="ucf-email">mgonzalez@contapy.py</div>
-            </div>
-          </div>
-          <span class="ucf-role role-senior">Contador Senior</span>
-          <div class="ucf-perms">
-            <span class="perm-tag">Facturación</span>
-            <span class="perm-tag">IVA / IRE</span>
-            <span class="perm-tag">Libros</span>
-            <span class="perm-tag">Declaraciones</span>
-          </div>
-          <div class="ucf-actions"><button class="btn btn-outline btn-sm">Editar</button></div>
-        </div>
-        <div class="user-card-full">
-          <div class="ucf-header">
-            <div class="ucf-avatar" style="background:#10b981;">CP</div>
-            <div>
-              <div class="ucf-name">Carlos Pérez</div>
-              <div class="ucf-email">cperez@contapy.py</div>
-            </div>
-          </div>
-          <span class="ucf-role role-junior">Contador Jr</span>
-          <div class="ucf-perms">
-            <span class="perm-tag">Facturas (solo ver)</span>
-            <span class="perm-tag">Clientes asignados</span>
-          </div>
-          <div class="ucf-actions"><button class="btn btn-outline btn-sm">Editar</button></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- REPORTES -->
-    <div class="page" id="page-reportes">
-      <div class="page-header">
-        <div><h2>Reportes</h2><p>Generación de informes y exportaciones</p></div>
-      </div>
-      <div class="grid-3">
-        <div class="decl-card" style="cursor:pointer;">
-          <div class="decl-icon">📊</div>
-          <div class="decl-name">Libro IVA Ventas</div>
-          <div class="decl-desc">Registro de ventas con detalle de IVA para presentar a la SET.</div>
-          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar TXT</button>
-        </div>
-        <div class="decl-card">
-          <div class="decl-icon">🛒</div>
-          <div class="decl-name">Libro IVA Compras</div>
-          <div class="decl-desc">Registro de compras con crédito fiscal deducible.</div>
-          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar TXT</button>
-        </div>
-        <div class="decl-card">
-          <div class="decl-icon">📈</div>
-          <div class="decl-name">Estado de Resultados</div>
-          <div class="decl-desc">Informe de ingresos y egresos del período seleccionado.</div>
-          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar PDF</button>
-        </div>
-        <div class="decl-card">
-          <div class="decl-icon">⚖️</div>
-          <div class="decl-name">Balance General</div>
-          <div class="decl-desc">Activos, pasivos y patrimonio al cierre del período.</div>
-          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar PDF</button>
-        </div>
-        <div class="decl-card">
-          <div class="decl-icon">📋</div>
-          <div class="decl-name">Retenciones</div>
-          <div class="decl-desc">Comprobantes de retención del IVA e IRE emitidos.</div>
-          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar</button>
-        </div>
-        <div class="decl-card">
-          <div class="decl-icon">🏦</div>
-          <div class="decl-name">Conciliación Bancaria</div>
-          <div class="decl-desc">Comparación entre registros contables y extractos bancarios.</div>
-          <button class="btn btn-outline btn-sm" style="margin-top:8px;">Generar</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- EMPRESAS -->
-    <div class="page" id="page-empresas">
-      <div class="page-header">
-        <div><h2>Empresas</h2><p>Contribuyentes gestionados por el estudio</p></div>
-        <button class="btn btn-primary">+ Nueva Empresa</button>
-      </div>
-      <div class="card">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>RUC</th><th>Razón Social</th><th>Tipo Soc.</th><th>Régimen</th><th>Timbrado Vigente</th><th>Venc. Timbrado</th><th>Estado</th></tr></thead>
-            <tbody>
-              <tr><td style="font-family:'DM Mono',monospace">80012345-6</td><td>Empresa ABC S.A.</td><td>SA</td><td>IRE General</td><td style="font-family:'DM Mono',monospace">12345678</td><td>31/12/2026</td><td><span class="badge-status ok">Vigente</span></td></tr>
-              <tr><td style="font-family:'DM Mono',monospace">4512678-9</td><td>Comercial Norte SRL</td><td>SRL</td><td>IRE ReSiMo</td><td style="font-family:'DM Mono',monospace">87654321</td><td>30/06/2026</td><td><span class="badge-status ok">Vigente</span></td></tr>
-              <tr><td style="font-family:'DM Mono',monospace">2234567-1</td><td>Ferretería Central</td><td>Unipersonal</td><td>IRS</td><td style="font-family:'DM Mono',monospace">11223344</td><td>15/04/2026</td><td><span class="badge-status pend">Por vencer</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- PROVEEDORES -->
-    <div class="page" id="page-proveedores">
-      <div class="page-header">
-        <div><h2>Proveedores</h2><p>Registro de proveedores y compras</p></div>
-        <button class="btn btn-primary">+ Nuevo Proveedor</button>
-      </div>
-      <div class="card">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>RUC</th><th>Razón Social</th><th>Rubro</th><th>Teléfono</th><th>Crédito Fiscal</th><th>Estado</th></tr></thead>
-            <tbody>
-              <tr><td style="font-family:'DM Mono',monospace">5567890-1</td><td>Distribuidora Central SA</td><td>Mayorista</td><td>021-555000</td><td style="font-family:'DM Mono',monospace;color:var(--success);">₲ 340.000</td><td><span class="badge-status ok">Activo</span></td></tr>
-              <tr><td style="font-family:'DM Mono',monospace">3345678-2</td><td>Importadora XYZ</td><td>Importación</td><td>021-666000</td><td style="font-family:'DM Mono',monospace;color:var(--success);">₲ 890.000</td><td><span class="badge-status ok">Activo</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- CONFIGURACION -->
-    <div class="page" id="page-configuracion">
-      <div class="page-header">
-        <div><h2>Configuración</h2><p>Parámetros del sistema</p></div>
-      </div>
-      <div class="form-section">
-        <div class="form-section-title">⚙️ Parámetros Generales</div>
-        <div class="form-grid">
-          <div class="form-group"><label>Nombre del Estudio</label><input type="text" value="Estudio Contable ContaPY"></div>
-          <div class="form-group"><label>RUC del Estudio</label><input type="text" value="1234567-8"></div>
-          <div class="form-group"><label>Email Principal</label><input type="email" value="admin@contapy.py"></div>
-          <div class="form-group"><label>Teléfono</label><input type="text" value="021-000000"></div>
-          <div class="form-group"><label>Dirección</label><input type="text" value="Asunción, Paraguay"></div>
-          <div class="form-group"><label>Moneda por Defecto</label><select><option>PYG — Guaraní</option></select></div>
-        </div>
-        <div class="form-actions"><button class="btn btn-primary">Guardar Cambios</button></div>
-      </div>
-      <div class="form-section">
-        <div class="form-section-title">🔗 Conexión SIFEN — SET</div>
-        <div class="form-grid">
-          <div class="form-group"><label>Ambiente</label><select><option>Producción</option><option>Test</option></select></div>
-          <div class="form-group"><label>Certificado Digital</label><input type="file"></div>
-          <div class="form-group"><label>Contraseña Cert.</label><input type="password" placeholder="••••••••"></div>
-        </div>
-        <div class="form-actions"><button class="btn btn-secondary">Probar Conexión</button></div>
-      </div>
-    </div>
-
-    <!-- FACTURAS / NOTAS / IRE / ASIENTOS -->
-    <div class="page" id="page-facturas">
-      <div class="page-header"><div><h2>Facturas</h2><p>Registro de facturas emitidas y recibidas</p></div><button class="btn btn-primary">+ Nueva Factura</button></div>
-      <div class="card"><p style="color:var(--text-light);padding:20px;text-align:center;">Módulo en desarrollo — disponible próximamente</p></div>
-    </div>
-    <div class="page" id="page-notas">
-      <div class="page-header"><div><h2>Notas de Crédito / Débito</h2></div><button class="btn btn-primary">+ Nueva Nota</button></div>
-      <div class="card"><p style="color:var(--text-light);padding:20px;text-align:center;">Módulo en desarrollo</p></div>
-    </div>
+    <!-- IRE -->
     <div class="page" id="page-ire">
-      <div class="page-header"><div><h2>IRE / IRP</h2><p>Impuesto a la Renta</p></div></div>
-      <div class="card"><p style="color:var(--text-light);padding:20px;text-align:center;">Módulo en desarrollo</p></div>
-    </div>
-    <div class="page" id="page-asientos">
-      <div class="page-header"><div><h2>Asientos Contables</h2></div><button class="btn btn-primary" onclick="openModal('asiento-modal')">+ Nuevo Asiento</button></div>
-      <div class="card"><p style="color:var(--text-light);padding:20px;text-align:center;">Módulo en desarrollo</p></div>
+      <div class="page-header"><div><h2>IRE — Impuesto a la Renta Empresarial</h2><p>Formulario 500 / IRACIS Form. 101 — Ley 6380/2019</p></div></div>
+      <div class="form-section">
+        <div class="form-section-title">📋 Rubro 1 — Estado de Resultados (Casillas 10-64)</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Casilla 58 — Total Ingresos Brutos</label><div class="input-prefix"><span>₲</span><input type="text" placeholder="0" id="ire_ingbruto" oninput="calcIRE()"></div></div>
+          <div class="form-group"><label>Casilla 17 — Devoluciones/Desc.</label><div class="input-prefix"><span>₲</span><input type="text" placeholder="0" id="ire_devoluc" oninput="calcIRE()"></div></div>
+          <div class="form-group"><label>Casilla 61 — Total Costos</label><div class="input-prefix"><span>₲</span><input type="text" placeholder="0" id="ire_costos" oninput="calcIRE()"></div></div>
+          <div class="form-group"><label>Casilla 63 — Total Gastos</label><div class="input-prefix"><span>₲</span><input type="text" placeholder="0" id="ire_gastos" oninput="calcIRE()"></div></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">💰 Rubro 4 — Liquidación</div>
+        <div style="max-width:400px;" id="ire-resultado">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Casilla 59 — Ingresos Netos</span><span style="font-family:'DM Mono',monospace" id="ire_r59">₲ 0</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Casilla 68 — Utilidad/Pérdida Fiscal</span><span style="font-family:'DM Mono',monospace" id="ire_r68">₲ 0</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Casilla 83 — IRE (Tasa 10%)</span><span style="font-family:'DM Mono',monospace;color:var(--accent)" id="ire_r83">₲ 0</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span>Casilla 98 — Anticipo trimestral</span><span style="font-family:'DM Mono',monospace" id="ire_r98">₲ 0</span></div>
+        </div>
+      </div>
     </div>
 
-  </div><!-- /content -->
-</div><!-- /main -->
+    <!-- IRP -->
+    <div class="page" id="page-irp">
+      <div class="page-header"><div><h2>IRP — Impuesto a la Renta Personal</h2><p>Formulario 515 V1 — Ley 6380/2019 Art. 47-70</p></div></div>
+      <div class="notif">📌 <span>MNA (Monto No Alcanzado): <strong>₲ 80.000.000</strong>. Solo tributa quien supera este monto anual en servicios personales.</span></div>
+      <div class="form-section">
+        <div class="form-section-title">📊 Rubro 1 — Ingresos por Servicios Personales</div>
+        <div class="form-grid col2">
+          <div class="form-group"><label>Casilla 12 — Ingresos Gravados Totales ₲</label><input type="number" placeholder="0" id="irp_ing" oninput="calcIRP()"></div>
+          <div class="form-group"><label>Casilla 22 — Total Egresos Deducibles ₲</label><input type="number" placeholder="0" id="irp_ded" oninput="calcIRP()"></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">💰 Rubro 3 — Cálculo del Impuesto (Tasas Progresivas)</div>
+        <div id="irp-resultado" style="max-width:500px;">
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span>Renta Neta (Ing. - Egresos)</span><span style="font-family:'DM Mono',monospace" id="irp_r1">₲ 0</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span>Hasta ₲50M → 8%</span><span style="font-family:'DM Mono',monospace" id="irp_t1">₲ 0</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span>₲50M a ₲150M → 9%</span><span style="font-family:'DM Mono',monospace" id="irp_t2">₲ 0</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span>Más de ₲150M → 10%</span><span style="font-family:'DM Mono',monospace" id="irp_t3">₲ 0</span></div>
+          <div style="display:flex;justify-content:space-between;padding:9px 0;font-size:15px;font-weight:700"><span>IRP TOTAL A PAGAR</span><span style="font-family:'DM Mono',monospace;color:var(--accent)" id="irp_total">₲ 0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INR -->
+    <div class="page" id="page-inr">
+      <div class="page-header"><div><h2>INR — Impuesto a la Renta de No Residentes</h2><p>Formulario 525 V1 — Ley 6380/2019 Art. 71-79 — Tasa General 15%</p></div></div>
+      <div class="form-section">
+        <div class="form-section-title">📊 Tabla de Tasas Efectivas — Art. 75 Ley 6380/2019</div>
+        <table><thead><tr><th>Hecho Generador</th><th>% Base Imponible</th><th>Tasa INR</th><th>Tasa Efectiva</th></tr></thead>
+        <tbody>
+          <tr><td>Intereses/comisiones por préstamos del exterior</td><td>30%</td><td>15%</td><td style="font-weight:700;color:var(--accent)">4.5%</td></tr>
+          <tr><td>Transporte internacional (personas/fletes)</td><td>30%</td><td>15%</td><td style="font-weight:700;color:var(--accent)">4.5%</td></tr>
+          <tr><td>Cesión de uso de contenedores</td><td>30%</td><td>15%</td><td style="font-weight:700;color:var(--accent)">4.5%</td></tr>
+          <tr><td>Artes escénicas / espectáculos públicos</td><td>30%</td><td>15%</td><td style="font-weight:700;color:var(--accent)">4.5%</td></tr>
+          <tr><td>Primas de seguros/reaseguros</td><td>30%</td><td>15%</td><td style="font-weight:700;color:var(--accent)">4.5%</td></tr>
+          <tr><td>Servicios digitales / telefonía / streaming</td><td>30%</td><td>15%</td><td style="font-weight:700;color:var(--accent)">4.5%</td></tr>
+          <tr><td>Enajenación bienes muebles en el país</td><td>30%</td><td>15%</td><td style="font-weight:700;color:var(--accent)">4.5%</td></tr>
+          <tr><td>Arrendamiento de bienes inmuebles</td><td>50%</td><td>15%</td><td style="font-weight:700;color:var(--warning)">7.5%</td></tr>
+          <tr><td>Servicios personales/profesionales</td><td>70%</td><td>15%</td><td style="font-weight:700;color:var(--warning)">10.5%</td></tr>
+          <tr><td>Remesas de sucursales/agencias</td><td>100%</td><td>15%</td><td style="font-weight:700;color:var(--danger)">15%</td></tr>
+          <tr><td>Cualquier otro concepto</td><td>100%</td><td>15%</td><td style="font-weight:700;color:var(--danger)">15%</td></tr>
+        </tbody></table>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">🧮 Calculadora INR</div>
+        <div class="form-grid col2">
+          <div class="form-group"><label>Hecho Generador</label>
+            <select id="inr_tipo" onchange="calcINR()">
+              <option value="4.5">Intereses/préstamos/transporte/digitales (4.5%)</option>
+              <option value="7.5">Arrendamiento inmuebles (7.5%)</option>
+              <option value="10.5">Servicios personales (10.5%)</option>
+              <option value="15">Remesas/Otros (15%)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Monto Bruto ₲</label><input type="number" placeholder="0" id="inr_monto" oninput="calcINR()"></div>
+        </div>
+        <div style="margin-top:12px;padding:14px;background:var(--bg);border-radius:8px;display:flex;gap:24px;">
+          <div><div style="font-size:11px;color:var(--text-light);text-transform:uppercase">INR a Retener</div><div style="font-size:20px;font-weight:700;font-family:'DM Mono',monospace;color:var(--accent)" id="inr_resultado">₲ 0</div></div>
+          <div><div style="font-size:11px;color:var(--text-light);text-transform:uppercase">Monto Neto</div><div style="font-size:20px;font-weight:700;font-family:'DM Mono',monospace;color:var(--success)" id="inr_neto">₲ 0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BALANCE -->
+    <div class="page" id="page-balance">
+      <div class="page-header"><div><h2>Balance General</h2><p>Estado de Situación Financiera — 31/03/2026</p></div>
+        <button class="btn btn-primary">Exportar PDF</button>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">ACTIVOS</div>
+          <div style="font-weight:700;font-size:13px;padding:7px 0;border-bottom:2px solid var(--border);color:var(--accent2)">ACTIVO CORRIENTE</div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>1.1.1 — Efectivo y Equivalentes</span><span style="font-family:'DM Mono',monospace">₲ 15.200.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>1.1.2 — Cuentas por Cobrar</span><span style="font-family:'DM Mono',monospace">₲ 8.500.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>1.1.3 — Inventarios</span><span style="font-family:'DM Mono',monospace">₲ 6.300.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:2px solid var(--border);font-size:13px"><span>1.1.5 — IVA Crédito Fiscal</span><span style="font-family:'DM Mono',monospace">₲ 2.100.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;font-weight:700"><span>Total Activo Corriente</span><span style="font-family:'DM Mono',monospace;color:var(--accent2)">₲ 32.100.000</span></div>
+          <div style="font-weight:700;font-size:13px;padding:7px 0;border-bottom:2px solid var(--border);color:var(--accent2);margin-top:8px">ACTIVO NO CORRIENTE</div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>1.2.1 — Prop. Planta y Equipo</span><span style="font-family:'DM Mono',monospace">₲ 25.000.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:2px solid var(--border);font-size:13px"><span>1.2.2 — (-) Depreciación Acum.</span><span style="font-family:'DM Mono',monospace;color:var(--danger)">(₲ 5.000.000)</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;font-weight:700"><span>Total Activo No Corriente</span><span style="font-family:'DM Mono',monospace;color:var(--accent2)">₲ 20.000.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:9px 0;font-size:15px;font-weight:700;border-top:2px solid var(--border);margin-top:6px"><span>TOTAL ACTIVOS</span><span style="font-family:'DM Mono',monospace;color:var(--accent2)">₲ 52.100.000</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">PASIVOS Y PATRIMONIO</div>
+          <div style="font-weight:700;font-size:13px;padding:7px 0;border-bottom:2px solid var(--border);color:var(--accent)">PASIVO CORRIENTE</div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>2.1.1 — Cuentas por Pagar</span><span style="font-family:'DM Mono',monospace">₲ 4.500.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>2.1.4 — IVA Débito Fiscal</span><span style="font-family:'DM Mono',monospace">₲ 4.381.818</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:2px solid var(--border);font-size:13px"><span>2.1.5 — IRE por Pagar</span><span style="font-family:'DM Mono',monospace">₲ 2.000.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;font-weight:700"><span>Total Pasivo Corriente</span><span style="font-family:'DM Mono',monospace;color:var(--accent)">₲ 10.881.818</span></div>
+          <div style="font-weight:700;font-size:13px;padding:7px 0;border-bottom:2px solid var(--border);color:#7c3aed;margin-top:8px">PATRIMONIO NETO</div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>3.1.1 — Capital Social</span><span style="font-family:'DM Mono',monospace">₲ 30.000.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px"><span>3.1.3 — Reservas</span><span style="font-family:'DM Mono',monospace">₲ 5.000.000</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:2px solid var(--border);font-size:13px"><span>3.1.5 — Resultado del Ejercicio</span><span style="font-family:'DM Mono',monospace">₲ 6.218.182</span></div>
+          <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13px;font-weight:700"><span>Total Patrimonio</span><span style="font-family:'DM Mono',monospace;color:#7c3aed">₲ 41.218.182</span></div>
+          <div style="display:flex;justify-content:space-between;padding:9px 0;font-size:15px;font-weight:700;border-top:2px solid var(--border);margin-top:6px"><span>TOTAL PAS. + PATRIM.</span><span style="font-family:'DM Mono',monospace;color:var(--accent2)">₲ 52.100.000</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PÁGINAS SIMPLES -->
+    <div class="page" id="page-sifen"><div class="page-header"><div><h2>SIFEN — Facturación Electrónica</h2></div><button class="btn btn-primary">+ Nueva Factura</button></div><div class="card"><p style="color:var(--text-light);padding:20px;text-align:center">Módulo SIFEN — conectar con certificado digital SET</p></div></div>
+    <div class="page" id="page-retenciones"><div class="page-header"><div><h2>Comprobantes de Retención</h2></div><button class="btn btn-primary">+ Nueva Retención</button></div><div class="card"><p style="color:var(--text-light);padding:20px;text-align:center">Retenciones IRE/IRP/INR — Formulario 525</p></div></div>
+    <div class="page" id="page-resultados"><div class="page-header"><div><h2>Estado de Resultados</h2></div><button class="btn btn-primary">Exportar</button></div><div class="card"><p style="color:var(--text-light);padding:20px;text-align:center">Estado de resultados del período</p></div></div>
+    <div class="page" id="page-reportes"><div class="page-header"><div><h2>Exportaciones</h2></div></div><div class="card"><p style="color:var(--text-light);padding:20px;text-align:center">Exportar libros en formato TXT para Marangatú</p></div></div>
+    <div class="page" id="page-clientes"><div class="page-header"><div><h2>Clientes</h2></div><button class="btn btn-primary">+ Nuevo</button></div><div class="card"><p style="color:var(--text-light);padding:20px;text-align:center">Gestión de clientes del estudio</p></div></div>
+    <div class="page" id="page-empresas"><div class="page-header"><div><h2>Empresas</h2></div><button class="btn btn-primary">+ Nueva</button></div><div class="card"><p style="color:var(--text-light);padding:20px;text-align:center">Contribuyentes gestionados</p></div></div>
+    <div class="page" id="page-usuarios"><div class="page-header"><div><h2>Usuarios</h2></div><button class="btn btn-primary">+ Nuevo</button></div><div class="card"><p style="color:var(--text-light);padding:20px;text-align:center">Gestión de accesos</p></div></div>
+    <div class="page" id="page-config"><div class="page-header"><div><h2>Configuración</h2></div></div><div class="card"><p style="color:var(--text-light);padding:20px;text-align:center">Parámetros del sistema</p></div></div>
+
+  </div>
+</div>
 
 <!-- MODALES -->
-<div class="modal-overlay" id="empresa-modal">
-  <div class="modal empresa-modal" style="max-width:480px;">
+<div class="modal-overlay" id="modal-empresa">
+  <div class="modal" style="max-width:460px">
     <div class="modal-title">🏛️ Seleccionar Empresa</div>
-    <div class="empresa-item sel" onclick="selectEmpresa('Empresa ABC S.A.','80012345-6')">
-      <div class="emp-icon" style="background:#fee2e2;">🏭</div>
-      <div><div style="font-weight:600;">Empresa ABC S.A.</div><div class="emp-ruc">RUC: 80012345-6 — IRE General</div></div>
-    </div>
-    <div class="empresa-item" onclick="selectEmpresa('Comercial Norte SRL','4512678-9')">
-      <div class="emp-icon" style="background:#dbeafe;">🏪</div>
-      <div><div style="font-weight:600;">Comercial Norte SRL</div><div class="emp-ruc">RUC: 4512678-9 — IRE ReSiMo</div></div>
-    </div>
-    <div class="empresa-item" onclick="selectEmpresa('Ferretería Central','2234567-1')">
-      <div class="emp-icon" style="background:#d1fae5;">🔧</div>
-      <div><div style="font-weight:600;">Ferretería Central</div><div class="emp-ruc">RUC: 2234567-1 — IRS</div></div>
-    </div>
-    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('empresa-modal')">Cerrar</button></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="cliente-modal">
-  <div class="modal">
-    <div class="modal-title">🏢 Nuevo Cliente</div>
-    <div class="form-grid col2">
-      <div class="form-group"><label>RUC</label><input type="text" placeholder="00000000-0"></div>
-      <div class="form-group"><label>Razón Social</label><input type="text" placeholder="Empresa S.A."></div>
-      <div class="form-group"><label>Tipo Sociedad</label><select><option>SA</option><option>SRL</option><option>Unipersonal</option></select></div>
-      <div class="form-group"><label>Régimen</label><select><option>IRE General</option><option>IRE ReSiMo</option><option>IRS</option><option>IMAGRO</option></select></div>
-      <div class="form-group"><label>Email</label><input type="email" placeholder="contacto@empresa.com.py"></div>
-      <div class="form-group"><label>Teléfono</label><input type="text" placeholder="021-000000"></div>
-      <div class="form-group full"><label>Dirección</label><input type="text" placeholder="Dirección completa"></div>
-      <div class="form-group"><label>Contador Asignado</label><select><option>María González</option><option>Carlos Pérez</option><option>Ana López</option></select></div>
-    </div>
-    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('cliente-modal')">Cancelar</button><button class="btn btn-primary">Guardar</button></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="user-modal">
-  <div class="modal">
-    <div class="modal-title">👤 Nuevo Usuario</div>
-    <div class="form-grid col2">
-      <div class="form-group"><label>Nombre completo</label><input type="text" placeholder="Nombre Apellido"></div>
-      <div class="form-group"><label>Email</label><input type="email" placeholder="usuario@contapy.py"></div>
-      <div class="form-group"><label>Contraseña</label><input type="password" placeholder="••••••••"></div>
-      <div class="form-group"><label>Rol</label><select><option>Administrador</option><option>Contador Senior</option><option>Contador Jr</option></select></div>
-    </div>
-    <div style="margin-top:16px;">
-      <label style="font-size:12px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px;">Permisos</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:13px;">
-        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox" checked> Facturación</label>
-        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox" checked> IVA / Declaraciones</label>
-        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox" checked> Libros Contables</label>
-        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox"> Gestión Usuarios</label>
-        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox"> Configuración</label>
-        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--text);"><input type="checkbox" checked> Reportes</label>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div onclick="selectEmpresa('Empresa ABC S.A.','80012345-6')" style="display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--accent2);background:#eff6ff;border-radius:9px;cursor:pointer">
+        <div style="width:34px;height:34px;background:#fee2e2;border-radius:8px;display:flex;align-items:center;justify-content:center">🏭</div>
+        <div><div style="font-weight:600">Empresa ABC S.A.</div><div style="font-size:11px;color:var(--text-light)">RUC: 80012345-6 — IRE General</div></div>
+      </div>
+      <div onclick="selectEmpresa('Comercial Norte SRL','4512678-9')" style="display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer">
+        <div style="width:34px;height:34px;background:#dbeafe;border-radius:8px;display:flex;align-items:center;justify-content:center">🏪</div>
+        <div><div style="font-weight:600">Comercial Norte SRL</div><div style="font-size:11px;color:var(--text-light)">RUC: 4512678-9 — IRE ReSiMo</div></div>
+      </div>
+      <div onclick="selectEmpresa('Ferretería Central','2234567-1')" style="display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer">
+        <div style="width:34px;height:34px;background:#d1fae5;border-radius:8px;display:flex;align-items:center;justify-content:center">🔧</div>
+        <div><div style="font-weight:600">Ferretería Central</div><div style="font-size:11px;color:var(--text-light)">RUC: 2234567-1 — IRS</div></div>
       </div>
     </div>
-    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('user-modal')">Cancelar</button><button class="btn btn-primary">Crear Usuario</button></div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modal-empresa')">Cerrar</button></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="asiento-modal">
-  <div class="modal" style="max-width:680px;">
-    <div class="modal-title">✍️ Nuevo Asiento Contable</div>
-    <div class="form-grid col2" style="margin-bottom:16px;">
-      <div class="form-group"><label>Fecha</label><input type="date" value="2026-03-20"></div>
-      <div class="form-group"><label>Concepto</label><input type="text" placeholder="Descripción del asiento"></div>
+<div class="modal-overlay" id="modal-comprobante">
+  <div class="modal">
+    <div class="modal-title">🧾 Registrar Comprobante</div>
+    <div class="form-grid col2" style="margin-bottom:14px">
+      <div class="form-group"><label>Tipo de Comprobante</label>
+        <select id="comp_tipo" onchange="mostrarCamposComp()">
+          <option value="sifen">⚡ Factura Electrónica SIFEN (e-kuatia)</option>
+          <option value="virtual">💻 Factura Virtual (Tesakã)</option>
+          <option value="preimpresa">🖨️ Factura Preimpresa</option>
+          <option value="autofactura">🔄 Autofactura</option>
+          <option value="nc">📋 Nota de Crédito</option>
+          <option value="nd">📋 Nota de Débito</option>
+          <option value="retencion">📎 Comprobante de Retención</option>
+          <option value="resimple">🟣 Boleta RESIMPLE</option>
+          <option value="remision">📦 Nota de Remisión</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Operación</label>
+        <select><option>Venta / Ingreso</option><option>Compra / Egreso</option></select>
+      </div>
     </div>
-    <table style="width:100%;font-size:13px;margin-bottom:12px;">
-      <thead><tr style="background:var(--bg);"><th style="padding:8px;text-align:left;">Cuenta</th><th style="padding:8px;text-align:right;">Debe</th><th style="padding:8px;text-align:right;">Haber</th><th style="padding:8px;"></th></tr></thead>
-      <tbody>
-        <tr><td style="padding:6px;"><input type="text" placeholder="Cód. o nombre de cuenta" style="width:100%"></td><td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;"></td><td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;"></td><td><button class="btn btn-outline btn-sm">✕</button></td></tr>
-        <tr><td style="padding:6px;"><input type="text" placeholder="Cód. o nombre de cuenta" style="width:100%"></td><td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;"></td><td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;"></td><td><button class="btn btn-outline btn-sm">✕</button></td></tr>
+    <div class="form-grid col4" style="margin-bottom:14px">
+      <div class="form-group"><label>Establecimiento</label><input type="text" value="001"></div>
+      <div class="form-group"><label>Punto Emisión</label><input type="text" value="001"></div>
+      <div class="form-group"><label>N° Timbrado</label><input type="text" value="12345678"></div>
+      <div class="form-group"><label>N° Comprobante</label><input type="text" placeholder="0000001"></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:14px">
+      <div class="form-group"><label>Fecha</label><input type="date" value="2026-03-20"></div>
+      <div class="form-group"><label>RUC / CI Receptor</label><input type="text" placeholder="00000000-0"></div>
+      <div class="form-group"><label>Razón Social / Nombre</label><input type="text" placeholder="Nombre del cliente"></div>
+    </div>
+    <table style="width:100%;font-size:12.5px;margin-bottom:12px">
+      <thead><tr style="background:var(--bg)"><th style="padding:7px">Descripción</th><th style="padding:7px">Cant.</th><th style="padding:7px">Precio</th><th style="padding:7px">IVA</th><th style="padding:7px;text-align:right">Total</th><th style="padding:7px"></th></tr></thead>
+      <tbody id="comp-items">
+        <tr><td style="padding:4px"><input type="text" placeholder="Descripción del bien/servicio" style="width:100%"></td>
+        <td style="padding:4px"><input type="number" value="1" style="width:60px" onchange="calcCompTotal(this)"></td>
+        <td style="padding:4px"><input type="number" placeholder="0" style="width:100px" onchange="calcCompTotal(this)"></td>
+        <td style="padding:4px"><select style="width:75px" onchange="calcCompTotal(this)"><option>10%</option><option>5%</option><option>Exenta</option></select></td>
+        <td style="padding:4px;text-align:right;font-family:'DM Mono',monospace">₲ 0</td>
+        <td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();recalcComp()">✕</button></td></tr>
       </tbody>
     </table>
-    <button class="btn btn-outline btn-sm">+ Agregar línea</button>
-    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('asiento-modal')">Cancelar</button><button class="btn btn-primary">Guardar Asiento</button></div>
+    <button class="btn btn-outline btn-sm" onclick="agregarItemComp()">+ Ítem</button>
+    <div style="margin-top:12px;padding:12px;background:var(--bg);border-radius:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;font-size:12px">
+      <div><div style="color:var(--text-light)">Base 10%</div><div style="font-family:'DM Mono',monospace;font-weight:600" id="ct_b10">₲ 0</div></div>
+      <div><div style="color:var(--text-light)">Base 5%</div><div style="font-family:'DM Mono',monospace;font-weight:600" id="ct_b5">₲ 0</div></div>
+      <div><div style="color:var(--text-light)">IVA Total</div><div style="font-family:'DM Mono',monospace;font-weight:600;color:var(--accent)" id="ct_iva">₲ 0</div></div>
+      <div><div style="color:var(--text-light)">TOTAL</div><div style="font-family:'DM Mono',monospace;font-weight:700;font-size:15px;color:var(--accent2)" id="ct_total">₲ 0</div></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-comprobante')">Cancelar</button>
+      <button class="btn btn-outline">Guardar Borrador</button>
+      <button class="btn btn-primary" onclick="guardarComprobante()">💾 Guardar y Asentar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-asiento">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-title">✍️ Nuevo Asiento Contable</div>
+    <div class="form-grid col2" style="margin-bottom:14px">
+      <div class="form-group"><label>Fecha</label><input type="date" value="2026-03-20"></div>
+      <div class="form-group"><label>Concepto / Glosa</label><input type="text" placeholder="Descripción del asiento"></div>
+    </div>
+    <table style="width:100%;font-size:12.5px;margin-bottom:10px">
+      <thead><tr style="background:var(--bg)"><th style="padding:7px">Cuenta Contable</th><th style="padding:7px">Descripción</th><th style="padding:7px;text-align:right">Debe ₲</th><th style="padding:7px;text-align:right">Haber ₲</th><th style="padding:7px"></th></tr></thead>
+      <tbody id="asiento-lineas">
+        <tr><td style="padding:4px"><input type="text" placeholder="Ej: 1.1.1.01 Caja" style="width:100%"></td><td style="padding:4px"><input type="text" placeholder="Glosa" style="width:100%"></td><td style="padding:4px"><input type="number" placeholder="0" style="width:110px;text-align:right" onchange="calcAsiento()"></td><td style="padding:4px"><input type="number" placeholder="0" style="width:110px;text-align:right" onchange="calcAsiento()"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAsiento()">✕</button></td></tr>
+        <tr><td style="padding:4px"><input type="text" placeholder="Ej: 4.1.1.01 Ventas" style="width:100%"></td><td style="padding:4px"><input type="text" placeholder="Glosa" style="width:100%"></td><td style="padding:4px"><input type="number" placeholder="0" style="width:110px;text-align:right" onchange="calcAsiento()"></td><td style="padding:4px"><input type="number" placeholder="0" style="width:110px;text-align:right" onchange="calcAsiento()"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAsiento()">✕</button></td></tr>
+      </tbody>
+    </table>
+    <button class="btn btn-outline btn-sm" onclick="agregarLineaAsiento()">+ Línea</button>
+    <div id="asiento-balance" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px;font-size:13px;display:flex;gap:20px">
+      <div>Debe: <strong id="as_debe" style="font-family:'DM Mono',monospace">₲ 0</strong></div>
+      <div>Haber: <strong id="as_haber" style="font-family:'DM Mono',monospace">₲ 0</strong></div>
+      <div id="as_diff" style="color:var(--success);font-weight:600">✓ Balanceado</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-asiento')">Cancelar</button>
+      <button class="btn btn-primary" onclick="closeModal('modal-asiento')">💾 Guardar Asiento</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cuenta">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-title">📋 Nueva Cuenta Contable</div>
+    <div class="form-grid col2">
+      <div class="form-group"><label>Código</label><input type="text" placeholder="Ej: 1.1.1.02"></div>
+      <div class="form-group"><label>Nombre</label><input type="text" placeholder="Nombre de la cuenta"></div>
+      <div class="form-group"><label>Tipo</label><select><option>Activo</option><option>Pasivo</option><option>Patrimonio</option><option>Ingreso</option><option>Costo</option><option>Gasto</option></select></div>
+      <div class="form-group"><label>Naturaleza</label><select><option>Deudora (Débito)</option><option>Acreedora (Crédito)</option></select></div>
+      <div class="form-group full"><label>Descripción</label><textarea placeholder="Descripción de la cuenta y su uso"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('modal-cuenta')">Cancelar</button>
+      <button class="btn btn-primary">Guardar</button>
+    </div>
   </div>
 </div>
 
 <script>
-var usuarios = {
-  'admin@contapy.py': { pass: 'admin123', nombre: 'Juan Carlos', rol: 'Administrador', iniciales: 'JC' },
-  'mgonzalez@contapy.py': { pass: '1234', nombre: 'María González', rol: 'Contador Senior', iniciales: 'MG' },
-  'cperez@contapy.py': { pass: '1234', nombre: 'Carlos Pérez', rol: 'Contador Jr', iniciales: 'CP' }
+// ===== LOGIN =====
+var usuarios = {'admin@contapy.py':{pass:'admin123',n:'Juan Carlos',r:'Administrador',i:'JC'},'mgonzalez@contapy.py':{pass:'1234',n:'María González',r:'Contador Senior',i:'MG'}};
+function doLogin(){var u=document.getElementById('lu').value,p=document.getElementById('lp').value;if(usuarios[u]&&usuarios[u].pass===p){document.getElementById('login-wrap').style.display='none';}else{document.getElementById('lerr').style.display='block';}}
+function doLogout(){document.getElementById('login-wrap').style.display='flex';}
+
+// ===== NAVIGATION =====
+function showPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  var pg=document.getElementById('page-'+name);
+  if(pg)pg.classList.add('active');
+  if(el)el.classList.add('active');
+  var titles={dashboard:'Dashboard',plan_cuentas:'Plan de Cuentas',asientos:'Asientos Contables',libro_diario:'Libro Diario',libro_mayor:'Libro Mayor',comprobantes:'Comprobantes',sifen:'SIFEN — Facturación Electrónica',retenciones:'Retenciones',iva:'IVA — Formulario 120 V4',declaraciones:'Declaraciones Juradas',ire:'IRE — Impuesto a la Renta Empresarial',irp:'IRP — Renta Personal',inr:'INR — Renta No Residentes',balance:'Balance General',resultados:'Estado de Resultados',reportes:'Exportaciones',clientes:'Clientes',empresas:'Empresas',usuarios:'Usuarios',config:'Configuración'};
+  document.getElementById('topbar-title').textContent=titles[name]||name;
+}
+
+// ===== MODALS =====
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+function selectEmpresa(n,r){document.getElementById('empresa-activa').textContent=n+' — RUC '+r;closeModal('modal-empresa');}
+
+// ===== PLAN DE CUENTAS =====
+var planCuentas = [
+  // ACTIVO
+  {cod:'1',nom:'ACTIVO',tipo:'',nivel:1},
+  {cod:'1.1',nom:'ACTIVO CORRIENTE',tipo:'',nivel:2},
+  {cod:'1.1.1',nom:'Efectivo y Equivalentes al Efectivo',tipo:'Activo',nivel:3},
+  {cod:'1.1.1.01',nom:'Caja',tipo:'Activo',nivel:4},{cod:'1.1.1.02',nom:'Caja Chica',tipo:'Activo',nivel:4},{cod:'1.1.1.03',nom:'Banco Itaú Cta. Cte.',tipo:'Activo',nivel:4},{cod:'1.1.1.04',nom:'Banco Continental Cta. Cte.',tipo:'Activo',nivel:4},{cod:'1.1.1.05',nom:'Banco BNF',tipo:'Activo',nivel:4},
+  {cod:'1.1.2',nom:'Cuentas por Cobrar Comerciales',tipo:'Activo',nivel:3},
+  {cod:'1.1.2.01',nom:'Clientes Nacionales',tipo:'Activo',nivel:4},{cod:'1.1.2.02',nom:'Clientes del Exterior',tipo:'Activo',nivel:4},{cod:'1.1.2.03',nom:'Documentos por Cobrar',tipo:'Activo',nivel:4},{cod:'1.1.2.09',nom:'(-) Provisión Cuentas Incobrables',tipo:'Activo',nivel:4},
+  {cod:'1.1.3',nom:'Inventarios',tipo:'Activo',nivel:3},
+  {cod:'1.1.3.01',nom:'Mercaderías',tipo:'Activo',nivel:4},{cod:'1.1.3.02',nom:'Materias Primas',tipo:'Activo',nivel:4},{cod:'1.1.3.03',nom:'Productos Terminados',tipo:'Activo',nivel:4},{cod:'1.1.3.04',nom:'Productos en Proceso',tipo:'Activo',nivel:4},
+  {cod:'1.1.4',nom:'Otros Activos Corrientes',tipo:'Activo',nivel:3},
+  {cod:'1.1.4.01',nom:'Anticipo a Proveedores',tipo:'Activo',nivel:4},{cod:'1.1.4.02',nom:'Anticipos al Personal',tipo:'Activo',nivel:4},{cod:'1.1.4.03',nom:'Gastos Pagados por Anticipado',tipo:'Activo',nivel:4},
+  {cod:'1.1.5',nom:'Créditos Fiscales',tipo:'Activo',nivel:3},
+  {cod:'1.1.5.01',nom:'IVA Crédito Fiscal 10%',tipo:'Activo',nivel:4},{cod:'1.1.5.02',nom:'IVA Crédito Fiscal 5%',tipo:'Activo',nivel:4},{cod:'1.1.5.03',nom:'Anticipos IRE Pagados',tipo:'Activo',nivel:4},{cod:'1.1.5.04',nom:'Retenciones IVA a Favor',tipo:'Activo',nivel:4},
+  {cod:'1.2',nom:'ACTIVO NO CORRIENTE',tipo:'',nivel:2},
+  {cod:'1.2.1',nom:'Propiedades Planta y Equipo',tipo:'Activo',nivel:3},
+  {cod:'1.2.1.01',nom:'Terrenos',tipo:'Activo',nivel:4},{cod:'1.2.1.02',nom:'Edificios y Construcciones',tipo:'Activo',nivel:4},{cod:'1.2.1.03',nom:'Maquinaria y Equipo',tipo:'Activo',nivel:4},{cod:'1.2.1.04',nom:'Vehículos',tipo:'Activo',nivel:4},{cod:'1.2.1.05',nom:'Muebles y Enseres',tipo:'Activo',nivel:4},{cod:'1.2.1.06',nom:'Equipo de Computación',tipo:'Activo',nivel:4},{cod:'1.2.1.09',nom:'(-) Depreciación Acumulada',tipo:'Activo',nivel:4},
+  {cod:'1.2.2',nom:'Activos Intangibles',tipo:'Activo',nivel:3},
+  {cod:'1.2.2.01',nom:'Software y Licencias',tipo:'Activo',nivel:4},{cod:'1.2.2.02',nom:'Marcas y Patentes',tipo:'Activo',nivel:4},
+  // PASIVO
+  {cod:'2',nom:'PASIVO',tipo:'',nivel:1},
+  {cod:'2.1',nom:'PASIVO CORRIENTE',tipo:'',nivel:2},
+  {cod:'2.1.1',nom:'Cuentas por Pagar Comerciales',tipo:'Pasivo',nivel:3},
+  {cod:'2.1.1.01',nom:'Proveedores Nacionales',tipo:'Pasivo',nivel:4},{cod:'2.1.1.02',nom:'Proveedores del Exterior',tipo:'Pasivo',nivel:4},{cod:'2.1.1.03',nom:'Documentos por Pagar',tipo:'Pasivo',nivel:4},
+  {cod:'2.1.2',nom:'Deudas Financieras Corrientes',tipo:'Pasivo',nivel:3},
+  {cod:'2.1.2.01',nom:'Préstamos Bancarios CP',tipo:'Pasivo',nivel:4},{cod:'2.1.2.02',nom:'Intereses por Pagar',tipo:'Pasivo',nivel:4},
+  {cod:'2.1.3',nom:'Obligaciones con el Personal',tipo:'Pasivo',nivel:3},
+  {cod:'2.1.3.01',nom:'Sueldos y Jornales por Pagar',tipo:'Pasivo',nivel:4},{cod:'2.1.3.02',nom:'Aguinaldo por Pagar',tipo:'Pasivo',nivel:4},{cod:'2.1.3.03',nom:'IPS por Pagar',tipo:'Pasivo',nivel:4},{cod:'2.1.3.04',nom:'Vacaciones Acumuladas',tipo:'Pasivo',nivel:4},
+  {cod:'2.1.4',nom:'Obligaciones Fiscales',tipo:'Pasivo',nivel:3},
+  {cod:'2.1.4.01',nom:'IVA Débito Fiscal 10%',tipo:'Pasivo',nivel:4},{cod:'2.1.4.02',nom:'IVA Débito Fiscal 5%',tipo:'Pasivo',nivel:4},{cod:'2.1.4.03',nom:'IRE por Pagar',tipo:'Pasivo',nivel:4},{cod:'2.1.4.04',nom:'IRP por Pagar',tipo:'Pasivo',nivel:4},{cod:'2.1.4.05',nom:'INR Retenciones por Pagar',tipo:'Pasivo',nivel:4},{cod:'2.1.4.06',nom:'Retenciones IVA por Pagar',tipo:'Pasivo',nivel:4},{cod:'2.1.4.07',nom:'Anticipos de Clientes',tipo:'Pasivo',nivel:4},
+  {cod:'2.2',nom:'PASIVO NO CORRIENTE',tipo:'',nivel:2},
+  {cod:'2.2.1',nom:'Deudas Financieras LP',tipo:'Pasivo',nivel:3},
+  {cod:'2.2.1.01',nom:'Préstamos Bancarios LP',tipo:'Pasivo',nivel:4},{cod:'2.2.1.02',nom:'Préstamos de Socios',tipo:'Pasivo',nivel:4},
+  // PATRIMONIO
+  {cod:'3',nom:'PATRIMONIO NETO',tipo:'',nivel:1},
+  {cod:'3.1',nom:'CAPITAL Y RESERVAS',tipo:'',nivel:2},
+  {cod:'3.1.1',nom:'Capital Social',tipo:'Patrimonio',nivel:3},
+  {cod:'3.1.1.01',nom:'Capital Suscrito y Pagado',tipo:'Patrimonio',nivel:4},{cod:'3.1.1.02',nom:'Aportes Pendientes de Capitalizar',tipo:'Patrimonio',nivel:4},
+  {cod:'3.1.2',nom:'Resultados Acumulados',tipo:'Patrimonio',nivel:3},
+  {cod:'3.1.2.01',nom:'Utilidades Acumuladas',tipo:'Patrimonio',nivel:4},{cod:'3.1.2.02',nom:'Pérdidas Acumuladas',tipo:'Patrimonio',nivel:4},
+  {cod:'3.1.3',nom:'Reservas',tipo:'Patrimonio',nivel:3},
+  {cod:'3.1.3.01',nom:'Reserva Legal',tipo:'Patrimonio',nivel:4},{cod:'3.1.3.02',nom:'Reserva Estatutaria',tipo:'Patrimonio',nivel:4},{cod:'3.1.3.03',nom:'Reserva Facultativa',tipo:'Patrimonio',nivel:4},
+  {cod:'3.1.5',nom:'Resultado del Ejercicio',tipo:'Patrimonio',nivel:3},
+  {cod:'3.1.5.01',nom:'Utilidad del Ejercicio',tipo:'Patrimonio',nivel:4},{cod:'3.1.5.02',nom:'Pérdida del Ejercicio',tipo:'Patrimonio',nivel:4},
+  // INGRESOS
+  {cod:'4',nom:'INGRESOS',tipo:'',nivel:1},
+  {cod:'4.1',nom:'INGRESOS OPERACIONALES',tipo:'',nivel:2},
+  {cod:'4.1.1',nom:'Ventas Gravadas 10%',tipo:'Ingreso',nivel:3},
+  {cod:'4.1.1.01',nom:'Ventas de Mercaderías 10%',tipo:'Ingreso',nivel:4},{cod:'4.1.1.02',nom:'Ventas de Servicios 10%',tipo:'Ingreso',nivel:4},{cod:'4.1.1.03',nom:'(-) Devoluciones y Descuentos',tipo:'Ingreso',nivel:4},
+  {cod:'4.1.2',nom:'Ventas Gravadas 5%',tipo:'Ingreso',nivel:3},
+  {cod:'4.1.2.01',nom:'Ventas Canasta Familiar 5%',tipo:'Ingreso',nivel:4},{cod:'4.1.2.02',nom:'Ventas Prod. Agrícolas 5%',tipo:'Ingreso',nivel:4},{cod:'4.1.2.03',nom:'Arrendamiento Vivienda 5%',tipo:'Ingreso',nivel:4},
+  {cod:'4.1.3',nom:'Ventas Exoneradas',tipo:'Ingreso',nivel:3},
+  {cod:'4.1.3.01',nom:'Ventas Exoneradas de IVA',tipo:'Ingreso',nivel:4},{cod:'4.1.3.02',nom:'Exportaciones',tipo:'Ingreso',nivel:4},
+  {cod:'4.2',nom:'INGRESOS NO OPERACIONALES',tipo:'',nivel:2},
+  {cod:'4.2.1.01',nom:'Intereses Ganados',tipo:'Ingreso',nivel:4},{cod:'4.2.1.02',nom:'Diferencia de Cambio Ganada',tipo:'Ingreso',nivel:4},{cod:'4.2.1.03',nom:'Otros Ingresos',tipo:'Ingreso',nivel:4},
+  // COSTOS
+  {cod:'5',nom:'COSTOS',tipo:'',nivel:1},
+  {cod:'5.1',nom:'COSTO DE VENTAS',tipo:'',nivel:2},
+  {cod:'5.1.1.01',nom:'Costo de Mercaderías Vendidas',tipo:'Costo',nivel:4},{cod:'5.1.1.02',nom:'Costo de Producción',tipo:'Costo',nivel:4},{cod:'5.1.1.03',nom:'Mano de Obra Directa',tipo:'Costo',nivel:4},
+  // GASTOS
+  {cod:'6',nom:'GASTOS',tipo:'',nivel:1},
+  {cod:'6.1',nom:'GASTOS OPERACIONALES',tipo:'',nivel:2},
+  {cod:'6.1.1',nom:'Gastos de Personal',tipo:'Gasto',nivel:3},
+  {cod:'6.1.1.01',nom:'Sueldos y Salarios',tipo:'Gasto',nivel:4},{cod:'6.1.1.02',nom:'IPS Patronal',tipo:'Gasto',nivel:4},{cod:'6.1.1.03',nom:'Aguinaldo',tipo:'Gasto',nivel:4},{cod:'6.1.1.04',nom:'Vacaciones',tipo:'Gasto',nivel:4},{cod:'6.1.1.05',nom:'Bonificaciones',tipo:'Gasto',nivel:4},
+  {cod:'6.1.2',nom:'Gastos Generales y Admin.',tipo:'Gasto',nivel:3},
+  {cod:'6.1.2.01',nom:'Alquiler de Oficina',tipo:'Gasto',nivel:4},{cod:'6.1.2.02',nom:'Energía Eléctrica / Agua',tipo:'Gasto',nivel:4},{cod:'6.1.2.03',nom:'Telefonía e Internet',tipo:'Gasto',nivel:4},{cod:'6.1.2.04',nom:'Materiales de Oficina',tipo:'Gasto',nivel:4},{cod:'6.1.2.05',nom:'Publicidad y Marketing',tipo:'Gasto',nivel:4},{cod:'6.1.2.06',nom:'Mantenimiento y Reparaciones',tipo:'Gasto',nivel:4},{cod:'6.1.2.07',nom:'Seguros',tipo:'Gasto',nivel:4},{cod:'6.1.2.08',nom:'Honorarios Profesionales',tipo:'Gasto',nivel:4},{cod:'6.1.2.09',nom:'Transporte y Viáticos',tipo:'Gasto',nivel:4},
+  {cod:'6.1.3',nom:'Gastos Financieros',tipo:'Gasto',nivel:3},
+  {cod:'6.1.3.01',nom:'Intereses Pagados',tipo:'Gasto',nivel:4},{cod:'6.1.3.02',nom:'Comisiones Bancarias',tipo:'Gasto',nivel:4},{cod:'6.1.3.03',nom:'Diferencia de Cambio Perdida',tipo:'Gasto',nivel:4},
+  {cod:'6.1.4',nom:'Depreciaciones y Amortizaciones',tipo:'Gasto',nivel:3},
+  {cod:'6.1.4.01',nom:'Depreciación PP&E',tipo:'Gasto',nivel:4},{cod:'6.1.4.02',nom:'Amortización Intangibles',tipo:'Gasto',nivel:4},
+  {cod:'6.1.5',nom:'Gastos Fiscales',tipo:'Gasto',nivel:3},
+  {cod:'6.1.5.01',nom:'IVA Gasto (No recuperable)',tipo:'Gasto',nivel:4},{cod:'6.1.5.02',nom:'Impuestos Municipales',tipo:'Gasto',nivel:4},{cod:'6.1.5.03',nom:'Otros Impuestos',tipo:'Gasto',nivel:4},
+];
+
+function renderPlanCuentas(filtro){
+  var c=document.getElementById('tabla-cuentas');
+  var rows=c.querySelectorAll('.cuenta-row');
+  rows.forEach(r=>r.remove());
+  var f=(filtro||'').toLowerCase();
+  planCuentas.forEach(function(cuenta){
+    if(f && !cuenta.cod.toLowerCase().includes(f) && !cuenta.nom.toLowerCase().includes(f)) return;
+    var div=document.createElement('div');
+    div.className='cuenta-row';
+    var bg=cuenta.nivel===1?'cuenta-nivel-1':cuenta.nivel===2?'cuenta-nivel-2':cuenta.nivel===3?'cuenta-nivel-3':'cuenta-nivel-4';
+    div.classList.add(bg);
+    var tipoColor={'Activo':'#dbeafe','Pasivo':'#fee2e2','Patrimonio':'#ede9fe','Ingreso':'#d1fae5','Costo':'#fef3c7','Gasto':'#fce7f3','':''};
+    var tipoTxt={'Activo':'#1e40af','Pasivo':'#991b1b','Patrimonio':'#5b21b6','Ingreso':'#065f46','Costo':'#92400e','Gasto':'#9d174d','':''};
+    div.innerHTML='<div style="font-family:\'DM Mono\',monospace;font-size:11px">'+cuenta.cod+'</div><div>'+cuenta.nom+'</div>'+
+      (cuenta.tipo?'<div><span style="background:'+tipoColor[cuenta.tipo]+';color:'+tipoTxt[cuenta.tipo]+';padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600">'+cuenta.tipo+'</span></div>':'<div></div>')+
+      '<div><span class="badge-status ok" style="font-size:9px">Activa</span></div>';
+    c.appendChild(div);
+  });
+}
+function filtrarCuentas(){renderPlanCuentas(document.getElementById('search-cuenta').value);}
+renderPlanCuentas();
+
+// ===== CALCULADORAS =====
+function fmt(n){return '₲ '+Math.round(n).toLocaleString('es-PY');}
+
+function calcIRE(){
+  var ing=parseFloat(document.getElementById('ire_ingbruto').value)||0;
+  var dev=parseFloat(document.getElementById('ire_devoluc').value)||0;
+  var cos=parseFloat(document.getElementById('ire_costos').value)||0;
+  var gas=parseFloat(document.getElementById('ire_gastos').value)||0;
+  var neto=ing-dev;
+  var util=neto-cos-gas;
+  var ire=util>0?util*0.10:0;
+  var anticipo=ire>0?ire/4:0;
+  document.getElementById('ire_r59').textContent=fmt(neto);
+  document.getElementById('ire_r68').textContent=fmt(util);
+  document.getElementById('ire_r83').textContent=fmt(ire);
+  document.getElementById('ire_r98').textContent=fmt(anticipo);
+}
+
+function calcIRP(){
+  var ing=parseFloat(document.getElementById('irp_ing').value)||0;
+  var ded=parseFloat(document.getElementById('irp_ded').value)||0;
+  var neta=ing-ded;
+  document.getElementById('irp_r1').textContent=fmt(neta);
+  if(neta<=0){['irp_t1','irp_t2','irp_t3','irp_total'].forEach(id=>document.getElementById(id).textContent='₲ 0');return;}
+  var t1=0,t2=0,t3=0;
+  var MNA=80000000;
+  if(ing<MNA){document.getElementById('irp_t1').textContent='No alcanzado (< ₲80M)';['irp_t2','irp_t3','irp_total'].forEach(id=>document.getElementById(id).textContent='₲ 0');return;}
+  var t1b=Math.min(neta,50000000); t1=t1b>0?t1b*0.08:0;
+  var t2b=Math.min(Math.max(neta-50000000,0),100000000); t2=t2b>0?t2b*0.09:0;
+  var t3b=Math.max(neta-150000000,0); t3=t3b>0?t3b*0.10:0;
+  document.getElementById('irp_t1').textContent=fmt(t1);
+  document.getElementById('irp_t2').textContent=fmt(t2);
+  document.getElementById('irp_t3').textContent=fmt(t3);
+  document.getElementById('irp_total').textContent=fmt(t1+t2+t3);
+}
+
+function calcINR(){
+  var m=parseFloat(document.getElementById('inr_monto').value)||0;
+  var t=parseFloat(document.getElementById('inr_tipo').value)||0;
+  var inr=m*(t/100);
+  document.getElementById('inr_resultado').textContent=fmt(inr);
+  document.getElementById('inr_neto').textContent=fmt(m-inr);
+}
+
+// ===== LIBRO MAYOR =====
+var mayorData={
+  cxc:{nombre:'1.1.2.01 — Cuentas por Cobrar Comerciales',movs:[{fecha:'20/03/26',asiento:'A-0127',desc:'Venta Empresa ABC',debe:2500000,haber:0},{fecha:'19/03/26',asiento:'A-0126',desc:'Venta Comercial Norte',debe:850000,haber:0},{fecha:'15/03/26',asiento:'A-0120',desc:'Cobro Empresa ABC',debe:0,haber:1500000}]},
+  ventas:{nombre:'4.1.1.01 — Ventas Gravadas 10%',movs:[{fecha:'20/03/26',asiento:'A-0127',desc:'Venta Empresa ABC',debe:0,haber:2272728},{fecha:'19/03/26',asiento:'A-0126',desc:'Venta Comercial Norte',debe:0,haber:772728}]},
+  iva_debito:{nombre:'2.1.4.01 — IVA Débito Fiscal 10%',movs:[{fecha:'20/03/26',asiento:'A-0127',desc:'IVA Venta Empresa ABC',debe:0,haber:227272},{fecha:'19/03/26',asiento:'A-0126',desc:'IVA Venta Comercial Norte',debe:0,haber:77272}]},
+  iva_credito:{nombre:'1.1.5.01 — IVA Crédito Fiscal 10%',movs:[{fecha:'18/03/26',asiento:'A-0125',desc:'IVA Compra Distribuidora',debe:109091,haber:0}]},
+  cxp:{nombre:'2.1.1.01 — Cuentas por Pagar Comerciales',movs:[{fecha:'18/03/26',asiento:'A-0125',desc:'Compra Distribuidora Central',debe:0,haber:1200000},{fecha:'16/03/26',asiento:'A-0118',desc:'Pago parcial proveedor',debe:500000,haber:0}]},
+  caja:{nombre:'1.1.1.01 — Caja',movs:[{fecha:'20/03/26',asiento:'A-0130',desc:'Cobro venta contado',debe:300000,haber:0},{fecha:'19/03/26',asiento:'A-0128',desc:'Pago gastos varios',debe:0,haber:150000}]}
 };
 
-function doLogin() {
-  var u = document.getElementById('login-user').value;
-  var p = document.getElementById('login-pass').value;
-  if (usuarios[u] && usuarios[u].pass === p) {
-    document.getElementById('login-wrap').style.display = 'none';
-  } else {
-    document.getElementById('login-error').style.display = 'block';
-  }
+function mostrarMayor(){
+  var sel=document.getElementById('select-cuenta-mayor').value;
+  if(!sel)return;
+  var d=mayorData[sel];
+  var tot_debe=0,tot_haber=0,saldo=0;
+  var html='<div style="font-size:14px;font-weight:700;margin-bottom:14px;color:var(--accent2)">'+d.nombre+'</div>';
+  html+='<div class="libro-header"><div>Fecha</div><div>N° Asiento</div><div>Descripción</div><div>Debe ₲</div><div>Haber ₲</div></div>';
+  d.movs.forEach(function(m){
+    tot_debe+=m.debe; tot_haber+=m.haber; saldo+=m.debe-m.haber;
+    html+='<div class="libro-row"><div>'+m.fecha+'</div><div style="font-family:\'DM Mono\',monospace">'+m.asiento+'</div><div>'+m.desc+'</div>'+
+      '<div class="monto debe">'+(m.debe>0?m.debe.toLocaleString('es-PY'):'—')+'</div>'+
+      '<div class="monto haber">'+(m.haber>0?m.haber.toLocaleString('es-PY'):'—')+'</div></div>';
+  });
+  var saldoColor=saldo>=0?'var(--accent2)':'var(--accent)';
+  html+='<div style="display:grid;grid-template-columns:100px 80px 1fr 120px 120px;gap:8px;padding:10px;background:#f8f9fa;border-top:2px solid var(--border);font-weight:700;font-size:13px">'+
+    '<div></div><div></div><div>SALDOS</div>'+
+    '<div class="monto debe">'+tot_debe.toLocaleString('es-PY')+'</div>'+
+    '<div class="monto haber">'+tot_haber.toLocaleString('es-PY')+'</div></div>';
+  html+='<div style="padding:10px;text-align:right;font-size:14px;font-weight:700">Saldo: <span style="font-family:\'DM Mono\',monospace;color:'+saldoColor+'">₲ '+Math.abs(saldo).toLocaleString('es-PY')+'</span> '+(saldo>=0?'Deudor':'Acreedor')+'</div>';
+  document.getElementById('mayor-content').innerHTML=html;
 }
 
-function doLogout() {
-  document.getElementById('login-wrap').style.display = 'flex';
+// ===== COMPROBANTES =====
+function filtrarComprobantes(tipo,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.querySelectorAll('#tabla-comprobantes tr').forEach(function(tr){
+    tr.style.display=(tipo==='todos'||tr.dataset.tipo===tipo)?'':'none';
+  });
 }
 
-function showPage(name, el) {
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
-  var pg = document.getElementById('page-' + name);
-  if (pg) pg.classList.add('active');
-  if (el) el.classList.add('active');
-  var titles = {
-    'dashboard':'Dashboard','clientes':'Clientes','proveedores':'Proveedores',
-    'sifen':'SIFEN — Facturación Electrónica','facturas':'Facturas','notas':'Notas de Crédito/Débito',
-    'iva':'IVA','declaraciones':'Declaraciones Juradas','ire':'IRE / IRP',
-    'libros':'Libros Contables','asientos':'Asientos Contables','reportes':'Reportes',
-    'usuarios':'Usuarios','empresas':'Empresas','configuracion':'Configuración'
-  };
-  document.getElementById('topbar-title').textContent = titles[name] || name;
-}
-
-function openModal(id){ document.getElementById(id).classList.add('open'); }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(function(m){
-  m.addEventListener('click', function(e){ if(e.target===m) m.classList.remove('open'); });
-});
-
-function selectEmpresa(nombre, ruc) {
-  document.getElementById('empresa-activa').textContent = nombre + ' — RUC ' + ruc;
-  closeModal('empresa-modal');
-}
-
-function showSifenForm() {
-  document.getElementById('sifen-lista').style.display = 'none';
-  document.getElementById('sifen-form').style.display = 'block';
-  document.getElementById('sifen-steps').style.display = 'flex';
-}
-
-function cancelarSifen() {
-  document.getElementById('sifen-lista').style.display = 'block';
-  document.getElementById('sifen-form').style.display = 'none';
-  document.getElementById('sifen-steps').style.display = 'none';
-}
-
-var itemCount = 1;
-function agregarItem() {
-  var tbody = document.getElementById('items-tabla');
-  var tr = document.createElement('tr');
-  var id = itemCount++;
-  tr.innerHTML = '<td style="padding:6px;"><input type="text" placeholder="Descripción" style="width:100%"></td>' +
-    '<td style="padding:6px;"><select style="width:80px;"><option>UND</option><option>KG</option><option>LT</option><option>SVC</option></select></td>' +
-    '<td style="padding:6px;"><input type="number" value="1" style="width:70px;text-align:right;" onchange="calcTotal()"></td>' +
-    '<td style="padding:6px;"><input type="number" placeholder="0" style="width:120px;text-align:right;" onchange="calcTotal()"></td>' +
-    '<td style="padding:6px;"><select style="width:80px;" onchange="calcTotal()"><option>10%</option><option>5%</option><option>Exenta</option></select></td>' +
-    '<td style="padding:6px;text-align:right;font-family:\'DM Mono\',monospace;" id="total-row-'+id+'">₲ 0</td>' +
-    '<td style="padding:6px;"><button class="btn btn-outline btn-sm" onclick="this.closest(\'tr\').remove();calcTotal()">✕</button></td>';
+var itemCompCount=1;
+function agregarItemComp(){
+  var tbody=document.getElementById('comp-items');
+  var tr=document.createElement('tr');
+  var id=itemCompCount++;
+  tr.innerHTML='<td style="padding:4px"><input type="text" placeholder="Descripción" style="width:100%"></td>'+
+    '<td style="padding:4px"><input type="number" value="1" style="width:60px" onchange="calcCompTotal(this)"></td>'+
+    '<td style="padding:4px"><input type="number" placeholder="0" style="width:100px" onchange="calcCompTotal(this)"></td>'+
+    '<td style="padding:4px"><select style="width:75px" onchange="calcCompTotal(this)"><option>10%</option><option>5%</option><option>Exenta</option></select></td>'+
+    '<td style="padding:4px;text-align:right;font-family:\'DM Mono\',monospace">₲ 0</td>'+
+    '<td><button class="btn btn-outline btn-sm" onclick="this.closest(\'tr\').remove();recalcComp()">✕</button></td>';
   tbody.appendChild(tr);
 }
 
-function calcTotal() {
-  var rows = document.querySelectorAll('#items-tabla tr');
-  var tot10=0, tot5=0, totEx=0;
-  rows.forEach(function(row,i){
-    var inputs = row.querySelectorAll('input[type=number]');
-    var sel = row.querySelector('select');
-    if(inputs.length < 2) return;
-    var qty = parseFloat(inputs[0].value)||0;
-    var price = parseFloat(inputs[1].value)||0;
-    var total = qty * price;
-    var ivaType = sel ? sel.value : '10%';
-    var cell = row.querySelector('td:nth-child(6)');
-    if(cell) cell.textContent = '₲ ' + total.toLocaleString('es-PY');
-    if(ivaType==='10%') tot10+=total;
-    else if(ivaType==='5%') tot5+=total;
-    else totEx+=total;
+function calcCompTotal(el){recalcComp();}
+function recalcComp(){
+  var rows=document.querySelectorAll('#comp-items tr');
+  var b10=0,b5=0,bex=0;
+  rows.forEach(function(row){
+    var inputs=row.querySelectorAll('input[type=number]');
+    var sel=row.querySelector('select');
+    if(inputs.length<2)return;
+    var qty=parseFloat(inputs[0].value)||0;
+    var price=parseFloat(inputs[1].value)||0;
+    var total=qty*price;
+    var iva=sel?sel.value:'10%';
+    var cell=row.querySelector('td:nth-child(5)');
+    if(cell)cell.textContent='₲ '+total.toLocaleString('es-PY');
+    if(iva==='10%')b10+=total;
+    else if(iva==='5%')b5+=total;
+    else bex+=total;
   });
-  var iva10 = Math.round(tot10/11);
-  var iva5 = Math.round(tot5/21);
-  var base10 = tot10 - iva10;
-  var base5 = tot5 - iva5;
-  var totalGral = tot10 + tot5 + totEx;
-  document.getElementById('sub10').textContent = '₲ ' + base10.toLocaleString('es-PY');
-  document.getElementById('sub5').textContent = '₲ ' + base5.toLocaleString('es-PY');
-  document.getElementById('subex').textContent = '₲ ' + totEx.toLocaleString('es-PY');
-  document.getElementById('iva10').textContent = '₲ ' + iva10.toLocaleString('es-PY');
-  document.getElementById('iva5').textContent = '₲ ' + iva5.toLocaleString('es-PY');
-  document.getElementById('total-gral').textContent = '₲ ' + totalGral.toLocaleString('es-PY');
+  var iva10=Math.round(b10/11),iva5=Math.round(b5/21);
+  document.getElementById('ct_b10').textContent='₲ '+(b10-iva10).toLocaleString('es-PY');
+  document.getElementById('ct_b5').textContent='₲ '+(b5-iva5).toLocaleString('es-PY');
+  document.getElementById('ct_iva').textContent='₲ '+(iva10+iva5).toLocaleString('es-PY');
+  document.getElementById('ct_total').textContent='₲ '+(b10+b5+bex).toLocaleString('es-PY');
+}
+function guardarComprobante(){alert('✅ Comprobante registrado y asiento contable generado automáticamente.');closeModal('modal-comprobante');}
+
+// ===== ASIENTOS =====
+function agregarLineaAsiento(){
+  var tbody=document.getElementById('asiento-lineas');
+  var tr=document.createElement('tr');
+  tr.innerHTML='<td style="padding:4px"><input type="text" placeholder="Código o nombre de cuenta" style="width:100%"></td>'+
+    '<td style="padding:4px"><input type="text" placeholder="Glosa" style="width:100%"></td>'+
+    '<td style="padding:4px"><input type="number" placeholder="0" style="width:110px;text-align:right" onchange="calcAsiento()"></td>'+
+    '<td style="padding:4px"><input type="number" placeholder="0" style="width:110px;text-align:right" onchange="calcAsiento()"></td>'+
+    '<td><button class="btn btn-outline btn-sm" onclick="this.closest(\'tr\').remove();calcAsiento()">✕</button></td>';
+  tbody.appendChild(tr);
+}
+function calcAsiento(){
+  var rows=document.querySelectorAll('#asiento-lineas tr');
+  var debe=0,haber=0;
+  rows.forEach(function(row){
+    var inputs=row.querySelectorAll('input[type=number]');
+    if(inputs.length<2)return;
+    debe+=parseFloat(inputs[0].value)||0;
+    haber+=parseFloat(inputs[1].value)||0;
+  });
+  document.getElementById('as_debe').textContent='₲ '+debe.toLocaleString('es-PY');
+  document.getElementById('as_haber').textContent='₲ '+haber.toLocaleString('es-PY');
+  var diff=document.getElementById('as_diff');
+  if(Math.abs(debe-haber)<1){diff.textContent='✓ Balanceado';diff.style.color='var(--success)';}
+  else{diff.textContent='⚠️ Diferencia: ₲ '+Math.abs(debe-haber).toLocaleString('es-PY');diff.style.color='var(--danger)';}
 }
 
-document.getElementById('login-pass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+// ===== TABS IVA =====
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click',function(){
+    var parent=this.closest('.tabs');
+    if(parent)parent.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
 </script>
 </body>
 </html>
