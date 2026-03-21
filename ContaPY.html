@@ -15,7 +15,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
-.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto}
+.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;z-index:100}
 .sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .logo-mark{display:flex;align-items:center;gap:10px}
 .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
@@ -29,19 +29,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0}
 .topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
+.topbar-empresa{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:7px}
+.topbar-empresa .dot{width:7px;height:7px;background:var(--success);border-radius:50%}
 .content{flex:1;overflow-y:auto;padding:20px}
 .page{display:none} .page.active{display:block}
 .card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:18px}
 .card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
-.stat-card{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden;cursor:default}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden}
 .stat-card.clickable{cursor:pointer;transition:transform 0.1s;}
 .stat-card.clickable:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--accent2)}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
 .stat-card.blue::before{background:var(--accent2)}
+.stat-card.green::before{background:var(--success)}
 .stat-card.orange::before{background:var(--warning)}
 .stat-label{font-size:11px;color:var(--text-light);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
 .stat-value{font-size:22px;font-weight:700;color:var(--text);margin:6px 0 3px;letter-spacing:-1px}
+.stat-sub{font-size:11px;color:var(--text-light)}
+.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
 thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap}
@@ -51,6 +57,9 @@ tbody tr:hover{background:#fafafa}
 .badge-status.ok{background:#d1fae5;color:#065f46}
 .badge-status.pend{background:#fef3c7;color:#92400e}
 .badge-status.err{background:#fee2e2;color:#991b1b}
+.badge-status.info{background:#dbeafe;color:#1e40af}
+.form-section{background:var(--card);border-radius:10px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:14px}
+.form-section-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .form-grid.col2{grid-template-columns:repeat(2,1fr)}
 .form-grid.col4{grid-template-columns:repeat(4,1fr)}
@@ -65,7 +74,9 @@ textarea{resize:vertical;min-height:70px}
 .btn-secondary{background:var(--accent2);color:white}
 .btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}
 .btn-outline:hover{background:var(--bg)}
+.btn-success{background:var(--success);color:white}
 .btn-sm{padding:5px 10px;font-size:11px}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
 .tabs{display:flex;gap:2px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:16px;width:fit-content}
 .tab{padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--text-light)}
 .tab.active{background:white;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
@@ -73,6 +84,7 @@ textarea{resize:vertical;min-height:70px}
 .page-header h2{font-size:20px;font-weight:700}
 .page-header p{font-size:12px;color:var(--text-light);margin-top:2px}
 .notif{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;margin-bottom:14px;font-size:12.5px;color:#1e40af}
+.notif.warn{background:#fef3c7;border-color:#fde68a;color:#92400e}
 .monto{font-family:'DM Mono',monospace;text-align:right}
 .debe{color:var(--accent)} .haber{color:var(--success)}
 .libro-header{display:grid;grid-template-columns:80px 100px 1fr 110px 110px;gap:8px;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border)}
@@ -81,19 +93,42 @@ textarea{resize:vertical;min-height:70px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--white);border-radius:14px;padding:24px;width:90%;max-width:580px;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto}
 .modal-title{font-size:17px;font-weight:700;margin-bottom:18px}
-.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
-
-/* Wizard Styles */
-.wiz-step { display: none; }
-.wiz-step.active { display: block; }
-.wiz-header { display: flex; gap: 10px; margin-bottom: 20px; }
-.wiz-bullet { width: 30px; height: 30px; border-radius: 50%; background: var(--bg); color: var(--text-light); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
-.wiz-bullet.active { background: var(--accent); color: white; }
-.wiz-bullet.done { background: var(--success); color: white; }
+.wiz-step{display:none} .wiz-step.active{display:block}
+.wiz-header{display:flex;gap:10px;margin-bottom:20px;align-items:center}
+.wiz-bullet{width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--text-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.wiz-bullet.active{background:var(--accent);color:white}
+.wiz-bullet.done{background:var(--success);color:white}
+.cuenta-nivel-1{font-weight:700;font-size:13px;background:#f8f9fa;border-left:4px solid var(--accent2)}
+.cuenta-nivel-2{font-weight:600;font-size:12.5px;padding-left:20px!important;background:#fafafa;border-left:4px solid #93c5fd}
+.cuenta-nivel-3{font-size:12px;padding-left:36px!important;color:var(--text)}
+.cuenta-nivel-4{font-size:11.5px;padding-left:52px!important;color:var(--text-light)}
+.cuenta-row{display:grid;grid-template-columns:120px 1fr 80px 80px;gap:8px;padding:7px 10px;border-bottom:1px solid var(--border);align-items:center}
+.login-wrap{position:fixed;inset:0;background:linear-gradient(135deg,#0f1923 0%,#1a2535 50%,#0f1923 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-card{background:white;border-radius:18px;padding:36px;width:100%;max-width:380px;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.iva-box{background:var(--bg);border-radius:9px;padding:14px;text-align:center}
+.iva-box .val{font-size:20px;font-weight:700;font-family:'DM Mono',monospace}
+.iva-box .lbl{font-size:10px;color:var(--text-light);margin-top:3px;text-transform:uppercase}
+.iva-box.azul .val{color:var(--accent2)} .iva-box.verde .val{color:var(--success)} .iva-box.rojo .val{color:var(--accent)}
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="width:56px;height:56px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px">🧾</div>
+      <h1 style="font-size:24px;font-weight:800;letter-spacing:-1px">ContaPY</h1>
+      <p style="font-size:12px;color:var(--text-light);margin-top:3px">Sistema Contable Paraguay</p>
+    </div>
+    <div class="form-group"><label>Usuario</label><input type="text" id="lu" value="admin@contapy.py"></div>
+    <div class="form-group"><label>Contraseña</label><input type="password" id="lp" value="admin123" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:11px;margin-top:10px" onclick="doLogin()">Ingresar al Sistema</button>
+    <div id="lerr" style="display:none;background:#fee2e2;color:#991b1b;padding:8px 12px;border-radius:7px;font-size:12px;margin-top:10px;text-align:center">Datos incorrectos</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v2.1 Pro</div></div></div>
@@ -104,14 +139,32 @@ textarea{resize:vertical;min-height:70px}
     <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span>Clientes (Contribuyentes)</div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label">Operativa</div>
-    <div class="nav-item" onclick="openWizard()"><span class="icon">➕</span>Cargar Comprobante</div>
+    <div class="sidebar-label">Contabilidad</div>
+    <div class="nav-item" onclick="showPage('plan_cuentas',this)"><span class="icon">📋</span>Plan de Cuentas</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Facturación / Asientos</div>
+    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">🧾</span>Carga Comprobantes</div>
+    <div class="nav-item" style="color:var(--accent2)" onclick="openWizard()"><span class="icon">➕</span>Nuevo Asiento / Fact.</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Impuestos Generales</div>
+    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span>Liquidación IVA</div>
+    <div class="nav-item" onclick="showPage('ire',this)"><span class="icon">💼</span>Liquidación IRE</div>
+    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span>Liquidación IRP</div>
+    <div class="nav-item" onclick="showPage('inr',this)"><span class="icon">🌍</span>Liquidación INR</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Reportes</div>
+    <div class="nav-item" onclick="showPage('balance',this)"><span class="icon">⚖️</span>Balance General</div>
   </div>
 </div>
 
 <div class="main">
   <div class="topbar">
     <div class="topbar-title" id="topbar-title">Dashboard Principal</div>
+    <div class="topbar-empresa"><div class="dot"></div><span id="empresa-activa">Estudio Contable ContaPY</span></div>
+    <div class="btn-icon" onclick="document.getElementById('login-wrap').style.display='flex'">🚪</div>
   </div>
 
   <div class="content">
@@ -119,35 +172,39 @@ textarea{resize:vertical;min-height:70px}
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="page-header">
-        <div><h2>Estudio Contable ContaPY</h2><p>Panel General de Gestión</p></div>
+        <div><h2>Estudio Contable ContaPY 👋</h2><p>Panel General de Gestión — Mes Actual</p></div>
       </div>
-      <div class="notif">💡 <span>Presione sobre "Clientes Activos" para gestionar los cobros de honorarios pendientes.</span></div>
+      <div class="notif">💡 <span>Presione sobre la tarjeta <strong>"Clientes Activos"</strong> para abrir la planilla de control mensual de honorarios (Cobros).</span></div>
       <div class="stats-grid">
         <div class="stat-card clickable" onclick="openModalHonorarios()" title="Clic para gestionar cobros">
           <div class="stat-label">Clientes Activos (Honorarios)</div>
           <div class="stat-value" id="dash_cli_count">0</div>
-          <div class="stat-sub" style="color:var(--accent2);font-weight:600">👆 Clic para Control de Cobros</div>
+          <div class="stat-sub" style="color:var(--accent2);font-weight:600">👆 Tocar para Control de Cobros</div>
         </div>
-        <div class="stat-card blue"><div class="stat-label">Documentos Procesados</div><div class="stat-value" id="dash_doc_count">0</div></div>
-        <div class="stat-card orange"><div class="stat-label">Vencimientos Próximos</div><div class="stat-value">2</div></div>
+        <div class="stat-card blue"><div class="stat-label">Documentos Procesados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Facturas y asientos en el mes</div></div>
+        <div class="stat-card green"><div class="stat-label">Vencimientos Próximos</div><div class="stat-value">3</div><div class="stat-sub">Declaraciones IVA (RUC 0-3)</div></div>
+        <div class="stat-card orange"><div class="stat-label">Alertas SET</div><div class="stat-value">0</div><div class="stat-sub">Todo al día</div></div>
       </div>
     </div>
 
     <!-- CLIENTES DIRECTORIO -->
     <div class="page" id="page-clientes">
       <div class="page-header">
-        <div><h2>Directorio de Clientes</h2><p>Registro y configuración impositiva</p></div>
-        <button class="btn btn-primary" onclick="openModalCliente()">+ Nuevo Cliente</button>
+        <div><h2>Directorio de Clientes</h2><p>Registro y configuración impositiva de contribuyentes</p></div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" placeholder="🔍 Buscar por RUC o Nombre..." style="width:250px" id="search-cliente" onkeyup="renderClientes()">
+          <button class="btn btn-primary" onclick="openModalCliente()">+ Nuevo Cliente</button>
+        </div>
       </div>
       <div class="card">
         <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th>Razón Social</th><th>Impuestos Activos</th><th>Acciones</th></tr></thead>
+          <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Tipo Persona</th><th>Impuestos Activos</th><th>Acciones de Gestión</th></tr></thead>
           <tbody id="tabla-clientes-list"></tbody>
         </table></div>
       </div>
     </div>
 
-    <!-- CLIENTE DETALLE (Panel de Libros) -->
+    <!-- PANEL CLIENTE DETALLE -->
     <div class="page" id="page-cliente-detalle">
       <div class="page-header">
         <div>
@@ -160,81 +217,193 @@ textarea{resize:vertical;min-height:70px}
         <div class="tab active" onclick="switchClientTab('compras', this)">Libro Compras</div>
         <div class="tab" onclick="switchClientTab('ventas', this)">Libro Ventas</div>
         <div class="tab" onclick="switchClientTab('diario', this)">Libro Diario</div>
+        <div class="tab" onclick="switchClientTab('mayor', this)">Libro Mayor</div>
+        <div class="tab" onclick="switchClientTab('inventario', this)">Libro Inventario</div>
       </div>
       
-      <!-- COMPRAS -->
       <div id="ctab_compras" class="ctab-content" style="display:block;">
         <div class="card">
            <div class="card-title">Libro de Compras (Art. 92 Ley 6380)</div>
            <div class="table-wrap"><table>
-              <thead><tr><th>Fecha</th><th>Proveedor / Cliente</th><th>Comprobante</th><th>Monto Bruto</th><th>Neto / Grav.</th><th>IVA</th></tr></thead>
+              <thead><tr><th>Fecha</th><th>Proveedor</th><th>Comprobante</th><th>Monto Bruto</th><th>Monto Grav.</th><th>IVA Crédito</th></tr></thead>
               <tbody id="lista_lib_compras"></tbody>
            </table></div>
         </div>
       </div>
 
-      <!-- VENTAS -->
       <div id="ctab_ventas" class="ctab-content" style="display:none;">
         <div class="card">
            <div class="card-title">Libro de Ventas</div>
            <div class="table-wrap"><table>
-              <thead><tr><th>Fecha</th><th>Proveedor / Cliente</th><th>Comprobante</th><th>Monto Bruto</th><th>Neto / Grav.</th><th>IVA</th></tr></thead>
+              <thead><tr><th>Fecha</th><th>Cliente</th><th>Comprobante</th><th>Monto Bruto</th><th>Monto Grav.</th><th>IVA Débito</th></tr></thead>
               <tbody id="lista_lib_ventas"></tbody>
            </table></div>
         </div>
       </div>
 
-      <!-- DIARIO -->
       <div id="ctab_diario" class="ctab-content" style="display:none;">
         <div class="card">
-          <div class="card-title">Libro Diario Contable (Estructura Ábaco)</div>
-          <div class="libro-header"><div>Fecha</div><div>Asiento / Comp.</div><div>Descripción (Glosa)</div><div>Debe ₲</div><div>Haber ₲</div></div>
+          <div class="card-title">Libro Diario Contable</div>
+          <div class="libro-header"><div>Fecha</div><div>Asiento N°</div><div>Descripción (Glosa)</div><div>Debe ₲</div><div>Haber ₲</div></div>
           <div id="lista_lib_diario"></div>
         </div>
       </div>
+
+      <div id="ctab_mayor" class="ctab-content" style="display:none;">
+        <div class="card"><p style="color:var(--text-light);text-align:center;padding:30px">Centralización del Mayor en desarrollo (Muestra los saldos de cada cuenta del Diario anterior).</p></div>
+      </div>
+      
+      <div id="ctab_inventario" class="ctab-content" style="display:none;">
+        <div class="card">
+           <div class="card-title">Libro de Inventario (Art. 74 Ley 1034)</div>
+           <div class="notif">📋 <span>El Inventario extrae automáticamente los saldos finales de Activos y Pasivos del Libro Mayor.</span></div>
+           <div class="table-wrap"><table>
+              <thead><tr><th>Código</th><th>Cuenta Contable</th><th>Naturaleza</th><th>Monto ₲</th></tr></thead>
+              <tbody>
+                <tr><td style="font-family:'DM Mono',monospace">1.1.1.01</td><td>Caja / Bancos</td><td>Efectivo disponible</td><td class="monto">25.500.000</td></tr>
+                <tr style="font-weight:700;background:#eff6ff"><td colspan="3" style="text-align:right">TOTAL ACTIVO</td><td class="monto" style="color:var(--accent2)">25.500.000</td></tr>
+                <tr style="font-weight:700;background:#fee2e2"><td colspan="3" style="text-align:right">TOTAL PASIVO</td><td class="monto" style="color:var(--accent)">0</td></tr>
+                <tr style="font-weight:700;background:#f3f4f6"><td colspan="3" style="text-align:right">PATRIMONIO NETO</td><td class="monto">25.500.000</td></tr>
+              </tbody>
+           </table></div>
+        </div>
+      </div>
     </div>
+
+    <!-- COMPROBANTES (PAGINA PRINCIPAL) -->
+    <div class="page" id="page-comprobantes">
+      <div class="page-header">
+        <div><h2>Registro de Comprobantes</h2><p>Carga de Compras, Ventas, Recibos y Retenciones</p></div>
+        <button class="btn btn-primary" onclick="openWizard()">+ Cargar Nuevo Comprobante</button>
+      </div>
+      <div class="card">
+        <p style="text-align:center;color:var(--text-light);padding:20px;">Utiliza el botón superior para abrir el **Wizard Asistente de Carga** (flujo de 3 pasos) para registrar facturas, cobros y pagos.</p>
+      </div>
+    </div>
+
+    <!-- PLAN DE CUENTAS -->
+    <div class="page" id="page-plan_cuentas">
+      <div class="page-header">
+        <div><h2>Plan de Cuentas</h2><p>NIIF adaptado a Ley 6380/2019</p></div>
+        <input type="text" placeholder="🔍 Buscar cuenta..." style="width:250px" id="search-cuenta" onkeyup="renderPlanCuentas()">
+      </div>
+      <div class="card">
+        <div id="tabla-cuentas">
+          <div style="display:grid;grid-template-columns:110px 1fr 80px 90px;gap:8px;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border);">
+            <div>Código</div><div>Nombre</div><div>Tipo</div><div>Estado</div>
+          </div>
+          <div id="pc_body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IVA -->
+    <div class="page" id="page-iva">
+      <div class="page-header"><div><h2>IVA — Formulario 120 V4</h2><p>Liquidación Mensual (Cód. 211)</p></div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div class="iva-box azul"><div class="val">₲ 48.200.000</div><div class="lbl">Ventas Gravadas Total</div></div>
+        <div class="iva-box rojo"><div class="val">₲ 4.381.818</div><div class="lbl">IVA Débito Total</div></div>
+        <div class="iva-box verde"><div class="val">₲ 2.100.000</div><div class="lbl">IVA Crédito Total</div></div>
+      </div>
+      <div class="form-section">
+        <div class="form-section-title">💰 Liquidación Final</div>
+        <div style="max-width:400px;">
+          <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:15px;font-weight:700"><span>IMPUESTO A PAGAR</span><span style="font-family:'DM Mono',monospace;color:var(--accent)">₲ 2.281.818</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IRE -->
+    <div class="page" id="page-ire">
+      <div class="page-header"><div><h2>IRE — Impuesto a la Renta Empresarial</h2><p>Formulario 500 — General</p></div></div>
+      <div class="form-section">
+        <div class="form-grid">
+          <div class="form-group"><label>Total Ingresos</label><input type="number" id="ire_ing" value="0" oninput="calcIRE()"></div>
+          <div class="form-group"><label>Total Costos/Gastos</label><input type="number" id="ire_gas" value="0" oninput="calcIRE()"></div>
+        </div>
+        <div style="margin-top:15px;font-size:14px;font-weight:700">IRE (10% sobre Renta Neta): <span id="ire_res" style="color:var(--accent)">₲ 0</span></div>
+      </div>
+    </div>
+
+    <!-- IRP -->
+    <div class="page" id="page-irp">
+      <div class="page-header"><div><h2>IRP — Renta Personal (RSP)</h2><p>Monto No Alcanzado: ₲ 80.000.000</p></div></div>
+      <div class="form-section">
+        <div class="form-grid">
+          <div class="form-group"><label>Ingresos Gravados</label><input type="number" id="irp_ing" value="0" oninput="calcIRP()"></div>
+          <div class="form-group"><label>Egresos Deducibles</label><input type="number" id="irp_gas" value="0" oninput="calcIRP()"></div>
+        </div>
+        <div style="margin-top:15px;font-size:14px;font-weight:700">IRP a Pagar (Escala): <span id="irp_res" style="color:var(--accent)">₲ 0</span></div>
+      </div>
+    </div>
+
+    <!-- INR -->
+    <div class="page" id="page-inr">
+      <div class="page-header"><div><h2>INR — Renta No Residentes</h2></div></div>
+      <div class="form-section">
+        <div class="form-grid col2">
+          <div class="form-group"><label>Monto Bruto Remesado</label><input type="number" id="inr_ing" value="0" oninput="calcINR()"></div>
+          <div class="form-group"><label>Tasa Efectiva Aplicable</label>
+             <select id="inr_tasa" onchange="calcINR()">
+                <option value="4.5">4.5% (Serv. Digitales / Fletes)</option>
+                <option value="15">15% (Honorarios y Otros)</option>
+             </select>
+          </div>
+        </div>
+        <div style="margin-top:15px;font-size:14px;font-weight:700">Retención INR a Ingresar: <span id="inr_res" style="color:var(--danger)">₲ 0</span></div>
+      </div>
+    </div>
+
+    <!-- BALANCE -->
+    <div class="page" id="page-balance">
+      <div class="page-header"><div><h2>Balance General</h2><p>Situación Patrimonial Consolidada</p></div></div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">ACTIVOS</div><div style="font-weight:700;font-size:15px;color:var(--accent2)">Total Activos: ₲ 52.100.000</div></div>
+        <div class="card"><div class="card-title">PASIVO Y PATRIMONIO</div><div style="font-weight:700;font-size:15px;color:var(--accent2)">Total Pas+Pat: ₲ 52.100.000</div></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <!-- MODAL: CONTROL DE HONORARIOS (COBROS) -->
 <div class="modal-overlay" id="modal-honorarios">
   <div class="modal" style="max-width:700px">
-    <div class="modal-title">💰 Control de Cobro de Honorarios</div>
-    <div class="notif">📋 <span>Marque manualmente los meses pagados por cada cliente. Los datos se actualizan en tiempo real.</span></div>
-    
+    <div class="modal-title">💰 Control de Honorarios Mensuales</div>
+    <div class="notif">📋 <span>Marque manualmente los meses pagados por cada cliente. Actualización en tiempo real.</span></div>
     <div style="display:flex;justify-content:space-between;margin-bottom:10px">
         <select id="filtro_mes_cobro" style="width:200px" onchange="renderHonorarios()">
-            <option value="03/2026">Marzo 2026</option>
-            <option value="02/2026">Febrero 2026</option>
-            <option value="01/2026">Enero 2026</option>
+            <option value="03/2026">Marzo 2026</option><option value="02/2026">Febrero 2026</option>
         </select>
-        <button class="btn btn-outline" onclick="exportarReporteCobros()">📄 Generar Reporte PDF</button>
+        <button class="btn btn-outline" onclick="alert('Generando reporte PDF...')">📄 Exportar Reporte</button>
     </div>
-
     <div class="table-wrap" style="max-height:350px;overflow-y:auto;border:1px solid var(--border);border-radius:8px">
         <table style="width:100%">
-            <thead style="position:sticky;top:0;background:var(--bg);z-index:10">
-                <tr><th>Cliente</th><th>Cuota Mes</th><th>Vencimiento</th><th>Estado</th><th>Acción (Manual)</th></tr>
+            <thead style="position:sticky;top:0;background:var(--bg)">
+                <tr><th>Cliente</th><th>Mes</th><th>Vencimiento</th><th>Estado</th><th>Acción Manual</th></tr>
             </thead>
-            <tbody id="tabla-honorarios">
-                <!-- Llenado por JS -->
-            </tbody>
+            <tbody id="tabla-honorarios"></tbody>
         </table>
     </div>
-
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeModal('modal-honorarios')">Cerrar Panel</button>
-    </div>
+    <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modal-honorarios')">Cerrar</button></div>
   </div>
 </div>
 
 <!-- MODAL: NUEVO CLIENTE -->
 <div class="modal-overlay" id="modal-cliente">
   <div class="modal" style="max-width:640px">
-    <div class="modal-title">🏢 Configurar Cliente</div>
+    <div class="modal-title" id="m-cli-title">🏢 Configurar Cliente (Contribuyente)</div>
     <div class="form-grid col2">
       <div class="form-group"><label>RUC</label><input type="text" id="cli_ruc" placeholder="Ej: 80012345-6"></div>
       <div class="form-group"><label>Razón Social</label><input type="text" id="cli_nom"></div>
+      <div class="form-group"><label>Tipo de Persona</label><select id="cli_tipo"><option value="fisica">Física</option><option value="juridica">Jurídica</option></select></div>
+    </div>
+    <div class="form-section-title" style="margin-top:20px;font-size:13px;border-bottom:none">📌 Impuestos (Marque para configurar libros)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--bg);padding:15px;border-radius:8px;margin-bottom:15px">
+      <label style="display:flex;gap:6px;font-size:13px"><input type="checkbox" id="tax_iva" checked> IVA</label>
+      <label style="display:flex;gap:6px;font-size:13px"><input type="checkbox" id="tax_ire_gen"> IRE General (Diario/Mayor)</label>
+      <label style="display:flex;gap:6px;font-size:13px"><input type="checkbox" id="tax_ire_sim"> IRE Simple</label>
+      <label style="display:flex;gap:6px;font-size:13px"><input type="checkbox" id="tax_irp"> IRP (RSP)</label>
     </div>
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal('modal-cliente')">Cancelar</button>
@@ -243,50 +412,42 @@ textarea{resize:vertical;min-height:70px}
   </div>
 </div>
 
-<!-- WIZARD: CARGA DE COMPROBANTES (ESTILO ABACO) -->
+<!-- WIZARD: CARGA COMPROBANTES (ABACO STYLE) -->
 <div class="modal-overlay" id="modal-wizard">
-  <div class="modal" style="max-width:680px">
+  <div class="modal" style="max-width:680px;overflow:visible">
     <div class="modal-title" style="border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:20px">
-        🧾 Asiento Parametrizado (Wizard)
+        🧾 Asistente de Carga (Wizard Contable)
     </div>
     
-    <!-- Indicadores de progreso -->
     <div class="wiz-header">
         <div class="wiz-bullet active" id="wb-1">1</div> <span style="font-size:13px;font-weight:600;line-height:30px;color:var(--text)">Datos Comprobante</span>
         <div style="flex:1;border-bottom:2px dashed var(--border);margin:15px 10px"></div>
         <div class="wiz-bullet" id="wb-2">2</div> <span style="font-size:13px;font-weight:600;line-height:30px;color:var(--text-light)" id="wt-2">Método de Pago</span>
         <div style="flex:1;border-bottom:2px dashed var(--border);margin:15px 10px"></div>
-        <div class="wiz-bullet" id="wb-3">3</div> <span style="font-size:13px;font-weight:600;line-height:30px;color:var(--text-light)" id="wt-3">Glosa Contable</span>
+        <div class="wiz-bullet" id="wb-3">3</div> <span style="font-size:13px;font-weight:600;line-height:30px;color:var(--text-light)" id="wt-3">Glosa y Asiento</span>
     </div>
 
-    <!-- PASO 1: DATOS -->
+    <!-- PASO 1 -->
     <div class="wiz-step active" id="ws-1">
         <div class="form-grid col2" style="margin-bottom:14px">
-            <div class="form-group"><label>Seleccione Contribuyente (Libro Destino)</label>
-                <select id="wiz_cliente"></select>
-            </div>
-            <div class="form-group"><label>Operación</label>
-                <select id="wiz_operacion"><option value="compra">Compra / Egreso</option><option value="venta">Venta / Ingreso</option></select>
-            </div>
+            <div class="form-group"><label>Cliente (Destino del Libro)</label><select id="wiz_cliente"></select></div>
+            <div class="form-group"><label>Operación</label><select id="wiz_operacion"><option value="compra">Compra/Egreso</option><option value="venta">Venta/Ingreso</option></select></div>
         </div>
         <div class="form-grid col2" style="margin-bottom:14px;background:var(--bg);padding:10px;border-radius:8px">
-            <div class="form-group"><label>Tipo de Comprobante</label>
+            <div class="form-group"><label>Tipo Comprobante</label>
                 <select id="wiz_tipo" onchange="toggleWizardTipo()">
-                    <option value="factura">Factura</option>
-                    <option value="nc">Nota de Crédito</option>
-                    <option value="nd">Nota de Débito</option>
-                    <option value="recibo">Recibo</option>
+                    <option value="factura">Factura</option><option value="nc">Nota de Crédito</option>
+                    <option value="nd">Nota de Débito</option><option value="recibo">Recibo</option>
                     <option value="retencion">Comprobante de Retención</option>
                 </select>
             </div>
-            <div class="form-group"><label>Fecha</label><input type="date" id="wiz_fecha" value="2026-03-21"></div>
+            <div class="form-group"><label>Fecha</label><input type="date" id="wiz_fecha"></div>
         </div>
         
-        <!-- Bloque Factura/NC/ND/Recibo -->
         <div id="blk_factura">
             <div class="form-grid col3" style="margin-bottom:14px">
                 <div class="form-group"><label>N° Comprobante</label><input type="text" id="wiz_nro" placeholder="001-001-0000123"></div>
-                <div class="form-group" style="grid-column: span 2"><label>Razón Social (Tercero)</label><input type="text" id="wiz_tercero" placeholder="Nombre del Proveedor/Cliente"></div>
+                <div class="form-group" style="grid-column: span 2"><label>Tercero (Razón Social)</label><input type="text" id="wiz_tercero"></div>
             </div>
             <table style="width:100%;font-size:12.5px;margin-bottom:12px">
                 <thead><tr style="background:var(--bg)"><th>Monto Total Bruto ₲</th><th>% IVA</th></tr></thead>
@@ -300,41 +461,30 @@ textarea{resize:vertical;min-height:70px}
             </div>
         </div>
 
-        <!-- Bloque Retención -->
         <div id="blk_retencion" style="display:none;background:#fff1f2;padding:15px;border:1px solid #fecdd3;border-radius:8px">
             <div class="form-grid col2">
-                <div class="form-group"><label>Timbrado de Retención</label><input type="text" id="ret_timbrado" placeholder="12345678"></div>
-                <div class="form-group"><label>N° Comprobante</label><input type="text" id="ret_nro" placeholder="001-001-0000012"></div>
-                <div class="form-group"><label>Monto Bruto Operación ₲</label><input type="number" id="ret_bruto" oninput="calcRetencion()"></div>
-                <div class="form-group"><label>% Retención (Manual)</label><input type="number" id="ret_tasa" placeholder="Ej: 30 o 100" oninput="calcRetencion()"></div>
+                <div class="form-group"><label>Timbrado Retención</label><input type="text" placeholder="12345678"></div>
+                <div class="form-group"><label>N° Comprobante</label><input type="text" id="ret_nro"></div>
+                <div class="form-group"><label>Monto Bruto Base ₲</label><input type="number" id="ret_bruto" oninput="calcRetencion()"></div>
+                <div class="form-group"><label>% Retención (Manual)</label><input type="number" id="ret_tasa" placeholder="Ej: 30" oninput="calcRetencion()"></div>
             </div>
-            <div style="margin-top:10px;font-size:14px;font-weight:700;text-align:right">Monto a Retener (Neto): <span id="ret_neto" style="color:var(--danger);font-family:'DM Mono'">₲ 0</span></div>
+            <div style="margin-top:10px;font-size:14px;font-weight:700;text-align:right">Monto a Retener: <span id="ret_neto" style="color:var(--danger)">₲ 0</span></div>
         </div>
-
         <div class="modal-actions"><button class="btn btn-primary" onclick="wizNext(2)">Siguiente ➡️</button></div>
     </div>
 
-    <!-- PASO 2: PAGO/COBRO -->
+    <!-- PASO 2 -->
     <div class="wiz-step" id="ws-2">
-        <div class="notif">🏦 <span>Especifique cómo se realizó la operación (Contrapartida contable).</span></div>
-        <div class="form-group" style="margin-bottom:15px"><label>Método / Forma</label>
+        <div class="notif">🏦 <span>Especifique cómo se realizó la operación (Contrapartida).</span></div>
+        <div class="form-group" style="margin-bottom:15px"><label>Método de Pago / Cobro</label>
             <select id="wiz_pago_tipo" onchange="toggleBanco()">
-                <option value="caja">Efectivo / Caja (Moneda Nacional)</option>
-                <option value="banco">Transferencia / Cheque / Débito Bancario</option>
+                <option value="caja">Efectivo / Caja M.N.</option>
+                <option value="banco">Transferencia / Cheque</option>
                 <option value="credito">A Crédito (Cuentas por Cobrar/Pagar)</option>
             </select>
         </div>
-        <div class="form-group" id="blk_banco" style="display:none;margin-bottom:15px"><label>Seleccione el Banco (Paraguay)</label>
-            <select id="wiz_banco_lista">
-                <option>Banco Itaú Paraguay S.A.</option>
-                <option>Banco Continental S.A.E.C.A.</option>
-                <option>Banco Nacional de Fomento (BNF)</option>
-                <option>ueno bank</option>
-                <option>Banco Familiar</option>
-                <option>Banco GNB Paraguay</option>
-                <option>Banco Atlas</option>
-                <option>Banco Basa</option>
-            </select>
+        <div class="form-group" id="blk_banco" style="display:none;margin-bottom:15px"><label>Banco (Paraguay)</label>
+            <select id="wiz_banco_lista"><option>Banco Itaú</option><option>Banco Continental</option><option>BNF</option><option>ueno bank</option><option>Banco Familiar</option></select>
         </div>
         <div class="modal-actions">
             <button class="btn btn-outline" onclick="wizNext(1)">⬅️ Atrás</button>
@@ -342,71 +492,49 @@ textarea{resize:vertical;min-height:70px}
         </div>
     </div>
 
-    <!-- PASO 3: GLOSA -->
+    <!-- PASO 3 -->
     <div class="wiz-step" id="ws-3">
-        <div class="notif warn">⚠️ <span>Paso Final: Defina la Glosa Contable. Verifique que los impuestos coincidan antes de asentar.</span></div>
-        <div class="form-group"><label>Glosa / Concepto del Asiento (Libro Diario)</label>
-            <textarea id="wiz_glosa" placeholder="Ej: Pago de honorarios profesionales factura Nro 001..."></textarea>
-        </div>
-        
+        <div class="notif warn">⚠️ <span>Paso Final: Defina la Glosa. Valide que los impuestos (5/10%) coincidan antes de asentar.</span></div>
+        <div class="form-group"><label>Glosa Contable (Libro Diario)</label><textarea id="wiz_glosa" placeholder="Ej: Pago honorarios..."></textarea></div>
         <div style="margin-top:20px;padding:15px;background:#f8f9fa;border:1px solid var(--border);border-radius:8px">
-            <div style="font-weight:700;margin-bottom:10px">Resumen del Asiento a Generar:</div>
+            <div style="font-weight:700;margin-bottom:10px">Resumen:</div>
             <div id="wiz_resumen_txt" style="font-size:12px;font-family:'DM Mono';color:var(--text-light)"></div>
         </div>
-
         <div class="modal-actions">
             <button class="btn btn-outline" onclick="wizNext(2)">⬅️ Atrás</button>
-            <button class="btn btn-primary" onclick="guardarAsientoWizard()" style="background:var(--success)">💾 Guardar y Asentar Libro</button>
+            <button class="btn btn-primary" onclick="guardarAsientoWizard()" style="background:var(--success)">💾 Guardar y Asentar Libros</button>
         </div>
     </div>
   </div>
 </div>
 
 <script>
-// ===== DB CENTRAL Y CLIENTES =====
-var dbClientes =[
-  {id:0, ruc:'80012345-6', nom:'Empresa ABC S.A.', honorarios:{}, libros:{compras:[], ventas:[], diario:[]}},
-  {id:1, ruc:'4512678-9', nom:'Juan Pérez', honorarios:{'03/2026':'pagado'}, libros:{compras:[], ventas:[], diario:[]}}
-];
-var totalDocs = 0;
+// ===== LOGIN Y NAVEGACION =====
+var titles = {
+  dashboard: 'Panel General', clientes: 'Directorio de Clientes', 'cliente-detalle': 'Panel de Libros',
+  comprobantes: 'Registro de Comprobantes', plan_cuentas: 'Plan de Cuentas', iva: 'Liquidador IVA',
+  ire: 'Liquidador IRE', irp: 'Liquidador IRP', inr: 'Liquidador INR', balance: 'Balance General'
+};
 
-function showPage(name) {
+function doLogin(){
+  if(document.getElementById('lu').value==='admin@contapy.py' && document.getElementById('lp').value==='admin123'){
+    document.getElementById('login-wrap').style.display='none';
+  } else { document.getElementById('lerr').style.display='block'; }
+}
+
+function showPage(name, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  var pg = document.getElementById('page-'+name);
+  if(pg) pg.classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('topbar-title').textContent = titles[name] || name;
   document.getElementById('dash_cli_count').textContent = dbClientes.length;
-  document.getElementById('dash_doc_count').textContent = totalDocs;
 }
 
-function renderClientes() {
-  var tbody = document.getElementById('tabla-clientes-list');
-  tbody.innerHTML = '';
-  document.getElementById('wiz_cliente').innerHTML = ''; // Llenar selector del wizard
-  
-  dbClientes.forEach((c, i) => {
-    // Tabla
-    var tr = document.createElement('tr');
-    tr.innerHTML = `<td>${c.ruc}</td><td style="font-weight:700">${c.nom}</td><td><span class="badge-status ok">IVA/IRE</span></td>
-      <td><button class="btn btn-outline btn-sm" onclick="verCliente(${i})">📚 Ver Libros</button></td>`;
-    tbody.appendChild(tr);
-    
-    // Select Wizard
-    var opt = document.createElement('option'); opt.value = i; opt.text = c.nom + " (" + c.ruc + ")";
-    document.getElementById('wiz_cliente').appendChild(opt);
-  });
-  showPage('dashboard');
-}
-
-// ===== PANEL CLIENTE (LIBROS) =====
-var currentCli = 0;
-function verCliente(idx) {
-  currentCli = idx;
-  var c = dbClientes[idx];
-  document.getElementById('cdet_nombre').textContent = c.nom;
-  document.getElementById('cdet_ruc').textContent = "RUC: " + c.ruc;
-  renderLibros();
-  showPage('cliente-detalle');
-}
-
+// ===== MODALES Y TABS =====
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function switchClientTab(tabId, el) {
   document.querySelectorAll('#page-cliente-detalle .tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
@@ -414,205 +542,202 @@ function switchClientTab(tabId, el) {
   document.getElementById('ctab_' + tabId).style.display = 'block';
 }
 
+// ===== DB CLIENTES Y HONORARIOS =====
+var dbClientes =[
+  {id:0, ruc:'80012345-6', nom:'Empresa ABC S.A.', tipo:'juridica', taxes:['IVA','IRE'], honorarios:{'03/2026':'pendiente'}, libros:{compras:[], ventas:[], diario:[]}},
+  {id:1, ruc:'4512678-9', nom:'Juan Pérez', tipo:'fisica', taxes:['IVA','IRP'], honorarios:{'03/2026':'pagado'}, libros:{compras:[], ventas:[], diario:[]}}
+];
+var totalDocs = 0;
+
+function renderClientes() {
+  var tbody = document.getElementById('tabla-clientes-list');
+  var s = document.getElementById('search-cliente').value.toLowerCase();
+  tbody.innerHTML = '';
+  document.getElementById('wiz_cliente').innerHTML = ''; 
+  
+  dbClientes.forEach((c, i) => {
+    if(s && !c.ruc.toLowerCase().includes(s) && !c.nom.toLowerCase().includes(s)) return;
+    
+    var tBadges = c.taxes.map(t => `<span class="badge-status ok">${t}</span>`).join(' ');
+    tbody.innerHTML += `<tr><td>${c.ruc}</td><td style="font-weight:700">${c.nom}</td><td style="text-transform:capitalize">${c.tipo}</td>
+      <td>${tBadges}</td><td><button class="btn btn-outline btn-sm" onclick="verCliente(${i})">📚 Ver Libros</button></td></tr>`;
+      
+    var opt = document.createElement('option'); opt.value = i; opt.text = c.nom;
+    document.getElementById('wiz_cliente').appendChild(opt);
+  });
+  document.getElementById('dash_cli_count').textContent = dbClientes.length;
+}
+
+function openModalCliente() { document.getElementById('cli_ruc').value=''; document.getElementById('cli_nom').value=''; openModal('modal-cliente'); }
+function guardarCliente() {
+  var taxes =[];
+  if(document.getElementById('tax_iva').checked) taxes.push('IVA');
+  if(document.getElementById('tax_ire_gen').checked) taxes.push('IRE General');
+  if(document.getElementById('tax_ire_sim').checked) taxes.push('IRE Simple');
+  if(document.getElementById('tax_irp').checked) taxes.push('IRP');
+  
+  dbClientes.push({
+      id: dbClientes.length, ruc: document.getElementById('cli_ruc').value, nom: document.getElementById('cli_nom').value,
+      tipo: document.getElementById('cli_tipo').value, taxes: taxes, honorarios: {}, libros:{compras:[], ventas:[], diario:[]}
+  });
+  renderClientes();
+  closeModal('modal-cliente');
+}
+
+function openModalHonorarios() { openModal('modal-honorarios'); renderHonorarios(); }
+function renderHonorarios() {
+  var mes = document.getElementById('filtro_mes_cobro').value;
+  var tb = document.getElementById('tabla-honorarios'); tb.innerHTML='';
+  dbClientes.forEach((c, i) => {
+    var est = c.honorarios[mes] === 'pagado' ? 'pagado' : 'pendiente';
+    var bg = est==='pagado' ? '<span class="badge-status ok">Pagado</span>' : '<span class="badge-status pend">Pendiente</span>';
+    var bA = est==='pagado' ? `<button class="btn btn-outline btn-sm" onclick="toggleCobro(${i},'${mes}','pendiente')">Desmarcar</button>` 
+                            : `<button class="btn btn-success btn-sm" onclick="toggleCobro(${i},'${mes}','pagado')">Marcar</button>`;
+    tb.innerHTML += `<tr><td style="font-weight:600">${c.nom}</td><td>${mes}</td><td>10/${mes}</td><td>${bg}</td><td>${bA}</td></tr>`;
+  });
+}
+function toggleCobro(cli, mes, est) { dbClientes[cli].honorarios[mes] = est; renderHonorarios(); }
+
+// ===== PANEL LIBROS CLIENTE =====
+var currentCli = 0;
+function verCliente(idx) {
+  currentCli = idx; var c = dbClientes[idx];
+  document.getElementById('cdet_nombre').textContent = c.nom;
+  document.getElementById('cdet_ruc').textContent = "RUC: " + c.ruc;
+  renderLibros();
+  showPage('cliente-detalle');
+  document.querySelectorAll('#page-cliente-detalle .tab')[0].click();
+}
+
 function renderLibros() {
   var c = dbClientes[currentCli];
-  
-  var lCompras = document.getElementById('lista_lib_compras'); lCompras.innerHTML = '';
+  var lComp = document.getElementById('lista_lib_compras'); lComp.innerHTML='';
   c.libros.compras.forEach(r => {
-    lCompras.innerHTML += `<tr><td>${r.fecha}</td><td>${r.tercero}</td><td>${r.tipo.toUpperCase()} ${r.nro}</td>
+    lComp.innerHTML += `<tr><td>${r.fecha}</td><td>${r.tercero}</td><td>${r.tipo.toUpperCase()} ${r.nro}</td>
       <td class="monto">${r.bruto.toLocaleString()}</td><td class="monto">${r.neto.toLocaleString()}</td><td class="monto debe">${r.iva.toLocaleString()}</td></tr>`;
   });
-
-  var lVentas = document.getElementById('lista_lib_ventas'); lVentas.innerHTML = '';
+  var lVent = document.getElementById('lista_lib_ventas'); lVent.innerHTML='';
   c.libros.ventas.forEach(r => {
-    lVentas.innerHTML += `<tr><td>${r.fecha}</td><td>${r.tercero}</td><td>${r.tipo.toUpperCase()} ${r.nro}</td>
+    lVent.innerHTML += `<tr><td>${r.fecha}</td><td>${r.tercero}</td><td>${r.tipo.toUpperCase()} ${r.nro}</td>
       <td class="monto">${r.bruto.toLocaleString()}</td><td class="monto">${r.neto.toLocaleString()}</td><td class="monto haber">${r.iva.toLocaleString()}</td></tr>`;
   });
-
-  var lDiario = document.getElementById('lista_lib_diario'); lDiario.innerHTML = '';
+  var lDiario = document.getElementById('lista_lib_diario'); lDiario.innerHTML='';
   c.libros.diario.forEach(a => {
     lDiario.innerHTML += `<div class="libro-row" style="background:#f8f9fa;border-bottom:none">
         <div><strong>${a.fecha}</strong></div><div style="font-family:'DM Mono'">${a.asiento}</div>
-        <div style="font-weight:600;color:var(--accent2)">Glosa: ${a.glosa}</div><div></div><div></div>
-      </div>`;
-    a.lineas.forEach(lin => {
-       lDiario.innerHTML += `<div class="libro-row">
-         <div></div><div></div><div style="padding-left:20px">${lin.cuenta}</div>
-         <div class="monto debe">${lin.debe>0 ? lin.debe.toLocaleString():''}</div>
-         <div class="monto haber">${lin.haber>0 ? lin.haber.toLocaleString():''}</div>
-       </div>`;
+        <div style="font-weight:600;color:var(--accent2)">${a.glosa}</div><div></div><div></div></div>`;
+    a.lineas.forEach(l => {
+       lDiario.innerHTML += `<div class="libro-row"><div></div><div></div><div style="padding-left:20px">${l.cuenta}</div>
+         <div class="monto debe">${l.debe>0?l.debe.toLocaleString():''}</div><div class="monto haber">${l.haber>0?l.haber.toLocaleString():''}</div></div>`;
     });
   });
-}
-
-// ===== HONORARIOS (COBROS) =====
-function openModalHonorarios() {
-  openModal('modal-honorarios');
-  renderHonorarios();
-}
-
-function renderHonorarios() {
-  var mes = document.getElementById('filtro_mes_cobro').value;
-  var tbody = document.getElementById('tabla-honorarios');
-  tbody.innerHTML = '';
-  
-  dbClientes.forEach((c, i) => {
-    var estado = c.honorarios[mes] === 'pagado' ? 'pagado' : 'pendiente';
-    var badge = estado === 'pagado' ? '<span class="badge-status ok">Cobrado ✓</span>' : '<span class="badge-status pend">Pendiente ⏳</span>';
-    var btn = estado === 'pagado' 
-      ? `<button class="btn btn-outline btn-sm" onclick="toggleCobro(${i}, '${mes}', 'pendiente')">Desmarcar</button>`
-      : `<button class="btn btn-success btn-sm" onclick="toggleCobro(${i}, '${mes}', 'pagado')">Marcar Pagado</button>`;
-
-    tbody.innerHTML += `<tr>
-      <td style="font-weight:600">${c.nom}</td><td>${mes}</td><td>10/${mes}</td>
-      <td>${badge}</td><td>${btn}</td>
-    </tr>`;
-  });
-}
-
-function toggleCobro(cliIdx, mes, nuevoEstado) {
-  dbClientes[cliIdx].honorarios[mes] = nuevoEstado;
-  renderHonorarios();
-}
-
-function exportarReporteCobros() {
-  alert("Generando Reporte PDF de Cobranzas del mes seleccionado...\n\n(Simulación de descarga)");
 }
 
 // ===== WIZARD (ABACO STYLE) =====
 function openWizard() {
   document.getElementById('wiz_fecha').value = new Date().toISOString().split('T')[0];
-  document.getElementById('wiz_monto').value = "0";
-  document.getElementById('wiz_glosa').value = "";
-  wizNext(1);
-  openModal('modal-wizard');
+  wizNext(1); openModal('modal-wizard');
 }
 
 function wizNext(step) {
-  if(step === 3) generarResumenGlosa();
-  
-  document.querySelectorAll('.wiz-step').forEach(e => e.classList.remove('active'));
-  document.querySelectorAll('.wiz-bullet').forEach(e => {e.classList.remove('active'); e.classList.remove('done');});
-  
+  if(step===3) generarResumenGlosa();
+  document.querySelectorAll('.wiz-step').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.wiz-bullet').forEach(e=>{e.classList.remove('active'); e.classList.remove('done');});
   document.getElementById('ws-'+step).classList.add('active');
   for(var i=1; i<step; i++) document.getElementById('wb-'+i).classList.add('done');
   document.getElementById('wb-'+step).classList.add('active');
-  
   document.getElementById('wt-2').style.color = step>=2 ? 'var(--text)' : 'var(--text-light)';
   document.getElementById('wt-3').style.color = step>=3 ? 'var(--text)' : 'var(--text-light)';
 }
 
 function toggleWizardTipo() {
   var t = document.getElementById('wiz_tipo').value;
-  if(t === 'retencion') {
-    document.getElementById('blk_factura').style.display = 'none';
-    document.getElementById('blk_retencion').style.display = 'block';
-  } else {
-    document.getElementById('blk_factura').style.display = 'block';
-    document.getElementById('blk_retencion').style.display = 'none';
-  }
+  document.getElementById('blk_factura').style.display = t==='retencion'?'none':'block';
+  document.getElementById('blk_retencion').style.display = t==='retencion'?'block':'none';
 }
-
-function toggleBanco() {
-  var pt = document.getElementById('wiz_pago_tipo').value;
-  document.getElementById('blk_banco').style.display = pt === 'banco' ? 'block' : 'none';
-}
+function toggleBanco() { document.getElementById('blk_banco').style.display = document.getElementById('wiz_pago_tipo').value==='banco'?'block':'none'; }
 
 function calcWizIva() {
-  var tot = parseFloat(document.getElementById('wiz_monto').value) || 0;
-  var tasa = parseInt(document.getElementById('wiz_iva_tasa').value);
-  var iva = tasa===10 ? Math.round(tot/11) : (tasa===5 ? Math.round(tot/21) : 0);
-  document.getElementById('wiz_base').textContent = (tot - iva).toLocaleString();
+  var tot = parseFloat(document.getElementById('wiz_monto').value)||0;
+  var t = parseInt(document.getElementById('wiz_iva_tasa').value);
+  var iva = t===10?Math.round(tot/11):(t===5?Math.round(tot/21):0);
+  document.getElementById('wiz_base').textContent = (tot-iva).toLocaleString();
   document.getElementById('wiz_iva').textContent = iva.toLocaleString();
 }
-
 function calcRetencion() {
-  var b = parseFloat(document.getElementById('ret_bruto').value) || 0;
-  var t = parseFloat(document.getElementById('ret_tasa').value) || 0;
-  var neto = Math.round(b * (t/100));
-  document.getElementById('ret_neto').textContent = "₲ " + neto.toLocaleString();
+  var b = parseFloat(document.getElementById('ret_bruto').value)||0, t = parseFloat(document.getElementById('ret_tasa').value)||0;
+  document.getElementById('ret_neto').textContent = "₲ " + Math.round(b*(t/100)).toLocaleString();
 }
 
 function generarResumenGlosa() {
-  var tipo = document.getElementById('wiz_tipo').value;
-  var oper = document.getElementById('wiz_operacion').value;
-  var pago = document.getElementById('wiz_pago_tipo').value;
-  var c_pago = pago==='caja'?'Caja':(pago==='banco'?document.getElementById('wiz_banco_lista').value:'Cuentas por Pagar/Cobrar');
-  
-  var txt = "";
-  if(tipo === 'retencion') {
-      var rNeto = Math.round((parseFloat(document.getElementById('ret_bruto').value)||0) * ((parseFloat(document.getElementById('ret_tasa').value)||0)/100));
-      txt = `Generará Asiento de Retención por ₲ ${rNeto.toLocaleString()}<br>Contrapartida: ${c_pago}`;
-  } else {
-      var tot = parseFloat(document.getElementById('wiz_monto').value) || 0;
-      var iva = parseInt(document.getElementById('wiz_iva').textContent.replace(/,/g,'')) || 0;
-      txt = `Se registrará ${oper.toUpperCase()} de ₲ ${tot.toLocaleString()}<br>IVA Reconocido: ₲ ${iva.toLocaleString()}<br>Forma/Cuenta: ${c_pago}`;
+  var tipo = document.getElementById('wiz_tipo').value, oper = document.getElementById('wiz_operacion').value;
+  var c_pago = document.getElementById('wiz_pago_tipo').value==='banco' ? document.getElementById('wiz_banco_lista').value : document.getElementById('wiz_pago_tipo').value.toUpperCase();
+  if(tipo==='retencion'){
+    var net = Math.round((parseFloat(document.getElementById('ret_bruto').value)||0)*((parseFloat(document.getElementById('ret_tasa').value)||0)/100));
+    document.getElementById('wiz_resumen_txt').innerHTML = `Retención por ₲ ${net.toLocaleString()}<br>Contrapartida: ${c_pago}`;
+  }else{
+    var tot = parseFloat(document.getElementById('wiz_monto').value)||0, iva = parseInt(document.getElementById('wiz_iva').textContent.replace(/,/g,''))||0;
+    document.getElementById('wiz_resumen_txt').innerHTML = `${oper.toUpperCase()} ₲ ${tot.toLocaleString()}<br>IVA Reconocido: ₲ ${iva.toLocaleString()}<br>Pago/Cobro por: ${c_pago}`;
   }
-  document.getElementById('wiz_resumen_txt').innerHTML = txt;
 }
 
 function guardarAsientoWizard() {
-    var cIdx = document.getElementById('wiz_cliente').value;
-    var oper = document.getElementById('wiz_operacion').value;
-    var tipo = document.getElementById('wiz_tipo').value;
-    var fch = document.getElementById('wiz_fecha').value;
-    var glosa = document.getElementById('wiz_glosa').value || "S/ Glosa";
-    var cli = dbClientes[cIdx];
-    
-    // Validar Consulta 5/10% si es Factura
-    if(tipo === 'factura') {
-        var tasa = document.getElementById('wiz_iva_tasa').value;
-        if(!confirm(`CONSULTA DE VALIDACIÓN (Ley 6380):\n\n¿Confirma que la discriminación de la tasa es correcta (${tasa}%) para asentar en el Libro de ${oper.toUpperCase()}S del cliente ${cli.nom}?`)){
-            return;
-        }
-    }
+  var cIdx = document.getElementById('wiz_cliente').value, oper = document.getElementById('wiz_operacion').value, tipo = document.getElementById('wiz_tipo').value;
+  var fch = document.getElementById('wiz_fecha').value, glosa = document.getElementById('wiz_glosa').value || "S/ Glosa";
+  var cli = dbClientes[cIdx];
+  
+  // VALIDACIÓN ESTRICTA (Mensaje de Consulta)
+  if(tipo !== 'retencion') {
+      var t = document.getElementById('wiz_iva_tasa').value;
+      if(!confirm(`⚠️ CONSULTA DE VALIDACIÓN (Ley 6380)\n\n¿Confirma que el impuesto a asentar es exactamente el ${t}% para ingresar a los libros del contribuyente ${cli.nom}?`)) return;
+  }
 
-    var obj = {fecha: fch, tipo: tipo, glosa: glosa};
-    var nroAsiento = "AS-" + Math.floor(1000 + Math.random() * 9000);
-    var lineasDiario =[];
+  var obj = {fecha: fch, tipo: tipo, glosa: glosa}, nAsi = "A-"+Math.floor(1000+Math.random()*9000), lin =[];
+  var pgo = document.getElementById('wiz_pago_tipo').value;
+  var cta = pgo==='caja'?'1.1.1.01 Caja':(pgo==='banco'?'1.1.1.03 Banco Cta. Cte.':'Cuentas Comerciales');
 
-    var pago = document.getElementById('wiz_pago_tipo').value;
-    var c_pago = pago==='caja'?'1.1.1.01 Caja':(pago==='banco'?'1.1.1.03 Banco Cta. Cte.':'Cuentas Comerciales');
-
-    if(tipo === 'retencion') {
-        var rNeto = Math.round((parseFloat(document.getElementById('ret_bruto').value)||0) * ((parseFloat(document.getElementById('ret_tasa').value)||0)/100));
-        obj.tercero = "Retención Aplicada"; obj.nro = document.getElementById('ret_nro').value;
-        obj.bruto = rNeto; obj.neto = rNeto; obj.iva = 0;
-        
-        lineasDiario.push({cuenta: oper==='compra'?'2.1.4.06 Retenciones a Pagar':'1.1.5.04 Retenciones a Favor', debe: oper==='venta'?rNeto:0, haber: oper==='compra'?rNeto:0});
-        lineasDiario.push({cuenta: c_pago, debe: oper==='compra'?rNeto:0, haber: oper==='venta'?rNeto:0});
-        
-    } else {
-        var tot = parseFloat(document.getElementById('wiz_monto').value) || 0;
-        var iva = parseInt(document.getElementById('wiz_iva').textContent.replace(/,/g,'')) || 0;
-        obj.tercero = document.getElementById('wiz_tercero').value || "Sin Nombre";
-        obj.nro = document.getElementById('wiz_nro').value;
-        obj.bruto = tot; obj.neto = tot-iva; obj.iva = iva;
-        
-        if(oper === 'compra') {
-            lineasDiario.push({cuenta: '5.1.1.01 Costo/Gasto', debe: tot-iva, haber: 0});
-            if(iva>0) lineasDiario.push({cuenta: '1.1.5.01 IVA Crédito Fiscal', debe: iva, haber: 0});
-            lineasDiario.push({cuenta: c_pago, debe: 0, haber: tot});
-            cli.libros.compras.push(obj);
-        } else {
-            lineasDiario.push({cuenta: c_pago, debe: tot, haber: 0});
-            if(iva>0) lineasDiario.push({cuenta: '2.1.4.01 IVA Débito Fiscal', debe: 0, haber: iva});
-            lineasDiario.push({cuenta: '4.1.1.01 Ventas Gravadas', debe: 0, haber: tot-iva});
-            cli.libros.ventas.push(obj);
-        }
-    }
-
-    cli.libros.diario.push({fecha: fch, asiento: nroAsiento, glosa: glosa, lineas: lineasDiario});
-    totalDocs++;
-    
-    alert(`✅ Asiento ${nroAsiento} guardado y mayorizado correctamente en los libros de ${cli.nom}.`);
-    closeModal('modal-wizard');
-    if(currentCli == cIdx && document.getElementById('page-cliente-detalle').classList.contains('active')) renderLibros();
-    showPage('dashboard');
+  if(tipo === 'retencion') {
+      var rN = Math.round((parseFloat(document.getElementById('ret_bruto').value)||0)*((parseFloat(document.getElementById('ret_tasa').value)||0)/100));
+      obj.tercero="Agente de Retención"; obj.nro=document.getElementById('ret_nro').value; obj.bruto=rN; obj.neto=rN; obj.iva=0;
+      lin.push({cuenta: oper==='compra'?'2.1.4.06 Ret. a Pagar':'1.1.5.04 Ret. a Favor', debe: oper==='venta'?rN:0, haber: oper==='compra'?rN:0});
+      lin.push({cuenta: cta, debe: oper==='compra'?rN:0, haber: oper==='venta'?rN:0});
+  } else {
+      var tot = parseFloat(document.getElementById('wiz_monto').value)||0, iva = parseInt(document.getElementById('wiz_iva').textContent.replace(/,/g,''))||0;
+      obj.tercero = document.getElementById('wiz_tercero').value || "Varios"; obj.nro = document.getElementById('wiz_nro').value || "S/N";
+      obj.bruto = tot; obj.neto = tot-iva; obj.iva = iva;
+      if(oper==='compra'){
+          lin.push({cuenta: '5.1.1.01 Costo/Gasto', debe: tot-iva, haber: 0});
+          if(iva>0) lin.push({cuenta: '1.1.5.01 IVA Crédito', debe: iva, haber: 0});
+          lin.push({cuenta: cta, debe: 0, haber: tot});
+          cli.libros.compras.push(obj);
+      } else {
+          lin.push({cuenta: cta, debe: tot, haber: 0});
+          if(iva>0) lin.push({cuenta: '2.1.4.01 IVA Débito', debe: 0, haber: iva});
+          lin.push({cuenta: '4.1.1.01 Ventas', debe: 0, haber: tot-iva});
+          cli.libros.ventas.push(obj);
+      }
+  }
+  cli.libros.diario.push({fecha: fch, asiento: nAsi, glosa: glosa, lineas: lin});
+  totalDocs++; document.getElementById('dash_doc_count').textContent = totalDocs;
+  alert(`✅ Asiento ${nAsi} validado y guardado en libros de ${cli.nom}.`);
+  closeModal('modal-wizard');
+  if(currentCli==cIdx && document.getElementById('page-cliente-detalle').classList.contains('active')) renderLibros();
 }
 
-function openModalCliente() { document.getElementById('cli_ruc').value=''; document.getElementById('cli_nom').value=''; openModal('modal-cliente'); }
-function guardarCliente() {
-  dbClientes.push({
-      id: dbClientes.length, ruc: document.getElementById('cli_ruc').value, nom: document.getElementById('cli_nom').value, 
-      honorarios: {}, libros:{compras:[], ventas:[], diario:
+// ===== CALCULADORAS SECUNDARIAS =====
+var pCuentas=[{c:'1.1.1.01',n:'Caja',t:'Activo'},{c:'1.1.2.01',n:'Clientes',t:'Activo'},{c:'2.1.1.01',n:'Proveedores',t:'Pasivo'},{c:'4.1.1.01',n:'Ventas',t:'Ingreso'},{c:'5.1.1.01',n:'Costo Ventas',t:'Costo'}];
+function renderPlanCuentas(){
+  var s=document.getElementById('search-cuenta').value.toLowerCase(), bd=document.getElementById('pc_body'); bd.innerHTML='';
+  pCuentas.forEach(c=>{ if(s && !c.c.includes(s) && !c.n.toLowerCase().includes(s)) return;
+    bd.innerHTML+=`<div class="cuenta-row"><div style="font-family:'DM Mono'">${c.c}</div><div>${c.n}</div><div><span class="badge-status info">${c.t}</span></div><div><span class="badge-status ok">Activa</span></div></div>`;
+  });
+}
+function calcIRE(){ var i=parseFloat(document.getElementById('ire_ing').value)||0, g=parseFloat(document.getElementById('ire_gas').value)||0; document.getElementById('ire_res').textContent = "₲ " + ((i-g)*0.1).toLocaleString(); }
+function calcIRP(){ var i=parseFloat(document.getElementById('irp_ing').value)||0, g=parseFloat(document.getElementById('irp_gas').value)||0, r=i-g; document.getElementById('irp_res').textContent = r>80000000 ? "₲ "+(r*0.08).toLocaleString() : "No alcanza el Rango (MNA)"; }
+function calcINR(){ var i=parseFloat(document.getElementById('inr_ing').value)||0, t=parseFloat(document.getElementById('inr_tasa').value)||0; document.getElementById('inr_res').textContent = "₲ " + (i*(t/100)).toLocaleString(); }
+
+// INIT
+renderClientes(); renderPlanCuentas();
+</script>
+</body>
+</html>
