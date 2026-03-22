@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v2.9 — Sistema Contable Inteligente</title>
+<title>ContaPY v3.0 — Sistema Contable Inteligente</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -29,6 +29,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0}
 .topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
+.topbar-empresa{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:7px}
+.topbar-empresa .dot{width:7px;height:7px;background:var(--success);border-radius:50%}
 .content{flex:1;overflow-y:auto;padding:20px}
 .page{display:none} .page.active{display:block}
 .card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:18px}
@@ -76,8 +78,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .page-header h2{font-size:20px;font-weight:700}
 .page-header p{font-size:12px;color:var(--text-light);margin-top:2px}
 .notif{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:9px;margin-bottom:14px;font-size:12.5px;color:#1e40af}
-.notif.warn{background:#fef3c7;border-color:#fde68a;color:#92400e}
-.notif.err{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
 .monto{font-family:'DM Mono',monospace;text-align:right}
 .debe{color:var(--accent)} .haber{color:var(--success)}
 .libro-header{display:grid;grid-template-columns:80px 100px 1fr 110px 110px 80px;gap:8px;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border)}
@@ -123,7 +123,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v2.9 Pro</div></div></div>
+    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v3.0 Pro</div></div></div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Principal</div>
@@ -140,6 +140,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span>Estado IVA (120)</div>
     <div class="nav-item" onclick="showPage('ire',this)"><span class="icon">💼</span>Estado IRE (500)</div>
     <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span>Estado IRP (515)</div>
+  </div>
+  <div class="sidebar-section" style="margin-top:10px">
+    <div class="sidebar-label">Administración</div>
+    <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span>Perfil Admin / Usuarios</div>
   </div>
   <div class="copyright-footer">&copy; Derechos reservados 2026<br>de @jcarlos2028</div>
 </div>
@@ -186,6 +190,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
+    <!-- USUARIOS / PERFIL ADMIN -->
+    <div class="page" id="page-usuarios">
+      <div class="page-header">
+        <div><h2>Gestión de Usuarios</h2><p>Administración de accesos y contraseñas del sistema</p></div>
+        <button class="btn btn-primary" onclick="openModalUsuario()">+ Nuevo Usuario</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap"><table>
+          <thead><tr><th>Usuario / Correo</th><th>Contraseña (Visible)</th><th>Rol del Sistema</th><th>Acciones</th></tr></thead>
+          <tbody id="tabla-usuarios-list"></tbody>
+        </table></div>
+      </div>
+    </div>
+
     <!-- PANEL CLIENTE DETALLE -->
     <div class="page" id="page-cliente-detalle">
       <div class="page-header" style="position:relative;background:var(--card);padding:20px;border-radius:10px;box-shadow:var(--shadow);border:1px solid var(--border)">
@@ -211,37 +229,43 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)">Estado de Cuentas</div>
       </div>
       
+      <!-- PESTAÑA COMPRAS -->
       <div id="ctab_compras" class="ctab-content" style="display:block;">
         <div class="card"><div class="card-title"><span>Libro de Compras</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_compras', 'Libro_Compras')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_compras"><thead><tr><th>Fecha</th><th>Condición</th><th>Doc.</th><th>RUC / Proveedor</th><th>Rol</th><th>Timbrado / Nro</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_compras"></tbody></table></div></div>
       </div>
 
+      <!-- PESTAÑA VENTAS -->
       <div id="ctab_ventas" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Libro de Ventas</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_ventas', 'Libro_Ventas')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_ventas"><thead><tr><th>Fecha</th><th>Condición</th><th>Doc.</th><th>RUC / Cliente</th><th>Rol</th><th>Timbrado / Nro</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_ventas"></tbody></table></div></div>
       </div>
 
+      <!-- PESTAÑA RECIBOS -->
       <div id="ctab_recibos" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Tesorería: Recibos</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_recibos', 'Libro_Tesoreria')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_recibos"><thead><tr><th>Fecha</th><th>Operación</th><th>RUC / Tercero</th><th>Rol</th><th>Nro. Recibo</th><th>Monto Total ₲</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_recibos"></tbody></table></div></div>
       </div>
 
+      <!-- PESTAÑA RETENCIONES -->
       <div id="ctab_retenciones" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Retenciones</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_retenciones', 'Libro_Retenciones')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_retenciones"><thead><tr><th>Fecha</th><th>Tipo</th><th>RUC / Tercero</th><th>Rol</th><th>Timbrado / Nro</th><th>Monto Retenido ₲</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_retenciones"></tbody></table></div></div>
       </div>
 
+      <!-- PESTAÑA DIARIO -->
       <div id="ctab_diario" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Libro Diario Contable</span></div>
-          <div class="libro-header"><div>Fecha</div><div>Asiento N°</div><div>Descripción (Glosa)</div><div>Debe ₲</div><div>Haber ₲</div><div></div></div>
+          <div class="libro-header"><div>Fecha</div><div>Asiento N°</div><div>Descripción (Glosa)</div><div>Debe ₲</div><div>Haber ₲</div><div>Acción</div></div>
           <div id="lista_lib_diario"></div>
         </div>
       </div>
 
+      <!-- PESTAÑA MAYOR -->
       <div id="ctab_mayor" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Libro Mayor Analítico</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_mayor', 'Libro_Mayor')">📥 Exportar a Excel</button></div>
           <div class="table-wrap"><table id="tbl_mayor" style="font-size:13px">
@@ -251,6 +275,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
       </div>
 
+      <!-- PESTAÑA BALANCE -->
       <div id="ctab_balance" class="ctab-content" style="display:none;">
         <div class="grid-2">
           <div class="card"><div class="card-title" style="color:var(--accent2)">ACTIVOS</div>
@@ -265,10 +290,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
       </div>
 
+      <!-- PESTAÑA ESTADO DE CUENTAS -->
       <div id="ctab_estado_cuentas" class="ctab-content" style="display:none;">
-        <div class="card"><div class="card-title"><span>Estado de Cuentas (Proveedores y Clientes)</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_cta', 'Estado_Cuentas')">📥 Exportar a Excel</button></div>
+        <div class="card"><div class="card-title"><span>Estado de Cuentas (Créditos)</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_cta', 'Estado_Cuentas')">📥 Exportar</button></div>
            <div class="table-wrap"><table id="tbl_cta">
-              <thead><tr><th>RUC / Tercero</th><th>Rol Contable</th><th>Total Facturado (Crédito)</th><th>Total Cobros/Pagos</th><th>Saldo Pendiente ₲</th></tr></thead>
+              <thead><tr><th>RUC / Tercero</th><th>Rol Contable</th><th>Total Facturado</th><th>Total Cobrado/Pagado</th><th>Saldo Pendiente ₲</th></tr></thead>
               <tbody id="lista_estado_cuentas"></tbody>
            </table></div>
         </div>
@@ -293,7 +319,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
     <!-- ESTADOS -->
     <div class="page" id="page-iva"><div class="page-header"><div><h2>Estado de IVA (Formulario 120)</h2></div></div>
-      <div class="form-section"><label>Seleccione el Cliente:</label><select id="iva_cli_sel" class="cli-select" onchange="calcularImpuestos('iva')" style="max-width:400px;margin-top:5px;padding:8px"></select></div>
+      <div class="form-section"><label>Seleccione el Cliente (Contribuyente):</label><select id="iva_cli_sel" class="cli-select" onchange="calcularImpuestos('iva')" style="max-width:400px;margin-top:5px;padding:8px"></select></div>
       <div id="iva_resultados" style="display:none">
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
             <div class="iva-box azul"><div class="val" id="iva_ventas">₲ 0</div><div class="lbl">Ventas Gravadas Total</div></div><div class="iva-box rojo"><div class="val" id="iva_debito">₲ 0</div><div class="lbl">IVA Débito (Ventas)</div></div><div class="iva-box verde"><div class="val" id="iva_credito">₲ 0</div><div class="lbl">IVA Crédito (Compras)</div></div>
@@ -315,13 +341,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <!-- MODAL: ASIENTO MANUAL LIBRE -->
 <div class="modal-overlay" id="modal-asiento-manual">
   <div class="modal" style="max-width:700px"><div class="close-btn" onclick="closeModal('modal-asiento-manual')">✕</div>
-    <div class="modal-title">✍️ Asiento Manual Inicial / Ajuste</div>
-    <div class="notif">💡 <span>Seleccione cuentas de la lista (Res 48/14) para que el asiento impacte correctamente en el Balance.</span></div>
+    <div class="modal-title">✍️ Asiento Manual Libre / Ajuste</div>
+    <div class="notif">💡 <span>Seleccione las cuentas de la lista (Res 48/14) para que el asiento impacte correctamente en el Mayor y el Balance General.</span></div>
     <div class="form-grid col2"><div class="form-group"><label>Fecha del Asiento</label><input type="date" id="am_fecha"></div><div class="form-group"><label>Glosa General</label><input type="text" id="am_glosa" placeholder="Concepto del asiento"></div></div>
     <table style="width:100%;margin-top:15px"><thead><tr><th>Cuenta Contable (Despliegue)</th><th style="width:120px">Debe ₲</th><th style="width:120px">Haber ₲</th><th style="width:40px"></th></tr></thead><tbody id="am_lineas"></tbody></table>
     <button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="addAMLine()">+ Añadir Cuenta al Asiento</button>
     <div style="display:flex;justify-content:flex-end;gap:20px;margin-top:15px;font-weight:700;font-size:14px;background:var(--bg);padding:10px;border-radius:7px"><div>Tot Debe: <span id="am_tot_deb" style="color:var(--accent2);font-family:'DM Mono'">0</span></div><div>Tot Haber: <span id="am_tot_hab" style="color:var(--success);font-family:'DM Mono'">0</span></div><div id="am_diff" style="color:var(--danger)">Diferencia: 0</div></div>
-    <div class="modal-actions"><button class="btn btn-primary" onclick="guardarAsientoManual()">💾 Guardar Asiento</button></div>
+    <div class="modal-actions"><button class="btn btn-primary" onclick="guardarAsientoManual()">💾 Guardar Asiento en Diario</button></div>
   </div>
 </div>
 
@@ -358,6 +384,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
 </div>
 
+<!-- MODAL: USUARIO -->
+<div class="modal-overlay" id="modal-usuario">
+  <div class="modal" style="max-width:400px"><div class="close-btn" onclick="closeModal('modal-usuario')">✕</div>
+    <div class="modal-title">👥 Nuevo Usuario</div>
+    <div class="form-group"><label>Correo / Usuario</label><input type="text" id="usu_user"></div>
+    <div class="form-group" style="margin-top:10px"><label>Contraseña</label><input type="text" id="usu_pass"></div>
+    <div class="form-group" style="margin-top:10px"><label>Rol</label><select id="usu_rol"><option>Contador</option><option>Administrador</option></select></div>
+    <div class="modal-actions"><button class="btn btn-primary" onclick="guardarUsuario()">💾 Guardar Usuario</button></div>
+  </div>
+</div>
+
 <!-- WIZARD: CARGA COMPROBANTES -->
 <div class="modal-overlay" id="modal-wizard">
   <div class="modal" style="max-width:680px;overflow:visible"><div class="close-btn" onclick="closeModal('modal-wizard')">✕</div>
@@ -381,7 +418,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div id="blk_factura">
             <div class="form-grid col3" style="margin-bottom:14px">
                 <div class="form-group"><label>RUC (Tercero)</label><input type="text" id="wiz_ruc" placeholder="Ej: 80000000-1"></div>
-                <div class="form-group"><label>Razón Social / Nombre</label><input type="text" id="wiz_tercero" placeholder="Nombre del contribuyente"></div>
+                <div class="form-group" style="grid-column: span 2"><label>Razón Social / Nombre</label><input type="text" id="wiz_tercero" placeholder="Nombre del contribuyente"></div>
                 <div class="form-group"><label>Rol del Tercero</label><select id="wiz_rol_tercero"><option value="proveedor">Proveedor (Pasivo)</option><option value="cliente">Cliente (Activo)</option><option value="acreedor">Acreedor Vario (Pasivo)</option><option value="deudor">Deudor Vario (Activo)</option></select></div>
             </div>
             
@@ -424,7 +461,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
     <div class="wiz-step" id="ws-3">
         <div class="notif warn">⚠️ <span>Las cuentas se compensarán automáticamente según las reglas NIIF.</span></div>
-        <div class="form-group"><label>Glosa Contable (Diario)</label><textarea id="wiz_glosa" placeholder="Ej: Registro de comprobante..."></textarea></div>
+        <div class="form-group"><label>Glosa Contable (Diario)</label><textarea id="wiz_glosa" placeholder="Ej: Registro según comprobante..."></textarea></div>
         <div class="modal-actions"><button class="btn btn-outline" onclick="wizNext(2)">⬅️ Atrás</button><button class="btn btn-primary" onclick="guardarAsientoWizard()" style="background:var(--success)">💾 Guardar y Asentar</button></div>
     </div>
   </div>
@@ -443,6 +480,26 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 </div>
 
 <script>
+// ===== USUARIOS =====
+var dbUsuarios =[ { user: 'admin@contapy.py', pass: 'admin123', rol: 'Administrador' } ];
+function doLogin(){
+    var u = document.getElementById('lu').value, p = document.getElementById('lp').value;
+    var valid = dbUsuarios.find(us => us.user === u && us.pass === p);
+    if(valid) { document.getElementById('login-wrap').style.display='none'; } else { alert("Usuario o contraseña incorrectos"); }
+}
+function renderUsuarios() {
+    var tbody = document.getElementById('tabla-usuarios-list'); if(!tbody) return; tbody.innerHTML = '';
+    dbUsuarios.forEach((u, i) => {
+        tbody.innerHTML += `<tr><td style="font-weight:600">${u.user}</td><td style="font-family:'DM Mono';color:var(--danger)">${u.pass}</td><td><span class="badge-status ok">${u.rol}</span></td><td><button class="btn btn-outline btn-sm" onclick="resetUserPass(${i})">🔄 Reset Pass</button></td></tr>`;
+    });
+}
+function openModalUsuario() { document.getElementById('usu_user').value = ''; document.getElementById('usu_pass').value = ''; document.getElementById('usu_rol').value = 'Contador'; openModal('modal-usuario'); }
+function guardarUsuario() {
+    var u = document.getElementById('usu_user').value, p = document.getElementById('usu_pass').value, r = document.getElementById('usu_rol').value;
+    if(!u || !p) return alert("Complete usuario y contraseña"); dbUsuarios.push({user: u, pass: p, rol: r}); renderUsuarios(); closeModal('modal-usuario');
+}
+function resetUserPass(idx) { var newP = prompt("Ingrese nueva contraseña para " + dbUsuarios[idx].user + ":", "123456"); if(newP) { dbUsuarios[idx].pass = newP; renderUsuarios(); } }
+
 // ===== PLAN DE CUENTAS (RES. 48/14 SET) =====
 var cuentasRes4814 =[
     "1.1.1.01 Caja", "1.1.1.02 Recaudaciones a Depositar", "1.1.1.03 Banco Cta. Cte.", 
@@ -464,11 +521,9 @@ function initPlanCuentas() {
 // ===== UTILIDADES =====
 function exportToCSV(tableId, filename) {
     var table = document.getElementById(tableId); if(!table) return;
-    var rows = table.querySelectorAll('tr'); var csv = [];
-    var skipCols = [];
+    var rows = table.querySelectorAll('tr'); var csv = []; var skipCols = [];
     var headers = rows[0].querySelectorAll('th, td');
     for(var h=0; h<headers.length; h++) { if(headers[h].innerText.trim() === 'Acción' || headers[h].innerText.trim() === 'ACCIÓN') skipCols.push(h); }
-    
     for(var i = 0; i < rows.length; i++){
         var row = [], cols = rows[i].querySelectorAll('td, th');
         for(var j = 0; j < cols.length; j++){
@@ -476,7 +531,7 @@ function exportToCSV(tableId, filename) {
             var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, ' ').replace(/(\s\s+)/gm, ' ').trim();
             row.push('"' + data.replace(/"/g, '""') + '"');
         }
-        csv.push(row.join(';')); // Formato ES
+        csv.push(row.join(';')); 
     }
     var csvFile = new Blob(["\uFEFF"+csv.join('\n')], {type: "text/csv;charset=utf-8;"});
     var link = document.createElement("a"); link.href = URL.createObjectURL(csvFile); link.download = filename + ".csv";
@@ -489,8 +544,14 @@ var dbClientes =[
   {id:1, ruc:'4512678-9', nom:'Juan Pérez', tel:'0971 999 888', correo:'juanp@outlook.com', tipo:'fisica', estado:'activo', taxes:['IVA','IRP'], honorarios:{'03/2026':'pagado'}, libros:{compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}}
 ];
 var totalDocs = 0; var editandoCliIdx = -1; var wizContext = null;
-function doLogin(){ document.getElementById('login-wrap').style.display='none'; }
-function showPage(name) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('page-'+name).classList.add('active'); if(name === 'dashboard' || name==='clientes') renderClientes(); if(['iva','ire','irp'].includes(name)) actualizarSelectsClientes(); }
+
+function showPage(name) { 
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
+    document.getElementById('page-'+name).classList.add('active'); 
+    if(name === 'dashboard' || name==='clientes') renderClientes(); 
+    if(['iva','ire','irp'].includes(name)) actualizarSelectsClientes(); 
+    if(name === 'usuarios') renderUsuarios();
+}
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 
@@ -512,8 +573,8 @@ function renderClientes() {
 
 function openModalCliente(idx = -1) {
   editandoCliIdx = idx;
-  if(idx >= 0) { var c = dbClientes[idx]; document.getElementById('m-cli-title').textContent = '✏️ Editar Cliente'; ['ruc','nom','tel','correo','tipo','estado'].forEach(k=>document.getElementById('cli_'+k).value=c[k]); document.getElementById('tax_iva').checked = c.taxes.includes('IVA'); document.getElementById('tax_ire_gen').checked = c.taxes.includes('IRE General'); document.getElementById('tax_irp').checked = c.taxes.includes('IRP'); } 
-  else { document.getElementById('m-cli-title').textContent = '🏢 Nuevo Cliente'; ['cli_ruc','cli_nom','cli_tel','cli_correo'].forEach(id => document.getElementById(id).value=''); document.getElementById('cli_estado').value = 'activo'; }
+  if(idx >= 0) { var c = dbClientes[idx]; document.getElementById('m-cli-title').textContent = '✏️ Editar Cliente';['ruc','nom','tel','correo','tipo','estado'].forEach(k=>document.getElementById('cli_'+k).value=c[k]); document.getElementById('tax_iva').checked = c.taxes.includes('IVA'); document.getElementById('tax_ire_gen').checked = c.taxes.includes('IRE General'); document.getElementById('tax_irp').checked = c.taxes.includes('IRP'); } 
+  else { document.getElementById('m-cli-title').textContent = '🏢 Nuevo Cliente';['cli_ruc','cli_nom','cli_tel','cli_correo'].forEach(id => document.getElementById(id).value=''); document.getElementById('cli_estado').value = 'activo'; }
   openModal('modal-cliente');
 }
 function guardarCliente() {
@@ -546,9 +607,12 @@ function renderLibros() {
   document.getElementById('lista_lib_ventas').innerHTML = c.libros.ventas.map((r,i)=>dr(r,'ventas',i)).join('');
   document.getElementById('lista_lib_recibos').innerHTML = c.libros.recibos.map((r,i)=>`<tr><td>${r.fecha}</td><td><span class="badge-status info">${r.operacion.toUpperCase()}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'-'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.nro}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString()}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${currentCli}, 'recibos', ${i})">✏️ Editar</button></td></tr>`).join('');
   document.getElementById('lista_lib_retenciones').innerHTML = c.libros.retenciones.map((r,i)=>`<tr><td>${r.fecha}</td><td><span class="badge-status err">${r.operacion.toUpperCase()}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'-'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.timbrado||'-'}<br>${r.nro}</td><td class="monto" style="font-weight:600;color:var(--danger)">₲ ${r.bruto.toLocaleString()}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${currentCli}, 'retenciones', ${i})">✏️ Editar</button></td></tr>`).join('');
+  
   var lDiario = document.getElementById('lista_lib_diario'); lDiario.innerHTML='';
   c.libros.diario.forEach((a, i) => {
-    lDiario.innerHTML += `<div class="libro-row" style="background:#f8f9fa;border-bottom:none"><div><strong>${a.fecha}</strong></div><div style="font-family:'DM Mono'">${a.asiento}</div><div style="font-weight:600;color:var(--accent2)">Glosa: ${a.glosa}</div><div></div><div></div><div></div></div>`;
+    var isManual = a.asiento.startsWith('M-');
+    var btnEdit = isManual ? `<button class="btn btn-outline btn-sm" onclick="editarAsientoManual(${currentCli}, '${a.asiento}')">✏️ Editar</button>` : '';
+    lDiario.innerHTML += `<div class="libro-row" style="background:#f8f9fa;border-bottom:none"><div><strong>${a.fecha}</strong></div><div style="font-family:'DM Mono'">${a.asiento}</div><div style="font-weight:600;color:var(--accent2)">Glosa: ${a.glosa}</div><div></div><div></div><div>${btnEdit}</div></div>`;
     a.lineas.forEach(l => { lDiario.innerHTML += `<div class="libro-row"><div></div><div></div><div style="padding-left:20px">${l.cuenta}</div><div class="monto debe">${l.debe>0?l.debe.toLocaleString():''}</div><div class="monto haber">${l.haber>0?l.haber.toLocaleString():''}</div><div></div></div>`; });
   });
 }
@@ -593,15 +657,64 @@ function renderMayorYBalance() {
 }
 
 // ===== ASIENTO MANUAL =====
-function openAsientoManual() { document.getElementById('am_fecha').value = new Date().toISOString().split('T')[0]; document.getElementById('am_glosa').value = "Asiento Inicial / Ajuste"; document.getElementById('am_lineas').innerHTML = ''; addAMLine(); addAMLine(); calcAM(); openModal('modal-asiento-manual'); }
-function addAMLine() { var tr = document.createElement('tr'); tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" placeholder="Escriba cuenta..." style="width:100%"></td><td><input type="number" class="am-deb" value="0" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="0" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`; document.getElementById('am_lineas').appendChild(tr); }
-function calcAM() { var d=0, h=0; document.querySelectorAll('#am_lineas tr').forEach(tr => { d+=parseFloat(tr.querySelector('.am-deb').value)||0; h+=parseFloat(tr.querySelector('.am-hab').value)||0; }); document.getElementById('am_tot_deb').textContent = "₲ "+d.toLocaleString(); document.getElementById('am_tot_hab').textContent = "₲ "+h.toLocaleString(); var df=Math.abs(d-h), el=document.getElementById('am_diff'); if(df===0){el.textContent="Asiento Cuadrado ✓";el.style.color="var(--success)";}else{el.textContent="Diferencia: ₲ "+df.toLocaleString();el.style.color="var(--danger)";} }
+var editandoAsientoRef = null;
+
+function openAsientoManual() {
+    editandoAsientoRef = null;
+    document.getElementById('am_fecha').value = new Date().toISOString().split('T')[0]; document.getElementById('am_glosa').value = "Asiento Inicial / Ajuste";
+    document.getElementById('am_lineas').innerHTML = ''; addAMLine(); addAMLine(); calcAM(); openModal('modal-asiento-manual');
+}
+
+function editarAsientoManual(cliIdx, asientoId) {
+    editandoAsientoRef = asientoId;
+    var cli = dbClientes[cliIdx];
+    var asiento = cli.libros.diario.find(a => a.asiento === asientoId);
+    if(!asiento) return;
+
+    document.getElementById('am_fecha').value = asiento.fecha;
+    document.getElementById('am_glosa').value = asiento.glosa;
+    document.getElementById('am_lineas').innerHTML = '';
+
+    asiento.lineas.forEach(l => {
+        var tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" value="${l.cuenta}" style="width:100%"></td><td><input type="number" class="am-deb" value="${l.debe}" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="${l.haber}" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`;
+        document.getElementById('am_lineas').appendChild(tr);
+    });
+    calcAM();
+    openModal('modal-asiento-manual');
+}
+
+function addAMLine() {
+    var tr = document.createElement('tr'); 
+    tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" placeholder="Escriba cuenta..." style="width:100%"></td><td><input type="number" class="am-deb" value="0" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="0" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`;
+    document.getElementById('am_lineas').appendChild(tr);
+}
+function calcAM() {
+    var d = 0, h = 0; document.querySelectorAll('#am_lineas tr').forEach(tr => { d += parseFloat(tr.querySelector('.am-deb').value)||0; h += parseFloat(tr.querySelector('.am-hab').value)||0; });
+    document.getElementById('am_tot_deb').textContent = "₲ " + d.toLocaleString(); document.getElementById('am_tot_hab').textContent = "₲ " + h.toLocaleString();
+    var df = Math.abs(d - h), el = document.getElementById('am_diff');
+    if(df===0){ el.textContent="Asiento Cuadrado ✓"; el.style.color="var(--success)"; } else { el.textContent="Diferencia: ₲ "+df.toLocaleString(); el.style.color="var(--danger)"; }
+}
 function guardarAsientoManual() {
-    calcAM(); if(!document.getElementById('am_diff').textContent.includes('Cuadrado')) return alert("❌ El asiento no cuadra.");
+    calcAM(); if(!document.getElementById('am_diff').textContent.includes('Cuadrado')) return alert("❌ El asiento no cuadra. El Debe y el Haber deben ser iguales.");
     var lin =[]; document.querySelectorAll('#am_lineas tr').forEach(tr => { var cta=tr.querySelector('.am-cta').value.trim(), d=parseFloat(tr.querySelector('.am-deb').value)||0, h=parseFloat(tr.querySelector('.am-hab').value)||0; if(cta && (d>0||h>0)) lin.push({cuenta:cta, debe:d, haber:h}); });
     if(lin.length===0) return alert("❌ Debe ingresar al menos una cuenta válida.");
-    var nA = "M-"+Math.floor(1000+Math.random()*9000); dbClientes[currentCli].libros.diario.push({fecha: document.getElementById('am_fecha').value, asiento: nA, glosa: document.getElementById('am_glosa').value, lineas: lin});
-    alert(`✅ Asiento Manual ${nA} guardado.`); closeModal('modal-asiento-manual'); renderLibros(); renderMayorYBalance();
+    
+    if(editandoAsientoRef) {
+        var cli = dbClientes[currentCli];
+        var idx = cli.libros.diario.findIndex(a => a.asiento === editandoAsientoRef);
+        if(idx !== -1) {
+            cli.libros.diario[idx].fecha = document.getElementById('am_fecha').value;
+            cli.libros.diario[idx].glosa = document.getElementById('am_glosa').value;
+            cli.libros.diario[idx].lineas = lin;
+        }
+        alert(`✅ Asiento Manual ${editandoAsientoRef} actualizado.`);
+    } else {
+        var nA = "M-"+Math.floor(1000+Math.random()*9000); dbClientes[currentCli].libros.diario.push({fecha: document.getElementById('am_fecha').value, asiento: nA, glosa: document.getElementById('am_glosa').value, lineas: lin});
+        alert(`✅ Asiento Manual ${nA} guardado.`); 
+    }
+    
+    closeModal('modal-asiento-manual'); renderLibros(); renderMayorYBalance();
 }
 
 // ===== WIZARD =====
