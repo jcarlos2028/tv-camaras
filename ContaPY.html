@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v3.0 — Sistema Contable Inteligente</title>
+<title>ContaPY v3.1 — Sistema Contable Inteligente</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -29,8 +29,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0}
 .topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
-.topbar-empresa{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:6px 12px;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:7px}
-.topbar-empresa .dot{width:7px;height:7px;background:var(--success);border-radius:50%}
 .content{flex:1;overflow-y:auto;padding:20px}
 .page{display:none} .page.active{display:block}
 .card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:18px}
@@ -112,23 +110,27 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div style="text-align:center;margin-bottom:28px">
       <div style="width:56px;height:56px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px">🧾</div>
       <h1 style="font-size:24px;font-weight:800;letter-spacing:-1px">ContaPY</h1>
-      <p style="font-size:12px;color:var(--text-light);margin-top:3px">Sistema Contable Paraguay</p>
+      <p style="font-size:12px;color:var(--text-light);margin-top:3px">Sistema Contable Inteligente</p>
     </div>
-    <div class="form-group"><label>Usuario</label><input type="text" id="lu" value="admin@contapy.py"></div>
-    <div class="form-group"><label>Contraseña</label><input type="password" id="lp" value="admin123" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:11px;margin-top:10px" onclick="doLogin()">Ingresar al Sistema</button>
+    <div class="form-group"><label>Usuario / Correo</label><input type="text" id="lu" value="admin@contapy.py"></div>
+    <div class="form-group" style="margin-top:10px"><label>Contraseña</label><input type="password" id="lp" value="admin123" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:11px;margin-top:15px" onclick="doLogin()">Ingresar al Sistema</button>
   </div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v3.0 Pro</div></div></div>
+    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v3.1 Pro</div></div></div>
+  </div>
+  <div class="sidebar-section" style="padding-top:5px;padding-bottom:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px">
+    <div style="color:var(--success);font-size:11px;font-weight:700" id="sb_user_name">Usuario Activo</div>
+    <div style="color:rgba(255,255,255,0.4);font-size:10px" id="sb_user_rol">Rol</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Principal</div>
     <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span>Dashboard</div>
-    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span>Clientes (Contribuyentes)</div>
+    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span>Clientes (Cartera)</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Facturación / Tesorería</div>
@@ -141,7 +143,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div class="nav-item" onclick="showPage('ire',this)"><span class="icon">💼</span>Estado IRE (500)</div>
     <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span>Estado IRP (515)</div>
   </div>
-  <div class="sidebar-section" style="margin-top:10px">
+  <div class="sidebar-section" id="menu_admin" style="display:none;margin-top:10px">
     <div class="sidebar-label">Administración</div>
     <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span>Perfil Admin / Usuarios</div>
   </div>
@@ -161,11 +163,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       <div class="page-header"><div><h2>Estudio Contable ContaPY 👋</h2><p>Panel General de Gestión</p></div></div>
       <div class="stats-grid">
         <div class="stat-card blue"><div class="stat-label">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
-        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label">Clientes Activos (Cobros)</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para marcar honorarios</div></div>
+        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label">Clientes Asignados (Cobros)</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
       </div>
       
       <div class="card">
-        <div class="card-title">🏢 Acceso Rápido a Clientes Activos</div>
+        <div class="card-title">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
         <div class="table-wrap"><table>
           <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Contacto</th><th>Impuestos Activos</th></tr></thead>
           <tbody id="dash-clientes-list"></tbody>
@@ -193,12 +195,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- USUARIOS / PERFIL ADMIN -->
     <div class="page" id="page-usuarios">
       <div class="page-header">
-        <div><h2>Gestión de Usuarios</h2><p>Administración de accesos y contraseñas del sistema</p></div>
+        <div><h2>Gestión de Usuarios y Accesos</h2><p>Administración de roles y carteras de clientes</p></div>
         <button class="btn btn-primary" onclick="openModalUsuario()">+ Nuevo Usuario</button>
       </div>
       <div class="card">
         <div class="table-wrap"><table>
-          <thead><tr><th>Usuario / Correo</th><th>Contraseña (Visible)</th><th>Rol del Sistema</th><th>Acciones</th></tr></thead>
+          <thead><tr><th>Usuario / Correo</th><th>Contraseña (Visible)</th><th>Rol del Sistema</th><th>Permisos / Cartera</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-usuarios-list"></tbody>
         </table></div>
       </div>
@@ -229,35 +231,30 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)">Estado de Cuentas</div>
       </div>
       
-      <!-- PESTAÑA COMPRAS -->
       <div id="ctab_compras" class="ctab-content" style="display:block;">
         <div class="card"><div class="card-title"><span>Libro de Compras</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_compras', 'Libro_Compras')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_compras"><thead><tr><th>Fecha</th><th>Condición</th><th>Doc.</th><th>RUC / Proveedor</th><th>Rol</th><th>Timbrado / Nro</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_compras"></tbody></table></div></div>
       </div>
 
-      <!-- PESTAÑA VENTAS -->
       <div id="ctab_ventas" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Libro de Ventas</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_ventas', 'Libro_Ventas')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_ventas"><thead><tr><th>Fecha</th><th>Condición</th><th>Doc.</th><th>RUC / Cliente</th><th>Rol</th><th>Timbrado / Nro</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_ventas"></tbody></table></div></div>
       </div>
 
-      <!-- PESTAÑA RECIBOS -->
       <div id="ctab_recibos" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Tesorería: Recibos</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_recibos', 'Libro_Tesoreria')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_recibos"><thead><tr><th>Fecha</th><th>Operación</th><th>RUC / Tercero</th><th>Rol</th><th>Nro. Recibo</th><th>Monto Total ₲</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_recibos"></tbody></table></div></div>
       </div>
 
-      <!-- PESTAÑA RETENCIONES -->
       <div id="ctab_retenciones" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Retenciones</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_retenciones', 'Libro_Retenciones')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_retenciones"><thead><tr><th>Fecha</th><th>Tipo</th><th>RUC / Tercero</th><th>Rol</th><th>Timbrado / Nro</th><th>Monto Retenido ₲</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_retenciones"></tbody></table></div></div>
       </div>
 
-      <!-- PESTAÑA DIARIO -->
       <div id="ctab_diario" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Libro Diario Contable</span></div>
           <div class="libro-header"><div>Fecha</div><div>Asiento N°</div><div>Descripción (Glosa)</div><div>Debe ₲</div><div>Haber ₲</div><div>Acción</div></div>
@@ -265,7 +262,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
       </div>
 
-      <!-- PESTAÑA MAYOR -->
       <div id="ctab_mayor" class="ctab-content" style="display:none;">
         <div class="card"><div class="card-title"><span>Libro Mayor Analítico</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_mayor', 'Libro_Mayor')">📥 Exportar a Excel</button></div>
           <div class="table-wrap"><table id="tbl_mayor" style="font-size:13px">
@@ -275,7 +271,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
       </div>
 
-      <!-- PESTAÑA BALANCE -->
       <div id="ctab_balance" class="ctab-content" style="display:none;">
         <div class="grid-2">
           <div class="card"><div class="card-title" style="color:var(--accent2)">ACTIVOS</div>
@@ -290,11 +285,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
       </div>
 
-      <!-- PESTAÑA ESTADO DE CUENTAS -->
       <div id="ctab_estado_cuentas" class="ctab-content" style="display:none;">
-        <div class="card"><div class="card-title"><span>Estado de Cuentas (Créditos)</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_cta', 'Estado_Cuentas')">📥 Exportar</button></div>
+        <div class="card"><div class="card-title"><span>Estado de Cuentas (Proveedores y Clientes)</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_cta', 'Estado_Cuentas')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_cta">
-              <thead><tr><th>RUC / Tercero</th><th>Rol Contable</th><th>Total Facturado</th><th>Total Cobrado/Pagado</th><th>Saldo Pendiente ₲</th></tr></thead>
+              <thead><tr><th>RUC / Tercero</th><th>Rol Contable</th><th>Total Facturado (Crédito)</th><th>Total Cobros/Pagos</th><th>Saldo Pendiente ₲</th></tr></thead>
               <tbody id="lista_estado_cuentas"></tbody>
            </table></div>
         </div>
@@ -308,16 +302,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
       <div class="card" style="border-left:4px solid var(--accent2)">
         <div class="card-title">🔍 Consulta de Factura Electrónica (SIFEN - e-Kuatia)</div>
-        <p style="font-size:12px;color:var(--text-light);margin-bottom:15px">Ingrese el CDC (Código de Control) de 44 dígitos para recuperar los datos desde la DNIT.</p>
+        <p style="font-size:12px;color:var(--text-light);margin-bottom:15px">Ingrese el CDC de 44 dígitos para verificar validez y recuperar datos directamente desde e-kuatia.</p>
         <div style="display:flex;gap:10px">
             <input type="text" id="sifen_cdc" placeholder="Ej: 01800123456001001000012320260321123456789012" maxlength="44" style="flex:1;font-family:'DM Mono';letter-spacing:1px">
             <button class="btn btn-secondary" onclick="consultarSIFEN()">Consultar a DNIT</button>
         </div>
-        <div id="sifen_res" style="display:none;margin-top:15px;padding:15px;background:#eff6ff;border-radius:8px;border:1px solid #bfdbfe"></div>
       </div>
     </div>
 
-    <!-- ESTADOS -->
+    <!-- ESTADOS IMPUESTOS -->
     <div class="page" id="page-iva"><div class="page-header"><div><h2>Estado de IVA (Formulario 120)</h2></div></div>
       <div class="form-section"><label>Seleccione el Cliente (Contribuyente):</label><select id="iva_cli_sel" class="cli-select" onchange="calcularImpuestos('iva')" style="max-width:400px;margin-top:5px;padding:8px"></select></div>
       <div id="iva_resultados" style="display:none">
@@ -338,11 +331,34 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
 </div>
 
+<!-- MODAL: USUARIO -->
+<div class="modal-overlay" id="modal-usuario">
+  <div class="modal" style="max-width:550px"><div class="close-btn" onclick="closeModal('modal-usuario')">✕</div>
+    <div class="modal-title" id="m-usu-title">👥 Perfil de Usuario</div>
+    <div class="form-grid col2">
+        <div class="form-group"><label>Correo / Usuario</label><input type="text" id="usu_user"></div>
+        <div class="form-group"><label>Contraseña</label><input type="text" id="usu_pass"></div>
+        <div class="form-group" style="grid-column:span 2"><label>Rol Profesional</label>
+            <select id="usu_rol" onchange="toggleUsuClientes()">
+                <option>Administrador</option><option>Contador/a</option><option>Sub contador</option><option>Auxiliar de contabilidad</option><option>Secretaria/o</option>
+            </select>
+        </div>
+    </div>
+    <div id="usu_clientes_box" style="display:none;margin-top:15px">
+        <div class="form-section-title" style="font-size:13px;border-bottom:none;margin-bottom:5px;color:var(--accent2)">📌 Cartera de Clientes Asignada (Permisos)</div>
+        <div class="notif">💡 <span>Marque los clientes a los que este usuario tendrá acceso exclusivo.</span></div>
+        <div style="background:var(--bg);padding:15px;border-radius:8px;max-height:180px;overflow-y:auto" id="usu_clientes_list">
+            <!-- Render por JS -->
+        </div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-primary" onclick="guardarUsuario()">💾 Guardar Usuario</button></div>
+  </div>
+</div>
+
 <!-- MODAL: ASIENTO MANUAL LIBRE -->
 <div class="modal-overlay" id="modal-asiento-manual">
   <div class="modal" style="max-width:700px"><div class="close-btn" onclick="closeModal('modal-asiento-manual')">✕</div>
     <div class="modal-title">✍️ Asiento Manual Libre / Ajuste</div>
-    <div class="notif">💡 <span>Seleccione las cuentas de la lista (Res 48/14) para que el asiento impacte correctamente en el Mayor y el Balance General.</span></div>
     <div class="form-grid col2"><div class="form-group"><label>Fecha del Asiento</label><input type="date" id="am_fecha"></div><div class="form-group"><label>Glosa General</label><input type="text" id="am_glosa" placeholder="Concepto del asiento"></div></div>
     <table style="width:100%;margin-top:15px"><thead><tr><th>Cuenta Contable (Despliegue)</th><th style="width:120px">Debe ₲</th><th style="width:120px">Haber ₲</th><th style="width:40px"></th></tr></thead><tbody id="am_lineas"></tbody></table>
     <button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="addAMLine()">+ Añadir Cuenta al Asiento</button>
@@ -384,17 +400,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
 </div>
 
-<!-- MODAL: USUARIO -->
-<div class="modal-overlay" id="modal-usuario">
-  <div class="modal" style="max-width:400px"><div class="close-btn" onclick="closeModal('modal-usuario')">✕</div>
-    <div class="modal-title">👥 Nuevo Usuario</div>
-    <div class="form-group"><label>Correo / Usuario</label><input type="text" id="usu_user"></div>
-    <div class="form-group" style="margin-top:10px"><label>Contraseña</label><input type="text" id="usu_pass"></div>
-    <div class="form-group" style="margin-top:10px"><label>Rol</label><select id="usu_rol"><option>Contador</option><option>Administrador</option></select></div>
-    <div class="modal-actions"><button class="btn btn-primary" onclick="guardarUsuario()">💾 Guardar Usuario</button></div>
-  </div>
-</div>
-
 <!-- WIZARD: CARGA COMPROBANTES -->
 <div class="modal-overlay" id="modal-wizard">
   <div class="modal" style="max-width:680px;overflow:visible"><div class="close-btn" onclick="closeModal('modal-wizard')">✕</div>
@@ -418,7 +423,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div id="blk_factura">
             <div class="form-grid col3" style="margin-bottom:14px">
                 <div class="form-group"><label>RUC (Tercero)</label><input type="text" id="wiz_ruc" placeholder="Ej: 80000000-1"></div>
-                <div class="form-group" style="grid-column: span 2"><label>Razón Social / Nombre</label><input type="text" id="wiz_tercero" placeholder="Nombre del contribuyente"></div>
+                <div class="form-group" style="grid-column: span 2"><label>Razón Social / Nombre</label><input type="text" id="wiz_tercero" placeholder="Nombre del tercero"></div>
                 <div class="form-group"><label>Rol del Tercero</label><select id="wiz_rol_tercero"><option value="proveedor">Proveedor (Pasivo)</option><option value="cliente">Cliente (Activo)</option><option value="acreedor">Acreedor Vario (Pasivo)</option><option value="deudor">Deudor Vario (Activo)</option></select></div>
             </div>
             
@@ -437,21 +442,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
 
         <div id="blk_retencion" style="display:none;background:#fff1f2;padding:15px;border:1px solid #fecdd3;border-radius:8px">
-            <div class="form-grid col2">
-                <div class="form-group"><label>RUC Sujeto</label><input type="text" id="ret_ruc"></div>
-                <div class="form-group"><label>Nombre / Razón Social</label><input type="text" id="ret_tercero"></div>
-                <div class="form-group"><label>Timbrado</label><input type="text" id="ret_timbrado"></div>
-                <div class="form-group"><label>N° Comprobante</label><input type="text" id="ret_nro"></div>
-                <div class="form-group"><label>Monto Base ₲</label><input type="number" id="ret_bruto" oninput="calcRetencion()"></div>
-                <div class="form-group"><label>% Retención</label><input type="number" id="ret_tasa" placeholder="Ej: 30" oninput="calcRetencion()"></div>
-            </div>
+            <div class="form-grid col2"><div class="form-group"><label>RUC Sujeto</label><input type="text" id="ret_ruc"></div><div class="form-group"><label>Nombre / Razón Social</label><input type="text" id="ret_tercero"></div><div class="form-group"><label>Timbrado</label><input type="text" id="ret_timbrado"></div><div class="form-group"><label>N° Comprobante</label><input type="text" id="ret_nro"></div><div class="form-group"><label>Monto Base ₲</label><input type="number" id="ret_bruto" oninput="calcRetencion()"></div><div class="form-group"><label>% Retención</label><input type="number" id="ret_tasa" placeholder="Ej: 30" oninput="calcRetencion()"></div></div>
             <div style="margin-top:10px;font-size:14px;font-weight:700;text-align:right">Monto Retener: <span id="ret_neto" style="color:var(--danger)">₲ 0</span></div>
         </div>
         <div class="modal-actions"><button class="btn btn-primary" onclick="wizNext(2)">Siguiente ➡️</button></div>
     </div>
 
     <div class="wiz-step" id="ws-2">
-        <div class="notif">🏦 <span>Especifique el origen/destino de los fondos o si es a crédito.</span></div>
+        <div class="notif">🏦 <span>Especifique el origen/destino de los fondos o crédito.</span></div>
         <div class="form-group" style="margin-bottom:15px"><label>Método de Pago / Condición</label>
             <select id="wiz_pago_tipo" onchange="toggleBanco()"><option value="caja">Efectivo / Caja M.N.</option><option value="banco">Transferencia / Cheque</option><option value="credito" id="opt_credito">A Crédito (Comercial)</option></select>
         </div>
@@ -480,25 +478,62 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 </div>
 
 <script>
-// ===== USUARIOS =====
-var dbUsuarios =[ { user: 'admin@contapy.py', pass: 'admin123', rol: 'Administrador' } ];
+// ===== ROLES, USUARIOS Y LOGIN =====
+var dbUsuarios =[ { user: 'admin@contapy.py', pass: 'admin123', rol: 'Administrador', clientesAsignados: [] } ];
+var currentUser = null; var editandoUsuIdx = -1;
+
 function doLogin(){
     var u = document.getElementById('lu').value, p = document.getElementById('lp').value;
     var valid = dbUsuarios.find(us => us.user === u && us.pass === p);
-    if(valid) { document.getElementById('login-wrap').style.display='none'; } else { alert("Usuario o contraseña incorrectos"); }
+    if(valid) { 
+        currentUser = valid; document.getElementById('login-wrap').style.display='none'; 
+        document.getElementById('sb_user_name').textContent = currentUser.user.split('@')[0].toUpperCase();
+        document.getElementById('sb_user_rol').textContent = currentUser.rol;
+        document.getElementById('menu_admin').style.display = currentUser.rol === 'Administrador' ? 'block' : 'none';
+        renderClientes(); actualizarSelectsClientes(); showPage('dashboard');
+    } else { alert("❌ Usuario o contraseña incorrectos"); }
 }
+
 function renderUsuarios() {
     var tbody = document.getElementById('tabla-usuarios-list'); if(!tbody) return; tbody.innerHTML = '';
     dbUsuarios.forEach((u, i) => {
-        tbody.innerHTML += `<tr><td style="font-weight:600">${u.user}</td><td style="font-family:'DM Mono';color:var(--danger)">${u.pass}</td><td><span class="badge-status ok">${u.rol}</span></td><td><button class="btn btn-outline btn-sm" onclick="resetUserPass(${i})">🔄 Reset Pass</button></td></tr>`;
+        var cAsig = u.rol==='Administrador' ? 'Todos' : (u.clientesAsignados.length + ' clientes');
+        tbody.innerHTML += `<tr><td style="font-weight:600">${u.user}</td><td style="font-family:'DM Mono';color:var(--danger)">${u.pass}</td><td><span class="badge-status ok">${u.rol}</span></td><td><span class="badge-status info">${cAsig}</span></td><td><button class="btn btn-outline btn-sm" onclick="openModalUsuario(${i})">✏️ Editar</button> <button class="btn btn-outline btn-sm" onclick="resetUserPass(${i})">🔄 Reset</button></td></tr>`;
     });
 }
-function openModalUsuario() { document.getElementById('usu_user').value = ''; document.getElementById('usu_pass').value = ''; document.getElementById('usu_rol').value = 'Contador'; openModal('modal-usuario'); }
+
+function openModalUsuario(idx = -1) {
+    editandoUsuIdx = idx; var htmlCli = '';
+    dbClientes.forEach(c => { htmlCli += `<label style="display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:13px;color:var(--text)"><input type="checkbox" class="usu-cli-chk" value="${c.id}"> ${c.nom} (${c.ruc})</label>`; });
+    document.getElementById('usu_clientes_list').innerHTML = htmlCli;
+
+    if(idx >= 0) {
+        var u = dbUsuarios[idx]; document.getElementById('usu_user').value = u.user; document.getElementById('usu_pass').value = u.pass; document.getElementById('usu_rol').value = u.rol;
+        document.querySelectorAll('.usu-cli-chk').forEach(chk => { if(u.clientesAsignados && u.clientesAsignados.includes(parseInt(chk.value))) chk.checked = true; });
+    } else {
+        document.getElementById('usu_user').value = ''; document.getElementById('usu_pass').value = ''; document.getElementById('usu_rol').value = 'Auxiliar de contabilidad';
+        document.querySelectorAll('.usu-cli-chk').forEach(chk => chk.checked = false);
+    }
+    toggleUsuClientes(); openModal('modal-usuario');
+}
+
+function toggleUsuClientes() { document.getElementById('usu_clientes_box').style.display = (document.getElementById('usu_rol').value === 'Administrador') ? 'none' : 'block'; }
+
 function guardarUsuario() {
     var u = document.getElementById('usu_user').value, p = document.getElementById('usu_pass').value, r = document.getElementById('usu_rol').value;
-    if(!u || !p) return alert("Complete usuario y contraseña"); dbUsuarios.push({user: u, pass: p, rol: r}); renderUsuarios(); closeModal('modal-usuario');
+    if(!u || !p) return alert("❌ Complete usuario y contraseña");
+    var asignados =[]; document.querySelectorAll('.usu-cli-chk:checked').forEach(chk => asignados.push(parseInt(chk.value)));
+    if(editandoUsuIdx >= 0) { dbUsuarios[editandoUsuIdx].user=u; dbUsuarios[editandoUsuIdx].pass=p; dbUsuarios[editandoUsuIdx].rol=r; dbUsuarios[editandoUsuIdx].clientesAsignados=asignados; } 
+    else { dbUsuarios.push({user: u, pass: p, rol: r, clientesAsignados: asignados}); }
+    renderUsuarios(); closeModal('modal-usuario');
 }
-function resetUserPass(idx) { var newP = prompt("Ingrese nueva contraseña para " + dbUsuarios[idx].user + ":", "123456"); if(newP) { dbUsuarios[idx].pass = newP; renderUsuarios(); } }
+function resetUserPass(idx) { var newP = prompt("Nueva contraseña para " + dbUsuarios[idx].user + ":", "123456"); if(newP) { dbUsuarios[idx].pass = newP; renderUsuarios(); } }
+
+function puedeVerCliente(cliId) {
+    if(!currentUser) return true;
+    if(currentUser.rol === 'Administrador') return true;
+    return currentUser.clientesAsignados && currentUser.clientesAsignados.includes(cliId);
+}
 
 // ===== PLAN DE CUENTAS (RES. 48/14 SET) =====
 var cuentasRes4814 =[
@@ -521,7 +556,7 @@ function initPlanCuentas() {
 // ===== UTILIDADES =====
 function exportToCSV(tableId, filename) {
     var table = document.getElementById(tableId); if(!table) return;
-    var rows = table.querySelectorAll('tr'); var csv = []; var skipCols = [];
+    var rows = table.querySelectorAll('tr'); var csv = []; var skipCols =[];
     var headers = rows[0].querySelectorAll('th, td');
     for(var h=0; h<headers.length; h++) { if(headers[h].innerText.trim() === 'Acción' || headers[h].innerText.trim() === 'ACCIÓN') skipCols.push(h); }
     for(var i = 0; i < rows.length; i++){
@@ -530,15 +565,14 @@ function exportToCSV(tableId, filename) {
             if(skipCols.includes(j)) continue;
             var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, ' ').replace(/(\s\s+)/gm, ' ').trim();
             row.push('"' + data.replace(/"/g, '""') + '"');
-        }
-        csv.push(row.join(';')); 
+        } csv.push(row.join(';')); 
     }
     var csvFile = new Blob(["\uFEFF"+csv.join('\n')], {type: "text/csv;charset=utf-8;"});
     var link = document.createElement("a"); link.href = URL.createObjectURL(csvFile); link.download = filename + ".csv";
     link.style.visibility = 'hidden'; document.body.appendChild(link); link.click(); document.body.removeChild(link);
 }
 
-// ===== DB Y NAVEGACION =====
+// ===== DB CLIENTES Y NAVEGACION =====
 var dbClientes =[
   {id:0, ruc:'80012345-6', nom:'Empresa ABC S.A.', tel:'0981 123 456', correo:'abc@gmail.com', tipo:'juridica', estado:'activo', taxes:['IVA','IRE'], honorarios:{'03/2026':'pendiente'}, libros:{compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}},
   {id:1, ruc:'4512678-9', nom:'Juan Pérez', tel:'0971 999 888', correo:'juanp@outlook.com', tipo:'fisica', estado:'activo', taxes:['IVA','IRP'], honorarios:{'03/2026':'pagado'}, libros:{compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}}
@@ -561,7 +595,10 @@ function renderClientes() {
   var tbody = document.getElementById('tabla-clientes-list'), dtbody = document.getElementById('dash-clientes-list'), wizSel = document.getElementById('wiz_cliente');
   if(tbody) tbody.innerHTML = ''; if(dtbody) dtbody.innerHTML = ''; if(wizSel) wizSel.innerHTML = ''; 
   var actCount = 0;
+  
   dbClientes.forEach((c, i) => {
+    if(!puedeVerCliente(c.id)) return; // Filtro por usuario
+
     if(c.estado === 'activo') actCount++;
     var tb = c.taxes.map(t => `<span class="badge-status ok">${t}</span>`).join(' '), est = c.estado==='activo'?'<span class="badge-status ok">Activo</span>':'<span class="badge-status inactive">Inactivo</span>';
     if(tbody && (!s || c.ruc.toLowerCase().includes(s) || c.nom.toLowerCase().includes(s))) tbody.innerHTML += `<tr><td style="font-family:'DM Mono'">${c.ruc}</td><td style="font-weight:700">${c.nom}</td><td>${c.tel||'S/T'}<br><span style="font-size:10px">${c.correo||'S/C'}</span></td><td>${est} <br> ${tb}</td><td><button class="btn btn-outline btn-sm" onclick="verCliente(${i})">📚 Perfil</button> <button class="btn btn-outline btn-sm" onclick="openModalCliente(${i})">✏️ Editar</button></td></tr>`;
@@ -581,7 +618,10 @@ function guardarCliente() {
   var tx=[]; if(document.getElementById('tax_iva').checked) tx.push('IVA'); if(document.getElementById('tax_ire_gen').checked) tx.push('IRE General'); if(document.getElementById('tax_irp').checked) tx.push('IRP');
   var o = {ruc: document.getElementById('cli_ruc').value, nom: document.getElementById('cli_nom').value, tel: document.getElementById('cli_tel').value, correo: document.getElementById('cli_correo').value, tipo: document.getElementById('cli_tipo').value, estado: document.getElementById('cli_estado').value, taxes: tx};
   if(editandoCliIdx >= 0) { Object.assign(dbClientes[editandoCliIdx], o); if(currentCli===editandoCliIdx) document.getElementById('cdet_nombre').textContent = o.nom; }
-  else { o.id = dbClientes.length; o.honorarios={}; o.libros={compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}; dbClientes.push(o); }
+  else { 
+      o.id = dbClientes.length; o.honorarios={}; o.libros={compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}; dbClientes.push(o); 
+      if(currentUser && currentUser.rol !== 'Administrador') currentUser.clientesAsignados.push(o.id);
+  }
   renderClientes(); closeModal('modal-cliente');
 }
 
@@ -589,6 +629,7 @@ function openModalHonorarios() { openModal('modal-honorarios'); renderHonorarios
 function renderHonorarios() {
   var mes = document.getElementById('filtro_mes_cobro').value, tb = document.getElementById('tabla-honorarios'); tb.innerHTML='';
   dbClientes.forEach((c, i) => {
+    if(!puedeVerCliente(c.id)) return;
     var est = c.honorarios[mes]==='pagado'?'pagado':'pendiente', bg = est==='pagado'?'<span class="badge-status ok">Pagado</span>':'<span class="badge-status pend">Pendiente</span>', st = c.estado==='activo'?'🟢 Activo':'🔴 Inactivo', bA = est==='pagado'?`<button class="btn btn-outline btn-sm" onclick="toggleCobro(${i},'${mes}','pendiente')">Desmarcar</button>`:`<button class="btn btn-success btn-sm" onclick="toggleCobro(${i},'${mes}','pagado')">Marcar</button>`;
     tb.innerHTML += `<tr style="${c.estado==='inactivo'?'opacity:0.6;background:#f9fafb':''}"><td style="font-weight:600">${c.nom}</td><td>${st}</td><td>${mes}</td><td>${bg}</td><td>${bA}</td></tr>`;
   });
@@ -610,8 +651,7 @@ function renderLibros() {
   
   var lDiario = document.getElementById('lista_lib_diario'); lDiario.innerHTML='';
   c.libros.diario.forEach((a, i) => {
-    var isManual = a.asiento.startsWith('M-');
-    var btnEdit = isManual ? `<button class="btn btn-outline btn-sm" onclick="editarAsientoManual(${currentCli}, '${a.asiento}')">✏️ Editar</button>` : '';
+    var btnEdit = a.asiento.startsWith('M-') ? `<button class="btn btn-outline btn-sm" onclick="editarAsientoManual(${currentCli}, '${a.asiento}')">✏️ Editar</button>` : '';
     lDiario.innerHTML += `<div class="libro-row" style="background:#f8f9fa;border-bottom:none"><div><strong>${a.fecha}</strong></div><div style="font-family:'DM Mono'">${a.asiento}</div><div style="font-weight:600;color:var(--accent2)">Glosa: ${a.glosa}</div><div></div><div></div><div>${btnEdit}</div></div>`;
     a.lineas.forEach(l => { lDiario.innerHTML += `<div class="libro-row"><div></div><div></div><div style="padding-left:20px">${l.cuenta}</div><div class="monto debe">${l.debe>0?l.debe.toLocaleString():''}</div><div class="monto haber">${l.haber>0?l.haber.toLocaleString():''}</div><div></div></div>`; });
   });
@@ -638,15 +678,9 @@ function renderMayorYBalance() {
 
   // ESTADO DE CUENTAS 
   var terceros = {};
-  c.libros.compras.forEach(d => { 
-      if(d.condicion==='credito'){ var k=d.ruc+'_'+(d.rol||'proveedor'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'proveedor', fact:0, cp:0}; terceros[k].fact += d.bruto; }
-  });
-  c.libros.ventas.forEach(d => { 
-      if(d.condicion==='credito'){ var k=d.ruc+'_'+(d.rol||'cliente'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'cliente', fact:0, cp:0}; terceros[k].fact += d.bruto; }
-  });
-  c.libros.recibos.forEach(d => { 
-      var k=d.ruc+'_'+(d.rol||'cliente'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'cliente', fact:0, cp:0}; terceros[k].cp += d.bruto; 
-  });
+  c.libros.compras.forEach(d => { if(d.condicion==='credito'){ var k=d.ruc+'_'+(d.rol||'proveedor'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'proveedor', fact:0, cp:0}; terceros[k].fact += d.bruto; } });
+  c.libros.ventas.forEach(d => { if(d.condicion==='credito'){ var k=d.ruc+'_'+(d.rol||'cliente'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'cliente', fact:0, cp:0}; terceros[k].fact += d.bruto; } });
+  c.libros.recibos.forEach(d => { var k=d.ruc+'_'+(d.rol||'cliente'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'cliente', fact:0, cp:0}; terceros[k].cp += d.bruto; });
   
   var hEst = "";
   Object.keys(terceros).sort().forEach(k => {
@@ -658,62 +692,25 @@ function renderMayorYBalance() {
 
 // ===== ASIENTO MANUAL =====
 var editandoAsientoRef = null;
-
-function openAsientoManual() {
-    editandoAsientoRef = null;
-    document.getElementById('am_fecha').value = new Date().toISOString().split('T')[0]; document.getElementById('am_glosa').value = "Asiento Inicial / Ajuste";
-    document.getElementById('am_lineas').innerHTML = ''; addAMLine(); addAMLine(); calcAM(); openModal('modal-asiento-manual');
-}
-
+function openAsientoManual() { editandoAsientoRef=null; document.getElementById('am_fecha').value=new Date().toISOString().split('T')[0]; document.getElementById('am_glosa').value="Asiento Inicial / Ajuste"; document.getElementById('am_lineas').innerHTML=''; addAMLine(); addAMLine(); calcAM(); openModal('modal-asiento-manual'); }
 function editarAsientoManual(cliIdx, asientoId) {
-    editandoAsientoRef = asientoId;
-    var cli = dbClientes[cliIdx];
-    var asiento = cli.libros.diario.find(a => a.asiento === asientoId);
-    if(!asiento) return;
-
-    document.getElementById('am_fecha').value = asiento.fecha;
-    document.getElementById('am_glosa').value = asiento.glosa;
-    document.getElementById('am_lineas').innerHTML = '';
-
-    asiento.lineas.forEach(l => {
-        var tr = document.createElement('tr');
-        tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" value="${l.cuenta}" style="width:100%"></td><td><input type="number" class="am-deb" value="${l.debe}" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="${l.haber}" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`;
-        document.getElementById('am_lineas').appendChild(tr);
-    });
-    calcAM();
-    openModal('modal-asiento-manual');
+    editandoAsientoRef = asientoId; var cli = dbClientes[cliIdx], asiento = cli.libros.diario.find(a => a.asiento === asientoId); if(!asiento) return;
+    document.getElementById('am_fecha').value = asiento.fecha; document.getElementById('am_glosa').value = asiento.glosa; document.getElementById('am_lineas').innerHTML = '';
+    asiento.lineas.forEach(l => { var tr = document.createElement('tr'); tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" value="${l.cuenta}" style="width:100%"></td><td><input type="number" class="am-deb" value="${l.debe}" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="${l.haber}" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`; document.getElementById('am_lineas').appendChild(tr); });
+    calcAM(); openModal('modal-asiento-manual');
 }
-
-function addAMLine() {
-    var tr = document.createElement('tr'); 
-    tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" placeholder="Escriba cuenta..." style="width:100%"></td><td><input type="number" class="am-deb" value="0" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="0" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`;
-    document.getElementById('am_lineas').appendChild(tr);
-}
+function addAMLine() { var tr = document.createElement('tr'); tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" placeholder="Escriba cuenta..." style="width:100%"></td><td><input type="number" class="am-deb" value="0" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="0" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`; document.getElementById('am_lineas').appendChild(tr); }
 function calcAM() {
     var d = 0, h = 0; document.querySelectorAll('#am_lineas tr').forEach(tr => { d += parseFloat(tr.querySelector('.am-deb').value)||0; h += parseFloat(tr.querySelector('.am-hab').value)||0; });
     document.getElementById('am_tot_deb').textContent = "₲ " + d.toLocaleString(); document.getElementById('am_tot_hab').textContent = "₲ " + h.toLocaleString();
-    var df = Math.abs(d - h), el = document.getElementById('am_diff');
-    if(df===0){ el.textContent="Asiento Cuadrado ✓"; el.style.color="var(--success)"; } else { el.textContent="Diferencia: ₲ "+df.toLocaleString(); el.style.color="var(--danger)"; }
+    var df = Math.abs(d - h), el = document.getElementById('am_diff'); if(df===0){ el.textContent="Asiento Cuadrado ✓"; el.style.color="var(--success)"; } else { el.textContent="Diferencia: ₲ "+df.toLocaleString(); el.style.color="var(--danger)"; }
 }
 function guardarAsientoManual() {
     calcAM(); if(!document.getElementById('am_diff').textContent.includes('Cuadrado')) return alert("❌ El asiento no cuadra. El Debe y el Haber deben ser iguales.");
     var lin =[]; document.querySelectorAll('#am_lineas tr').forEach(tr => { var cta=tr.querySelector('.am-cta').value.trim(), d=parseFloat(tr.querySelector('.am-deb').value)||0, h=parseFloat(tr.querySelector('.am-hab').value)||0; if(cta && (d>0||h>0)) lin.push({cuenta:cta, debe:d, haber:h}); });
     if(lin.length===0) return alert("❌ Debe ingresar al menos una cuenta válida.");
-    
-    if(editandoAsientoRef) {
-        var cli = dbClientes[currentCli];
-        var idx = cli.libros.diario.findIndex(a => a.asiento === editandoAsientoRef);
-        if(idx !== -1) {
-            cli.libros.diario[idx].fecha = document.getElementById('am_fecha').value;
-            cli.libros.diario[idx].glosa = document.getElementById('am_glosa').value;
-            cli.libros.diario[idx].lineas = lin;
-        }
-        alert(`✅ Asiento Manual ${editandoAsientoRef} actualizado.`);
-    } else {
-        var nA = "M-"+Math.floor(1000+Math.random()*9000); dbClientes[currentCli].libros.diario.push({fecha: document.getElementById('am_fecha').value, asiento: nA, glosa: document.getElementById('am_glosa').value, lineas: lin});
-        alert(`✅ Asiento Manual ${nA} guardado.`); 
-    }
-    
+    if(editandoAsientoRef) { var cli = dbClientes[currentCli], idx = cli.libros.diario.findIndex(a => a.asiento === editandoAsientoRef); if(idx !== -1) { cli.libros.diario[idx].fecha = document.getElementById('am_fecha').value; cli.libros.diario[idx].glosa = document.getElementById('am_glosa').value; cli.libros.diario[idx].lineas = lin; } alert(`✅ Asiento Manual ${editandoAsientoRef} actualizado.`); } 
+    else { var nA = "M-"+Math.floor(1000+Math.random()*9000); dbClientes[currentCli].libros.diario.push({fecha: document.getElementById('am_fecha').value, asiento: nA, glosa: document.getElementById('am_glosa').value, lineas: lin}); alert(`✅ Asiento Manual ${nA} guardado.`); }
     closeModal('modal-asiento-manual'); renderLibros(); renderMayorYBalance();
 }
 
@@ -765,11 +762,7 @@ function guardarAsientoWizard() {
   var mtd = document.getElementById('wiz_pago_tipo').value, ref = document.getElementById('wiz_ref_doc') ? document.getElementById('wiz_ref_doc').value : ""; if(ref) glosa += ` (Ref: Fact. ${ref})`;
 
   var ctaCajaBanco = (mtd === 'banco') ? '1.1.1.03 Banco Cta. Cte.' : '1.1.1.01 Caja';
-  var ctaComercial = '';
-  if(obj.rol === 'cliente') ctaComercial = '1.1.2.01 Clientes Locales';
-  else if(obj.rol === 'proveedor') ctaComercial = '2.1.1.01 Proveedores Locales';
-  else if(obj.rol === 'acreedor') ctaComercial = '2.1.2.01 Acreedores Varios';
-  else if(obj.rol === 'deudor') ctaComercial = '1.1.2.02 Deudores Varios';
+  var ctaComercial = ''; if(obj.rol === 'cliente') ctaComercial = '1.1.2.01 Clientes Locales'; else if(obj.rol === 'proveedor') ctaComercial = '2.1.1.01 Proveedores Locales'; else if(obj.rol === 'acreedor') ctaComercial = '2.1.2.01 Acreedores Varios'; else if(obj.rol === 'deudor') ctaComercial = '1.1.2.02 Deudores Varios';
 
   var tot = parseFloat(document.getElementById('wiz_monto').value)||0, tasaIva = parseInt(document.getElementById('wiz_iva_tasa').value)||0, iva = tipo==='recibo'?0:(tasaIva===10?Math.round(tot/11):(tasaIva===5?Math.round(tot/21):0));
   obj.nro = document.getElementById('wiz_nro').value || "S/N"; obj.bruto = tot; obj.neto = tot-iva; obj.iva = iva; obj.condicion = (mtd === 'credito') ? 'credito' : 'contado'; obj.tasa_iva = tasaIva;
@@ -836,7 +829,7 @@ function procesarImportacion() {
     if(parseados.length > 0) {
         parseados.forEach(p => {
             var iva = p.tasa===10?Math.round(p.monto/11):(p.tasa===5?Math.round(p.monto/21):0);
-            var obj = {fecha: p.fecha, tipo: p.tipo, timbrado: p.timb, nro: p.nro, ruc: p.ruc, tercero: p.terc, bruto: p.monto, neto: p.monto-iva, iva: iva, tasa_iva: p.tasa, ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion:'contado'};
+            var obj = {fecha: p.fecha, tipo: p.tipo, timbrado: p.timb, nro: p.nro, ruc: p.ruc, tercero: p.terc, bruto: p.monto, neto: p.monto-iva, iva: iva, tasa_iva: p.tasa, ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion:'contado', rol:'proveedor'};
             var cVenta = p.tasa===10 ? '4.1.1.01 Ventas 10%' : (p.tasa===5 ? '4.1.1.02 Ventas 5%' : '4.1.1.03 Ventas Exentas');
             var cIva = p.tasa===10 ? '2.1.4.01 IVA Débito 10%' : (p.tasa===5 ? '2.1.4.02 IVA Débito 5%' : '');
             var lin =[{cuenta:'1.1.1.01 Caja', debe:p.monto, haber:0}, {cuenta:cVenta, debe:0, haber:p.monto-iva}]; if(iva>0) lin.push({cuenta:cIva, debe:0, haber:iva});
@@ -849,7 +842,7 @@ function procesarImportacion() {
 
 // ===== IMPUESTOS BUSCADORES =====
 function actualizarSelectsClientes() {
-    var opts = dbClientes.map((c,i) => `<option value="${i}">${c.nom} (RUC: ${c.ruc})</option>`).join('');
+    var opts = dbClientes.map((c,i) => { if(puedeVerCliente(c.id)) return `<option value="${i}">${c.nom} (RUC: ${c.ruc})</option>`; return ''; }).join('');
     document.querySelectorAll('.cli-select').forEach(s => { s.innerHTML = opts; });
 }
 
@@ -876,7 +869,7 @@ function calcularImpuestos(tipo) {
 }
 
 // INICIO
-initPlanCuentas(); renderClientes();
+initPlanCuentas(); renderUsuarios();
 </script>
 </body>
 </html>
