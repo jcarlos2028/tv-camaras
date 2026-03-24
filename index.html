@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Andry Fernández - Nail Designer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    
+    <style>
+        :root { --rosa: #C899A3; --negro: #1a1a1a; --blanco: #ffffff; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            margin: 0; padding: 20px 15px 120px 15px; 
+            background-color: var(--blanco); 
+            color: var(--negro);
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 450px; margin: 0 auto; text-align: center; }
+        
+        h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--rosa); margin: 0; }
+        .brand-tag { color: var(--rosa); text-transform: uppercase; letter-spacing: 5px; font-size: 0.65rem; margin-bottom: 30px; display: block; font-weight: 600; }
+
+        /* SERVICIOS */
+        .servicio-card {
+            background: #fff; border: 1px solid #eee; padding: 18px; border-radius: 20px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.3s;
+        }
+        .servicio-card.selected { border-color: var(--rosa); background-color: #fff9fa; transform: scale(1.02); }
+        .servicio-info { text-align: left; pointer-events: none; }
+        .servicio-nombre { font-weight: 600; font-size: 0.9rem; display: block; }
+        .servicio-precio { font-size: 0.8rem; color: var(--rosa); margin-top: 4px; display: block; }
+
+        .custom-check { width: 24px; height: 24px; border: 2px solid #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .selected .custom-check { background: var(--rosa); border-color: var(--rosa); }
+        .custom-check:after { content: '✓'; color: white; display: none; font-size: 14px; }
+        .selected .custom-check:after { display: block; }
+
+        .btn-agendar {
+            background: var(--negro); color: #fff; width: 100%; padding: 20px; border-radius: 50px;
+            border: none; font-weight: 700; text-transform: uppercase; margin-top: 25px; 
+            display: none; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* CARRUSEL INFINITO */
+        .portfolio-title { font-size: 0.85rem; font-weight: 600; margin: 45px 0 20px; text-transform: uppercase; letter-spacing: 2px; }
+        .carrusel-window { width: 100%; overflow: hidden; border-radius: 20px; }
+        .carrusel-track { display: flex; gap: 12px; width: fit-content; animation: scroll 20s linear infinite; }
+        .carrusel-item { width: 160px; height: 230px; background-size: cover; background-position: center; border-radius: 15px; flex-shrink: 0; }
+        
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-516px); } }
+
+        /* POLÍTICAS */
+        .politica-texto { 
+            font-size: 0.8rem; color: #666; text-align: left; background: #fffcfd; 
+            padding: 20px; border-radius: 18px; border: 1px dashed var(--rosa); line-height: 1.7; margin-top: 40px;
+        }
+
+        /* BARRA SOCIAL LATERAL */
+        .social-bar {
+            position: fixed; bottom: 25px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000;
+        }
+        .social-icon {
+            width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: 0.3s;
+        }
+        .wa { background: #25d366; }
+        .ig { background: #E1306C; }
+        .map { background: #4285F4; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <span class="brand-tag">Andry Fernández - Nails</span>
+    <h1>Define tu Estatus</h1>
+    
+    <div id="lista-servicios" style="margin-top: 30px;">
+        <div class="servicio-card" onclick="toggleSelection(this)">
+            <span class="servicio-info">
+                <span class="servicio-nombre">💎 Uñas Acrílicas Full Set</span>
+                <span class="servicio-precio">280.000 Gs</span>
+            </span>
+            <div class="custom-check"></div>
+            <input type="checkbox" class="srv-check" style="display:none">
+        </div>
+        <div class="servicio-card" onclick="toggleSelection(this)">
+            <span class="servicio-info">
+                <span class="servicio-nombre">✨ Gel / Soft Gel / Polygel</span>
+                <span class="servicio-precio">Desde 170.000 Gs</span>
+            </span>
+            <div class="custom-check"></div>
+            <input type="checkbox" class="srv-check" style="display:none">
+        </div>
+        <div class="servicio-card" onclick="toggleSelection(this)">
+            <span class="servicio-info">
+                <span class="servicio-nombre">🦶 Spa de Pies + Semipermanente</span>
+                <span class="servicio-precio">130.000 Gs</span>
+            </span>
+            <div class="custom-check"></div>
+            <input type="checkbox" class="srv-check" style="display:none">
+        </div>
+        <div class="servicio-card" onclick="toggleSelection(this)">
+            <span class="servicio-info">
+                <span class="servicio-nombre">🗑️ Retirado de Productos</span>
+                <span class="servicio-precio">80.000 Gs</span>
+            </span>
+            <div class="custom-check"></div>
+            <input type="checkbox" class="srv-check" style="display:none">
+        </div>
+    </div>
+
+    <button id="btnPrincipal" onclick="abrirCalendly()" class="btn-agendar">Confirmar Selección</button>
+
+    <div class="portfolio-title">Mi Trabajo</div>
+    <div class="carrusel-window">
+        <div class="carrusel-track">
+            <div class="carrusel-item" style="background-image: url('https://i.ibb.co/HTThD9HL/andry1.jpg');"></div>
+            <div class="carrusel-item" style="background-image: url('https://i.ibb.co/8LxDCFqj/andry2.jpg');"></div>
+            <div class="carrusel-item" style="background-image: url('https://i.ibb.co/nMwggVkc/andry3.jpg');"></div>
+            <div class="carrusel-item" style="background-image: url('https://i.ibb.co/HTThD9HL/andry1.jpg');"></div>
+            <div class="carrusel-item" style="background-image: url('https://i.ibb.co/8LxDCFqj/andry2.jpg');"></div>
+            <div class="carrusel-item" style="background-image: url('https://i.ibb.co/nMwggVkc/andry3.jpg');"></div>
+        </div>
+    </div>
+
+    <div class="politica-texto">
+        • <b>Puntualidad:</b> 10 min de tolerancia para no afectar el turno siguiente.<br>
+        • <b>Cancelación (+24hs):</b> Sin recargo.<br>
+        • <b>Cancelación (-24hs):</b> Se cobra el 50% si el monto supera los 100.000 Gs. En montos inferiores se cobra el total.<br>
+        • <b>Inasistencia:</b> Inasistencias sin aviso previo requieren seña para nueva cita.
+    </div>
+</div>
+
+<div class="social-bar">
+    <a href="https://www.instagram.com/andry_fer_?igsh=MWlhbHR0amN1aDlueQ%3D%3D" class="social-icon ig" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="28">
+    </a>
+    <a href="https://maps.app.goo.gl/rjF8aGVKGUVQaU8R7" class="social-icon map" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg" width="25">
+    </a>
+    <a href="https://wa.me/595981672477" class="social-icon wa" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="28">
+    </a>
+</div>
+
+<script>
+    function toggleSelection(card) {
+        const checkbox = card.querySelector('.srv-check');
+        checkbox.checked = !checkbox.checked;
+        card.classList.toggle('selected');
+        const selected = document.querySelectorAll('.srv-check:checked').length;
+        document.getElementById('btnPrincipal').style.display = selected > 0 ? 'block' : 'none';
+    }
+
+    function abrirCalendly() {
+        Calendly.initPopupWidget({ 
+            url: 'https://calendly.com/anfer12343', 
+            color: '#C899A3' 
+        });
+        return false;
+    }
+</script>
+</body>
+</html>
