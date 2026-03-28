@@ -74,6 +74,12 @@
     <div id="lista-eventos"></div>
     <div class="section-title">🇧🇴 Bolivia</div>
     <div id="lista-bolivia"></div>
+    <div class="section-title">🇧🇷 Brasil — Canales Abiertos</div>
+    <div id="lista-brasil-abiertos"></div>
+    <div class="section-title">🇧🇷 Brasil — Entretenimiento & Cable</div>
+    <div id="lista-brasil-cable"></div>
+    <div class="section-title">🇧🇷 Brasil — Deportes & Especiales</div>
+    <div id="lista-brasil-deportes"></div>
     <div class="section-title">📻 Radios</div>
     <div id="lista-radios"></div>
     <div class="section-title">💬 Consultar a Claude</div>
@@ -119,28 +125,112 @@ var secciones = {
         keys: ['btv','atb','reduno'],
         nombres: {'btv':'📺 BTV','atb':'📺 ATB','reduno':'📺 Red Uno'}
     },
+    'lista-brasil-abiertos': {
+        keys: ['br_sbt','br_cnnbrasil','br_record','br_globosp','br_globorj','br_globomg','br_globors','br_globoam','br_bandnews'],
+        nombres: {
+            'br_sbt':      '📺 SBT',
+            'br_cnnbrasil':'📺 CNN Brasil',
+            'br_record':   '📺 Record TV',
+            'br_globosp':  '📺 Globo SP',
+            'br_globorj':  '📺 Globo RJ',
+            'br_globomg':  '📺 Globo MG',
+            'br_globors':  '📺 Globo RS',
+            'br_globoam':  '📺 Globo AM',
+            'br_bandnews': '📺 Band News'
+        }
+    },
+    'lista-brasil-cable': {
+        keys: ['br_tnt','br_warner','br_universal','br_star','br_sony','br_comedy','br_adultswim','br_telecinepipoca','br_telecinepremium','br_foodnetwork','br_history','br_history2','br_animalplanet','br_discoveryid','br_fishtv','br_cartoonito'],
+        nombres: {
+            'br_tnt':             '🎬 TNT',
+            'br_warner':          '🎬 Warner Bros Channel',
+            'br_universal':       '🎬 Universal TV',
+            'br_star':            '🎬 Star Channel',
+            'br_sony':            '🎬 Sony Channel',
+            'br_comedy':          '😂 Comedy Central',
+            'br_adultswim':       '🌙 Adult Swim',
+            'br_telecinepipoca':  '🍿 Telecine Pipoca',
+            'br_telecinepremium': '🍿 Telecine Premium',
+            'br_foodnetwork':     '🍽️ Food Network',
+            'br_history':         '📜 History',
+            'br_history2':        '📜 History 2',
+            'br_animalplanet':    '🐾 Animal Planet',
+            'br_discoveryid':     '🔍 Discovery ID',
+            'br_fishtv':          '🐟 Fish TV',
+            'br_cartoonito':      '🧸 Cartoonito'
+        }
+    },
+    'lista-brasil-deportes': {
+        keys: ['br_bandsports','br_chaves247','br_simpsons247'],
+        nombres: {
+            'br_bandsports':   '⚽ Band Sports',
+            'br_chaves247':    '📺 El Chaves 24/7',
+            'br_simpsons247':  '📺 Os Simpsons 24/7'
+        }
+    },
     'lista-radios': {
         keys: ['r_montecarlo','r_farra','r_emisoras','r_itapiru','r_transcontinental','r_altoparana','r_mingaguazu','r_maxima','r_natalio','r_libertad','r_caaguazu','r_horizonte','r_naranjal','r_progresos','r_latina','r_integracion'],
         nombres: {'r_montecarlo':'📻 Montecarlo','r_farra':'📻 Farra','r_emisoras':'📻 Emisoras PY','r_itapiru':'📻 Radio Itapiru','r_transcontinental':'📻 Transcontinental','r_altoparana':'📻 Alto Paraná','r_mingaguazu':'📻 Minga Guazú','r_maxima':'📻 Máxima FM','r_natalio':'📻 Radio Natalio','r_libertad':'📻 Radio Libertad','r_caaguazu':'📻 Radio Caaguazú','r_horizonte':'📻 Radio Horizonte','r_naranjal':'📻 Radio Naranjal','r_progresos':'📻 Progresos','r_latina':'📻 Radio Latina','r_integracion':'📻 Integración'}
     }
 };
 
+// Valores por defecto para los nuevos canales brasileños
+var defaultsBrasil = {
+    'br_sbt':             '<iframe src="https://1embedcanaisonline.xyz/sbtsp/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
+    'br_cnnbrasil':       'https://www3.embedtv.best/cnnbrasil',
+    'br_record':          '<iframe src="https://1embedcanaisonline.xyz/recordmg/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
+    'br_globosp':         '<iframe src="https://1embedcanaisonline.xyz/globosp/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
+    'br_globorj':         '<iframe src="https://1embedcanaisonline.xyz/globorj/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
+    'br_globomg':         '<iframe src="https://1embedcanaisonline.xyz/globomg/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
+    'br_globors':         '<iframe src="https://1embedcanaisonline.xyz/globors/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
+    'br_globoam':         'https://www3.embedtv.best/globoam',
+    'br_bandnews':        'https://www3.embedtv.best/bandnews',
+    'br_tnt':             'https://www3.embedtv.best/tnt',
+    'br_warner':          'https://www3.embedtv.best/warnerchannel',
+    'br_universal':       'https://www3.embedtv.best/universaltv',
+    'br_star':            'https://www3.embedtv.best/starchannel',
+    'br_sony':            'https://www3.embedtv.best/sonychannel',
+    'br_comedy':          'https://www3.embedtv.best/comedycentral',
+    'br_adultswim':       'https://www3.embedtv.best/adultswim',
+    'br_telecinepipoca':  'https://www3.embedtv.best/telecinepipoca',
+    'br_telecinepremium': 'https://www3.embedtv.best/telecinepremium',
+    'br_foodnetwork':     'https://www3.embedtv.best/foodnetwork',
+    'br_history':         'https://www3.embedtv.best/history',
+    'br_history2':        'https://www3.embedtv.best/history2',
+    'br_animalplanet':    'https://www3.embedtv.best/animalplanet',
+    'br_discoveryid':     'https://www3.embedtv.best/discoveryid',
+    'br_fishtv':          'https://www3.embedtv.best/fish',
+    'br_cartoonito':      'https://www3.embedtv.best/cartoonito',
+    'br_bandsports':      'https://www3.embedtv.best/bandsports',
+    'br_chaves247':       'https://www3.embedtv.best/24h_chaves',
+    'br_simpsons247':     'https://www3.embedtv.best/24h_simpsons'
+};
+
 function setStatus(t,x){document.getElementById('status-dot').className='dot '+t;document.getElementById('status-text').textContent=x;}
 
 function cargarCanales() {
     setStatus('loading','Cargando canales desde GitHub...');
-    // Usar jsDelivr para leer (sin CORS) y API GitHub para obtener SHA
     fetch('https://cdn.jsdelivr.net/gh/'+REPO+'@main/'+FILE+'?t='+Date.now())
     .then(function(r){return r.json();})
     .then(function(data){
-        canalesData=data;
+        canalesData = data;
+        // Rellenar defaults de Brasil si no existen en el JSON remoto
+        Object.keys(defaultsBrasil).forEach(function(k){
+            if(!canalesData[k]) canalesData[k] = defaultsBrasil[k];
+        });
         renderCanales();
         setStatus('ok','Conectado — '+Object.keys(canalesData).length+' canales cargados. Listo para editar.');
-        // Obtener SHA para poder guardar
         fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
             headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
         }).then(function(r){return r.json();}).then(function(d){fileSha=d.sha;}).catch(function(){});
-    }).catch(function(){setStatus('error','Error al cargar canales');});
+    }).catch(function(){
+        // Si falla GitHub, usar defaults de Brasil igual
+        Object.keys(defaultsBrasil).forEach(function(k){
+            if(!canalesData[k]) canalesData[k] = defaultsBrasil[k];
+        });
+        renderCanales();
+        setStatus('error','No se pudo cargar desde GitHub — mostrando valores por defecto');
+    });
 }
 
 function renderCanales() {
@@ -152,11 +242,12 @@ function renderCanales() {
         sec.keys.forEach(function(key){
             var nombre=sec.nombres[key]||key;
             var url=canalesData[key]||'(sin link)';
+            var urlDisplay = url.length > 120 ? url.substring(0,120)+'...' : url;
             var d=document.createElement('div');
             d.className='canal-card';
             d.id='card-'+key;
             d.innerHTML='<div class="canal-header"><span class="canal-nombre">'+nombre+'</span><span class="canal-key">'+key+'</span><button class="btn-editar" onclick="editarCanal(\''+key+'\')">✏️ Editar</button></div>'+
-                '<div class="canal-url" id="url-'+key+'">'+url+'</div>'+
+                '<div class="canal-url" id="url-'+key+'">'+urlDisplay+'</div>'+
                 '<div class="edit-area" id="edit-'+key+'"><textarea id="ta-'+key+'">'+url+'</textarea>'+
                 '<div class="edit-buttons"><button class="btn-guardar" id="btn-'+key+'" onclick="guardarCanal(\''+key+'\')">💾 Guardar</button>'+
                 '<button class="btn-cancelar" onclick="cancelarEdicion(\''+key+'\')">✕ Cancelar</button></div>'+
@@ -170,6 +261,7 @@ function editarCanal(key){
     document.querySelectorAll('.canal-card').forEach(function(c){c.classList.remove('editando');c.querySelector('.edit-area').style.display='none';});
     document.getElementById('card-'+key).classList.add('editando');
     document.getElementById('edit-'+key).style.display='block';
+    document.getElementById('ta-'+key).value = canalesData[key]||'';
     document.getElementById('ta-'+key).focus();
     document.getElementById('ta-'+key).select();
 }
@@ -188,7 +280,6 @@ function guardarCanal(key){
     btn.disabled=true; btn.textContent='⏳ Obteniendo SHA...'; msg.className='msg';
     canalesData[key]=url;
     var enc=btoa(unescape(encodeURIComponent(JSON.stringify(canalesData,null,2))));
-    // Obtener SHA fresco antes de guardar
     fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
         headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
     }).then(function(r){return r.json();}).then(function(fileData){
@@ -202,7 +293,8 @@ function guardarCanal(key){
     }).then(function(r){return r.json();}).then(function(data){
         if(data.content){
             fileSha=data.content.sha;
-            document.getElementById('url-'+key).textContent=url;
+            var urlDisplay = url.length > 120 ? url.substring(0,120)+'...' : url;
+            document.getElementById('url-'+key).textContent=urlDisplay;
             document.getElementById('card-'+key).classList.remove('editando');
             document.getElementById('card-'+key).classList.add('guardado');
             document.getElementById('edit-'+key).style.display='none';
