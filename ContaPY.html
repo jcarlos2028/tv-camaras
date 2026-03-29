@@ -2,89 +2,117 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ContaPY Cloud - EXE FIX</title>
+    <title>ContaPY v4.0 - Local Edition</title>
     <style>
-        /* FIX TOTAL PARA EXES BLOQUEADOS */
-        :root { --accent: #e63946; --dark: #0f1923; }
+        :root { --bg: #f4f7f6; --dark: #0f1923; --accent: #e63946; --text: #333; }
         
-        /* 1. DESACTIVAR ARRASTRE GLOBAL (Esto es lo que bloquea tu teclado) */
-        * { 
-            box-sizing: border-box; margin: 0; padding: 0; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            -webkit-app-region: no-drag !important; /* Desactiva el arrastre en todo */
-            user-select: text !important; /* Permite seleccionar y escribir */
-            -webkit-user-select: text !important;
-        }
+        /* ELIMINAMOS CUALQUIER COSA DE "DRAG" QUE BLOQUEE EL TECLADO */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        
+        body { display: flex; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
 
-        body { display: flex; height: 100vh; background: #f0f2f5; overflow: hidden; }
+        /* SIDEBAR */
+        .sidebar { width: 240px; background: var(--dark); color: white; display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
+        .logo { font-size: 22px; font-weight: bold; margin-bottom: 30px; color: var(--accent); }
+        .nav-item { padding: 12px; cursor: pointer; border-radius: 8px; margin-bottom: 5px; transition: 0.3s; opacity: 0.7; }
+        .nav-item:hover, .nav-item.active { background: var(--accent); opacity: 1; }
 
-        /* 2. AREA DE ARRASTRE MINIMA (Solo esta barrita servirá para mover la ventana) */
-        .drag-handle {
-            position: fixed; top: 0; left: 0; width: 100%; height: 10px;
-            -webkit-app-region: drag !important; z-index: 999999;
-        }
-
-        .sidebar { width: 230px; background: var(--dark); color: white; padding: 20px; flex-shrink: 0; }
+        /* CONTENIDO */
         .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .topbar { background: white; height: 50px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid #ddd; }
-        .content { padding: 20px; overflow-y: auto; flex: 1; }
+        .topbar { background: white; height: 60px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid #ddd; justify-content: space-between; }
+        .content { padding: 30px; overflow-y: auto; flex: 1; }
 
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        
-        /* 3. INPUTS FORZADOS (Para que el EXE los deje usar) */
-        input, select, textarea {
-            width: 100%; padding: 12px; margin-bottom: 15px;
-            border: 2px solid #ccc; border-radius: 6px;
-            font-size: 16px; color: black !important;
-            background-color: white !important;
-            display: block !important;
-            pointer-events: auto !important; /* Fuerza a recibir clics */
-            cursor: text !important;
+        /* UI */
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        th { font-size: 12px; color: #888; text-transform: uppercase; }
+
+        .btn { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-outline { background: #eee; color: #555; }
+
+        /* FORMULARIOS - FORZADOS PARA EXE */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
+        input, select { 
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px;
+            background: white !important; color: black !important;
+            /* Estos 3 comandos fuerzan al EXE a permitir el teclado */
+            pointer-events: auto !important;
+            -webkit-user-select: text !important;
+            user-select: text !important;
         }
 
-        .btn { padding: 10px 20px; border-radius: 6px; cursor: pointer; border: none; font-weight: bold; background: var(--accent); color: white; }
-
-        /* MODAL SIMPLE */
-        .modal-overlay { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); 
-            z-index: 5000; align-items: center; justify-content: center; 
-        }
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .modal-overlay.open { display: flex; }
-        .modal { background: white; padding: 30px; border-radius: 12px; width: 400px; }
+        .modal { background: white; padding: 30px; border-radius: 15px; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
 
-        .nav-item { padding: 10px; cursor: pointer; margin-bottom: 5px; border-radius: 5px; }
-        .nav-item.active { background: var(--accent); }
+        /* LOGIN */
+        .login-wrap { position: fixed; inset: 0; background: var(--dark); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: white; padding: 40px; border-radius: 20px; width: 360px; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="drag-handle"></div>
-
-<!-- LOGIN -->
-<div id="login-wrap" style="position:fixed;inset:0;background:var(--dark);z-index:10000;display:flex;align-items:center;justify-content:center;color:white;">
-    <div style="background:white;padding:40px;border-radius:20px;width:350px;color:black;text-align:center">
-        <h2 style="margin-bottom:20px">ContaPY Cloud</h2>
-        <input type="text" id="lu" placeholder="Email o Usuario">
-        <input type="password" id="lp" placeholder="Contraseña">
-        <button class="btn" style="width:100%" onclick="window.doLogin()">Entrar</button>
+<!-- PANTALLA DE LOGIN -->
+<div class="login-wrap" id="login-wrap">
+    <div class="login-card">
+        <h2 style="margin-bottom:20px">ContaPY Cloud Auth</h2>
+        <div class="form-group"><input type="text" id="lu" placeholder="Usuario / Email"></div>
+        <div class="form-group"><input type="password" id="lp" placeholder="Contraseña"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Ingresar</button>
+        <p id="l-msg" style="color:red; margin-top:10px; font-size:12px"></p>
     </div>
 </div>
 
 <div class="sidebar">
-    <h2 style="margin-bottom:20px">ContaPY</h2>
-    <div class="nav-item active" onclick="location.reload()">🏠 Dashboard</div>
-    <div class="nav-item" onclick="window.openModalCliente()">➕ Nuevo Cliente</div>
+    <div class="logo">🧾 ContaPY v4.0</div>
+    <div class="nav-item active" id="m_dash" onclick="showPage('dashboard',this)">🏠 Dashboard</div>
+    <div class="nav-item" id="m_cli" onclick="showPage('clientes',this)">🏢 Clientes</div>
+    <div style="margin-top:auto">
+        <button class="btn btn-outline" style="width:100%" onclick="localStorage.removeItem('logged'); location.reload();">🚪 Salir</button>
+    </div>
 </div>
 
 <div class="main">
-    <div class="topbar"><b>Panel Administrador</b></div>
+    <div class="topbar">
+        <h3 id="top-title">Dashboard</h3>
+        <select id="lang_sel" onchange="window.changeLang(this.value)" style="width: auto;">
+            <option value="es">🇪🇸 Español</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="pt">🇧🇷 Português</option>
+        </select>
+    </div>
     <div class="content">
-        <div class="card">
-            <h3>Lista de Contribuyentes</h3>
-            <table style="width:100%; margin-top:15px; text-align:left">
-                <thead><tr><th>RUC</th><th>Nombre</th><th>Acciones</th></tr></thead>
-                <tbody id="lista-clientes"></tbody>
-            </table>
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+            <div class="card">
+                <h2 id="dash_welcome">Bienvenido 👋</h2>
+                <p id="dash_sub">Los datos se guardan localmente en esta PC.</p>
+            </div>
+            <div class="card">
+                <h3 id="dash_list_title">Cartera de Clientes</h3>
+                <table id="dash-table">
+                    <thead><tr><th id="th_ruc">RUC</th><th id="th_nom">Nombre</th></tr></thead>
+                    <tbody id="dash-list"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- CLIENTES -->
+        <div class="page" id="page-clientes">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+                <h2 id="cli_title">Directorio de Clientes</h2>
+                <button class="btn btn-primary" onclick="window.openModalCliente()">+ Nuevo</button>
+            </div>
+            <div class="card">
+                <table>
+                    <thead><tr><th id="th_ruc2">RUC</th><th id="th_nom2">Nombre</th><th id="th_act">Acción</th></tr></thead>
+                    <tbody id="tabla-list"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -92,63 +120,108 @@
 <!-- MODAL CLIENTE -->
 <div class="modal-overlay" id="modal-cliente">
     <div class="modal">
-        <h3 style="margin-bottom:20px">Registrar Cliente</h3>
-        <input type="text" id="cli_ruc" placeholder="RUC (ej: 123456-7)">
-        <input type="text" id="cli_nom" placeholder="Razón Social o Nombre">
-        <div style="text-align:right">
-            <button class="btn" style="background:#888" onclick="window.closeModal()">Cancelar</button>
-            <button class="btn" onclick="window.guardarCliente()">💾 Guardar</button>
+        <h3 id="modal_title" style="margin-bottom:20px">Datos del Cliente</h3>
+        <div class="form-group"><label>RUC</label><input type="text" id="cli_ruc"></div>
+        <div class="form-group"><label>Razón Social</label><input type="text" id="cli_nom"></div>
+        <div style="text-align:right; margin-top:20px">
+            <button class="btn btn-outline" onclick="window.closeModal()">Cancelar</button>
+            <button class="btn btn-primary" onclick="window.guardarCliente()">💾 Guardar en PC</button>
         </div>
     </div>
 </div>
 
 <script>
-window.dbClientes = [];
+// --- CONFIGURACIÓN DE IDIOMAS ---
+const langData = {
+    es: {
+        title: "Dashboard", m_dash: "🏠 Inicio", m_cli: "🏢 Clientes", welcome: "Bienvenido 👋", 
+        sub: "Los datos se guardan localmente en esta PC.", list: "Cartera de Clientes",
+        th_ruc: "RUC", th_nom: "Nombre", th_act: "Acción", modal: "Datos del Cliente"
+    },
+    en: {
+        title: "Dashboard", m_dash: "🏠 Home", m_cli: "🏢 Clients", welcome: "Welcome 👋", 
+        sub: "Data is saved locally on this PC.", list: "Client Portfolio",
+        th_ruc: "Tax ID", th_nom: "Legal Name", th_act: "Action", modal: "Client Details"
+    },
+    pt: {
+        title: "Painel", m_dash: "🏠 Início", m_cli: "🏢 Clientes", welcome: "Bem-vindo 👋", 
+        sub: "Os dados são salvos localmente neste PC.", list: "Carteira de Clientes",
+        th_ruc: "RUC/CPF", th_nom: "Nome", th_act: "Ação", modal: "Dados do Cliente"
+    }
+};
 
-window.doLogin = async function() {
-    const u = document.getElementById('lu').value;
-    const p = document.getElementById('lp').value;
-    // La lógica real está en el script de abajo
-    if(window.firebaseLogin) window.firebaseLogin(u, p);
+window.changeLang = function(lang) {
+    localStorage.setItem('contapy_lang', lang);
+    const d = langData[lang];
+    document.getElementById('top-title').textContent = d.title;
+    document.getElementById('m_dash').textContent = d.m_dash;
+    document.getElementById('m_cli').textContent = d.m_cli;
+    document.getElementById('dash_welcome').textContent = d.welcome;
+    document.getElementById('dash_sub').textContent = d.sub;
+    document.getElementById('dash_list_title').textContent = d.list;
+    document.getElementById('th_ruc').textContent = d.th_ruc;
+    document.getElementById('th_nom').textContent = d.th_nom;
+    document.getElementById('th_ruc2').textContent = d.th_ruc;
+    document.getElementById('th_nom2').textContent = d.th_nom;
+    document.getElementById('th_act').textContent = d.th_act;
+    document.getElementById('modal_title').textContent = d.modal;
+};
+
+// --- LÓGICA DE DATOS LOCALES ---
+window.dbClientes = JSON.parse(localStorage.getItem('contapy_db')) || [];
+
+window.showPage = function(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    el.classList.add('active');
 };
 
 window.openModalCliente = function() {
     document.getElementById('cli_ruc').value = '';
     document.getElementById('cli_nom').value = '';
     document.getElementById('modal-cliente').classList.add('open');
-    // Forzar el foco
-    setTimeout(() => { document.getElementById('cli_ruc').focus(); }, 300);
+    setTimeout(() => { document.getElementById('cli_ruc').focus(); }, 200);
 };
 
-window.closeModal = function() {
-    document.getElementById('modal-cliente').classList.remove('open');
-};
+window.closeModal = function() { document.getElementById('modal-cliente').classList.remove('open'); };
 
-window.guardarCliente = async function() {
-    const r = document.getElementById('cli_ruc').value.trim();
-    const n = document.getElementById('cli_nom').value.trim();
-    if(!r || !n) return alert("RUC y Nombre requeridos");
+window.guardarCliente = function() {
+    const r = document.getElementById('cli_ruc').value;
+    const n = document.getElementById('cli_nom').value;
+    if(!r || !n) return alert("Complete los campos");
 
     window.dbClientes.push({ ruc: r, nom: n });
-    await window.saveData();
+    localStorage.setItem('contapy_db', JSON.stringify(window.dbClientes));
     window.render();
     window.closeModal();
-    alert("✅ Guardado con éxito.");
 };
 
 window.render = function() {
-    const tbody = document.getElementById('lista-clientes');
-    tbody.innerHTML = '';
-    window.dbClientes.forEach((c) => {
-        tbody.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td>✏️</td></tr>`;
+    const t = document.getElementById('tabla-list');
+    const d = document.getElementById('dash-list');
+    t.innerHTML = ''; d.innerHTML = '';
+    window.dbClientes.forEach((c, i) => {
+        t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td><button class="btn btn-outline" onclick="window.borrar(${i})">🗑️</button></td></tr>`;
+        d.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td></tr>`;
     });
 };
+
+window.borrar = function(i) {
+    if(confirm("¿Borrar cliente?")) {
+        window.dbClientes.splice(i, 1);
+        localStorage.setItem('contapy_db', JSON.stringify(window.dbClientes));
+        window.render();
+    }
+};
+
+// --- FIREBASE SOLO AUTH ---
+window.doLogin = function() { console.log("Firebase no listo"); };
 </script>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyBn3tcXb3WpVojYmMX603L68jhOqzW8abg",
@@ -161,22 +234,24 @@ window.render = function() {
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getFirestore(app);
 
-    window.firebaseLogin = async (u, p) => {
-        try { await signInWithEmailAndPassword(auth, u, p); } catch(e) { alert("Acceso fallido"); }
+    window.doLogin = async function() {
+        const u = document.getElementById('lu').value;
+        const p = document.getElementById('lp').value;
+        try { 
+            await signInWithEmailAndPassword(auth, u, p); 
+        } catch(e) { 
+            document.getElementById('l-msg').textContent = "Acceso incorrecto"; 
+        }
     };
 
-    window.saveData = async () => {
-        await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes });
-    };
-
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
         if (user) {
             document.getElementById('login-wrap').style.display = 'none';
-            const snap = await getDoc(doc(db, "sistema", "datos_principales"));
-            if(snap.exists()) window.dbClientes = snap.data().clientes || [];
             window.render();
+            const l = localStorage.getItem('contapy_lang') || 'es';
+            document.getElementById('lang_sel').value = l;
+            window.changeLang(l);
         } else {
             document.getElementById('login-wrap').style.display = 'flex';
         }
