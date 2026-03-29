@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.firebaseapp.com https://api.anthropic.com https://identitytoolkit.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.firebaseapp.com https://api.anthropic.com https://identitytoolkit.googleapis.com wss://*.firebaseio.com; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:;">
 <title>ContaPY v1.1 — Sistema Contable Cloud + Claude IA</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -14,7 +15,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 
-/* --- CORRECCIÓN CRÍTICA PARA EL INSTALABLE --- */
+/* --- CORRECCIÓN PARA INSTALABLE Y ESCRITURA --- */
 body {
     font-family:'DM Sans',sans-serif;
     background:var(--bg);
@@ -22,53 +23,80 @@ body {
     display:flex;
     height:100vh;
     overflow:hidden;
-    -webkit-app-region: drag; /* Permite arrastrar la ventana desde zonas vacías */
+    -webkit-app-region: drag; /* Permite arrastrar la ventana */
 }
 
-/* Deshabilitar drag en TODO lo que sea interactivo para permitir clics y escritura */
-.sidebar, .main, .modal, .nav-item, .btn, input, select, textarea, .tab {
-    -webkit-app-region: no-drag;
+/* Desbloqueo de clics y escritura en áreas interactivas */
+.sidebar, .main, .modal, .nav-item, .btn, input, select, textarea, .tab, .win-btn, .stat-card.clickable {
+    -webkit-app-region: no-drag !important;
+    pointer-events: auto !important;
 }
 
 input, select, textarea {
-    pointer-events: auto !important;
     user-select: text !important;
     -webkit-user-select: text !important;
 }
-/* ------------------------------------------- */
+/* --------------------------------------------- */
 
 .sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;z-index:100;}
 .sidebar-logo{padding:20px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .logo-text{color:white;font-size:17px;font-weight:700;}
-.sidebar-section{padding:12px 10px}
-.sidebar-label{color:rgba(255,255,255,.25);font-size:10px;font-weight:600;text-transform:uppercase;margin-bottom:5px}
-.nav-item{display:flex;align-items:center;gap:9px;padding:10px;border-radius:7px;color:rgba(255,255,255,.55);font-size:13px;cursor:pointer;transition:0.2s}
-.nav-item:hover{background:var(--sidebar-hover);color:white}
+.sidebar-section{padding:12px 10px 2px}
+.sidebar-label{color:rgba(255,255,255,.25);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;padding:0 8px;margin-bottom:3px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;color:rgba(255,255,255,.55);font-size:13px;cursor:pointer;transition:all .15s;margin-bottom:1px}
+.nav-item:hover{background:var(--sidebar-hover);color:rgba(255,255,255,.85)}
 .nav-item.active{background:var(--accent);color:white}
 
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0}
 .content{flex:1;overflow-y:auto;padding:20px;}
 .page{display:none} .page.active{display:block}
 
-.card{background:var(--white);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:18px}
-.form-group{margin-bottom:15px;display:flex;flex-direction:column;gap:5px}
-label{font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase}
-input, select{padding:10px;border:1px solid var(--border);border-radius:6px;outline:none;width:100%}
-.btn{padding:10px 16px;border-radius:6px;cursor:pointer;border:none;font-weight:600;font-size:13px; display:inline-flex; align-items:center; gap:5px;}
+.card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:18px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.stat-card.blue::before{background:var(--accent2)}
+.stat-card.green::before{background:var(--success)}
+
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border)}
+tbody td{padding:10px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+label{font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase}
+input,select,textarea{padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;}
+
+.btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;}
 .btn-primary{background:var(--accent);color:white}
+.btn-outline{background:transparent;border:1.5px solid var(--border)}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:14px;width:90%;max-width:680px;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column;}
+.modal-header{background:var(--bg);padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;border-bottom:1px solid var(--border)}
+.modal-body{padding:24px;overflow-y:auto;}
+
+.tabs{display:flex;gap:2px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:16px;width:fit-content}
+.tab{padding:6px 14px;border-radius:7px;font-size:12.5px;cursor:pointer;color:var(--text-light)}
+.tab.active{background:white;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
 </style>
 </head>
 <body>
 
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div style="color:white; font-weight:800">🧾 ContaPY v1.1</div>
+    <div style="color:white; font-weight:800; display:flex; align-items:center; gap:8px">🧾 <span>ContaPY v1.1</span></div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_main">Principal</div>
     <div class="nav-item active" onclick="showPage('dashboard',this)">🏠 <span data-i18n="nav_dash">Dashboard</span></div>
     <div class="nav-item" onclick="showPage('clientes',this)">🏢 <span data-i18n="nav_clients">Clientes (Cartera)</span></div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Facturación</div>
+    <div class="nav-item" onclick="showPage('comprobantes',this)">📥 <span data-i18n="nav_sifen">SIFEN / Carga</span></div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_taxes">Estados Financieros</div>
@@ -77,94 +105,129 @@ input, select{padding:10px;border:1px solid var(--border);border-radius:6px;outl
     <div class="nav-item" onclick="showPage('irp',this)">👤 <span data-i18n="nav_irp">Estado IRP (515)</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label">IA Soporte</div>
-    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b">🤖 <span data-i18n="nav_ai">Claude IA</span></div>
+    <div class="sidebar-label">Herramientas</div>
+    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b">🤖 <span data-i18n="nav_ai">Soporte Claude IA</span></div>
   </div>
+  <div style="margin-top:auto; padding:15px; font-size:10px; color:rgba(255,255,255,0.3)">© 2026 @Jcarlos2028</div>
 </div>
 
 <div class="main">
   <div class="topbar">
-    <div id="topbar-title" style="font-weight:700" data-i18n="nav_dash">Dashboard</div>
+    <div style="flex:1; font-weight:700" id="topbar-title" data-i18n="nav_dash">Dashboard</div>
     <select id="lang_sel" onchange="changeLang(this.value)" style="width:auto">
       <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
     </select>
+    <div style="cursor:pointer">🚪</div>
   </div>
 
   <div class="content">
     <div class="page active" id="page-dashboard">
-        <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
-        <p>Sincronización con Firebase Activa.</p>
+      <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
+      <div class="stats-grid" style="margin-top:20px">
+        <div class="stat-card blue"><div>Asientos</div><div style="font-size:24px; font-weight:800">1,240</div></div>
+        <div class="stat-card green"><div>Clientes</div><div style="font-size:24px; font-weight:800">48</div></div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700; margin-bottom:10px">Acceso Rápido a Clientes</div>
+        <table id="dash-clientes-list">
+            <thead><tr><th>RUC</th><th>Razón Social</th><th>Impuestos</th></tr></thead>
+            <tbody><tr><td>80012345-0</td><td>Ejemplo S.A.</td><td>IVA, IRE</td></tr></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="page" id="page-clientes">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+      <div style="display:flex; justify-content:space-between; margin-bottom:20px">
         <h2 data-i18n="nav_clients">Directorio de Clientes</h2>
-        <button class="btn btn-primary" onclick="openModal()">+ Nuevo Cliente</button>
+        <button class="btn btn-primary" onclick="openModalCliente()">+ Nuevo Cliente</button>
       </div>
       <div class="card">
-         <p>Aquí aparecerá tu lista de clientes conectada a Firebase.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social</th><th>Contacto</th><th>Acciones</th></tr></thead>
+                <tbody id="tabla-clientes-list"></tbody>
+            </table>
+        </div>
       </div>
     </div>
 
     <div class="page" id="page-iva">
-        <h2>Liquidación de IVA</h2>
-        <div class="card">Módulo de cálculo según Formulario 120.</div>
+      <h2>Liquidación IVA Form. 120</h2>
+      <div class="card">Módulo de impuestos en desarrollo...</div>
     </div>
 
     <div class="page" id="page-gemini">
-        <h2 data-i18n="ai_h2">🤖 Soporte Claude IA</h2>
-        <div class="card">Asistente Ley 6380/2019.</div>
+      <h2 data-i18n="ai_h2">🤖 Soporte Claude IA</h2>
+      <div class="card" style="height:60vh; display:flex; flex-direction:column">
+        <div id="chat_box" style="flex:1; overflow-y:auto; padding:10px; background:#f9f9f9">Chat iniciado...</div>
+        <div style="display:flex; gap:10px; padding-top:10px">
+            <input type="text" id="chat_input" placeholder="Consulte sobre la Ley 6380..." style="flex:1">
+            <button class="btn btn-primary">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cliente">
+  <div class="modal">
+    <div class="modal-header">
+      <span style="font-weight:700">Registrar Nuevo Contribuyente</span>
+      <button class="win-btn" onclick="closeModalCliente()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>RUC (Sin DV)</label>
+        <input type="text" id="cli_ruc" placeholder="80001234">
+      </div>
+      <div class="form-group">
+        <label data-i18n="tbl_name">Nombre / Razón Social</label>
+        <input type="text" id="cli_nombre" placeholder="Juan Pérez">
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px">
+        <button class="btn btn-outline" onclick="closeModalCliente()">Cancelar</button>
+        <button class="btn btn-primary" onclick="alert('Guardando en Firebase...')">Guardar Cliente</button>
+      </div>
     </div>
   </div>
 </div>
 
-<div id="modal-cliente" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-    <div class="card" style="width:400px; margin-bottom:0">
-        <h3>Registrar Nuevo Cliente</h3><br>
-        <div class="form-group">
-            <label>RUC</label>
-            <input type="text" id="nuevo_ruc" placeholder="Ingrese RUC">
-        </div>
-        <div class="form-group">
-            <label data-i18n="tbl_name">Nombre</label>
-            <input type="text" id="nuevo_nombre" placeholder="Nombre completo">
-        </div>
-        <div style="display:flex; justify-content:flex-end; gap:10px">
-            <button class="btn" onclick="closeModal()">Cerrar</button>
-            <button class="btn btn-primary" onclick="alert('Conectando a Firebase...')">Guardar</button>
-        </div>
-    </div>
-</div>
-
 <script>
-// NAVEGACIÓN
+// --- LÓGICA DE NAVEGACIÓN ---
 function showPage(pageId, element) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + pageId).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     if(element) element.classList.add('active');
+    // Actualizar título de topbar
+    const title = element ? element.innerText : "Dashboard";
+    document.getElementById('topbar-title').innerText = title;
 }
 
-// MODAL
-function openModal() { document.getElementById('modal-cliente').style.display = 'flex'; }
-function closeModal() { document.getElementById('modal-cliente').style.display = 'none'; }
+// --- LÓGICA DE MODALES ---
+function openModalCliente() { document.getElementById('modal-cliente').classList.add('open'); }
+function closeModalCliente() { document.getElementById('modal-cliente').classList.remove('open'); }
 
-// TRADUCCIÓN
+// --- LÓGICA DE IDIOMAS ---
 const traducciones = {
     es: {
-        nav_dash: "Dashboard", nav_clients: "Clientes (Cartera)", nav_iva: "Estado IVA (120)",
-        nav_ire: "IRE General", nav_irp: "Estado IRP (515)", nav_ai: "Claude IA",
-        dash_h2: "Estudio Contable ContaPY 👋", tbl_name: "Razón Social / Nombre"
+        menu_main: "Principal", nav_dash: "Dashboard", nav_clients: "Clientes (Cartera)",
+        nav_iva: "Estado IVA (120)", nav_ire: "IRE General", nav_irp: "Estado IRP (515)",
+        nav_ai: "Soporte Claude IA", dash_h2: "Estudio Contable ContaPY 👋",
+        tbl_name: "Razón Social / Nombre", ai_h2: "Soporte Claude IA"
     },
     en: {
-        nav_dash: "Main Panel", nav_clients: "Client Portfolio", nav_iva: "VAT Status (120)",
-        nav_ire: "General IRE", nav_irp: "Personal Tax (515)", nav_ai: "Claude AI",
-        dash_h2: "ContaPY Accounting Office 👋", tbl_name: "Business Name"
+        menu_main: "Main Menu", nav_dash: "Control Panel", nav_clients: "Client Portfolio",
+        nav_iva: "VAT Status (120)", nav_ire: "General IRE", nav_irp: "Personal Tax (515)",
+        nav_ai: "Claude AI Support", dash_h2: "ContaPY Accounting Firm 👋",
+        tbl_name: "Business Name", ai_h2: "Claude AI Assistant"
     },
     pt: {
-        nav_dash: "Painel", nav_clients: "Carteira de Clientes", nav_iva: "Estado IVA (120)",
-        nav_ire: "IRE Geral", nav_irp: "Estado IRP (515)", nav_ai: "Claude IA",
-        dash_h2: "Escritório Contábil ContaPY 👋", tbl_name: "Razão Social"
+        menu_main: "Principal", nav_dash: "Painel", nav_clients: "Carteira de Clientes",
+        nav_iva: "Estado IVA (120)", nav_ire: "IRE Geral", nav_irp: "Estado IRP (515)",
+        nav_ai: "Suporte Claude IA", dash_h2: "Escritório Contábil ContaPY 👋",
+        tbl_name: "Razão Social / Nome", ai_h2: "Suporte Claude IA"
     }
 };
 
@@ -174,6 +237,10 @@ function changeLang(lang) {
         if (traducciones[lang][key]) el.innerText = traducciones[lang][key];
     });
 }
+
+// Nota: Aquí reintegrarás tus funciones de Firebase (Auth, Firestore) 
+// cuando decidas activarlas de nuevo.
 </script>
+
 </body>
 </html>
