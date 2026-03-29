@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v1.1 — Hybrid Cloud Edition</title>
+<title>ContaPY v1.1 — Premium Cloud Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- Firebase v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -39,12 +39,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
 .topbar select, .topbar .btn-icon { -webkit-app-region: no-drag; }
 
-.content{flex:1;overflow-y:auto;padding:20px;}
+.content{flex:1;overflow-y:auto;padding:20px;position:relative;}
 .page{display:none} .page.active{display:block}
 .card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:18px}
 .card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 
-/* FORMULARIOS EXE FIX: Obligatorio para escribir en el EXE */
+/* INPUTS EXE FIX: Obligatorio para escribir en el EXE */
 input, select, textarea { 
     padding:8px 10px; border:1.5px solid var(--border); border-radius:7px; font-size:13px; 
     background:var(--white); outline:none;
@@ -56,18 +56,28 @@ input, select, textarea {
 .btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;transition:0.1s}
 .btn-primary{background:var(--accent);color:white}
 .btn-secondary{background:var(--accent2);color:white}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}
 
+/* WIZARD DESIGN */
+.wiz-header{display:flex;gap:10px;margin-bottom:20px;align-items:center}
+.wiz-bullet{width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--text-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.wiz-bullet.active{background:var(--accent);color:white}
+.wiz-bullet.done{background:var(--success);color:white}
+.wiz-step{display:none} .wiz-step.active{display:block}
+
+/* TABLES & LIBROS */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
-thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border)}
+thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border);white-space:nowrap}
 tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.monto{font-family:'DM Mono',monospace;text-align:right}
 
-.badge-tax { display:inline-block; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:700; margin-right:3px; background:#e5e7eb; color:#374151; border: 1px solid #d1d5db; }
-.badge-tax.active { background:var(--accent2); color:white; border-color:var(--accent2); }
-
+/* MODALES */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;overflow:auto;}
 .modal-overlay.open{display:flex}
-.modal{background:white;border-radius:14px;width:90%;max-width:550px;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column;max-height:88vh;}
+.modal{background:var(--white);border-radius:14px;width:90%;max-width:680px;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column;max-height:88vh;}
+.modal-drag-header{background:var(--bg);padding:10px 15px;cursor:move;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;user-select:none;border-bottom:1px solid var(--border)}
+.modal-body-scroll{padding:24px;overflow:y:auto;flex:1; -webkit-user-select:text; user-select:text}
 
 .login-wrap{position:fixed;inset:0;background:var(--sidebar);display:flex;align-items:center;justify-content:center;z-index:99999}
 .login-card{background:white;border-radius:18px;padding:36px;width:100%;max-width:380px;text-align:center}
@@ -75,6 +85,8 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
 </style>
 </head>
 <body>
+
+<datalist id="planCuentasRes4814"></datalist>
 
 <!-- LOGIN -->
 <div class="login-wrap" id="login-wrap">
@@ -86,7 +98,7 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
         <label data-i18n="lbl_user">Usuario</label><input type="text" id="lu" placeholder="ejemplo@correo.com" style="width:100%; margin-bottom:10px">
         <label data-i18n="lbl_pass">Contraseña</label><input type="password" id="lp" placeholder="••••••••" style="width:100%; margin-bottom:20px">
     </div>
-    <button class="btn btn-primary" style="width:100%; height:45px; justify-content:center" onclick="window.doLogin()" data-i18n="btn_login">Ingresar</button>
+    <button class="btn btn-primary" style="width:100%; height:45px; justify-content:center" onclick="window.doLogin()" data-i18n="btn_login">Ingresar al Sistema</button>
     <p id="l-msg" style="color:red;font-size:11px;margin-top:10px"></p>
   </div>
 </div>
@@ -98,16 +110,13 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_main">Principal</div>
-    <div class="nav-item active" id="nav_dash" onclick="showPage('dashboard',this)">🏠 <span data-i18n="nav_dash">Dashboard</span></div>
-    <div class="nav-item" id="nav_cli" onclick="showPage('clientes',this)">🏢 <span data-i18n="nav_clients">Clientes (Cartera)</span></div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)">🏠 <span data-i18n="nav_dash">Dashboard</span></div>
+    <div class="nav-item" onclick="showPage('clientes',this)">🏢 <span data-i18n="nav_clients">Clientes (Cartera)</span></div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_billing">Facturación / Tesorería</div>
-    <div class="nav-item" onclick="showPage('sifen',this)"><span class="icon">📥</span><span>Carga / SIFEN</span></div>
-  </div>
-  <div class="sidebar-section">
-    <div class="sidebar-label">Herramientas</div>
-    <div class="nav-item" onclick="showPage('claude',this)" style="color:#f59e0b">🤖 <span data-i18n="nav_ai">Soporte Claude IA</span></div>
+    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span>Carga Inteligente</span></div>
+    <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="window.openWizard()"><span class="icon">➕</span><span data-i18n="nav_new">Nuevo Asiento</span></div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_admin">Administración</div>
@@ -131,42 +140,78 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
-      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0;">
-        <div class="card" style="border-top:3px solid var(--accent2)"><div style="font-size:11px;color:#888" data-i18n="dash_s2">CLIENTES ACTIVOS</div><div class="stat-value" id="dash_cli_count">0</div></div>
-        <div class="card" style="border-top:3px solid var(--success)"><div style="font-size:11px;color:#888" id="sync_status">ESTADO SINCRONIZACIÓN</div><div class="stat-value" style="font-size:14px; color:var(--success)" id="txt_sync">Local: OK | Nube: OK</div></div>
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0;">
+        <div class="card" style="border-top:3px solid var(--accent2)"><div style="font-size:11px;color:#888" data-i18n="dash_s1">ASIENTOS</div><div class="stat-value" id="dash_doc_count">0</div></div>
+        <div class="card" style="border-top:3px solid var(--success)"><div style="font-size:11px;color:#888" data-i18n="dash_s2">CLIENTES</div><div class="stat-value" id="dash_cli_count">0</div></div>
       </div>
-      <div class="card">
-        <h3 data-i18n="dash_t1">Vista Rápida de Clientes</h3>
-        <table id="dash-clientes-list"></table>
-      </div>
+      <div class="card"><h3 data-i18n="dash_t1">Acceso Rápido a Clientes</h3><table id="dash-clientes-list"></table></div>
     </div>
 
-    <!-- CLIENTES -->
+    <!-- DIRECTORIO DE CLIENTES -->
     <div class="page" id="page-clientes">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <h2 data-i18n="cli_h2">Directorio de Clientes</h2>
         <button class="btn btn-primary" onclick="window.openModalCliente()">+ <span data-i18n="nav_new">Nuevo</span></button>
       </div>
-      <div class="card">
-        <table id="tabla-clientes-list"></table>
-      </div>
+      <div class="card"><table id="tabla-clientes-list"></table></div>
     </div>
 
     <!-- ADMIN -->
     <div class="page" id="page-admin">
       <h2 data-i18n="nav_adm">Configuración</h2>
-      <div class="card" style="margin-top:20px; border-left: 4px solid var(--accent2)">
-        <h3 data-i18n="update_title">Actualización y Nube</h3>
-        <p style="font-size:13px; margin-bottom:15px">Sincroniza manualmente si has hecho cambios en otra PC.</p>
-        <button class="btn btn-secondary" onclick="window.buscarActualizaciones()">🔄 Forzar Sincronización</button>
+      <div class="card" style="margin-top:20px">
+        <button class="btn btn-secondary" onclick="window.buscarActualizaciones()">🔄 Sincronizar con Netlify</button>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- CLAUDE IA -->
-    <div class="page" id="page-claude">
-        <h2 data-i18n="nav_ai">Soporte Claude IA</h2>
-        <div class="card" style="margin-top:20px; height:300px; background:#f9f9f9">
-            <p style="padding:20px; color:#888">Asistente v1.1 listo...</p>
+<!-- WIZARD CARGA COMPROBANTES (RESTAURADO) -->
+<div class="modal-overlay" id="modal-wizard">
+  <div class="modal">
+    <div class="modal-drag-header"><b>🧾 Asistente de Carga Contable</b><button onclick="window.closeModal('modal-wizard')" style="background:none;border:none;cursor:pointer">✕</button></div>
+    <div class="modal-body-scroll">
+        <div class="wiz-header">
+            <div id="wb-1" class="wiz-bullet active">1</div> <span>Datos y Montos</span>
+            <div style="flex:1; border-bottom:1px dashed #ddd"></div>
+            <div id="wb-2" class="wiz-bullet">2</div> <span>Cobro/Pago</span>
+            <div style="flex:1; border-bottom:1px dashed #ddd"></div>
+            <div id="wb-3" class="wiz-bullet">3</div> <span>Asiento</span>
+        </div>
+
+        <div id="ws-1" class="wiz-step active">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px">
+                <div class="form-group"><label>Cliente Destino</label><select id="wiz_cli"></select></div>
+                <div class="form-group"><label>Operación</label><select id="wiz_oper"><option value="compra">Egreso / Compra</option><option value="venta">Ingreso / Venta</option></select></div>
+                <div class="form-group"><label>RUC Tercero</label><input type="text" id="wiz_ruc_t"></div>
+                <div class="form-group"><label>Razón Social</label><input type="text" id="wiz_nom_t"></div>
+                <div class="form-group"><label>Monto Total ₲</label><input type="number" id="wiz_monto_total" oninput="window.calcIVA()"></div>
+                <div class="form-group"><label>Aplicación de IVA</label>
+                    <select id="wiz_iva_tipo" onchange="window.calcIVA()">
+                        <option value="10">Solo 10%</option><option value="5">Solo 5%</option>
+                        <option value="0">Exenta</option><option value="mixta">Mixta (Separado)</option>
+                    </select>
+                </div>
+            </div>
+            <!-- SECCIÓN MIXTA -->
+            <div id="wiz_mixta_box" style="display:none; margin-top:15px; background:#f9fafb; padding:15px; border-radius:8px">
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px">
+                    <div class="form-group"><label>Grav. 10%</label><input type="number" id="wiz_m10" value="0"></div>
+                    <div class="form-group"><label>Grav. 5%</label><input type="number" id="wiz_m5" value="0"></div>
+                    <div class="form-group"><label>Exenta</label><input type="number" id="wiz_mex" value="0"></div>
+                </div>
+            </div>
+            <div style="text-align:right; margin-top:20px"><button class="btn btn-primary" onclick="window.wizNext(2)">Siguiente ➡️</button></div>
+        </div>
+        
+        <div id="ws-2" class="wiz-step">
+            <label>Condición:</label><select id="wiz_cond"><option value="contado">Contado</option><option value="credito">Crédito</option></select>
+            <div style="text-align:right; margin-top:20px"><button class="btn" onclick="window.wizNext(1)">Atrás</button><button class="btn btn-primary" onclick="window.wizNext(3)">Siguiente ➡️</button></div>
+        </div>
+
+        <div id="ws-3" class="wiz-step">
+            <p>Se generará un asiento automático según la Ley 6380/19.</p>
+            <div style="text-align:right; margin-top:20px"><button class="btn" onclick="window.wizNext(2)">Atrás</button><button class="btn btn-primary" onclick="window.guardarTodo()">💾 Guardar y Asentar</button></div>
         </div>
     </div>
   </div>
@@ -175,41 +220,32 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
 <!-- MODAL CLIENTE -->
 <div class="modal-overlay" id="modal-cliente">
   <div class="modal">
-    <div class="modal-drag-header"><b data-i18n="mod_tit">Configurar Cliente</b><button onclick="window.closeModal('modal-cliente')" style="background:none;border:none;cursor:pointer">✕</button></div>
-    <div style="padding:25px">
+    <div class="modal-drag-header"><b data-i18n="mod_tit">Datos del Cliente</b><button onclick="window.closeModal('modal-cliente')" style="background:none;border:none;cursor:pointer">✕</button></div>
+    <div class="modal-body-scroll">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
-            <div class="form-group"><label>RUC / ID:</label><input type="text" id="cli_ruc" placeholder="80000000-0"></div>
-            <div class="form-group"><label>Nombre y Apellido:</label><input type="text" id="cli_nom"></div>
-            <div class="form-group"><label>Correo Electrónico:</label><input type="email" id="cli_correo"></div>
-            <div class="form-group"><label>Línea / Teléfono:</label><input type="text" id="cli_tel"></div>
+            <div class="form-group"><label>RUC / ID:</label><input type="text" id="cli_ruc"></div>
+            <div class="form-group"><label>Razón Social:</label><input type="text" id="cli_nom"></div>
+            <div class="form-group"><label>Correo:</label><input type="email" id="cli_correo"></div>
+            <div class="form-group"><label>Teléfono:</label><input type="text" id="cli_tel"></div>
         </div>
-        
         <div style="margin-top:15px; padding:15px; background:var(--bg); border-radius:10px">
-            <label style="font-weight:700; display:block; margin-bottom:10px">IMPUESTOS ACTIVOS:</label>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
-                <label><input type="checkbox" id="tax_iva"> IVA</label>
-                <label><input type="checkbox" id="tax_ire_gen"> IRE Gral</label>
-                <label><input type="checkbox" id="tax_ire_sim"> IRE Simple</label>
-                <label><input type="checkbox" id="tax_irp"> IRP</label>
+            <label style="font-weight:700">IMPUESTOS ACTIVOS:</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px">
+                <label><input type="checkbox" id="t_iva"> IVA</label><label><input type="checkbox" id="t_ire_g"> IRE Gral</label>
+                <label><input type="checkbox" id="t_ire_s"> IRE Simple</label><label><input type="checkbox" id="t_irp"> IRP</label>
             </div>
         </div>
-
-        <div style="text-align:right; margin-top:25px">
-            <button class="btn btn-primary" style="width:100%" onclick="window.guardarCliente()">💾 Guardar en PC y Nube</button>
-        </div>
+        <div style="text-align:right; margin-top:25px"><button class="btn btn-primary" style="width:100%" onclick="window.guardarCliente()">💾 Guardar Datos</button></div>
     </div>
   </div>
 </div>
 
 <script>
-// --- LOGICA DE DATOS HIBRIDA ---
-window.dbClientes = JSON.parse(localStorage.getItem('contapy_local_db')) || [];
-window.editIdx = -1;
+window.dbClientes = JSON.parse(localStorage.getItem('contapy_db_v11')) || [];
 
 const translations = {
-    es: { top_title:"Dashboard Principal", nav_dash:"Dashboard", nav_clients:"Clientes (Cartera)", nav_ai:"Soporte Claude IA", nav_adm:"Perfil / Sistema", nav_logout:"Cerrar Sesión", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Vista Rápida", cli_h2:"Directorio de Clientes", tbl_name:"Razón Social", tbl_actions:"Acción", nav_new:"Nuevo", btn_login:"Ingresar", mod_tit:"Datos del Cliente", dash_s2:"CLIENTES ACTIVOS" },
-    en: { top_title:"Main Dashboard", nav_dash:"Dashboard", nav_clients:"Clients Portfolio", nav_ai:"Claude AI Support", nav_adm:"System", nav_logout:"Logout", dash_h2:"ContaPY Accounting 👋", dash_t1:"Quick Access", cli_h2:"Clients Directory", tbl_name:"Legal Name", tbl_actions:"Action", nav_new:"New", btn_login:"Login", mod_tit:"Client Details", dash_s2:"ACTIVE CLIENTS" },
-    pt: { top_title:"Painel Principal", nav_dash:"Painel", nav_clients:"Clientes (Carteira)", nav_ai:"Suporte Claude IA", nav_adm:"Sistema", nav_logout:"Sair", dash_h2:"Estúdio Contábil ContaPY 👋", dash_t1:"Vista Rápida", cli_h2:"Diretório de Clientes", tbl_name:"Razão Social", tbl_actions:"Ação", nav_new:"Novo", btn_login:"Entrar", mod_tit:"Dados do Cliente", dash_s2:"CLIENTES ATIVOS" }
+    es: { top_title:"Dashboard Principal", nav_dash:"Dashboard", nav_clients:"Clientes (Cartera)", nav_adm:"Perfil / Sistema", nav_logout:"Cerrar Sesión", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido", cli_h2:"Directorio de Clientes", tbl_name:"Razón Social", tbl_actions:"Acción", nav_new:"Nuevo", btn_login:"Ingresar" },
+    en: { top_title:"Main Dashboard", nav_dash:"Dashboard", nav_clients:"Clients Portfolio", nav_adm:"System", nav_logout:"Logout", dash_h2:"ContaPY Accounting Studio 👋", dash_t1:"Quick Access", cli_h2:"Directory", tbl_name:"Legal Name", tbl_actions:"Action", nav_new:"New", btn_login:"Login" }
 };
 
 window.changeLang = function(lang) {
@@ -219,7 +255,6 @@ window.changeLang = function(lang) {
         const key = el.getAttribute('data-i18n');
         if(t[key]) el.innerText = t[key];
     });
-    document.getElementById('txt_topbar').innerText = t.top_title;
 };
 
 window.showPage = function(name, el) {
@@ -229,80 +264,57 @@ window.showPage = function(name, el) {
     if(el) el.classList.add('active');
 };
 
-window.openModalCliente = function(idx = -1) {
-    window.editIdx = idx;
-    document.getElementById('cli_ruc').value = ''; document.getElementById('cli_nom').value = '';
-    document.getElementById('cli_correo').value = ''; document.getElementById('cli_tel').value = '';
-    document.querySelectorAll('#modal-cliente input[type="checkbox"]').forEach(c => c.checked = false);
-
-    if(idx >= 0) {
-        const c = window.dbClientes[idx];
-        document.getElementById('cli_ruc').value = c.ruc;
-        document.getElementById('cli_nom').value = c.nom;
-        document.getElementById('cli_correo').value = c.correo || '';
-        document.getElementById('cli_tel').value = c.tel || '';
-        if(c.taxes) {
-            document.getElementById('tax_iva').checked = c.taxes.includes('IVA');
-            document.getElementById('tax_ire_gen').checked = c.taxes.includes('IRE General');
-            document.getElementById('tax_ire_sim').checked = c.taxes.includes('IRE Simple');
-            document.getElementById('tax_irp').checked = c.taxes.includes('IRP');
-        }
-    }
-    document.getElementById('modal-cliente').classList.add('open');
-    setTimeout(() => document.getElementById('cli_ruc').focus(), 300);
-};
-
+window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
 window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
 
+window.openWizard = function() {
+    const sel = document.getElementById('wiz_cli'); sel.innerHTML = '';
+    window.dbClientes.forEach((c,i) => sel.innerHTML += `<option value="${i}">${c.nom}</option>`);
+    window.wizNext(1); window.openModal('modal-wizard');
+};
+
+window.wizNext = function(n) {
+    document.querySelectorAll('.wiz-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('ws-'+n).classList.add('active');
+    document.querySelectorAll('.wiz-bullet').forEach((b,i) => {
+        b.className = 'wiz-bullet';
+        if(i+1 < n) b.classList.add('done');
+        if(i+1 == n) b.classList.add('active');
+    });
+};
+
+window.calcIVA = function() {
+    const tipo = document.getElementById('wiz_iva_tipo').value;
+    document.getElementById('wiz_mixta_box').style.display = (tipo == 'mixta') ? 'block' : 'none';
+};
+
+window.openModalCliente = function() {
+    document.getElementById('cli_ruc').value = ''; document.getElementById('cli_nom').value = '';
+    window.openModal('modal-cliente');
+};
+
 window.guardarCliente = async function() {
-    const r = document.getElementById('cli_ruc').value.trim();
-    const n = document.getElementById('cli_nom').value.trim();
-    if(!r || !n) return alert("RUC y Nombre son requeridos");
-
-    const taxes = [];
-    if(document.getElementById('tax_iva').checked) taxes.push('IVA');
-    if(document.getElementById('tax_ire_gen').checked) taxes.push('IRE General');
-    if(document.getElementById('tax_ire_sim').checked) taxes.push('IRE Simple');
-    if(document.getElementById('tax_irp').checked) taxes.push('IRP');
-
-    const obj = { 
-        ruc: r, nom: n, correo: document.getElementById('cli_correo').value,
-        tel: document.getElementById('cli_tel').value, taxes: taxes,
-        id: (window.editIdx >= 0) ? window.dbClientes[window.editIdx].id : Date.now()
-    };
-
-    if(window.editIdx >= 0) window.dbClientes[window.editIdx] = obj;
-    else window.dbClientes.push(obj);
-
-    // GUARDAR LOCAL (INMEDIATO)
-    localStorage.setItem('contapy_local_db', JSON.stringify(window.dbClientes));
-    window.render();
-    window.closeModal('modal-cliente');
-
-    // SINCRONIZAR NUBE (SEGUNDO PLANO)
-    document.getElementById('txt_sync').innerText = "Local: OK | Nube: Sincronizando...";
+    var r = document.getElementById('cli_ruc').value.trim(), n = document.getElementById('cli_nom').value.trim();
+    if(!r || !n) return alert("Faltan datos");
+    window.dbClientes.push({ruc:r, nom:n, id:Date.now()});
+    localStorage.setItem('contapy_db_v11', JSON.stringify(window.dbClientes));
     if(window.saveData) await window.saveData();
+    window.render(); window.closeModal('modal-cliente');
 };
 
 window.render = function() {
     const t = document.getElementById('tabla-clientes-list');
     const d = document.getElementById('dash-clientes-list');
-    if(!t) return;
-    t.innerHTML = '<thead><tr><th>RUC</th><th>Nombre</th><th>Impuestos</th><th>Acción</th></tr></thead>';
-    d.innerHTML = '<thead><tr><th>RUC</th><th>Nombre</th><th>Impuestos</th></tr></thead>';
-    
+    if(!t) return; t.innerHTML = '<thead><tr><th>RUC</th><th>Nombre</th><th>Acción</th></tr></thead>';
+    d.innerHTML = '<thead><tr><th>RUC</th><th>Nombre</th></tr></thead>';
     window.dbClientes.forEach((c, i) => {
-        let taxBadges = (c.taxes || []).map(tx => `<span class="badge-tax active">${tx}</span>`).join('');
-        t.innerHTML += `<tr><td>${c.ruc}</td><td><b>${c.nom}</b></td><td>${taxBadges}</td><td><button class="btn btn-outline btn-sm" onclick="window.openModalCliente(${i})">✏️</button></td></tr>`;
-        d.innerHTML += `<tr><td>${c.ruc}</td><td><b>${c.nom}</b></td><td>${taxBadges}</td></tr>`;
+        t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td><button class="btn btn-outline btn-sm">✏️</button></td></tr>`;
+        d.innerHTML += `<tr><td>${c.ruc}</td><td><b>${c.nom}</b></td></tr>`;
     });
     document.getElementById('dash_cli_count').innerText = window.dbClientes.length;
 };
 
-window.buscarActualizaciones = function() {
-    window.location.href = window.location.pathname + "?u=" + Date.now();
-};
-
+window.buscarActualizaciones = function() { window.location.href = window.location.pathname + "?u=" + Date.now(); };
 window.doLogin = function(){}; window.doLogout = function(){}; window.saveData = function(){};
 </script>
 
@@ -327,31 +339,23 @@ window.doLogin = function(){}; window.doLogout = function(){}; window.saveData =
   window.doLogin = async function() {
       const u = document.getElementById('lu').value, p = document.getElementById('lp').value;
       try { await signInWithEmailAndPassword(auth, u, p); } 
-      catch (e) { document.getElementById('l-msg').innerText = "Credenciales incorrectas"; }
+      catch (e) { document.getElementById('l-msg').innerText = "Acceso denegado"; }
   };
 
   window.doLogout = async function() { await signOut(auth); location.reload(); };
 
   window.saveData = async function() {
-      try { 
-          await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes }); 
-          document.getElementById('txt_sync').innerText = "Local: OK | Nube: OK";
-      } catch (e) { 
-          document.getElementById('txt_sync').innerText = "Local: OK | Nube: ERROR (Offline)";
-      }
+      await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes });
   };
 
   onAuthStateChanged(auth, async (user) => {
       if (user) {
           document.getElementById('login-wrap').style.display = 'none';
-          window.render(); // Primero cargar local
           const snap = await getDoc(doc(db, "sistema", "datos_principales"));
-          if (snap.exists()) {
-              window.dbClientes = snap.data().clientes || [];
-              localStorage.setItem('contapy_local_db', JSON.stringify(window.dbClientes));
-              window.render(); // Actualizar con lo de la nube
-          }
+          if (snap.exists()) window.dbClientes = snap.data().clientes || [];
+          window.render();
           const l = localStorage.getItem('contapy_lang') || 'es';
+          document.getElementById('lang_sel').value = l;
           window.changeLang(l);
       } else {
           document.getElementById('login-wrap').style.display = 'flex';
