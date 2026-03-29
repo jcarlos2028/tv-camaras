@@ -3,152 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v4.0 — Sistema Contable Cloud + Claude IA</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>ContaPY v4.0 — Sistema Contable Cloud</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#f0f2f5;--sidebar:#0f1923;--sidebar-hover:#1a2535;--accent:#e63946;
-  --accent2:#2196f3;--white:#fff;--card:#fff;--text:#1a1a2e;--text-light:#6b7280;
-  --border:#e5e7eb;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;
-  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
-  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
+  --bg:#f0f2f5;--sidebar:#0f1923;--accent:#e63946;--accent2:#2196f3;--white:#fff;
+  --text:#1a1a2e;--text-light:#6b7280;--border:#e5e7eb;--success:#10b981;--danger:#ef4444;
+  --shadow:0 1px 3px rgba(0,0,0,.1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
-.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;z-index:100;transition:all 0.3s;}
-.sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
-.logo-mark{display:flex;align-items:center;gap:10px}
-.logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.logo-text{color:white;font-size:17px;font-weight:700;letter-spacing:-.5px}
-.logo-sub{color:rgba(255,255,255,.3);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:1px}
-.sidebar-section{padding:12px 10px 2px}
-.sidebar-label{color:rgba(255,255,255,.25);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:0 8px;margin-bottom:3px}
-.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;color:rgba(255,255,255,.55);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;margin-bottom:1px}
-.nav-item:hover{background:var(--sidebar-hover);color:rgba(255,255,255,.85)}
-.nav-item.active{background:var(--accent);color:white}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;}
-.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0}
-.topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
-.btn-icon { cursor: pointer; font-size: 20px; }
-.content{flex:1;overflow-y:auto;padding:20px;position:relative;}
+.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;color:white;padding:20px 10px}
+.nav-item{padding:12px;cursor:pointer;border-radius:8px;margin-bottom:5px;display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.7)}
+.nav-item:hover, .nav-item.active{background:var(--accent);color:white}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:white;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.content{padding:20px;overflow-y:auto;flex:1}
 .page{display:none} .page.active{display:block}
-.card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:18px}
-.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat-card{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden}
-.stat-card.clickable{cursor:pointer;transition:transform 0.1s;}
-.stat-card.clickable:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--accent2)}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
-.stat-card.blue::before{background:var(--accent2)}
-.stat-card.green::before{background:var(--success)}
-.stat-label{font-size:11px;color:var(--text-light);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
-.stat-value{font-size:22px;font-weight:700;color:var(--text);margin:6px 0 3px;letter-spacing:-1px}
-.stat-sub{font-size:11px;color:var(--text-light)}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border);white-space:nowrap}
-tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
-tbody tr:hover{background:#fafafa}
-.badge-status{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600}
-.badge-status.ok{background:#d1fae5;color:#065f46}
-.badge-status.info{background:#dbeafe;color:#1e40af}
-.badge-status.inactive{background:#e5e7eb;color:#4b5563}
-.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
-label{font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase}
-input,select,textarea{padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);outline:none;}
-input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
-.btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;transition:0.1s}
-.btn-primary{background:var(--accent);color:white} 
-.btn-secondary{background:var(--accent2);color:white}
-.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}
-.btn-sm{padding:5px 10px;font-size:11px}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.card{background:white;padding:20px;border-radius:12px;box-shadow:var(--shadow);margin-bottom:20px}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{text-align:left;font-size:11px;color:var(--text-light);text-transform:uppercase;padding:10px;border-bottom:2px solid var(--border)}
+td{padding:12px 10px;border-bottom:1px solid var(--border);font-size:13px}
+.btn{padding:8px 16px;border-radius:8px;cursor:pointer;border:none;font-weight:600;font-family:inherit}
+.btn-primary{background:var(--accent);color:white}
+.btn-outline{background:transparent;border:1px solid var(--border)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:var(--white);border-radius:14px;width:90%;max-width:600px;box-shadow:var(--shadow-lg);padding:24px;position:relative}
-.modal-header{margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
-.login-wrap{position:fixed;inset:0;background:linear-gradient(135deg,#0f1923 0%,#1a2535 50%,#0f1923 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
-.login-card{background:white;border-radius:18px;padding:36px;width:100%;max-width:380px}
+.modal{background:white;padding:25px;border-radius:15px;width:500px;max-width:95%}
+.form-group{margin-bottom:15px}
+label{display:block;font-size:11px;font-weight:700;margin-bottom:5px;color:var(--text-light)}
+input, select{width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;outline:none}
+.badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;background:var(--bg)}
+.badge-ok{background:#d1fae5;color:#065f46}
 </style>
 </head>
 <body>
 
-<!-- PANTALLA DE LOGIN -->
-<div class="login-wrap" id="login-wrap">
-  <div class="login-card">
-    <div style="text-align:center;margin-bottom:28px">
-      <h1 style="font-size:24px;font-weight:800">ContaPY Cloud</h1>
-      <p style="font-size:12px;color:var(--text-light)">Ingrese sus credenciales</p>
-    </div>
-    <div class="form-group"><label>Usuario</label><input type="text" id="lu" placeholder="ejemplo@correo.com"></div>
-    <div class="form-group"><label>Contraseña</label><input type="password" id="lp" placeholder="••••••••"></div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:15px" onclick="window.doLogin()">Ingresar</button>
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap" style="position:fixed;inset:0;background:var(--sidebar);z-index:9999;display:flex;align-items:center;justify-content:center">
+  <div style="background:white;padding:40px;border-radius:20px;width:350px">
+    <h2 style="text-align:center;margin-bottom:20px">ContaPY Cloud</h2>
+    <input type="text" id="lu" placeholder="Usuario (Email)" style="margin-bottom:10px">
+    <input type="password" id="lp" placeholder="Contraseña" style="margin-bottom:20px">
+    <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Ingresar</button>
   </div>
 </div>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v4.0 Cloud</div></div></div>
-  </div>
-  <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_main">Principal</div>
-    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span><span data-i18n="nav_dash">Dashboard</span></div>
-    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span><span data-i18n="nav_clients">Clientes</span></div>
-    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b;font-weight:600"><span class="icon">🤖</span><span data-i18n="nav_ai">Soporte Claude IA</span></div>
-  </div>
-  <div style="margin-top:auto; padding: 20px;">
-      <button class="btn btn-outline" style="width:100%; color: white; border-color: rgba(255,255,255,0.2)" onclick="location.reload()">🚪 Cerrar Sesión</button>
+  <h2 style="padding:10px;font-size:20px;margin-bottom:20px">🧾 ContaPY</h2>
+  <div class="nav-item active" onclick="showPage('dashboard',this)">🏠 <span data-i18n="nav_dash">Dashboard</span></div>
+  <div class="nav-item" onclick="showPage('clientes',this)">🏢 <span data-i18n="nav_clients">Clientes</span></div>
+  <div style="margin-top:auto">
+    <button class="btn" style="background:rgba(255,255,255,0.1);color:white;width:100%" onclick="location.reload()">Cerrar Sesión</button>
   </div>
 </div>
 
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="topbar-title" data-i18n="top_title">Dashboard Principal</div>
-    <select id="lang_sel" onchange="window.changeLang(this.value)" style="padding:4px 8px; font-weight: 600;">
-        <option value="es">🇪🇸 ES</option>
-        <option value="en">🇺🇸 EN</option>
-        <option value="pt">🇧🇷 PT</option>
+    <h3 id="topbar-title">Dashboard</h3>
+    <select id="lang_sel" onchange="window.changeLang(this.value)">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="pt">Português</option>
     </select>
   </div>
 
   <div class="content">
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
-      <div style="margin-bottom:20px">
-        <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
-        <p data-i18n="dash_p" style="font-size:12px; color:var(--text-light)">Sincronización Activa con Firebase</p>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-card blue"><div class="stat-label" data-i18n="dash_s1">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div></div>
-        <div class="stat-card green"><div class="stat-label" data-i18n="dash_s2">Clientes Activos</div><div class="stat-value" id="dash_cli_count">0</div></div>
+      <div class="card">
+        <h2>Bienvenido 👋</h2>
+        <p style="color:var(--text-light)">Sincronización con la nube activa.</p>
       </div>
       <div class="card">
-        <div class="card-title">🏢 Acceso Rápido a Clientes</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social</th><th data-i18n="tbl_contact">Contacto</th><th data-i18n="tbl_taxes">Impuestos</th></tr></thead>
+        <h3>Resumen de Clientes Activos</h3>
+        <table>
+          <thead><tr><th>RUC</th><th>Nombre</th><th>Impuestos</th></tr></thead>
           <tbody id="dash-clientes-list"></tbody>
-        </table></div>
+        </table>
       </div>
     </div>
 
     <!-- PÁGINA CLIENTES -->
     <div class="page" id="page-clientes">
-      <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <div><h2 data-i18n="nav_clients">Directorio de Clientes</h2></div>
-          <button class="btn btn-primary" onclick="window.openModalCliente()">+ Nuevo Cliente</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <h2>Directorio de Clientes</h2>
+        <button class="btn btn-primary" onclick="window.openModalCliente()">+ Nuevo Cliente</button>
       </div>
       <div class="card">
-        <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social</th><th>Estado</th><th data-i18n="tbl_actions">Acciones</th></tr></thead>
+        <table>
+          <thead><tr><th>RUC</th><th>Nombre</th><th>Estado</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-clientes-list"></tbody>
-        </table></div>
+        </table>
       </div>
-    </div>
-    
-    <!-- PÁGINA CLAUDE -->
-    <div class="page" id="page-gemini">
-        <h2>🤖 Soporte Claude IA</h2>
-        <p>Asistente contable especializado (Próximamente...)</p>
     </div>
   </div>
 </div>
@@ -156,153 +103,164 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <!-- MODAL CLIENTE -->
 <div class="modal-overlay" id="modal-cliente">
   <div class="modal">
-    <div class="modal-header"><h3 id="m-cli-title">Configurar Cliente</h3><button onclick="closeModal('modal-cliente')" style="cursor:pointer; border:none; background:none; font-size:20px">✕</button></div>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-        <div class="form-group"><label>RUC</label><input type="text" id="cli_ruc"></div>
-        <div class="form-group"><label>Razón Social</label><input type="text" id="cli_nom"></div>
-        <div class="form-group"><label>Teléfono</label><input type="text" id="cli_tel"></div>
-        <div class="form-group"><label>Correo</label><input type="text" id="cli_correo"></div>
-        <div class="form-group"><label>Tipo</label><select id="cli_tipo"><option value="fisica">Física</option><option value="juridica">Jurídica</option></select></div>
-        <div class="form-group"><label>Estado</label><select id="cli_estado"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div>
+    <h3 id="m-cli-title" style="margin-bottom:20px">Nuevo Cliente</h3>
+    <div class="form-group"><label>RUC</label><input type="text" id="cli_ruc"></div>
+    <div class="form-group"><label>Razón Social / Nombre</label><input type="text" id="cli_nom"></div>
+    <div class="form-group"><label>Estado</label>
+      <select id="cli_estado">
+        <option value="activo">Activo</option>
+        <option value="inactivo">Inactivo</option>
+      </select>
     </div>
-    <div style="margin-top: 15px;">
-        <label style="display:block; margin-bottom: 10px;">Impuestos Aplicables:</label>
-        <label><input type="checkbox" id="tax_iva" checked> IVA</label> &nbsp;
-        <label><input type="checkbox" id="tax_ire_gen"> IRE General</label> &nbsp;
-        <label><input type="checkbox" id="tax_ire_sim"> IRE Simple</label> &nbsp;
-        <label><input type="checkbox" id="tax_irp"> IRP</label>
+    <div style="margin-bottom:20px">
+      <label>Impuestos:</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+        <label style="font-weight:400"><input type="checkbox" id="tax_iva"> IVA</label>
+        <label style="font-weight:400"><input type="checkbox" id="tax_ire"> IRE</label>
+        <label style="font-weight:400"><input type="checkbox" id="tax_irp"> IRP</label>
+      </div>
     </div>
-    <div style="margin-top: 25px; text-align: right;">
-        <button class="btn btn-outline" onclick="closeModal('modal-cliente')">Cancelar</button>
-        <button class="btn btn-primary" onclick="window.guardarCliente()">💾 Guardar Cliente</button>
+    <div style="text-align:right">
+      <button class="btn btn-outline" onclick="window.closeModal('modal-cliente')">Cancelar</button>
+      <button class="btn btn-primary" onclick="window.guardarCliente()">Guardar en Nube</button>
     </div>
   </div>
 </div>
 
 <script>
-// VARIABLES GLOBALES
-window.dbUsuarios = []; 
-window.dbClientes = []; 
-window.totalDocs = 0; 
+// VARIABLES GLOBALES (Aseguramos que estén en Window para el EXE)
+window.dbClientes = [];
 window.editandoCliIdx = -1;
 
-// 1. DICCIONARIO DE TRADUCCIÓN
+// 1. DICCIONARIO DE IDIOMAS
 const translations = {
-    es: {
-        nav_dash: "Dashboard", nav_clients: "Clientes (Cartera)", nav_ai: "Soporte Claude IA",
-        dash_h2: "Estudio Contable ContaPY 👋", top_title: "Dashboard Principal",
-        tbl_name: "Razón Social", tbl_contact: "Contacto", tbl_actions: "Acciones",
-        dash_p: "Sincronización Activa con Firebase", dash_s1: "Asientos Generados", dash_s2: "Clientes Activos"
-    },
-    en: {
-        nav_dash: "Dashboard", nav_clients: "Clients", nav_ai: "Claude AI Support",
-        dash_h2: "ContaPY Accounting Studio 👋", top_title: "Main Dashboard",
-        tbl_name: "Legal Name", tbl_contact: "Contact", tbl_actions: "Actions",
-        dash_p: "Active Sync with Firebase", dash_s1: "Total Entries", dash_s2: "Active Clients"
-    },
-    pt: {
-        nav_dash: "Painel", nav_clients: "Clientes", nav_ai: "Suporte Claude IA",
-        dash_h2: "Estúdio Contábil ContaPY 👋", top_title: "Painel Principal",
-        tbl_name: "Razão Social", tbl_contact: "Contato", tbl_actions: "Ações",
-        dash_p: "Sincronização Ativa Firebase", dash_s1: "Lançamentos", dash_s2: "Clientes"
-    }
+  es: { nav_dash: "Inicio", nav_clients: "Clientes", top_title: "Dashboard" },
+  en: { nav_dash: "Home", nav_clients: "Clients", top_title: "Control Panel" },
+  pt: { nav_dash: "Início", nav_clients: "Clientes", top_title: "Painel" }
 };
 
-// 2. CAMBIO DE IDIOMA
 window.changeLang = function(lang) {
-    localStorage.setItem('contapy_lang', lang);
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang][key]) el.textContent = translations[lang][key];
-    });
+  localStorage.setItem('contapy_lang', lang);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(translations[lang][key]) el.textContent = translations[lang][key];
+  });
 };
 
-// 3. INTERFAZ
-function showPage(name, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    if(el) el.classList.add('active');
-}
+// 2. NAVEGACIÓN
+window.showPage = function(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('topbar-title').textContent = name.toUpperCase();
+};
 
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
+window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
 
-// 4. CLIENTES
+// 3. LOGICA DE CLIENTES (CORREGIDA)
 window.openModalCliente = function(idx = -1) {
-    window.editandoCliIdx = idx;
-    // Limpiar campos
-    document.getElementById('cli_ruc').value = '';
-    document.getElementById('cli_nom').value = '';
-    document.getElementById('cli_tel').value = '';
-    document.getElementById('cli_correo').value = '';
-    
-    if(idx >= 0) {
-        const c = window.dbClientes[idx];
-        document.getElementById('cli_ruc').value = c.ruc;
-        document.getElementById('cli_nom').value = c.nom;
-        document.getElementById('cli_tel').value = c.tel;
-        document.getElementById('cli_correo').value = c.correo;
-        document.getElementById('m-cli-title').textContent = "Editar Cliente";
-    } else {
-        document.getElementById('m-cli-title').textContent = "Nuevo Cliente";
+  window.editandoCliIdx = idx;
+  console.log("Abriendo modal. Indice:", idx);
+
+  // Resetear formulario
+  document.getElementById('cli_ruc').value = '';
+  document.getElementById('cli_nom').value = '';
+  document.getElementById('cli_estado').value = 'activo';
+  document.getElementById('tax_iva').checked = false;
+  document.getElementById('tax_ire').checked = false;
+  document.getElementById('tax_irp').checked = false;
+
+  if (idx >= 0) {
+    const c = window.dbClientes[idx];
+    document.getElementById('m-cli-title').textContent = "Editar Cliente";
+    document.getElementById('cli_ruc').value = c.ruc || '';
+    document.getElementById('cli_nom').value = c.nom || '';
+    document.getElementById('cli_estado').value = c.estado || 'activo';
+    if(c.taxes) {
+        document.getElementById('tax_iva').checked = c.taxes.includes('IVA');
+        document.getElementById('tax_ire').checked = c.taxes.includes('IRE');
+        document.getElementById('tax_irp').checked = c.taxes.includes('IRP');
     }
-    openModal('modal-cliente');
+  } else {
+    document.getElementById('m-cli-title').textContent = "Nuevo Cliente";
+  }
+  window.openModal('modal-cliente');
 };
 
 window.guardarCliente = async function() {
-    const ruc = document.getElementById('cli_ruc').value;
-    const nom = document.getElementById('cli_nom').value;
-    if(!ruc || !nom) return alert("RUC y Nombre son obligatorios");
+  const ruc = document.getElementById('cli_ruc').value.trim();
+  const nom = document.getElementById('cli_nom').value.trim();
+  
+  if (!ruc || !nom) {
+    alert("Por favor rellene RUC y Nombre.");
+    return;
+  }
 
-    const tx = [];
-    if(document.getElementById('tax_iva').checked) tx.push('IVA');
-    if(document.getElementById('tax_ire_gen').checked) tx.push('IRE General');
-    
-    const obj = {
-        ruc: ruc, nom: nom, tel: document.getElementById('cli_tel').value,
-        correo: document.getElementById('cli_correo').value,
-        tipo: document.getElementById('cli_tipo').value,
-        estado: document.getElementById('cli_estado').value,
-        taxes: tx
-    };
+  const tx = [];
+  if(document.getElementById('tax_iva').checked) tx.push('IVA');
+  if(document.getElementById('tax_ire').checked) tx.push('IRE');
+  if(document.getElementById('tax_irp').checked) tx.push('IRP');
 
-    if(window.editandoCliIdx >= 0) {
-        Object.assign(window.dbClientes[window.editandoCliIdx], obj);
-    } else {
-        obj.id = Date.now();
-        obj.libros = { compras:[], ventas:[], recibos:[], retenciones:[], diario:[] };
-        window.dbClientes.push(obj);
-    }
+  const datos = {
+    ruc: ruc,
+    nom: nom,
+    estado: document.getElementById('cli_estado').value,
+    taxes: tx,
+    libros: { compras:[], ventas:[], diario:[] }
+  };
 
-    await window.saveData();
-    window.renderClientes();
-    closeModal('modal-cliente');
-    alert("✅ Cliente guardado.");
+  if (window.editandoCliIdx >= 0) {
+    // Mantener los libros existentes si estamos editando
+    const librosAnteriores = window.dbClientes[window.editandoCliIdx].libros;
+    window.dbClientes[window.editandoCliIdx] = datos;
+    window.dbClientes[window.editandoCliIdx].libros = librosAnteriores;
+  } else {
+    window.dbClientes.push(datos);
+  }
+
+  console.log("Guardando datos...", window.dbClientes);
+  
+  // Guardar en Firebase
+  await window.saveData();
+  
+  window.renderClientes();
+  window.closeModal('modal-cliente');
+  alert("Sincronizado con la nube correctamente.");
 };
 
 window.renderClientes = function() {
-    const tb = document.getElementById('tabla-clientes-list');
-    const db = document.getElementById('dash-clientes-list');
-    if(!tb) return;
-    tb.innerHTML = ''; if(db) db.innerHTML = '';
-    
-    let activos = 0;
-    window.dbClientes.forEach((c, i) => {
-        if(c.estado === 'activo') activos++;
-        const badge = c.estado === 'activo' ? 'ok' : 'inactive';
-        tb.innerHTML += `<tr><td>${c.ruc}</td><td><strong>${c.nom}</strong></td><td><span class="badge-status ${badge}">${c.estado}</span></td><td><button class="btn btn-outline btn-sm" onclick="window.openModalCliente(${i})">✏️</button></td></tr>`;
-        if(db && c.estado === 'activo') db.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td>${c.tel}</td><td>${c.taxes.join(', ')}</td></tr>`;
-    });
-    document.getElementById('dash_cli_count').textContent = activos;
+  const listaDirectorio = document.getElementById('tabla-clientes-list');
+  const listaDash = document.getElementById('dash-clientes-list');
+  if(!listaDirectorio) return;
+
+  listaDirectorio.innerHTML = '';
+  if(listaDash) listaDash.innerHTML = '';
+
+  window.dbClientes.forEach((c, i) => {
+    const tr = `<tr>
+      <td>${c.ruc}</td>
+      <td><strong>${c.nom}</strong></td>
+      <td><span class="badge ${c.estado === 'activo' ? 'badge-ok' : ''}">${c.estado}</span></td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="window.openModalCliente(${i})">✏️ Editar</button>
+      </td>
+    </tr>`;
+    listaDirectorio.innerHTML += tr;
+
+    if(c.estado === 'activo' && listaDash) {
+        listaDash.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td>${c.taxes.join(', ')}</td></tr>`;
+    }
+  });
 };
 
-// Función Placeholder (será sobreescrita por Firebase)
-window.saveData = async function() { console.log("Cargando Nube..."); };
-window.doLogin = async function() { console.log("Cargando Nube..."); };
+// Placeholders
+window.saveData = async function() { console.log("Firebase no listo"); };
+window.doLogin = async function() { console.log("Firebase no listo"); };
 </script>
 
-<!-- FIREBASE MODULE -->
+<!-- FIREBASE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -322,30 +280,38 @@ window.doLogin = async function() { console.log("Cargando Nube..."); };
   const db = getFirestore(app);
 
   window.doLogin = async function() {
-      const u = document.getElementById('lu').value;
-      const p = document.getElementById('lp').value;
-      try { await signInWithEmailAndPassword(auth, u, p); } catch(e) { alert("Acceso denegado"); }
+    const u = document.getElementById('lu').value;
+    const p = document.getElementById('lp').value;
+    try { 
+        await signInWithEmailAndPassword(auth, u, p); 
+    } catch(e) { 
+        alert("Credenciales incorrectas"); 
+    }
   };
 
   window.saveData = async function() {
-      try { await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes, totalDocs: window.totalDocs }); } catch(e) { console.error(e); }
+    try {
+      await setDoc(doc(db, "sistema", "datos_principales"), { 
+          clientes: window.dbClientes 
+      });
+      console.log("Nube actualizada");
+    } catch(e) { console.error("Error nube:", e); }
   };
 
   onAuthStateChanged(auth, async (user) => {
-      if (user) {
-          document.getElementById('login-wrap').style.display = 'none';
-          const snap = await getDoc(doc(db, "sistema", "datos_principales"));
-          if(snap.exists()) {
-              window.dbClientes = snap.data().clientes || [];
-              window.totalDocs = snap.data().totalDocs || 0;
-          }
-          const l = localStorage.getItem('contapy_lang') || 'es';
-          document.getElementById('lang_sel').value = l;
-          window.changeLang(l);
-          window.renderClientes();
-      } else {
-          document.getElementById('login-wrap').style.display = 'flex';
+    if (user) {
+      document.getElementById('login-wrap').style.display = 'none';
+      const snap = await getDoc(doc(db, "sistema", "datos_principales"));
+      if(snap.exists()) {
+        window.dbClientes = snap.data().clientes || [];
       }
+      window.renderClientes();
+      const l = localStorage.getItem('contapy_lang') || 'es';
+      document.getElementById('lang_sel').value = l;
+      window.changeLang(l);
+    } else {
+      document.getElementById('login-wrap').style.display = 'flex';
+    }
   });
 </script>
 </body>
