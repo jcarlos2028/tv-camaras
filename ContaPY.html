@@ -18,7 +18,7 @@ body { font-family: 'DM Sans', sans-serif; display: flex; height: 100vh; backgro
 
 /* CONTENIDO PRINCIPAL */
 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.topbar { background: white; height: 60px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); -webkit-app-region: drag; }
+.topbar { background: white; height: 60px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid var(--border); }
 .topbar-title { flex: 1; font-weight: 700; }
 .content { padding: 20px; overflow-y: auto; flex: 1; }
 .page { display: none; } .page.active { display: block; }
@@ -30,22 +30,21 @@ th { text-align: left; font-size: 11px; color: #6b7280; padding: 10px; border-bo
 td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 14px; }
 
 /* BOTONES */
-.btn { padding: 8px 16px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; -webkit-app-region: no-drag; }
+.btn { padding: 8px 16px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; pointer-events: auto !important; }
 .btn-primary { background: var(--accent); color: white; }
 .btn-outline { background: transparent; border: 1px solid var(--border); }
 
-/* MODALES (ELIMINADO DRAG PARA EVITAR BLOQUEOS) */
+/* MODALES */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; }
 .modal { background: white; padding: 25px; border-radius: 15px; width: 450px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
 
-/* INPUTS (FORZADOS PARA EXE) */
+/* INPUTS */
 .form-group { margin-bottom: 15px; }
 label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 5px; color: #6b7280; }
 input, select { 
     width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; 
     font-size: 14px; outline: none; background: white !important;
-    -webkit-app-region: no-drag !important;
     pointer-events: auto !important;
 }
 
@@ -86,11 +85,11 @@ input, select {
   <div class="content">
     <div class="page active" id="page-dashboard">
       <div class="card">
-        <h2>Hola de nuevo 👋</h2>
+        <h2>Bienvenido 👋</h2>
         <p>Base de datos en la nube conectada.</p>
       </div>
       <div class="card">
-        <h3>Resumen rápido</h3>
+        <h3>Lista resumida</h3>
         <table>
           <thead><tr><th>RUC</th><th>Cliente</th></tr></thead>
           <tbody id="dash-list"></tbody>
@@ -105,7 +104,7 @@ input, select {
       </div>
       <div class="card">
         <table>
-          <thead><tr><th>RUC</th><th>Razón Social</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <thead><tr><th>RUC</th><th>Razón Social</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-list"></tbody>
         </table>
       </div>
@@ -130,7 +129,6 @@ input, select {
 </div>
 
 <script>
-// --- LOGICA DE INTERFAZ ---
 window.dbClientes = [];
 window.editandoIdx = -1;
 
@@ -149,7 +147,6 @@ window.changeLang = function(lang) {
     alert("Idioma cambiado a: " + lang);
 };
 
-// --- MANEJO DE CLIENTES ---
 window.openModalCliente = function(idx = -1) {
   window.editandoIdx = idx;
   document.getElementById('cli_ruc').value = '';
@@ -158,9 +155,9 @@ window.openModalCliente = function(idx = -1) {
 
   if (idx >= 0) {
     const c = window.dbClientes[idx];
-    document.getElementById('cli_ruc').value = c.ruc;
-    document.getElementById('cli_nom').value = c.nom;
-    document.getElementById('cli_estado').value = c.estado;
+    document.getElementById('cli_ruc').value = c.ruc || '';
+    document.getElementById('cli_nom').value = c.nom || '';
+    document.getElementById('cli_estado').value = c.estado || 'activo';
     document.getElementById('m-title').textContent = "Editar Cliente";
   } else {
     document.getElementById('m-title').textContent = "Nuevo Cliente";
@@ -190,6 +187,7 @@ window.guardarCliente = async function() {
 window.render = function() {
   const t = document.getElementById('tabla-list');
   const d = document.getElementById('dash-list');
+  if(!t || !d) return;
   t.innerHTML = ''; d.innerHTML = '';
   window.dbClientes.forEach((c, i) => {
     t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td>${c.estado}</td><td><button class="btn btn-outline" onclick="window.openModalCliente(${i})">✏️</button></td></tr>`;
@@ -197,12 +195,10 @@ window.render = function() {
   });
 };
 
-// Placeholders iniciales
 window.saveData = async function() { console.log("Nube no lista"); };
 window.doLogin = async function() { console.log("Nube no lista"); };
 </script>
 
-<!-- FIREBASE CONEXIÓN DIRECTA -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
@@ -224,13 +220,13 @@ window.doLogin = async function() { console.log("Nube no lista"); };
   window.doLogin = async function() {
     const u = document.getElementById('lu').value;
     const p = document.getElementById('lp').value;
-    try { await signInWithEmailAndPassword(auth, u, p); } catch(e) { alert("Error: " + e.message); }
+    try { await signInWithEmailAndPassword(auth, u, p); } catch(e) { alert("Acceso incorrecto."); }
   };
 
   window.saveData = async function() {
     try {
       await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes });
-    } catch(e) { alert("Error al guardar: " + e.message); }
+    } catch(e) { console.error("Error nube:", e); }
   };
 
   onAuthStateChanged(auth, async (user) => {
