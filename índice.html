@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v1.2 — Premium Contable</title>
+<title>ContaPY v1.1 — Premium Ley 6380 Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- Firebase v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -16,13 +16,15 @@
   --accent2:#2196f3;--white:#fff;--card:#fff;--text:#1a1a2e;--text-light:#6b7280;
   --border:#e5e7eb;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
 }
-/* ANTI-BLOQUEO EXE */
+/* PARCHE EXE: Habilitar teclado y clics */
 * { box-sizing:border-box; margin:0; padding:0; -webkit-app-region: no-drag; }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
 
 .sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;z-index:100;}
 .sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06); -webkit-app-region: drag;}
+.logo-mark{display:flex;align-items:center;gap:10px}
 .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:white}
 .logo-text{color:white;font-size:17px;font-weight:700;letter-spacing:-.5px}
 
@@ -34,7 +36,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;}
 .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0; -webkit-app-region: drag;}
 .topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
-.topbar select { -webkit-app-region: no-drag; }
+.topbar select, .topbar .btn-icon { -webkit-app-region: no-drag; }
 
 .content{flex:1;overflow-y:auto;padding:20px;}
 .page{display:none} .page.active{display:block}
@@ -50,56 +52,64 @@ input, select, textarea {
     user-select: text !important;
 }
 
-.btn{padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;transition:0.1s}
+.btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;transition:0.1s}
 .btn-primary{background:var(--accent);color:white}
 .btn-secondary{background:var(--accent2);color:white}
 .btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}
-.btn-sm{padding:4px 8px;font-size:10px}
 
-/* TABLAS */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{padding:10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border); background:#f9fafb}
-tbody td{padding:10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);border-top:3px solid var(--accent)}
+.stat-value{font-size:22px;font-weight:700;margin-top:5px}
 
-.monto{font-family:'DM Mono',monospace;text-align:right; font-weight: 600;}
-.badge-status{padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600}
-.badge-status.ok{background:#d1fae5;color:#065f46}
+table { width:100%; border-collapse:collapse; font-size:12.5px}
+thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border); background:#f9fafb}
+tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+
+.badge-tax { display:inline-block; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:700; margin-right:3px; background:#e5e7eb; color:#374151; }
+.badge-tax.active { background:var(--accent2); color:white; }
 
 /* MODALES */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;overflow:auto;}
 .modal-overlay.open{display:flex}
-.modal{background:white;border-radius:14px;width:90%;max-width:700px;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column;max-height:92vh;}
-.modal-drag-header{background:var(--bg);padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;border-bottom:1px solid var(--border)}
+.modal{background:white;border-radius:14px;width:90%;max-width:750px;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column;max-height:90vh;}
+.modal-drag-header{background:var(--bg);padding:10px 15px;cursor:move;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;border-bottom:1px solid var(--border)}
 .modal-body-scroll{padding:25px;overflow-y:auto;flex:1}
 
+/* WIZARD & TABS */
+.wiz-header{display:flex;gap:10px;margin-bottom:20px;align-items:center}
+.wiz-bullet{width:28px;height:28px;border-radius:50%;background:#e5e7eb;color:#9ca3af;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.wiz-bullet.active{background:var(--accent);color:white}
+.wiz-bullet.done{background:var(--success);color:white}
+.wiz-step{display:none} .wiz-step.active{display:block}
 .tabs{display:flex;gap:2px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:16px;width:fit-content}
 .tab{padding:6px 14px;border-radius:7px;font-size:12.5px;cursor:pointer;color:var(--text-light)}
 .tab.active{background:white;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
 
 .login-wrap{position:fixed;inset:0;background:var(--sidebar);display:flex;align-items:center;justify-content:center;z-index:99999}
-.login-card{background:white;border-radius:18px;padding:36px;width:100%;max-width:380px;text-align:center}
+.login-card{background:white;border-radius:18px;padding:45px;width:100%;max-width:400px;text-align:center}
 .copyright-footer{padding:15px;text-align:center;font-size:11px;color:rgba(255,255,255,0.4);border-top:1px solid rgba(255,255,255,0.06);line-height:1.5}
 </style>
 </head>
 <body>
 
 <datalist id="planCuentasRes4814">
-    <option value="1.1.1.01 Caja"></option><option value="1.1.1.03 Banco Cta Cte"></option>
-    <option value="5.1.1.01 Mercaderías"></option><option value="4.1.1.01 Ventas"></option>
+    <option value="5.1.2.04 Honorarios Profesionales"></option>
+    <option value="5.1.1.01 Compras Mercaderías"></option>
+    <option value="4.1.1.01 Ventas Servicios"></option>
+    <option value="1.1.1.01 Caja M.N."></option>
 </datalist>
 
 <!-- LOGIN -->
 <div class="login-wrap" id="login-wrap">
   <div class="login-card">
-    <div class="logo-icon" style="width:60px; height:60px; margin: 0 auto 15px; font-size: 26px;">☁️</div>
+    <div style="width:60px;height:60px;background:var(--accent);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 20px;color:white">☁️</div>
     <h1 style="margin-bottom:5px">ContaPY</h1>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:20px">v1.2 Premium Cloud Edition</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:25px">v1.1 Premium Cloud Edition</p>
     <div style="text-align:left">
-        <label>Usuario</label><input type="text" id="lu" style="width:100%; margin-bottom:10px">
-        <label>Contraseña</label><input type="password" id="lp" style="width:100%; margin-bottom:20px">
+        <label data-i18n="lbl_user">Usuario</label><input type="text" id="lu" style="width:100%; margin-bottom:10px">
+        <label data-i18n="lbl_pass">Contraseña</label><input type="password" id="lp" style="width:100%; margin-bottom:20px">
     </div>
-    <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Ingresar</button>
+    <button class="btn btn-primary" style="width:100%; height:45px" onclick="window.doLogin()" data-i18n="btn_login">Ingresar al Sistema</button>
     <p id="l-msg" style="color:red;font-size:11px;margin-top:10px"></p>
   </div>
 </div>
@@ -107,7 +117,7 @@ tbody td{padding:10px;border-bottom:1px solid var(--border);color:var(--text);ve
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v1.2 Premium</div></div></div>
+    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v1.1 Premium</div></div></div>
   </div>
   
   <div class="sidebar-section">
@@ -123,8 +133,15 @@ tbody td{padding:10px;border-bottom:1px solid var(--border);color:var(--text);ve
   </div>
 
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_taxes">Estados Financieros</div>
+    <div class="sidebar-label" data-i18n="menu_taxes">Estados Ley 6380</div>
     <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span><span data-i18n="nav_iva">IVA (120)</span></div>
+    <div class="nav-item" onclick="showPage('ire',this)"><span class="icon">💼</span><span data-i18n="nav_ire">IRE (Gral/Simp)</span></div>
+    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span><span data-i18n="nav_irp">IRP (515)</span></div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">Herramientas</div>
+    <div class="nav-item" onclick="showPage('claude',this)" style="color:#f59e0b">🤖 <span data-i18n="nav_ai">Soporte Claude IA</span></div>
   </div>
 
   <div class="sidebar-section">
@@ -150,115 +167,146 @@ tbody td{padding:10px;border-bottom:1px solid var(--border);color:var(--text);ve
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
-      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0;">
-        <div class="card" style="border-top:3px solid var(--accent2)"><div style="font-size:11px;color:#888" data-i18n="dash_s2">CLIENTES ACTIVOS</div><div class="stat-value" id="dash_cli_count">0</div></div>
+      <div class="stats-grid">
+        <div class="stat-card" style="border-top-color:var(--accent2)"><div style="font-size:11px;color:#888" data-i18n="dash_s1">ASIENTOS</div><div class="stat-value" id="dash_doc_count">0</div></div>
+        <div class="stat-card" style="border-top-color:var(--success)"><div style="font-size:11px;color:#888" data-i18n="dash_s2">CLIENTES</div><div class="stat-value" id="dash_cli_count">0</div></div>
       </div>
-      <div class="card">
-        <div class="card-title">
-            <span data-i18n="dash_t1">Acceso Rápido a Clientes</span>
-            <button class="btn btn-outline btn-sm" onclick="window.exportTableToExcel('dash-clientes-list', 'Cartera_Clientes')">📥 Exportar CSV</button>
-        </div>
-        <table id="dash-clientes-list"></table>
-      </div>
+      <div class="card"><h3 data-i18n="dash_t1">Acceso Rápido</h3><table id="dash-clientes-list"></table></div>
     </div>
 
     <!-- CLIENTES DIRECTORIO -->
     <div class="page" id="page-clientes">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <h2 data-i18n="cli_h2">Directorio de Clientes</h2>
-        <div style="display:flex; gap:10px">
-            <button class="btn btn-outline" onclick="window.exportTableToExcel('tabla-clientes-list', 'Directorio_Completo')">📥 Exportar</button>
-            <button class="btn btn-primary" onclick="window.openModalCliente()">+ <span data-i18n="nav_new">Nuevo</span></button>
-        </div>
+        <button class="btn btn-primary" onclick="window.openModalCliente()">+ <span data-i18n="nav_new">Nuevo</span></button>
       </div>
-      <div class="card">
-        <table id="tabla-clientes-list"></table>
-      </div>
+      <div class="card"><table id="tabla-clientes-list"></table></div>
     </div>
 
     <!-- CLIENTE DETALLE -->
     <div class="page" id="page-cliente-detalle">
         <div class="card" style="border-left: 5px solid var(--accent2); display:flex; justify-content:space-between; align-items:center">
-            <div>
-                <h2 id="cdet_nombre">---</h2>
-                <p id="cdet_ruc" style="font-size:12px;color:var(--text-light)"></p>
-            </div>
+            <div><h2 id="cdet_nombre">---</h2><p id="cdet_ruc" style="font-size:12px;color:var(--text-light)"></p></div>
             <button class="btn btn-outline btn-sm" onclick="window.showPage('dashboard')">⬅️ Volver</button>
         </div>
         <div class="tabs">
             <div class="tab active" onclick="switchClientTab('compras', this)">Compras</div>
             <div class="tab" onclick="switchClientTab('ventas', this)">Ventas</div>
-            <div class="tab" onclick="switchClientTab('diario', this)">Libro Diario</div>
+            <div class="tab" onclick="switchClientTab('diario', this)">Diario</div>
+            <div class="tab" onclick="switchClientTab('balance', this)">Balance</div>
         </div>
         <div id="ctab_compras" class="ctab-content" style="display:block;">
-            <div class="card">
-                <div class="card-title"><span>Libro de Compras</span> <button class="btn btn-outline btn-sm" onclick="window.exportTableToExcel('lista_lib_compras', 'Compras')">📥 Exportar</button></div>
-                <table><thead><tr><th>Fecha</th><th>Timbrado</th><th>Factura</th><th>Proveedor</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead><tbody id="lista_lib_compras"></tbody></table>
-            </div>
+            <div class="card"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead><tbody id="lista_lib_compras"></tbody></table></div>
         </div>
         <div id="ctab_ventas" class="ctab-content" style="display:none;">
-            <div class="card">
-                <div class="card-title"><span>Libro de Ventas</span> <button class="btn btn-outline btn-sm" onclick="window.exportTableToExcel('lista_lib_ventas', 'Ventas')">📥 Exportar</button></div>
-                <table><thead><tr><th>Fecha</th><th>Timbrado</th><th>Factura</th><th>Cliente</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead><tbody id="lista_lib_ventas"></tbody></table>
-            </div>
-        </div>
-        <div id="ctab_diario" class="ctab-content" style="display:none;">
-            <div class="card">
-                <div class="card-title"><span>Diario General</span> <button class="btn btn-outline btn-sm" onclick="window.exportTableToExcel('lista_lib_diario_table', 'Libro_Diario')">📥 Exportar</button></div>
-                <table id="lista_lib_diario_table"><thead><tr><th>Fecha</th><th>Asiento</th><th>Glosa</th><th>Total</th><th>Acción</th></tr></thead><tbody id="lista_lib_diario"></tbody></table>
-            </div>
+            <div class="card"><table><thead><tr><th>Fecha</th><th>Cliente</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead><tbody id="lista_lib_ventas"></tbody></table></div>
         </div>
     </div>
 
     <!-- ADMIN -->
     <div class="page" id="page-admin">
-      <h2 data-i18n="nav_adm">Administración</h2>
+      <h2 data-i18n="nav_adm">Configuración</h2>
       <div class="card" style="margin-top:20px">
-        <button class="btn btn-secondary" onclick="window.buscarActualizaciones()">🔄 Sincronizar con Netlify</button>
+        <button class="btn btn-secondary" onclick="window.buscarActualizaciones()">🔄 Sincronizar Sistema</button>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- WIZARD CARGA (EDITABLE) -->
-<div class="modal-overlay" id="modal-wizard">
-  <div class="modal">
-    <div class="modal-drag-header"><b id="wiz_title_txt">Carga de Comprobante</b><button onclick="window.closeModal('modal-wizard')" style="background:none;border:none;cursor:pointer;font-size:18px">✕</button></div>
-    <div class="modal-body-scroll" style="padding:25px">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
-            <div class="form-group"><label>Tipo Operación:</label><select id="wiz_oper"><option value="compra">Compra / Egreso</option><option value="venta">Venta / Ingreso</option></select></div>
-            <div class="form-group"><label>Fecha:</label><input type="date" id="wiz_fecha"></div>
-            <div class="form-group"><label>Timbrado N°:</label><input type="text" id="wiz_timbrado" placeholder="8 dígitos"></div>
-            <div class="form-group"><label>Factura N°:</label><input type="text" id="wiz_nro" placeholder="001-001-0000001"></div>
-            <div class="form-group"><label>RUC / ID Tercero:</label><input type="text" id="wiz_ruc_t"></div>
-            <div class="form-group"><label>Razón Social:</label><input type="text" id="wiz_nom_t"></div>
-            <div class="form-group"><label>Monto Total ₲:</label><input type="number" id="wiz_monto" oninput="window.calcIVA()"></div>
-            <div class="form-group"><label>Tasa IVA:</label><select id="wiz_iva_tasa" onchange="window.calcIVA()"><option value="10">10%</option><option value="5">5%</option><option value="0">Exenta</option></select></div>
+    <!-- CLAUDE -->
+    <div class="page" id="page-claude">
+        <h2 data-i18n="nav_ai">Soporte Claude IA</h2>
+        <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;height:70vh; margin-top:20px">
+            <div class="chat-messages" id="chat_box"></div>
+            <div style="padding:15px; background:white; display:flex; gap:10px; border-top:1px solid #eee">
+                <input type="text" id="chat_input" placeholder="Pregunta algo..." style="flex:1">
+                <button class="btn btn-primary" onclick="window.enviarIA()">Enviar</button>
+            </div>
         </div>
-        <div style="text-align:right; margin-top:25px"><button class="btn btn-primary" style="width:100%" onclick="window.finalizarCarga()">💾 Guardar y Asentar</button></div>
     </div>
   </div>
 </div>
 
-<!-- MODAL CLIENTE -->
+<!-- WIZARD CARGA COMPROBANTES (ESTILO ABACO) -->
+<div class="modal-overlay" id="modal-wizard">
+  <div class="modal">
+    <div class="modal-drag-header"><b>Asistente de Carga - Ley 6380</b><button onclick="window.closeModal('modal-wizard')" style="background:none;border:none;cursor:pointer">✕</button></div>
+    <div class="modal-body-scroll">
+        <div class="wiz-header">
+            <div id="wb-1" class="wiz-bullet active">1</div> <span>Datos</span>
+            <div style="flex:1; border-bottom:1px dashed #ddd"></div>
+            <div id="wb-2" class="wiz-bullet">2</div> <span>Cobro/Pago</span>
+            <div style="flex:1; border-bottom:1px dashed #ddd"></div>
+            <div id="wb-3" class="wiz-bullet">3</div> <span>Asiento</span>
+        </div>
+
+        <div id="ws-1" class="wiz-step active">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px">
+                <div class="form-group"><label>Cliente Destino</label><select id="wiz_cli"></select></div>
+                <div class="form-group"><label>Operación</label><select id="wiz_oper"><option value="compra">Egreso / Compra</option><option value="venta">Ingreso / Venta</option></select></div>
+                <div class="form-group"><label>RUC Tercero</label><input type="text" id="wiz_ruc_t" placeholder="800000-1"></div>
+                <div class="form-group"><label>Razón Social</label><input type="text" id="wiz_nom_t" placeholder="Empresa S.A."></div>
+                <div class="form-group"><label>Timbrado N°</label><input type="text" id="wiz_timb"></div>
+                <div class="form-group"><label>Factura N°</label><input type="text" id="wiz_nro" placeholder="001-001-0000001"></div>
+                <div class="form-group"><label>Monto Total ₲</label><input type="number" id="wiz_monto" oninput="window.calcIVA()"></div>
+                <div class="form-group"><label>Aplicación IVA</label>
+                    <select id="wiz_iva_tipo" onchange="window.calcIVA()">
+                        <option value="10">Solo 10%</option><option value="5">Solo 5%</option>
+                        <option value="0">Exenta</option><option value="mixta">Mixta (Manual)</option>
+                    </select>
+                </div>
+            </div>
+            <!-- SECCION MIXTA -->
+            <div id="wiz_mixta" style="display:none; margin-top:15px; background:#f8f9fa; padding:15px; border-radius:8px">
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px">
+                    <div class="form-group"><label>Gravada 10%</label><input type="number" id="w_10" value="0"></div>
+                    <div class="form-group"><label>Gravada 5%</label><input type="number" id="w_5" value="0"></div>
+                    <div class="form-group"><label>Exenta</label><input type="number" id="w_ex" value="0"></div>
+                </div>
+            </div>
+            <div style="text-align:right; margin-top:20px"><button class="btn btn-primary" onclick="window.wizNext(2)">Siguiente ➡️</button></div>
+        </div>
+
+        <div id="ws-2" class="wiz-step">
+            <div class="form-group"><label>Condición:</label><select id="wiz_cond"><option value="contado">Contado</option><option value="credito">Crédito</option></select></div>
+            <div style="text-align:right; margin-top:20px"><button class="btn" onclick="window.wizNext(1)">Atrás</button><button class="btn btn-primary" onclick="window.wizNext(3)">Siguiente ➡️</button></div>
+        </div>
+
+        <div id="ws-3" class="wiz-step">
+            <p>Se generará el asiento contable NIIF automáticamente.</p>
+            <div style="text-align:right; margin-top:20px"><button class="btn btn-primary" onclick="window.guardarAsiento()">💾 Finalizar y Guardar</button></div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CLIENTE DETALLADO -->
 <div class="modal-overlay" id="modal-cliente">
   <div class="modal">
-    <div class="modal-drag-header"><b data-i18n="mod_tit">Datos del Cliente</b><button onclick="window.closeModal('modal-cliente')" style="background:none;border:none;cursor:pointer">✕</button></div>
-    <div style="padding:25px">
-        <div class="form-group"><label>RUC:</label><input type="text" id="cli_ruc"></div>
-        <div class="form-group"><label data-i18n="tbl_name">Nombre:</label><input type="text" id="cli_nom"></div>
-        <div style="text-align:right; margin-top:25px"><button class="btn btn-primary" style="width:100%" onclick="window.guardarCliente()">💾 Guardar en Nube</button></div>
+    <div class="modal-drag-header"><b>Configurar Cliente</b><button onclick="window.closeModal('modal-cliente')" style="background:none;border:none;cursor:pointer">✕</button></div>
+    <div class="modal-body-scroll">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
+            <div class="form-group"><label>RUC / ID:</label><input type="text" id="cli_ruc" placeholder="80000000-0"></div>
+            <div class="form-group"><label>Nombre y Apellido:</label><input type="text" id="cli_nom"></div>
+            <div class="form-group"><label>Correo Electrónico:</label><input type="email" id="cli_correo"></div>
+            <div class="form-group"><label>Línea / Teléfono:</label><input type="text" id="cli_tel"></div>
+        </div>
+        <div style="margin-top:20px; padding:15px; background:var(--bg); border-radius:10px">
+            <label style="font-weight:700">IMPUESTOS ACTIVOS (LEY 6380):</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px">
+                <label><input type="checkbox" id="t_iva"> IVA (120)</label><label><input type="checkbox" id="t_ire_g"> IRE General</label>
+                <label><input type="checkbox" id="t_ire_s"> IRE Simple</label><label><input type="checkbox" id="t_irp"> IRP (515)</label>
+            </div>
+        </div>
+        <div style="text-align:right; margin-top:25px"><button class="btn btn-primary" style="width:100%" onclick="window.guardarCliente()">💾 Guardar Cliente</button></div>
     </div>
   </div>
 </div>
 
 <script>
-window.dbClientes = []; window.currentCli = -1; window.editEntryId = null;
+window.dbClientes = []; window.editIdx = -1; window.currentCli = -1;
 
-// --- DICCIONARIO ---
 const translations = {
-    es: { top_title:"Dashboard Principal", nav_dash:"Dashboard", nav_clients:"Clientes (Cartera)", nav_adm:"Perfil / Sistema", nav_logout:"Cerrar Sesión", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido a Clientes", cli_h2:"Directorio de Clientes", tbl_name:"Razón Social", tbl_actions:"Acción", nav_new:"Nuevo", btn_login:"Ingresar", mod_tit:"Datos del Cliente" },
-    en: { top_title:"Main Dashboard", nav_dash:"Dashboard", nav_clients:"Client Portfolio", nav_adm:"System", nav_logout:"Logout", dash_h2:"ContaPY Accounting 👋", dash_t1:"Quick Client Access", cli_h2:"Client Directory", tbl_name:"Legal Name", tbl_actions:"Action", nav_new:"New", btn_login:"Login", mod_tit:"Client Details" }
+    es: { top_title:"Dashboard Principal", nav_dash:"Dashboard", nav_clients:"Clientes (Cartera)", nav_ai:"Soporte Claude IA", nav_adm:"Perfil / Sistema", nav_logout:"Cerrar Sesión", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido", cli_h2:"Directorio de Clientes", tbl_name:"Razón Social", tbl_actions:"Acción", nav_new:"Nuevo", btn_login:"Ingresar" },
+    en: { top_title:"Main Dashboard", nav_dash:"Dashboard", nav_clients:"Clients Portfolio", nav_ai:"Claude AI Support", nav_adm:"System", nav_logout:"Logout", dash_h2:"ContaPY Accounting 👋", dash_t1:"Quick Access", cli_h2:"Directory", tbl_name:"Name", tbl_actions:"Action", nav_new:"New", btn_login:"Login" }
 };
 
 window.changeLang = function(lang) {
@@ -281,25 +329,49 @@ window.openModal = function(id) { document.getElementById(id).classList.add('ope
 window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
 
 window.openModalCliente = function() {
-    document.getElementById('cli_ruc').value = ''; document.getElementById('cli_nom').value = '';
+    document.getElementById('cli_ruc').value = ""; document.getElementById('cli_nom').value = "";
     window.openModal('modal-cliente');
+    setTimeout(() => document.getElementById('cli_ruc').focus(), 300);
 };
 
-window.openWizard = function(editId = null) {
-    window.editEntryId = editId;
-    if(!editId) {
-        document.getElementById('wiz_title_txt').innerText = "Carga de Comprobante";
-        document.querySelectorAll('#modal-wizard input').forEach(i => i.value = '');
-        document.getElementById('wiz_fecha').value = new Date().toISOString().split('T')[0];
-    }
-    window.openModal('modal-wizard');
+window.openWizard = function() {
+    const sel = document.getElementById('wiz_cli'); sel.innerHTML = '';
+    window.dbClientes.forEach((c,i) => sel.innerHTML += `<option value="${i}">${c.nom}</option>`);
+    window.wizNext(1); window.openModal('modal-wizard');
+};
+
+window.wizNext = function(n) {
+    document.querySelectorAll('.wiz-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('ws-'+n).classList.add('active');
+    document.querySelectorAll('.wiz-bullet').forEach((b,i) => {
+        b.className = 'wiz-bullet';
+        if(i+1 < n) b.classList.add('done');
+        if(i+1 == n) b.classList.add('active');
+    });
+};
+
+window.calcIVA = function() {
+    const t = document.getElementById('wiz_iva_tipo').value;
+    document.getElementById('wiz_mixta').style.display = (t == 'mixta') ? 'block' : 'none';
 };
 
 window.guardarCliente = async function() {
     var r = document.getElementById('cli_ruc').value.trim(), n = document.getElementById('cli_nom').value.trim();
     if(!r || !n) return alert("Faltan datos");
-    window.dbClientes.push({ruc:r, nom:n, libros:{compras:[], ventas:[], diario:[]}, id:Date.now()});
-    await window.saveData(); window.render(); window.closeModal('modal-cliente');
+    window.dbClientes.push({ruc:r, nom:n, id:Date.now(), libros:{compras:[], ventas:[], diario:[]}});
+    if(window.saveData) await window.saveData();
+    window.render(); window.closeModal('modal-cliente');
+};
+
+window.render = function() {
+    const t = document.getElementById('tabla-clientes-list');
+    const d = document.getElementById('dash-clientes-list');
+    if(!t) return; t.innerHTML = ''; d.innerHTML = '';
+    window.dbClientes.forEach((c, i) => {
+        t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td><button class="btn btn-outline btn-sm" onclick="window.verCliente(${i})">✏️</button></td></tr>`;
+        d.innerHTML += `<tr onclick="window.verCliente(${i})"><td>${c.ruc}</td><td><b>${c.nom}</b></td></tr>`;
+    });
+    document.getElementById('dash_cli_count').innerText = window.dbClientes.length;
 };
 
 window.verCliente = function(i) {
@@ -307,100 +379,15 @@ window.verCliente = function(i) {
     const c = window.dbClientes[i];
     document.getElementById('cdet_nombre').innerText = c.nom;
     document.getElementById('cdet_ruc').innerText = "RUC: " + c.ruc;
-    window.renderLibros();
     window.showPage('cliente-detalle');
 };
 
-window.finalizarCarga = async function() {
-    const cli = window.dbClientes[window.currentCli];
-    const oper = document.getElementById('wiz_oper').value;
-    const monto = parseFloat(document.getElementById('wiz_monto').value);
-    const tasa = parseInt(document.getElementById('wiz_iva_tasa').value);
-    const iva = tasa > 0 ? Math.round(monto / (tasa==10?11:21)) : 0;
-    
-    const entry = {
-        id: window.editEntryId || Date.now(),
-        fecha: document.getElementById('wiz_fecha').value,
-        timbrado: document.getElementById('wiz_timbrado').value,
-        nro: document.getElementById('wiz_nro').value,
-        ruc_t: document.getElementById('wiz_ruc_t').value,
-        nom_t: document.getElementById('wiz_nom_t').value,
-        total: monto,
-        iva: iva,
-        oper: oper
-    };
-
-    if(window.editEntryId) {
-        cli.libros.compras = cli.libros.compras.filter(e => e.id !== window.editEntryId);
-        cli.libros.ventas = cli.libros.ventas.filter(e => e.id !== window.editEntryId);
-        cli.libros.diario = cli.libros.diario.filter(e => e.id !== window.editEntryId);
-    }
-
-    if(oper === 'compra') cli.libros.compras.push(entry); else cli.libros.ventas.push(entry);
-    cli.libros.diario.push(entry);
-    
-    await window.saveData(); window.renderLibros(); window.closeModal('modal-wizard');
-};
-
-window.eliminarAsiento = async function(id) {
-    if(!confirm("¿Seguro que desea eliminar este asiento de todos los libros?")) return;
-    const cli = window.dbClientes[window.currentCli];
-    cli.libros.compras = cli.libros.compras.filter(e => e.id !== id);
-    cli.libros.ventas = cli.libros.ventas.filter(e => e.id !== id);
-    cli.libros.diario = cli.libros.diario.filter(e => e.id !== id);
-    await window.saveData(); window.renderLibros();
-};
-
-window.editarAsiento = function(id) {
-    const cli = window.dbClientes[window.currentCli];
-    const e = cli.libros.diario.find(x => x.id === id);
-    if(!e) return;
-    window.openWizard(id);
-    document.getElementById('wiz_title_txt').innerText = "Editando Asiento";
-    document.getElementById('wiz_oper').value = e.oper;
-    document.getElementById('wiz_fecha').value = e.fecha;
-    document.getElementById('wiz_timbrado').value = e.timbrado;
-    document.getElementById('wiz_nro').value = e.nro;
-    document.getElementById('wiz_ruc_t').value = e.ruc_t;
-    document.getElementById('wiz_nom_t').value = e.nom_t;
-    document.getElementById('wiz_monto').value = e.total;
-};
-
-window.render = function() {
-    const t = document.getElementById('tabla-clientes-list');
-    const d = document.getElementById('dash-clientes-list');
-    if(!t) return; t.innerHTML = '<thead><tr><th>RUC</th><th>Nombre</th><th>Acción</th></tr></thead>';
-    d.innerHTML = '<thead><tr><th>RUC</th><th>Nombre</th></tr></thead>';
-    window.dbClientes.forEach((c, i) => {
-        t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td><button class="btn btn-outline btn-sm" onclick="window.verCliente(${i})">👁️</button></td></tr>`;
-        d.innerHTML += `<tr onclick="window.verCliente(${i})" style="cursor:pointer"><td>${c.ruc}</td><td><b>${c.nom}</b></td></tr>`;
-    });
-    document.getElementById('dash_cli_count').innerText = window.dbClientes.length;
-};
-
-window.renderLibros = function() {
-    const c = window.dbClientes[window.currentCli];
-    const row = (l) => `<tr><td>${l.fecha}</td><td>${l.timbrado}</td><td>${l.nro}</td><td>${l.nom_t}</td><td class="monto">${l.total.toLocaleString()}</td><td class="monto">${l.iva.toLocaleString()}</td><td><button class="btn btn-sm" onclick="window.editarAsiento(${l.id})">✏️</button><button class="btn btn-sm" onclick="window.eliminarAsiento(${l.id})">🗑️</button></td></tr>`;
-    document.getElementById('lista_lib_compras').innerHTML = c.libros.compras.map(row).join('');
-    document.getElementById('lista_lib_ventas').innerHTML = c.libros.ventas.map(row).join('');
-    document.getElementById('lista_lib_diario').innerHTML = c.libros.diario.map(l => `<tr><td>${l.fecha}</td><td>AST-${l.id.toString().substr(-4)}</td><td>${l.oper.toUpperCase()} - ${l.nom_t}</td><td class="monto">${l.total.toLocaleString()}</td><td><button class="btn btn-sm" onclick="window.editarAsiento(${l.id})">✏️</button></td></tr>`).join('');
-};
-
-window.exportTableToExcel = function(tableID, filename = ''){
-    let table = document.getElementById(tableID);
-    let csv = [];
-    for (let i = 0; i < table.rows.length; i++) {
-        let row = [], cols = table.rows[i].querySelectorAll("td, th");
-        for (let j = 0; j < cols.length - 1; j++) row.push('"' + cols[j].innerText + '"');
-        csv.push(row.join(";"));
-    }
-    let csvContent = "data:text/csv;charset=utf-8,\ufeff" + csv.join("\n");
-    let encodedUri = encodeURI(csvContent);
-    let link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", filename + ".csv");
-    document.body.appendChild(link);
-    link.click();
+window.enviarIA = function() {
+    const inp = document.getElementById('chat_input');
+    if(!inp.value) return;
+    document.getElementById('chat_box').innerHTML += `<p style="text-align:right"><b>Tú:</b> ${inp.value}</p>`;
+    inp.value = '';
+    setTimeout(() => { document.getElementById('chat_box').innerHTML += `<p style="color:blue">🤖 <b>Claude:</b> Analizando tu consulta sobre Ley 6380...</p>`; }, 600);
 };
 
 window.buscarActualizaciones = function() { window.location.href = window.location.pathname + "?u=" + Date.now(); };
@@ -428,7 +415,7 @@ window.doLogin = function(){}; window.doLogout = function(){}; window.saveData =
   window.doLogin = async function() {
       const u = document.getElementById('lu').value, p = document.getElementById('lp').value;
       try { await signInWithEmailAndPassword(auth, u, p); } 
-      catch (e) { document.getElementById('l-msg').innerText = "Credenciales incorrectas"; }
+      catch (e) { document.getElementById('l-msg').innerText = "Acceso denegado"; }
   };
 
   window.doLogout = async function() { await signOut(auth); location.reload(); };
