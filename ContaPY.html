@@ -2,130 +2,119 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ContaPY v4.0 — Sistema Contable</title>
-    
-    <!-- Firebase Versión 8 (La mejor para compatibilidad con Windows/EXE) -->
+    <title>ContaPY v4.1 — Cloud Edition</title>
+    <!-- Firebase Versión Compatible -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <style>
-        :root { --bg:#f0f2f5; --dark:#0f1923; --accent:#e63946; --white:#ffffff; }
+        :root { --bg:#f0f2f5; --dark:#0f1923; --accent:#e63946; --accent2:#2196f3; }
         
-        /* FIX TOTAL PARA EL EXE: Desactivar arrastre en todo el cuerpo */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; -webkit-app-region: no-drag; }
+        /* BLOQUEO DE ARRASTRE PARA QUE EL TECLADO FUNCIONE EN EXE */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; -webkit-app-region: no-drag; }
         
         body { display: flex; height: 100vh; background: var(--bg); overflow: hidden; }
 
-        /* Barra Lateral */
-        .sidebar { width: 230px; background: var(--dark); color: white; padding: 20px; flex-shrink: 0; }
-        .nav-item { padding: 12px; cursor: pointer; border-radius: 8px; margin-bottom: 5px; opacity: 0.8; transition: 0.2s; }
-        .nav-item:hover, .nav-item.active { background: var(--accent); opacity: 1; }
+        /* Sidebar */
+        .sidebar { width: 240px; background: var(--dark); color: white; padding: 20px; flex-shrink: 0; }
+        .nav-item { padding: 12px; cursor: pointer; border-radius: 8px; margin-bottom: 5px; opacity: 0.8; }
+        .nav-item.active { background: var(--accent); opacity: 1; }
 
-        /* Contenido */
+        /* Main */
         .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        
-        /* Solo la barra superior permite arrastrar la ventana en el EXE */
-        .topbar { 
-            background: white; height: 60px; display: flex; align-items: center; 
-            padding: 0 20px; border-bottom: 1px solid #ddd; justify-content: space-between;
-            -webkit-app-region: drag; 
-        }
-        .topbar-title { font-weight: bold; -webkit-app-region: drag; }
-        .topbar select { -webkit-app-region: no-drag; cursor: pointer; padding: 5px; }
+        .topbar { background: white; height: 60px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid #ddd; -webkit-app-region: drag; }
+        .topbar-title { flex: 1; font-weight: bold; }
+        .topbar select { -webkit-app-region: no-drag; }
 
-        .content { padding: 25px; overflow-y: auto; flex: 1; }
+        .content { padding: 20px; overflow-y: auto; flex: 1; }
         .page { display: none; } .page.active { display: block; }
 
-        /* UI */
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; }
         th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
 
-        /* FORMULARIOS: FIX PARA EXE (Permitir teclado) */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; font-weight: bold; color: #666; margin-bottom: 5px; }
-        input, select { 
-            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; 
+        /* INPUTS - CLAVE PARA EL EXE */
+        input, select, textarea { 
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; margin-bottom: 10px;
             background: white !important; color: black !important;
-            /* Estos comandos fuerzan al EXE a aceptar clics y teclado */
-            pointer-events: auto !important;
-            -webkit-user-select: text !important;
-            user-select: text !important;
+            pointer-events: auto !important; -webkit-user-select: text !important; user-select: text !important;
         }
 
-        .btn { padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; transition: 0.2s; }
+        .btn { padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
         .btn-primary { background: var(--accent); color: white; }
+        .btn-secondary { background: var(--accent2); color: white; }
 
-        /* Modal */
+        /* MODAL */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; }
         .modal-overlay.open { display: flex; }
-        .modal { background: white; padding: 30px; border-radius: 15px; width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .modal { background: white; padding: 30px; border-radius: 15px; width: 450px; }
 
-        /* Login */
+        /* LOGIN */
         .login-wrap { position: fixed; inset: 0; background: var(--dark); z-index: 99999; display: flex; align-items: center; justify-content: center; }
         .login-card { background: white; padding: 40px; border-radius: 25px; width: 360px; text-align: center; }
     </style>
 </head>
 <body>
 
-<!-- PANTALLA LOGIN -->
 <div class="login-wrap" id="login-wrap">
     <div class="login-card">
-        <h2 style="margin-bottom:20px">ContaPY Access</h2>
-        <div class="form-group"><input type="text" id="lu" placeholder="Usuario / Email"></div>
-        <div class="form-group"><input type="password" id="lp" placeholder="Contraseña"></div>
-        <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Ingresar</button>
-        <p id="l-msg" style="color:red; margin-top:15px; font-size:12px; font-weight:bold"></p>
+        <h2 style="margin-bottom:10px">ContaPY Access</h2>
+        <p style="font-size: 12px; color: #888; margin-bottom: 20px;">Sincronización Cloud v4.1</p>
+        <input type="text" id="lu" placeholder="Email">
+        <input type="password" id="lp" placeholder="Contraseña">
+        <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Entrar</button>
+        <p id="l-msg" style="color:red; margin-top:10px; font-size:12px"></p>
     </div>
 </div>
 
 <div class="sidebar">
     <h2 style="color:var(--accent); margin-bottom:30px">🧾 ContaPY</h2>
-    <div class="nav-item active" id="menu-dash" onclick="showPage('dashboard', this)">🏠 Dashboard</div>
-    <div class="nav-item" id="menu-cli" onclick="showPage('clientes', this)">🏢 Clientes</div>
-    <div style="margin-top:auto">
-        <button class="btn" style="width:100%; background:rgba(255,255,255,0.1); color:white" onclick="window.doLogout()">Salir</button>
-    </div>
+    <div class="nav-item active" id="m-dash" onclick="showPage('dashboard', this)">🏠 Dashboard</div>
+    <div class="nav-item" id="m-cli" onclick="showPage('clientes', this)">🏢 Clientes</div>
+    <div class="nav-item" id="m-ia" onclick="showPage('ia', this)">🤖 Claude IA</div>
+    <div style="margin-top:auto"><button class="btn" style="width:100%; background:#222; color:white" onclick="location.reload()">Cerrar Sesión</button></div>
 </div>
 
 <div class="main">
     <div class="topbar">
-        <div class="topbar-title" id="txt-topbar">Dashboard Principal</div>
-        <select id="lang_sel" onchange="window.changeLang(this.value)">
-            <option value="es">Español</option>
-            <option value="en">English</option>
-            <option value="pt">Português</option>
+        <div class="topbar-title" id="txt-top">Dashboard v4.1</div>
+        <select id="lang_sel" onchange="window.changeLang(this.value)" style="width:auto">
+            <option value="es">ES</option><option value="en">EN</option><option value="pt">PT</option>
         </select>
     </div>
-
     <div class="content">
         <!-- DASHBOARD -->
         <div class="page active" id="page-dashboard">
             <div class="card">
                 <h2 id="txt-welcome">Bienvenido 👋</h2>
-                <p id="txt-sub">Los datos se sincronizan con la PC y la Nube.</p>
+                <p id="txt-sub">Los datos se guardan en la PC y en la Nube.</p>
             </div>
             <div class="card">
-                <h3 id="txt-list-title">Resumen de Cartera</h3>
-                <table>
-                    <thead><tr><th id="th-ruc1">RUC</th><th id="th-nom1">Nombre</th></tr></thead>
-                    <tbody id="dash-list"></tbody>
-                </table>
+                <h3 id="txt-resumen">Clientes Activos</h3>
+                <table id="dash-list"></table>
             </div>
         </div>
 
         <!-- CLIENTES -->
         <div class="page" id="page-clientes">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px">
                 <h2 id="txt-cli-title">Directorio</h2>
-                <button class="btn btn-primary" id="btn-new" onclick="window.openModalCliente()">+ Nuevo Cliente</button>
+                <button class="btn btn-primary" id="btn-new" onclick="window.openModalCliente()">+ Nuevo</button>
             </div>
+            <div class="card"><table id="tabla-list"></table></div>
+        </div>
+
+        <!-- IA -->
+        <div class="page" id="page-ia">
             <div class="card">
-                <table>
-                    <thead><tr><th id="th-ruc2">RUC</th><th id="th-nom2">Nombre</th><th id="th-act">Acción</th></tr></thead>
-                    <tbody id="tabla-list"></tbody>
-                </table>
+                <h2>🤖 Soporte Claude IA</h2>
+                <div id="chat-box" style="height:250px; overflow-y:auto; background:#f9f9f9; padding:15px; border:1px solid #ddd; margin:15px 0; border-radius:10px">
+                    <p><b>Claude:</b> ¡Hola! ¿En qué puedo ayudarte con la Ley 6380/19 hoy?</p>
+                </div>
+                <div style="display:flex; gap:10px">
+                    <input type="text" id="chat-input" placeholder="Escribe tu duda contable...">
+                    <button class="btn btn-secondary" onclick="window.preguntarIA()">Preguntar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -134,90 +123,67 @@
 <!-- MODAL CLIENTE -->
 <div class="modal-overlay" id="modal-cliente">
     <div class="modal">
-        <h3 id="txt-modal-title" style="margin-bottom:20px">Datos del Cliente</h3>
-        <div class="form-group"><label id="lbl-ruc">RUC:</label><input type="text" id="cli_ruc"></div>
-        <div class="form-group"><label id="lbl-nom">Nombre:</label><input type="text" id="cli_nom"></div>
+        <h3 id="txt-modal-title">Datos del Cliente</h3>
+        <input type="text" id="cli_ruc" placeholder="RUC">
+        <input type="text" id="cli_nom" placeholder="Razón Social">
         <div style="text-align:right; margin-top:20px">
             <button class="btn" style="background:#ccc" onclick="window.closeModal()">Cancelar</button>
-            <button class="btn btn-primary" id="btn-save" onclick="window.guardarCliente()">💾 Guardar Datos</button>
+            <button class="btn btn-primary" id="btn-save" onclick="window.guardarCliente()">💾 Guardar</button>
         </div>
     </div>
 </div>
 
 <script>
-    // --- VARIABLES ---
-    window.dbClientes = JSON.parse(localStorage.getItem('contapy_data')) || [];
+    window.dbClientes = JSON.parse(localStorage.getItem('contapy_v41')) || [];
 
-    // --- IDIOMAS CORREGIDO (Sin fallos de puntero) ---
+    // IDIOMAS (Lógica mejorada)
     window.changeLang = function(lang) {
         localStorage.setItem('contapy_lang', lang);
-        console.log("Cambiando a: " + lang);
-
-        var t = {
-            es: { top: "Dashboard Principal", welcome: "Bienvenido 👋", sub: "Datos en PC y Nube.", list: "Resumen de Cartera", cli: "Directorio", ruc: "RUC", nom: "Nombre", act: "Acción", modal: "Datos del Cliente", save: "💾 Guardar", new: "+ Nuevo Cliente" },
-            en: { top: "Main Dashboard", welcome: "Welcome 👋", sub: "Data synced to PC and Cloud.", list: "Portfolio Summary", cli: "Directory", ruc: "Tax ID", nom: "Legal Name", act: "Action", modal: "Client Details", save: "💾 Save Data", new: "+ New Client" },
-            pt: { top: "Painel Principal", welcome: "Bem-vindo 👋", sub: "Dados sincronizados no PC e Nuvem.", list: "Resumo da Carteira", cli: "Diretório", ruc: "RUC/CPF", nom: "Razão Social", act: "Ação", modal: "Dados do Cliente", save: "💾 Salvar Dados", new: "+ Novo Cliente" }
+        var d = {
+            es: { top: "Dashboard v4.1", welcome: "Bienvenido 👋", sub: "Datos en PC y Nube.", resumen: "Clientes Activos", cli: "Directorio", modal: "Datos del Cliente", save: "💾 Guardar", new: "+ Nuevo" },
+            en: { top: "Dashboard v4.1", welcome: "Welcome 👋", sub: "Data on PC and Cloud.", resumen: "Active Clients", cli: "Directory", modal: "Client Details", save: "💾 Save", new: "+ New" },
+            pt: { top: "Painel v4.1", welcome: "Bem-vindo 👋", sub: "Dados no PC e Nuvem.", resumen: "Clientes Ativos", cli: "Diretório", modal: "Dados do Cliente", save: "💾 Salvar", new: "+ Novo" }
         };
-
-        var sel = t[lang] || t.es;
-        document.getElementById('txt-topbar').innerText = sel.top;
-        document.getElementById('txt-welcome').innerText = sel.welcome;
-        document.getElementById('txt-sub').innerText = sel.sub;
-        document.getElementById('txt-list-title').innerText = sel.list;
-        document.getElementById('txt-cli-title').innerText = sel.cli;
-        document.getElementById('th-ruc1').innerText = sel.ruc;
-        document.getElementById('th-ruc2').innerText = sel.ruc;
-        document.getElementById('th-nom1').innerText = sel.nom;
-        document.getElementById('th-nom2').innerText = sel.nom;
-        document.getElementById('th-act').innerText = sel.act;
-        document.getElementById('txt-modal-title').innerText = sel.modal;
-        document.getElementById('btn-save').innerText = sel.save;
-        document.getElementById('btn-new').innerText = sel.new;
+        var s = d[lang] || d.es;
+        document.getElementById('txt-top').innerText = s.top;
+        document.getElementById('txt-welcome').innerText = s.welcome;
+        document.getElementById('txt-sub').innerText = s.sub;
+        document.getElementById('txt-resumen').innerText = s.resumen;
+        document.getElementById('txt-cli-title').innerText = s.cli;
+        document.getElementById('txt-modal-title').innerText = s.modal;
+        document.getElementById('btn-save').innerText = s.save;
+        document.getElementById('btn-new').innerText = s.new;
     };
 
-    // --- INTERFAZ ---
-    window.showPage = function(name, el) {
-        document.getElementById('page-dashboard').classList.remove('active');
-        document.getElementById('page-clientes').classList.remove('active');
-        document.getElementById('page-' + name).classList.add('active');
+    window.showPage = function(p, el) {
+        document.getElementById('page-dashboard').className = 'page';
+        document.getElementById('page-clientes').className = 'page';
+        document.getElementById('page-ia').className = 'page';
+        document.getElementById('page-' + p).className = 'page active';
         
-        document.getElementById('menu-dash').classList.remove('active');
-        document.getElementById('menu-cli').classList.remove('active');
-        el.classList.add('active');
+        document.getElementById('m-dash').className = 'nav-item';
+        document.getElementById('m-cli').className = 'nav-item';
+        document.getElementById('m-ia').className = 'nav-item';
+        el.className = 'nav-item active';
     };
 
     window.openModalCliente = function() {
         document.getElementById('cli_ruc').value = "";
         document.getElementById('cli_nom').value = "";
-        document.getElementById('modal-cliente').classList.add('open');
-        setTimeout(function(){ document.getElementById('cli_ruc').focus(); }, 300);
+        document.getElementById('modal-cliente').className = "modal-overlay open";
+        setTimeout(function(){ document.getElementById('cli_ruc').focus(); }, 400);
     };
 
-    window.closeModal = function() { document.getElementById('modal-cliente').classList.remove('open'); };
+    window.closeModal = function() { document.getElementById('modal-cliente').className = "modal-overlay"; };
 
     window.guardarCliente = function() {
-        var r = document.getElementById('cli_ruc').value.trim();
-        var n = document.getElementById('cli_nom').value.trim();
-        if(!r || !n) return alert("Complete los campos.");
-
+        var r = document.getElementById('cli_ruc').value;
+        var n = document.getElementById('cli_nom').value;
+        if(!r || !n) return alert("Faltan datos");
         window.dbClientes.push({ ruc: r, nom: n });
-        // Guardar en PC
-        localStorage.setItem('contapy_data', JSON.stringify(window.dbClientes));
-        // Guardar en Nube (si la función existe)
-        if(window.saveToFirebase) window.saveToFirebase();
-        
+        localStorage.setItem('contapy_v41', JSON.stringify(window.dbClientes));
         window.render();
         window.closeModal();
-        alert("✅ Cliente guardado.");
-    };
-
-    window.borrar = function(i) {
-        if(confirm("¿Borrar?")) {
-            window.dbClientes.splice(i, 1);
-            localStorage.setItem('contapy_data', JSON.stringify(window.dbClientes));
-            if(window.saveToFirebase) window.saveToFirebase();
-            window.render();
-        }
     };
 
     window.render = function() {
@@ -226,12 +192,24 @@
         t.innerHTML = ""; d.innerHTML = "";
         for(var i=0; i < window.dbClientes.length; i++) {
             var c = window.dbClientes[i];
-            t.innerHTML += '<tr><td>'+c.ruc+'</td><td>'+c.nom+'</td><td><button class="btn" style="background:#eee" onclick="window.borrar('+i+')">🗑️</button></td></tr>';
+            t.innerHTML += '<tr><td>'+c.ruc+'</td><td>'+c.nom+'</td><td>OK</td></tr>';
             d.innerHTML += '<tr><td><b>'+c.ruc+'</b></td><td>'+c.nom+'</td></tr>';
         }
     };
 
-    // --- FIREBASE ---
+    window.preguntarIA = function() {
+        var msg = document.getElementById('chat-input').value;
+        if(!msg) return;
+        var box = document.getElementById('chat-box');
+        box.innerHTML += '<p style="text-align:right"><b>Tú:</b> '+msg+'</p>';
+        document.getElementById('chat-input').value = "";
+        setTimeout(function(){
+            box.innerHTML += '<p style="color:blue"><b>Claude IA:</b> Analizando tu consulta sobre "'+msg+'" en la Ley 6380...</p>';
+            box.scrollTop = box.scrollHeight;
+        }, 500);
+    };
+
+    // FIREBASE
     var config = {
         apiKey: "AIzaSyBn3tcXb3WpVojYmMX603L68jhOqzW8abg",
         authDomain: "contapy-f85f9.firebaseapp.com",
@@ -246,20 +224,17 @@
         var u = document.getElementById('lu').value;
         var p = document.getElementById('lp').value;
         firebase.auth().signInWithEmailAndPassword(u, p).catch(function(e){
-            document.getElementById('l-msg').innerText = "Acceso incorrecto.";
+            document.getElementById('l-msg').innerText = "Usuario o Clave incorrectos.";
         });
     };
-
-    window.doLogout = function() { firebase.auth().signOut().then(function(){ location.reload(); }); };
 
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             document.getElementById('login-wrap').style.display = 'none';
             window.render();
-            // Aplicar idioma guardado
-            var savedLang = localStorage.getItem('contapy_lang') || 'es';
-            document.getElementById('lang_sel').value = savedLang;
-            window.changeLang(savedLang);
+            var l = localStorage.getItem('contapy_lang') || 'es';
+            document.getElementById('lang_sel').value = l;
+            window.changeLang(l);
         } else {
             document.getElementById('login-wrap').style.display = 'flex';
         }
