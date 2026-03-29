@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v5.2 — Premium Edition</title>
+<title>ContaPY v5.5 — Premium Edition (Cloud + PC)</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<!-- Firebase v8 para máxima compatibilidad con Windows -->
+<!-- Firebase v8 para máxima compatibilidad con Windows Antiguos -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
@@ -14,6 +14,7 @@
   --bg:#f0f2f5;--sidebar:#0f1923;--accent:#e63946;--accent2:#2196f3;
   --white:#fff;--text:#1a1a2e;--border:#e5e7eb;
 }
+
 /* ANTI-BLOQUEO EXE: Desactivar arrastre que impide escribir */
 * { box-sizing:border-box; margin:0; padding:0; -webkit-app-region: no-drag; }
 body { font-family:'DM Sans', sans-serif; background:var(--bg); display:flex; height:100vh; overflow:hidden; }
@@ -39,7 +40,7 @@ table { width:100%; border-collapse:collapse; }
 th { text-align:left; padding:12px; border-bottom:2px solid var(--border); color:#6b7280; text-transform:uppercase; font-size:11px; }
 td { padding:12px; border-bottom:1px solid var(--border); font-size:14px; }
 
-/* FORMULARIOS PARA EXE: Forzar interacción */
+/* FORMULARIOS PARA EXE: Forzar interacción e impedir que se bloquee el teclado */
 .form-group { margin-bottom:15px; }
 label { display:block; font-size:12px; font-weight:700; margin-bottom:5px; color:#4b5563; }
 input { 
@@ -70,11 +71,11 @@ input {
   <div class="login-card">
     <div class="logo-icon" style="width:60px; height:60px; font-size:30px; margin:0 auto 20px">☁️</div>
     <h2 style="margin-bottom:10px">ContaPY Access</h2>
-    <p style="font-size:12px; color:#6b7280; margin-bottom:20px">Inicie sesión para acceder a su PC</p>
+    <p style="font-size:12px; color:#6b7280; margin-bottom:20px">Versión 5.5 — Sincronizada</p>
     <div class="form-group"><input type="text" id="lu" placeholder="Usuario"></div>
     <div class="form-group"><input type="password" id="lp" placeholder="Contraseña"></div>
     <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Ingresar</button>
-    <p id="l-msg" style="color:red; font-size:12px; margin-top:15px"></p>
+    <p id="l-msg" style="color:red; font-size:12px; margin-top:15px; font-weight:bold;"></p>
   </div>
 </div>
 
@@ -92,7 +93,7 @@ input {
 
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="txt-topbar" data-i18n="top_title">Dashboard Principal</div>
+    <div class="topbar-title" id="txt-topbar">Dashboard v5.5</div>
     <select id="lang_sel" onchange="window.changeLang(this.value)">
       <option value="es">🇪🇸 ES</option>
       <option value="en">🇺🇸 EN</option>
@@ -104,7 +105,7 @@ input {
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
-      <p style="color:#6b7280; margin-bottom:20px">Los datos se guardan de forma segura en este equipo.</p>
+      <p style="color:#6b7280; margin-bottom:20px">Los datos se guardan de forma local en esta computadora.</p>
       <div class="card">
         <h3 data-i18n="dash_t1">Acceso Rápido</h3>
         <table>
@@ -144,19 +145,20 @@ input {
 </div>
 
 <script>
-    // CARGA LOCAL (PC)
-    window.dbClientes = JSON.parse(localStorage.getItem('contapy_db_v52')) || [];
+    // CARGA LOCAL EN PC
+    window.dbClientes = JSON.parse(localStorage.getItem('contapy_db_v55')) || [];
 
-    // --- IDIOMAS CORREGIDOS ---
+    // --- SISTEMA DE IDIOMAS AUTOMÁTICO ---
     var translations = {
-        es: { nav_dash:"Dashboard", nav_clients:"Clientes", top_title:"Dashboard Principal", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido", cli_h2:"Directorio de Clientes", nav_new:"Nuevo", tbl_name:"Razón Social", tbl_actions:"Acción" },
-        en: { nav_dash:"Dashboard", nav_clients:"Clients", top_title:"Main Dashboard", dash_h2:"ContaPY Accounting 👋", dash_t1:"Quick Access", cli_h2:"Client Directory", nav_new:"New", tbl_name:"Legal Name", tbl_actions:"Action" },
-        pt: { nav_dash:"Painel", nav_clients:"Clientes", top_title:"Painel Principal", dash_h2:"Estúdio Contábil ContaPY 👋", dash_t1:"Acesso Rápido", cli_h2:"Diretório de Clientes", nav_new:"Novo", tbl_name:"Razão Social", tbl_actions:"Ações" }
+        es: { nav_dash:"Dashboard", nav_clients:"Clientes", top_title:"Dashboard Principal v5.5", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido", cli_h2:"Directorio de Clientes", nav_new:"Nuevo Cliente", tbl_name:"Razón Social", tbl_actions:"Acción" },
+        en: { nav_dash:"Dashboard", nav_clients:"Clients", top_title:"Main Dashboard v5.5", dash_h2:"ContaPY Accounting 👋", dash_t1:"Quick Access", cli_h2:"Client Directory", nav_new:"New Client", tbl_name:"Legal Name", tbl_actions:"Action" },
+        pt: { nav_dash:"Painel", nav_clients:"Clientes", top_title:"Painel Principal v5.5", dash_h2:"Estúdio Contábil ContaPY 👋", dash_t1:"Acesso Rápido", cli_h2:"Diretório de Clientes", nav_new:"Novo Cliente", tbl_name:"Razão Social", tbl_actions:"Ações" }
     };
 
     window.changeLang = function(lang) {
         localStorage.setItem('contapy_lang', lang);
         var t = translations[lang] || translations.es;
+        
         var elements = document.querySelectorAll('[data-i18n]');
         for(var i=0; i<elements.length; i++) {
             var key = elements[i].getAttribute('data-i18n');
@@ -165,7 +167,7 @@ input {
         document.getElementById('txt-topbar').innerText = t.top_title;
     };
 
-    // --- INTERFAZ ---
+    // --- NAVEGACIÓN ---
     window.showPage = function(name, el) {
         document.getElementById('page-dashboard').className = 'page';
         document.getElementById('page-clientes').className = 'page';
@@ -188,9 +190,10 @@ input {
     window.guardarCliente = function() {
         var r = document.getElementById('cli_ruc').value.trim();
         var n = document.getElementById('cli_nom').value.trim();
-        if(!r || !n) return alert("Complete los campos.");
+        if(!r || !n) return alert("Complete los campos requeridos.");
+        
         window.dbClientes.push({ ruc:r, nom:n });
-        localStorage.setItem('contapy_db_v52', JSON.stringify(window.dbClientes));
+        localStorage.setItem('contapy_db_v55', JSON.stringify(window.dbClientes));
         window.render();
         window.closeModal();
     };
@@ -198,11 +201,20 @@ input {
     window.render = function() {
         var t = document.getElementById('tabla-list');
         var d = document.getElementById('dash-list');
+        if(!t) return;
         t.innerHTML = ""; d.innerHTML = "";
         for(var i=0; i < window.dbClientes.length; i++) {
             var c = window.dbClientes[i];
-            t.innerHTML += '<tr><td>'+c.ruc+'</td><td>'+c.nom+'</td><td>OK</td></tr>';
+            t.innerHTML += '<tr><td>'+c.ruc+'</td><td>'+c.nom+'</td><td><button class="btn" style="background:#eee; padding: 5px 10px;" onclick="window.borrarCliente('+i+')">🗑️</button></td></tr>';
             d.innerHTML += '<tr><td><b>'+c.ruc+'</b></td><td>'+c.nom+'</td></tr>';
+        }
+    };
+
+    window.borrarCliente = function(i) {
+        if(confirm("¿Eliminar este cliente?")) {
+            window.dbClientes.splice(i, 1);
+            localStorage.setItem('contapy_db_v55', JSON.stringify(window.dbClientes));
+            window.render();
         }
     };
 
