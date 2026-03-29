@@ -1,188 +1,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>ContaPY v5.0 — Cloud & Desktop</title>
-    <!-- Firebase Estable (Compatibilidad total con Windows) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContaPY v5.1 — Premium Cloud Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono&display=swap" rel="stylesheet">
+<!-- Firebase v8 (Máxima compatibilidad) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
-    <style>
-        :root {
-            --sidebar: #0f1923; --accent: #e63946; --bg: #f0f2f5;
-            --white: #ffffff; --text: #1a1a2e; --border: #e5e7eb;
-        }
-        /* FIX CRÍTICO: Desactivar arrastre global para que el teclado funcione siempre */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; -webkit-app-region: no-drag; }
-        
-        body { display: flex; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
+<style>
+:root {
+  --bg:#f0f2f5;--sidebar:#0f1923;--accent:#e63946;--accent2:#2196f3;
+  --white:#fff;--text:#1a1a2e;--text-light:#6b7280;--border:#e5e7eb;
+}
+/* FIX PARA EXE: Desactivar arrastre que bloquea teclado */
+* { box-sizing:border-box; margin:0; padding:0; -webkit-app-region: no-drag; }
+body { font-family:'DM Sans', sans-serif; background:var(--bg); color:var(--text); display:flex; height:100vh; overflow:hidden; }
 
-        /* SIDEBAR PROFESIONAL */
-        .sidebar { width: 240px; background: var(--sidebar); color: white; display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
-        .logo-box { padding-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
-        .logo-text { font-size: 20px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
-        .nav-item { padding: 12px 15px; cursor: pointer; border-radius: 8px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; transition: 0.2s; opacity: 0.7; }
-        .nav-item:hover, .nav-item.active { background: var(--accent); opacity: 1; color: white; }
+/* SIDEBAR ORIGINAL */
+.sidebar { width:240px; background:var(--sidebar); display:flex; flex-direction:column; flex-shrink:0; }
+.sidebar-logo { padding:20px; border-bottom:1px solid rgba(255,255,255,.06); -webkit-app-region: drag; }
+.logo-icon { width:34px; height:34px; background:var(--accent); border-radius:8px; display:inline-flex; align-items:center; justify-content:center; margin-right:10px; color:white; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:10px 15px; color:rgba(255,255,255,.6); cursor:pointer; font-size:13px; transition:0.2s; }
+.nav-item:hover, .nav-item.active { background:var(--accent); color:white; opacity:1; }
 
-        /* MAIN CONTENT */
-        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .topbar { 
-            background: var(--white); height: 60px; display: flex; align-items: center; 
-            padding: 0 25px; border-bottom: 1px solid var(--border); justify-content: space-between;
-            -webkit-app-region: drag; /* Solo aquí se puede arrastrar la ventana */
-        }
-        .topbar-title { font-weight: 700; font-size: 16px; -webkit-app-region: drag; }
-        .topbar select { -webkit-app-region: no-drag; padding: 6px; border-radius: 5px; border: 1px solid #ddd; outline: none; font-weight: 600; }
+/* MAIN */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.topbar { background:var(--white); border-bottom:1px solid var(--border); height:56px; display:flex; align-items:center; padding:0 20px; -webkit-app-region: drag; }
+.topbar-title { flex:1; font-weight:700; -webkit-app-region: drag; }
+.topbar select { -webkit-app-region: no-drag; padding:5px; border-radius:5px; border:1px solid #ddd; }
 
-        .content { padding: 25px; overflow-y: auto; flex: 1; }
-        .page { display: none; } .page.active { display: block; }
+.content { flex:1; overflow-y:auto; padding:20px; }
+.page { display:none; } .page.active { display:block; }
 
-        /* CARDS Y TABLAS */
-        .card { background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); margin-bottom: 20px; }
-        .card-title { font-weight: 700; margin-bottom: 15px; font-size: 14px; text-transform: uppercase; color: #6b7280; }
-        
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border); font-size: 11px; color: #9ca3af; text-transform: uppercase; }
-        td { padding: 14px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        tr:hover { background: #fafafa; }
+/* CARDS ORIGINALES */
+.card { background:var(--white); border-radius:10px; padding:18px; box-shadow:0 2px 8px rgba(0,0,0,.05); border:1px solid var(--border); margin-bottom:18px; }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:20px; }
+.stat-card { background:white; padding:16px; border-radius:10px; border-top:3px solid var(--accent); box-shadow:0 2px 5px rgba(0,0,0,0.05); }
+.stat-value { font-size:22px; font-weight:700; margin-top:5px; }
 
-        /* FORMULARIOS - CONFIGURADOS PARA EL EXE */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; font-weight: 700; margin-bottom: 6px; color: #4b5563; }
-        input, select { 
-            width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; 
-            outline: none; background: #fff !important; color: #000 !important;
-            /* Estos comandos evitan que el EXE bloquee la escritura */
-            pointer-events: auto !important; -webkit-user-select: text !important; user-select: text !important;
-        }
-        input:focus { border-color: var(--accent); ring: 2px var(--accent); }
+/* TABLAS */
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th { text-align:left; padding:10px; border-bottom:2px solid var(--border); color:var(--text-light); text-transform:uppercase; font-size:10px; }
+td { padding:10px; border-bottom:1px solid var(--border); }
 
-        .btn { padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: 700; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-primary:hover { background: #c1121f; }
-        .btn-outline { background: #f3f4f6; color: #374151; }
+/* INPUTS FIX (MÁXIMA PRIORIDAD) */
+input, select, textarea { 
+    width:100%; padding:10px; border:1.5px solid var(--border); border-radius:7px; outline:none; 
+    background:white !important; color:black !important;
+    pointer-events: auto !important; 
+    -webkit-user-select: text !important;
+    user-select: text !important;
+}
 
-        /* MODALES */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9000; align-items: center; justify-content: center; }
-        .modal-overlay.open { display: flex; }
-        .modal { background: var(--white); padding: 30px; border-radius: 16px; width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; }
+.btn { padding:8px 16px; border-radius:7px; font-weight:600; cursor:pointer; border:none; transition:0.1s; }
+.btn-primary { background:var(--accent); color:white; }
 
-        /* LOGIN */
-        .login-wrap { position: fixed; inset: 0; background: var(--sidebar); z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: white; padding: 45px; border-radius: 24px; width: 380px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-    </style>
+/* MODALES */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:9000; align-items:center; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal { background:white; border-radius:14px; width:90%; max-width:500px; padding:25px; box-shadow:0 10px 40px rgba(0,0,0,0.3); }
+
+/* LOGIN */
+.login-wrap { position:fixed; inset:0; background:var(--sidebar); z-index:10000; display:flex; align-items:center; justify-content:center; }
+.login-card { background:white; padding:40px; border-radius:20px; width:360px; text-align:center; }
+</style>
 </head>
 <body>
 
-<!-- PANTALLA LOGIN -->
+<!-- LOGIN -->
 <div class="login-wrap" id="login-wrap">
-    <div class="login-card">
-        <div style="background:var(--accent); width: 60px; height: 60px; border-radius: 15px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 30px; color: white;">☁️</div>
-        <h2 style="margin-bottom:10px">ContaPY Access</h2>
-        <p style="color: #6b7280; font-size: 13px; margin-bottom: 25px;">Sincronización Cloud v5.0</p>
-        <div class="form-group"><input type="text" id="lu" placeholder="Correo Electrónico"></div>
-        <div class="form-group"><input type="password" id="lp" placeholder="Contraseña"></div>
-        <button class="btn btn-primary" style="width:100%; justify-content:center; height: 50px;" onclick="window.doLogin()">Entrar al Sistema</button>
-        <p id="l-msg" style="color:var(--accent); margin-top:15px; font-size:12px; font-weight: bold;"></p>
-    </div>
+  <div class="login-card">
+    <div class="logo-icon" style="width:60px; height:60px; font-size:30px; margin:0 auto 20px">☁️</div>
+    <h2 style="margin-bottom:10px">ContaPY Access</h2>
+    <p style="font-size:12px; color:var(--text-light); margin-bottom:20px">Versión 5.1 Premium</p>
+    <input type="text" id="lu" placeholder="Usuario / Correo" style="margin-bottom:10px">
+    <input type="password" id="lp" placeholder="Contraseña" style="margin-bottom:20px">
+    <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Entrar</button>
+    <p id="l-msg" style="color:red; font-size:11px; margin-top:10px"></p>
+  </div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-    <div class="logo-box"><div class="logo-text">🧾 ContaPY</div></div>
-    <div class="nav-item active" id="menu-dash" onclick="showPage('dashboard', this)">🏠 <span id="m-dash">Dashboard</span></div>
-    <div class="nav-item" id="menu-cli" onclick="showPage('clientes', this)">🏢 <span id="m-cli">Clientes</span></div>
-    <div style="margin-top:auto">
-        <button class="btn btn-outline" style="width:100%; background: rgba(255,255,255,0.1); color: white;" onclick="window.doLogout()">🚪 Salir</button>
-    </div>
+  <div class="sidebar-logo">
+    <div class="logo-icon">🧾</div><span style="color:white; font-weight:700">ContaPY Cloud</span>
+  </div>
+  <div class="nav-item active" id="nav_dash" onclick="showPage('dashboard', this)">🏠 <span data-i18n="nav_dash">Dashboard</span></div>
+  <div class="nav-item" id="nav_cli" onclick="showPage('clientes', this)">🏢 <span data-i18n="nav_clients">Clientes</span></div>
+  <div class="nav-item" id="nav_ia" onclick="showPage('ia', this)">🤖 <span data-i18n="nav_ai">Claude IA</span></div>
+  <div style="margin-top:auto; padding:20px">
+    <button class="btn" style="width:100%; background:rgba(255,255,255,0.1); color:white" onclick="location.reload()">Cerrar Sesión</button>
+  </div>
 </div>
 
 <div class="main">
-    <div class="topbar">
-        <div class="topbar-title" id="txt-topbar">Dashboard Principal</div>
-        <select id="lang_sel" onchange="window.changeLang(this.value)">
-            <option value="es">Español</option>
-            <option value="en">English</option>
-            <option value="pt">Português</option>
-        </select>
+  <div class="topbar">
+    <div class="topbar-title" id="txt_topbar" data-i18n="top_title">Dashboard Principal</div>
+    <select id="lang_sel" onchange="window.changeLang(this.value)">
+      <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
+    </select>
+  </div>
+
+  <div class="content">
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
+      <div class="stats-grid">
+        <div class="stat-card"><div style="font-size:11px; color:#888" data-i18n="dash_s1">Asientos</div><div class="stat-value">0</div></div>
+        <div class="stat-card"><div style="font-size:11px; color:#888" data-i18n="dash_s2">Clientes</div><div class="stat-value" id="dash_cli_count">0</div></div>
+      </div>
+      <div class="card">
+        <h3 data-i18n="dash_t1">Acceso Rápido a Clientes</h3>
+        <table>
+          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social</th></tr></thead>
+          <tbody id="dash-list"></tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="content">
-        <!-- PÁGINA DASHBOARD -->
-        <div class="page active" id="page-dashboard">
-            <div class="card">
-                <h2 id="txt-welcome">Bienvenido 👋</h2>
-                <p id="txt-sub" style="color: #6b7280; margin-top: 5px;">Sistema de gestión local sincronizado.</p>
-            </div>
-            <div class="card">
-                <div class="card-title" id="txt-resumen">Resumen de Clientes</div>
-                <table>
-                    <thead><tr><th id="th-ruc1">RUC</th><th id="th-nom1">Razón Social</th></tr></thead>
-                    <tbody id="dash-list"></tbody>
-                </table>
-            </div>
-        </div>
+    <!-- CLIENTES -->
+    <div class="page" id="page-clientes">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+        <h2 data-i18n="cli_h2">Directorio de Clientes</h2>
+        <button class="btn btn-primary" onclick="window.openModalCliente()">+ <span data-i18n="nav_new">Nuevo</span></button>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Nombre</th><th data-i18n="tbl_actions">Acción</th></tr></thead>
+          <tbody id="tabla-list"></tbody>
+        </table>
+      </div>
+    </div>
 
-        <!-- PÁGINA CLIENTES -->
-        <div class="page" id="page-clientes">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
-                <h2 id="txt-cli-title">Directorio de Clientes</h2>
-                <button class="btn btn-primary" id="btn-new" onclick="window.openModalCliente()">+ Nuevo Cliente</button>
+    <!-- IA -->
+    <div class="page" id="page-ia">
+        <h2 data-i18n="nav_ai">Soporte Claude IA</h2>
+        <div class="card" style="height:400px; display:flex; flex-direction:column">
+            <div id="chat-box" style="flex:1; overflow-y:auto; background:#f8f9fa; padding:15px; border-radius:10px; margin-bottom:10px">
+                <p>🤖 <b>Claude:</b> ¡Hola! Soy tu asistente contable. ¿Qué consulta tienes sobre la Ley 6380?</p>
             </div>
-            <div class="card">
-                <table>
-                    <thead><tr><th id="th-ruc2">RUC</th><th id="th-nom2">Nombre</th><th id="th-act">Acción</th></tr></thead>
-                    <tbody id="tabla-list"></tbody>
-                </table>
+            <div style="display:flex; gap:10px">
+                <input type="text" id="chat-input" placeholder="Pregunta aquí...">
+                <button class="btn btn-primary" onclick="window.preguntarIA()">Enviar</button>
             </div>
         </div>
     </div>
+  </div>
 </div>
 
 <!-- MODAL CLIENTE -->
 <div class="modal-overlay" id="modal-cliente">
-    <div class="modal">
-        <h2 id="txt-modal-title" style="margin-bottom:20px">Datos del Cliente</h2>
-        <div class="form-group"><label id="lbl-ruc">RUC / ID:</label><input type="text" id="cli_ruc" placeholder="Ej: 80000000-0"></div>
-        <div class="form-group"><label id="lbl-nom">RAZÓN SOCIAL:</label><input type="text" id="cli_nom" placeholder="Ej: Empresa S.A."></div>
-        <div style="text-align:right; margin-top:30px; display: flex; gap: 10px; justify-content: flex-end;">
-            <button class="btn btn-outline" id="btn-cancel" onclick="window.closeModal()">Cancelar</button>
-            <button class="btn btn-primary" id="btn-save" onclick="window.guardarCliente()">💾 Guardar Datos</button>
-        </div>
+  <div class="modal">
+    <h3 id="txt_modal_title" style="margin-bottom:20px">Datos del Cliente</h3>
+    <div style="margin-bottom:15px">
+        <label>RUC:</label>
+        <input type="text" id="cli_ruc" placeholder="Ej: 80000000-0">
     </div>
+    <div style="margin-bottom:15px">
+        <label>Razón Social:</label>
+        <input type="text" id="cli_nom" placeholder="Nombre completo">
+    </div>
+    <div style="text-align:right">
+        <button class="btn" style="background:#eee" onclick="window.closeModal()">Cerrar</button>
+        <button class="btn btn-primary" onclick="window.guardarCliente()">💾 Guardar en PC</button>
+    </div>
+  </div>
 </div>
 
 <script>
-    // Base de datos Local
-    window.dbClientes = JSON.parse(localStorage.getItem('contapy_db_v5')) || [];
+    // VARIABLES LOCALES
+    window.dbClientes = JSON.parse(localStorage.getItem('contapy_db_v51')) || [];
 
-    // --- IDIOMAS CORREGIDO (Lógica manual uno a uno) ---
+    // --- IDIOMAS ---
+    var translations = {
+        es: { nav_dash:"Dashboard", nav_clients:"Clientes", nav_ai:"Claude IA", top_title:"Dashboard Principal", dash_h2:"Estudio Contable ContaPY 👋", dash_s1:"Asientos", dash_s2:"Clientes", dash_t1:"Acceso Rápido", cli_h2:"Directorio", nav_new:"Nuevo", tbl_name:"Razón Social", tbl_actions:"Acción" },
+        en: { nav_dash:"Dashboard", nav_clients:"Clients", nav_ai:"Claude IA", top_title:"Main Dashboard", dash_h2:"ContaPY Accounting 👋", dash_s1:"Entries", dash_s2:"Clients", dash_t1:"Quick Access", cli_h2:"Directory", nav_new:"New", tbl_name:"Legal Name", tbl_actions:"Action" },
+        pt: { nav_dash:"Painel", nav_clients:"Clientes", nav_ai:"Claude IA", top_title:"Painel Principal", dash_h2:"Estúdio Contábil ContaPY 👋", dash_s1:"Lançamentos", dash_s2:"Clientes", dash_t1:"Acesso Rápido", cli_h2:"Diretório", nav_new:"Novo", tbl_name:"Razão Social", tbl_actions:"Ações" }
+    };
+
     window.changeLang = function(lang) {
         localStorage.setItem('contapy_lang', lang);
-        
-        var dict = {
-            es: { top:"Dashboard Principal", dash:"Dashboard", cli:"Clientes", welcome:"Bienvenido 👋", sub:"Sistema local sincronizado.", res:"Resumen de Clientes", title:"Directorio", ruc:"RUC", nom:"Nombre", act:"Acción", modal:"Datos del Cliente", cancel:"Cancelar", save:"💾 Guardar Datos", new:"+ Nuevo Cliente" },
-            en: { top:"Main Dashboard", dash:"Home", cli:"Clients", welcome:"Welcome 👋", sub:"Local system synchronized.", res:"Client Summary", title:"Directory", ruc:"Tax ID", nom:"Name", act:"Action", modal:"Client Details", cancel:"Cancel", save:"💾 Save Data", new:"+ New Client" },
-            pt: { top:"Painel Principal", dash:"Início", cli:"Clientes", welcome:"Bem-vindo 👋", sub:"Sistema local sincronizado.", res:"Resumo de Clientes", title:"Diretório", ruc:"RUC/CPF", nom:"Razão Social", act:"Ação", modal:"Dados do Cliente", cancel:"Cancelar", save:"💾 Salvar Dados", new:"+ Novo Cliente" }
-        };
-
-        var s = dict[lang] || dict.es;
-        document.getElementById('txt-topbar').innerText = s.top;
-        document.getElementById('m-dash').innerText = s.dash;
-        document.getElementById('m-cli').innerText = s.cli;
-        document.getElementById('txt-welcome').innerText = s.welcome;
-        document.getElementById('txt-sub').innerText = s.sub;
-        document.getElementById('txt-resumen').innerText = s.res;
-        document.getElementById('txt-cli-title').innerText = s.title;
-        document.getElementById('th-ruc1').innerText = s.ruc;
-        document.getElementById('th-ruc2').innerText = s.ruc;
-        document.getElementById('th-nom1').innerText = s.nom;
-        document.getElementById('th-nom2').innerText = s.nom;
-        document.getElementById('th-act').innerText = s.act;
-        document.getElementById('txt-modal-title').innerText = s.modal;
-        document.getElementById('btn-cancel').innerText = s.cancel;
-        document.getElementById('btn-save').innerText = s.save;
-        document.getElementById('btn-new').innerText = s.new;
+        var t = translations[lang] || translations.es;
+        var elements = document.querySelectorAll('[data-i18n]');
+        for(var i=0; i<elements.length; i++) {
+            var key = elements[i].getAttribute('data-i18n');
+            if(t[key]) elements[i].innerText = t[key];
+        }
+        document.getElementById('txt_topbar').innerText = t.top_title;
     };
 
     // --- INTERFAZ ---
@@ -191,38 +197,28 @@
         for(var i=0; i<pages.length; i++) pages[i].classList.remove('active');
         document.getElementById('page-' + name).classList.add('active');
         
-        var items = document.getElementsByClassName('nav-item');
-        for(var i=0; i<items.length; i++) items[i].classList.remove('active');
+        var navs = document.getElementsByClassName('nav-item');
+        for(var i=0; i<navs.length; i++) navs[i].classList.remove('active');
         el.classList.add('active');
     };
 
     window.openModalCliente = function() {
         document.getElementById('cli_ruc').value = "";
         document.getElementById('cli_nom').value = "";
-        document.getElementById('modal-cliente').classList.add('open');
-        // Obligar al EXE a activar el teclado
+        document.getElementById('modal-cliente').className = "modal-overlay open";
         setTimeout(function(){ document.getElementById('cli_ruc').focus(); }, 300);
     };
 
-    window.closeModal = function() { document.getElementById('modal-cliente').classList.remove('open'); };
+    window.closeModal = function() { document.getElementById('modal-cliente').className = "modal-overlay"; };
 
     window.guardarCliente = function() {
         var r = document.getElementById('cli_ruc').value.trim();
         var n = document.getElementById('cli_nom').value.trim();
-        if(!r || !n) return alert("Faltan datos obligatorios.");
-
-        window.dbClientes.push({ ruc: r, nom: n });
-        localStorage.setItem('contapy_db_v5', JSON.stringify(window.dbClientes));
+        if(!r || !n) return alert("Complete los campos.");
+        window.dbClientes.push({ ruc:r, nom:n });
+        localStorage.setItem('contapy_db_v51', JSON.stringify(window.dbClientes));
         window.render();
         window.closeModal();
-    };
-
-    window.borrar = function(i) {
-        if(confirm("¿Eliminar cliente?")) {
-            window.dbClientes.splice(i, 1);
-            localStorage.setItem('contapy_db_v5', JSON.stringify(window.dbClientes));
-            window.render();
-        }
     };
 
     window.render = function() {
@@ -231,9 +227,22 @@
         t.innerHTML = ""; d.innerHTML = "";
         for(var i=0; i < window.dbClientes.length; i++) {
             var c = window.dbClientes[i];
-            t.innerHTML += '<tr><td>'+c.ruc+'</td><td>'+c.nom+'</td><td><button class="btn btn-outline" style="padding:5px 10px" onclick="window.borrar('+i+')">🗑️</button></td></tr>';
+            t.innerHTML += '<tr><td>'+c.ruc+'</td><td>'+c.nom+'</td><td>OK</td></tr>';
             d.innerHTML += '<tr><td><b>'+c.ruc+'</b></td><td>'+c.nom+'</td></tr>';
         }
+        document.getElementById('dash_cli_count').innerText = window.dbClientes.length;
+    };
+
+    window.preguntarIA = function() {
+        var inp = document.getElementById('chat-input');
+        var box = document.getElementById('chat-box');
+        if(!inp.value) return;
+        box.innerHTML += '<p style="text-align:right"><b>Tú:</b> '+inp.value+'</p>';
+        var v = inp.value; inp.value = "";
+        setTimeout(function(){
+            box.innerHTML += '<p style="color:blue">🤖 <b>Claude:</b> Procesando consulta sobre "'+v+'"...</p>';
+            box.scrollTop = box.scrollHeight;
+        }, 500);
     };
 
     // --- FIREBASE (LOGIN) ---
@@ -251,11 +260,9 @@
         var u = document.getElementById('lu').value;
         var p = document.getElementById('lp').value;
         firebase.auth().signInWithEmailAndPassword(u, p).catch(function(e){
-            document.getElementById('l-msg').innerText = "Credenciales incorrectas.";
+            document.getElementById('l-msg').innerText = "Credenciales incorrectas";
         });
     };
-
-    window.doLogout = function() { firebase.auth().signOut().then(function(){ location.reload(); }); };
 
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
