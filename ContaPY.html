@@ -1,83 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>ContaPY v4.0 - PC Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContaPY v4.0 — Sistema Contable</title>
     
-    <!-- Cargamos Firebase Versión 8 (Máxima compatibilidad para EXEs) -->
+    <!-- Firebase Versión 8 (La mejor para compatibilidad con Windows/EXE) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <style>
-        /* CSS BÁSICO Y ANTIBLOQUEO PARA EL EXE */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        :root { --bg:#f0f2f5; --dark:#0f1923; --accent:#e63946; --white:#ffffff; }
         
-        body { display: flex; height: 100vh; background: #f0f2f5; overflow: hidden; }
+        /* FIX TOTAL PARA EL EXE: Desactivar arrastre en todo el cuerpo */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; -webkit-app-region: no-drag; }
+        
+        body { display: flex; height: 100vh; background: var(--bg); overflow: hidden; }
 
-        /* Sidebar */
-        .sidebar { width: 220px; background: #0f1923; color: white; padding: 20px; flex-shrink: 0; }
-        .nav-item { padding: 12px; cursor: pointer; border-radius: 5px; margin-bottom: 5px; background: rgba(255,255,255,0.05); }
-        .nav-item:hover { background: #e63946; }
-        .nav-item.active { background: #e63946; }
+        /* Barra Lateral */
+        .sidebar { width: 230px; background: var(--dark); color: white; padding: 20px; flex-shrink: 0; }
+        .nav-item { padding: 12px; cursor: pointer; border-radius: 8px; margin-bottom: 5px; opacity: 0.8; transition: 0.2s; }
+        .nav-item:hover, .nav-item.active { background: var(--accent); opacity: 1; }
 
-        /* Contenido Principal */
+        /* Contenido */
         .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .topbar { background: white; height: 55px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid #ddd; justify-content: space-between; }
-        .content { padding: 20px; overflow-y: auto; flex: 1; }
+        
+        /* Solo la barra superior permite arrastrar la ventana en el EXE */
+        .topbar { 
+            background: white; height: 60px; display: flex; align-items: center; 
+            padding: 0 20px; border-bottom: 1px solid #ddd; justify-content: space-between;
+            -webkit-app-region: drag; 
+        }
+        .topbar-title { font-weight: bold; -webkit-app-region: drag; }
+        .topbar select { -webkit-app-region: no-drag; cursor: pointer; padding: 5px; }
 
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; }
+        .content { padding: 25px; overflow-y: auto; flex: 1; }
+        .page { display: none; } .page.active { display: block; }
 
-        /* INPUTS - CONFIGURACIÓN PARA QUE EL EXE PERMITA ESCRIBIR */
+        /* UI */
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+
+        /* FORMULARIOS: FIX PARA EXE (Permitir teclado) */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; font-weight: bold; color: #666; margin-bottom: 5px; }
         input, select { 
-            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; 
-            font-size: 15px; margin-bottom: 15px; display: block; 
+            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; 
             background: white !important; color: black !important;
-            -webkit-app-region: no-drag !important;
+            /* Estos comandos fuerzan al EXE a aceptar clics y teclado */
+            pointer-events: auto !important;
+            -webkit-user-select: text !important;
+            user-select: text !important;
         }
 
-        .btn { padding: 10px 20px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
-        .btn-primary { background: #e63946; color: white; }
-        .btn-outline { background: #f0f0f0; color: #333; }
+        .btn { padding: 10px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; transition: 0.2s; }
+        .btn-primary { background: var(--accent); color: white; }
 
-        /* Modales */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10000; align-items: center; justify-content: center; }
         .modal-overlay.open { display: flex; }
-        .modal { background: white; padding: 30px; border-radius: 12px; width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .modal { background: white; padding: 30px; border-radius: 15px; width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
 
         /* Login */
-        .login-wrap { position: fixed; inset: 0; background: #0f1923; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: white; padding: 40px; border-radius: 20px; width: 340px; text-align: center; }
+        .login-wrap { position: fixed; inset: 0; background: var(--dark); z-index: 99999; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: white; padding: 40px; border-radius: 25px; width: 360px; text-align: center; }
     </style>
 </head>
 <body>
 
-<!-- PANTALLA DE LOGIN -->
+<!-- PANTALLA LOGIN -->
 <div class="login-wrap" id="login-wrap">
     <div class="login-card">
         <h2 style="margin-bottom:20px">ContaPY Access</h2>
-        <input type="text" id="lu" placeholder="Usuario / Email">
-        <input type="password" id="lp" placeholder="Contraseña">
-        <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Ingresar al Sistema</button>
-        <p id="l-msg" style="color:red; font-size:12px; margin-top:15px; font-weight: bold;"></p>
+        <div class="form-group"><input type="text" id="lu" placeholder="Usuario / Email"></div>
+        <div class="form-group"><input type="password" id="lp" placeholder="Contraseña"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Ingresar</button>
+        <p id="l-msg" style="color:red; margin-top:15px; font-size:12px; font-weight:bold"></p>
     </div>
 </div>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-    <h2 style="color:#e63946; margin-bottom:40px; font-size: 24px;">ContaPY</h2>
-    <div class="nav-item active" id="btn_nav_dash" onclick="showPage('dashboard')">🏠 Inicio</div>
-    <div class="nav-item" id="btn_nav_cli" onclick="showPage('clientes')">🏢 Clientes</div>
+    <h2 style="color:var(--accent); margin-bottom:30px">🧾 ContaPY</h2>
+    <div class="nav-item active" id="menu-dash" onclick="showPage('dashboard', this)">🏠 Dashboard</div>
+    <div class="nav-item" id="menu-cli" onclick="showPage('clientes', this)">🏢 Clientes</div>
     <div style="margin-top:auto">
-        <button class="btn" style="width:100%; background:#222; color:white" onclick="doLogout()">Cerrar Sesión</button>
+        <button class="btn" style="width:100%; background:rgba(255,255,255,0.1); color:white" onclick="window.doLogout()">Salir</button>
     </div>
 </div>
 
 <div class="main">
     <div class="topbar">
-        <b id="txt_top_title">Dashboard Principal</b>
-        <select id="lang_sel" onchange="changeLang(this.value)" style="width:auto; margin-bottom: 0;">
+        <div class="topbar-title" id="txt-topbar">Dashboard Principal</div>
+        <select id="lang_sel" onchange="window.changeLang(this.value)">
             <option value="es">Español</option>
             <option value="en">English</option>
             <option value="pt">Português</option>
@@ -85,34 +100,30 @@
     </div>
 
     <div class="content">
-        <!-- PÁGINA DASHBOARD -->
-        <div id="page-dashboard">
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
             <div class="card">
-                <h2 id="txt_dash_welcome">Bienvenido 👋</h2>
-                <p id="txt_dash_sub">Los datos se guardan en el disco duro de esta PC.</p>
+                <h2 id="txt-welcome">Bienvenido 👋</h2>
+                <p id="txt-sub">Los datos se sincronizan con la PC y la Nube.</p>
             </div>
             <div class="card">
-                <h3 id="txt_dash_list">Resumen de Clientes</h3>
+                <h3 id="txt-list-title">Resumen de Cartera</h3>
                 <table>
-                    <thead>
-                        <tr><th id="th_ruc1">RUC</th><th id="th_nom1">Razón Social</th></tr>
-                    </thead>
+                    <thead><tr><th id="th-ruc1">RUC</th><th id="th-nom1">Nombre</th></tr></thead>
                     <tbody id="dash-list"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- PÁGINA CLIENTES -->
-        <div id="page-clientes" style="display:none">
+        <!-- CLIENTES -->
+        <div class="page" id="page-clientes">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
-                <h2 id="txt_cli_title">Directorio de Clientes</h2>
-                <button class="btn btn-primary" id="btn_new_cli" onclick="openModalCliente()">+ Nuevo Cliente</button>
+                <h2 id="txt-cli-title">Directorio</h2>
+                <button class="btn btn-primary" id="btn-new" onclick="window.openModalCliente()">+ Nuevo Cliente</button>
             </div>
             <div class="card">
                 <table>
-                    <thead>
-                        <tr><th id="th_ruc2">RUC</th><th id="th_nom2">Nombre</th><th id="th_act">Acción</th></tr>
-                    </thead>
+                    <thead><tr><th id="th-ruc2">RUC</th><th id="th-nom2">Nombre</th><th id="th-act">Acción</th></tr></thead>
                     <tbody id="tabla-list"></tbody>
                 </table>
             </div>
@@ -123,134 +134,105 @@
 <!-- MODAL CLIENTE -->
 <div class="modal-overlay" id="modal-cliente">
     <div class="modal">
-        <h3 id="txt_modal_title" style="margin-bottom:20px">Datos del Cliente</h3>
-        <label id="lbl_ruc">RUC:</label>
-        <input type="text" id="cli_ruc" placeholder="Ej: 123456-7">
-        <label id="lbl_nom">Nombre:</label>
-        <input type="text" id="cli_nom" placeholder="Ej: Juan Pérez">
+        <h3 id="txt-modal-title" style="margin-bottom:20px">Datos del Cliente</h3>
+        <div class="form-group"><label id="lbl-ruc">RUC:</label><input type="text" id="cli_ruc"></div>
+        <div class="form-group"><label id="lbl-nom">Nombre:</label><input type="text" id="cli_nom"></div>
         <div style="text-align:right; margin-top:20px">
-            <button class="btn btn-outline" id="btn_cancel" onclick="closeModal()">Cancelar</button>
-            <button class="btn btn-primary" id="btn_save" onclick="guardarCliente()">💾 Guardar en PC</button>
+            <button class="btn" style="background:#ccc" onclick="window.closeModal()">Cancelar</button>
+            <button class="btn btn-primary" id="btn-save" onclick="window.guardarCliente()">💾 Guardar Datos</button>
         </div>
     </div>
 </div>
 
 <script>
-    // --- VARIABLES GLOBALES ---
-    var dbClientes = JSON.parse(localStorage.getItem('contapy_pc_data')) || [];
+    // --- VARIABLES ---
+    window.dbClientes = JSON.parse(localStorage.getItem('contapy_data')) || [];
 
-    // --- SISTEMA DE IDIOMAS (Lógica Manual para que no falle) ---
-    function changeLang(lang) {
+    // --- IDIOMAS CORREGIDO (Sin fallos de puntero) ---
+    window.changeLang = function(lang) {
         localStorage.setItem('contapy_lang', lang);
-        
-        if (lang === 'es') {
-            document.getElementById('txt_top_title').innerText = "Dashboard Principal";
-            document.getElementById('btn_nav_dash').innerText = "🏠 Inicio";
-            document.getElementById('btn_nav_cli').innerText = "🏢 Clientes";
-            document.getElementById('txt_dash_welcome').innerText = "Bienvenido 👋";
-            document.getElementById('txt_dash_sub').innerText = "Los datos se guardan en el disco duro de esta PC.";
-            document.getElementById('txt_dash_list').innerText = "Resumen de Clientes";
-            document.getElementById('th_ruc1').innerText = "RUC"; document.getElementById('th_ruc2').innerText = "RUC";
-            document.getElementById('th_nom1').innerText = "Razón Social"; document.getElementById('th_nom2').innerText = "Nombre";
-            document.getElementById('th_act').innerText = "Acción";
-            document.getElementById('txt_cli_title').innerText = "Directorio de Clientes";
-            document.getElementById('btn_new_cli').innerText = "+ Nuevo Cliente";
-            document.getElementById('txt_modal_title').innerText = "Datos del Cliente";
-            document.getElementById('btn_cancel').innerText = "Cancelar";
-            document.getElementById('btn_save').innerText = "💾 Guardar en PC";
-        } 
-        else if (lang === 'en') {
-            document.getElementById('txt_top_title').innerText = "Main Dashboard";
-            document.getElementById('btn_nav_dash').innerText = "🏠 Home";
-            document.getElementById('btn_nav_cli').innerText = "🏢 Clients";
-            document.getElementById('txt_dash_welcome').innerText = "Welcome 👋";
-            document.getElementById('txt_dash_sub').innerText = "Data is saved on this PC's hard drive.";
-            document.getElementById('txt_dash_list').innerText = "Client Summary";
-            document.getElementById('th_ruc1').innerText = "Tax ID"; document.getElementById('th_ruc2').innerText = "Tax ID";
-            document.getElementById('th_nom1').innerText = "Company Name"; document.getElementById('th_nom2').innerText = "Name";
-            document.getElementById('th_act').innerText = "Action";
-            document.getElementById('txt_cli_title').innerText = "Client Directory";
-            document.getElementById('btn_new_cli').innerText = "+ New Client";
-            document.getElementById('txt_modal_title').innerText = "Client Details";
-            document.getElementById('btn_cancel').innerText = "Cancel";
-            document.getElementById('btn_save').innerText = "💾 Save to PC";
-        }
-        else if (lang === 'pt') {
-            document.getElementById('txt_top_title').innerText = "Painel Principal";
-            document.getElementById('btn_nav_dash').innerText = "🏠 Início";
-            document.getElementById('btn_nav_cli').innerText = "🏢 Clientes";
-            document.getElementById('txt_dash_welcome').innerText = "Bem-vindo 👋";
-            document.getElementById('txt_dash_sub').innerText = "Os dados são salvos no disco rígido deste PC.";
-            document.getElementById('txt_dash_list').innerText = "Resumo de Clientes";
-            document.getElementById('th_ruc1').innerText = "RUC/CPF"; document.getElementById('th_ruc2').innerText = "RUC/CPF";
-            document.getElementById('th_nom1').innerText = "Razão Social"; document.getElementById('th_nom2').innerText = "Nome";
-            document.getElementById('th_act').innerText = "Ação";
-            document.getElementById('txt_cli_title').innerText = "Diretório de Clientes";
-            document.getElementById('btn_new_cli').innerText = "+ Novo Cliente";
-            document.getElementById('txt_modal_title').innerText = "Dados do Cliente";
-            document.getElementById('btn_cancel').innerText = "Cancelar";
-            document.getElementById('btn_save').innerText = "💾 Salvar no PC";
-        }
-    }
+        console.log("Cambiando a: " + lang);
 
-    // --- NAVEGACIÓN ---
-    function showPage(name) {
-        document.getElementById('page-dashboard').style.display = 'none';
-        document.getElementById('page-clientes').style.display = 'none';
-        document.getElementById('page-' + name).style.display = 'block';
-        
-        document.getElementById('btn_nav_dash').className = 'nav-item';
-        document.getElementById('btn_nav_cli').className = 'nav-item';
-        if(name === 'dashboard') document.getElementById('btn_nav_dash').className = 'nav-item active';
-        if(name === 'clientes') document.getElementById('btn_nav_cli').className = 'nav-item active';
-    }
+        var t = {
+            es: { top: "Dashboard Principal", welcome: "Bienvenido 👋", sub: "Datos en PC y Nube.", list: "Resumen de Cartera", cli: "Directorio", ruc: "RUC", nom: "Nombre", act: "Acción", modal: "Datos del Cliente", save: "💾 Guardar", new: "+ Nuevo Cliente" },
+            en: { top: "Main Dashboard", welcome: "Welcome 👋", sub: "Data synced to PC and Cloud.", list: "Portfolio Summary", cli: "Directory", ruc: "Tax ID", nom: "Legal Name", act: "Action", modal: "Client Details", save: "💾 Save Data", new: "+ New Client" },
+            pt: { top: "Painel Principal", welcome: "Bem-vindo 👋", sub: "Dados sincronizados no PC e Nuvem.", list: "Resumo da Carteira", cli: "Diretório", ruc: "RUC/CPF", nom: "Razão Social", act: "Ação", modal: "Dados do Cliente", save: "💾 Salvar Dados", new: "+ Novo Cliente" }
+        };
 
-    // --- GESTIÓN DE CLIENTES ---
-    function openModalCliente() {
+        var sel = t[lang] || t.es;
+        document.getElementById('txt-topbar').innerText = sel.top;
+        document.getElementById('txt-welcome').innerText = sel.welcome;
+        document.getElementById('txt-sub').innerText = sel.sub;
+        document.getElementById('txt-list-title').innerText = sel.list;
+        document.getElementById('txt-cli-title').innerText = sel.cli;
+        document.getElementById('th-ruc1').innerText = sel.ruc;
+        document.getElementById('th-ruc2').innerText = sel.ruc;
+        document.getElementById('th-nom1').innerText = sel.nom;
+        document.getElementById('th-nom2').innerText = sel.nom;
+        document.getElementById('th-act').innerText = sel.act;
+        document.getElementById('txt-modal-title').innerText = sel.modal;
+        document.getElementById('btn-save').innerText = sel.save;
+        document.getElementById('btn-new').innerText = sel.new;
+    };
+
+    // --- INTERFAZ ---
+    window.showPage = function(name, el) {
+        document.getElementById('page-dashboard').classList.remove('active');
+        document.getElementById('page-clientes').classList.remove('active');
+        document.getElementById('page-' + name).classList.add('active');
+        
+        document.getElementById('menu-dash').classList.remove('active');
+        document.getElementById('menu-cli').classList.remove('active');
+        el.classList.add('active');
+    };
+
+    window.openModalCliente = function() {
         document.getElementById('cli_ruc').value = "";
         document.getElementById('cli_nom').value = "";
-        document.getElementById('modal-cliente').className = "modal-overlay open";
-        // Foco automático para que el EXE active el teclado
-        setTimeout(function() { document.getElementById('cli_ruc').focus(); }, 300);
-    }
+        document.getElementById('modal-cliente').classList.add('open');
+        setTimeout(function(){ document.getElementById('cli_ruc').focus(); }, 300);
+    };
 
-    function closeModal() {
-        document.getElementById('modal-cliente').className = "modal-overlay";
-    }
+    window.closeModal = function() { document.getElementById('modal-cliente').classList.remove('open'); };
 
-    function guardarCliente() {
+    window.guardarCliente = function() {
         var r = document.getElementById('cli_ruc').value.trim();
         var n = document.getElementById('cli_nom').value.trim();
-        if(!r || !n) return alert("Complete los campos requeridos.");
+        if(!r || !n) return alert("Complete los campos.");
 
-        dbClientes.push({ ruc: r, nom: n });
-        localStorage.setItem('contapy_pc_data', JSON.stringify(dbClientes));
-        render();
-        closeModal();
-        alert("✅ Cliente guardado localmente en esta PC.");
-    }
+        window.dbClientes.push({ ruc: r, nom: n });
+        // Guardar en PC
+        localStorage.setItem('contapy_data', JSON.stringify(window.dbClientes));
+        // Guardar en Nube (si la función existe)
+        if(window.saveToFirebase) window.saveToFirebase();
+        
+        window.render();
+        window.closeModal();
+        alert("✅ Cliente guardado.");
+    };
 
-    function borrar(i) {
-        if(confirm("¿Seguro que desea eliminar este cliente?")) {
-            dbClientes.splice(i, 1);
-            localStorage.setItem('contapy_pc_data', JSON.stringify(dbClientes));
-            render();
+    window.borrar = function(i) {
+        if(confirm("¿Borrar?")) {
+            window.dbClientes.splice(i, 1);
+            localStorage.setItem('contapy_data', JSON.stringify(window.dbClientes));
+            if(window.saveToFirebase) window.saveToFirebase();
+            window.render();
         }
-    }
+    };
 
-    function render() {
+    window.render = function() {
         var t = document.getElementById('tabla-list');
         var d = document.getElementById('dash-list');
         t.innerHTML = ""; d.innerHTML = "";
-        for(var i=0; i < dbClientes.length; i++) {
-            var c = dbClientes[i];
-            t.innerHTML += '<tr><td>'+c.ruc+'</td><td>'+c.nom+'</td><td><button class="btn btn-outline" onclick="borrar('+i+')">🗑️</button></td></tr>';
+        for(var i=0; i < window.dbClientes.length; i++) {
+            var c = window.dbClientes[i];
+            t.innerHTML += '<tr><td>'+c.ruc+'</td><td>'+c.nom+'</td><td><button class="btn" style="background:#eee" onclick="window.borrar('+i+')">🗑️</button></td></tr>';
             d.innerHTML += '<tr><td><b>'+c.ruc+'</b></td><td>'+c.nom+'</td></tr>';
         }
-    }
+    };
 
-    // --- FIREBASE (LOGIN) ---
-    var firebaseConfig = {
+    // --- FIREBASE ---
+    var config = {
         apiKey: "AIzaSyBn3tcXb3WpVojYmMX603L68jhOqzW8abg",
         authDomain: "contapy-f85f9.firebaseapp.com",
         projectId: "contapy-f85f9",
@@ -258,32 +240,26 @@
         messagingSenderId: "230770781636",
         appId: "1:230770781636:web:5114af83fb351c15b68891"
     };
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(config);
 
-    function doLogin() {
+    window.doLogin = function() {
         var u = document.getElementById('lu').value;
         var p = document.getElementById('lp').value;
-        if(!u || !p) return alert("Ingrese sus credenciales.");
-        
-        firebase.auth().signInWithEmailAndPassword(u, p).catch(function(error) {
-            document.getElementById('l-msg').innerText = "❌ Acceso Denegado: Usuario o Clave incorrectos.";
+        firebase.auth().signInWithEmailAndPassword(u, p).catch(function(e){
+            document.getElementById('l-msg').innerText = "Acceso incorrecto.";
         });
-    }
+    };
 
-    function doLogout() {
-        firebase.auth().signOut().then(function() {
-            location.reload();
-        });
-    }
+    window.doLogout = function() { firebase.auth().signOut().then(function(){ location.reload(); }); };
 
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             document.getElementById('login-wrap').style.display = 'none';
-            render();
+            window.render();
             // Aplicar idioma guardado
-            var l = localStorage.getItem('contapy_lang') || 'es';
-            document.getElementById('lang_sel').value = l;
-            changeLang(l);
+            var savedLang = localStorage.getItem('contapy_lang') || 'es';
+            document.getElementById('lang_sel').value = savedLang;
+            window.changeLang(savedLang);
         } else {
             document.getElementById('login-wrap').style.display = 'flex';
         }
