@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v1.1 — Premium Ley 6380 Edition</title>
+<title>ContaPY v1.3 — Premium Cloud Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- Firebase v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -18,11 +18,11 @@
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
   --shadow-lg:0 8px 32px rgba(0,0,0,.12);
 }
-/* PARCHE EXE: Habilitar teclado y clics */
+/* ANTI-BLOQUEO EXE */
 * { box-sizing:border-box; margin:0; padding:0; -webkit-app-region: no-drag; }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
 
-.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;z-index:100;}
+.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;z-index:100;transition:all 0.3s;}
 .sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06); -webkit-app-region: drag;}
 .logo-mark{display:flex;align-items:center;gap:10px}
 .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:white}
@@ -56,24 +56,14 @@ input, select, textarea {
 .btn-primary{background:var(--accent);color:white}
 .btn-secondary{background:var(--accent2);color:white}
 .btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+.btn-sm{padding:5px 10px;font-size:11px}
 
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat-card{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);border-top:3px solid var(--accent)}
-.stat-value{font-size:22px;font-weight:700;margin-top:5px}
-
-table { width:100%; border-collapse:collapse; font-size:12.5px}
-thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border); background:#f9fafb}
-tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
-
-.badge-tax { display:inline-block; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:700; margin-right:3px; background:#e5e7eb; color:#374151; }
-.badge-tax.active { background:var(--accent2); color:white; }
-
-/* MODALES */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;overflow:auto;}
-.modal-overlay.open{display:flex}
-.modal{background:white;border-radius:14px;width:90%;max-width:750px;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column;max-height:90vh;}
-.modal-drag-header{background:var(--bg);padding:10px 15px;cursor:move;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;border-bottom:1px solid var(--border)}
-.modal-body-scroll{padding:25px;overflow-y:auto;flex:1}
+/* TABLES */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{padding:10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border); background:#f9fafb}
+tbody td{padding:10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.monto{font-family:'DM Mono',monospace;text-align:right; font-weight: 600;}
 
 /* WIZARD & TABS */
 .wiz-header{display:flex;gap:10px;margin-bottom:20px;align-items:center}
@@ -86,69 +76,49 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
 .tab.active{background:white;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
 
 .login-wrap{position:fixed;inset:0;background:var(--sidebar);display:flex;align-items:center;justify-content:center;z-index:99999}
-.login-card{background:white;border-radius:18px;padding:45px;width:100%;max-width:400px;text-align:center}
+.login-card{background:white;border-radius:18px;padding:36px;width:100%;max-width:380px;text-align:center}
 .copyright-footer{padding:15px;text-align:center;font-size:11px;color:rgba(255,255,255,0.4);border-top:1px solid rgba(255,255,255,0.06);line-height:1.5}
 </style>
 </head>
 <body>
 
-<datalist id="planCuentasRes4814">
+<datalist id="planCuentas">
+    <option value="1.1.1.01 Caja M.N."></option><option value="1.1.1.03 Banco Itaú"></option>
+    <option value="5.1.1.01 Mercaderías"></option><option value="4.1.1.01 Ventas Servicios"></option>
     <option value="5.1.2.04 Honorarios Profesionales"></option>
-    <option value="5.1.1.01 Compras Mercaderías"></option>
-    <option value="4.1.1.01 Ventas Servicios"></option>
-    <option value="1.1.1.01 Caja M.N."></option>
 </datalist>
 
 <!-- LOGIN -->
 <div class="login-wrap" id="login-wrap">
   <div class="login-card">
-    <div style="width:60px;height:60px;background:var(--accent);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 20px;color:white">☁️</div>
+    <div style="width:60px;height:60px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 15px; color:white">☁️</div>
     <h1 style="margin-bottom:5px">ContaPY</h1>
-    <p style="font-size:12px;color:var(--text-light);margin-bottom:25px">v1.1 Premium Cloud Edition</p>
+    <p style="font-size:12px;color:var(--text-light);margin-bottom:20px">v1.3 Premium Cloud Edition</p>
     <div style="text-align:left">
-        <label data-i18n="lbl_user">Usuario</label><input type="text" id="lu" style="width:100%; margin-bottom:10px">
-        <label data-i18n="lbl_pass">Contraseña</label><input type="password" id="lp" style="width:100%; margin-bottom:20px">
+        <label>Usuario</label><input type="text" id="lu" placeholder="ejemplo@correo.com" style="width:100%; margin-bottom:10px">
+        <label>Contraseña</label><input type="password" id="lp" style="width:100%; margin-bottom:20px">
     </div>
-    <button class="btn btn-primary" style="width:100%; height:45px" onclick="window.doLogin()" data-i18n="btn_login">Ingresar al Sistema</button>
+    <button class="btn btn-primary" style="width:100%" onclick="window.doLogin()">Ingresar</button>
     <p id="l-msg" style="color:red;font-size:11px;margin-top:10px"></p>
   </div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v1.1 Premium</div></div></div>
-  </div>
-  
+  <div class="sidebar-logo"><div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v1.3 Premium</div></div></div></div>
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_main">Principal</div>
     <div class="nav-item active" id="nav_dash" onclick="showPage('dashboard',this)">🏠 <span data-i18n="nav_dash">Dashboard</span></div>
     <div class="nav-item" id="nav_cli" onclick="showPage('clientes',this)">🏢 <span data-i18n="nav_clients">Clientes (Cartera)</span></div>
   </div>
-
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_billing">Facturación / Tesorería</div>
-    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span>Carga / SIFEN</span></div>
-    <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="window.openWizard()"><span class="icon">➕</span><span data-i18n="nav_new">Nuevo Asiento</span></div>
+    <div class="sidebar-label">Facturación / Tesorería</div>
+    <div class="nav-item" style="color:var(--accent2); font-weight:bold" onclick="window.openWizard()"><span class="icon">➕</span><span data-i18n="nav_new">Nuevo Asiento</span></div>
   </div>
-
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_taxes">Estados Ley 6380</div>
-    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span><span data-i18n="nav_iva">IVA (120)</span></div>
-    <div class="nav-item" onclick="showPage('ire',this)"><span class="icon">💼</span><span data-i18n="nav_ire">IRE (Gral/Simp)</span></div>
-    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span><span data-i18n="nav_irp">IRP (515)</span></div>
-  </div>
-
-  <div class="sidebar-section">
-    <div class="sidebar-label">Herramientas</div>
-    <div class="nav-item" onclick="showPage('claude',this)" style="color:#f59e0b">🤖 <span data-i18n="nav_ai">Soporte Claude IA</span></div>
-  </div>
-
-  <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_admin">Administración</div>
+    <div class="sidebar-label">Administración</div>
     <div class="nav-item" id="nav_adm" onclick="showPage('admin',this)">⚙️ <span data-i18n="nav_adm">Perfil / Sistema</span></div>
   </div>
-
   <div style="margin-top:auto">
     <div class="nav-item" style="color:var(--danger)" onclick="window.doLogout()">🚪 <span data-i18n="nav_logout">Cerrar Sesión</span></div>
     <div class="copyright-footer">Derechos reservados 2026<br>@jcarlos2028</div>
@@ -167,18 +137,18 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
-      <div class="stats-grid">
-        <div class="stat-card" style="border-top-color:var(--accent2)"><div style="font-size:11px;color:#888" data-i18n="dash_s1">ASIENTOS</div><div class="stat-value" id="dash_doc_count">0</div></div>
-        <div class="stat-card" style="border-top-color:var(--success)"><div style="font-size:11px;color:#888" data-i18n="dash_s2">CLIENTES</div><div class="stat-value" id="dash_cli_count">0</div></div>
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0;">
+        <div class="card" style="border-top:3px solid var(--accent2)"><div style="font-size:11px;color:#888">DOCUMENTOS</div><div class="stat-value" id="dash_doc_count">0</div></div>
+        <div class="card" style="border-top:3px solid var(--success)"><div style="font-size:11px;color:#888">CLIENTES ACTIVOS</div><div class="stat-value" id="dash_cli_count">0</div></div>
       </div>
-      <div class="card"><h3 data-i18n="dash_t1">Acceso Rápido</h3><table id="dash-clientes-list"></table></div>
+      <div class="card"><h3 data-i18n="dash_t1">Acceso Rápido a Clientes</h3><table id="dash-clientes-list"></table></div>
     </div>
 
-    <!-- CLIENTES DIRECTORIO -->
+    <!-- CLIENTES -->
     <div class="page" id="page-clientes">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <h2 data-i18n="cli_h2">Directorio de Clientes</h2>
-        <button class="btn btn-primary" onclick="window.openModalCliente()">+ <span data-i18n="nav_new">Nuevo</span></button>
+        <h2>Directorio de Clientes</h2>
+        <button class="btn btn-primary" onclick="window.openModalCliente()">+ <span data-i18n="nav_new">Nuevo Cliente</span></button>
       </div>
       <div class="card"><table id="tabla-clientes-list"></table></div>
     </div>
@@ -190,106 +160,103 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
             <button class="btn btn-outline btn-sm" onclick="window.showPage('dashboard')">⬅️ Volver</button>
         </div>
         <div class="tabs">
-            <div class="tab active" onclick="switchClientTab('compras', this)">Compras</div>
-            <div class="tab" onclick="switchClientTab('ventas', this)">Ventas</div>
-            <div class="tab" onclick="switchClientTab('diario', this)">Diario</div>
-            <div class="tab" onclick="switchClientTab('balance', this)">Balance</div>
+            <div class="tab active" onclick="switchClientTab('compras', this)">Libro Compras</div>
+            <div class="tab" onclick="switchClientTab('ventas', this)">Libro Ventas</div>
+            <div class="tab" onclick="switchClientTab('diario', this)">Diario Contable</div>
         </div>
         <div id="ctab_compras" class="ctab-content" style="display:block;">
-            <div class="card"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead><tbody id="lista_lib_compras"></tbody></table></div>
+            <div class="card"><div class="card-title">Compras / Egresos <button class="btn btn-outline btn-sm" onclick="window.exportToExcel('table_compras')">📥 Excel</button></div>
+                <table id="table_compras"><thead><tr><th>Fecha</th><th>Tipo</th><th>N° Factura</th><th>Proveedor</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead><tbody id="lista_lib_compras"></tbody></table></div>
         </div>
         <div id="ctab_ventas" class="ctab-content" style="display:none;">
-            <div class="card"><table><thead><tr><th>Fecha</th><th>Cliente</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead><tbody id="lista_lib_ventas"></tbody></table></div>
+            <div class="card"><div class="card-title">Ventas / Ingresos <button class="btn btn-outline btn-sm" onclick="window.exportToExcel('table_ventas')">📥 Excel</button></div>
+                <table id="table_ventas"><thead><tr><th>Fecha</th><th>Tipo</th><th>N° Factura</th><th>Cliente</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead><tbody id="lista_lib_ventas"></tbody></table></div>
+        </div>
+        <div id="ctab_diario" class="ctab-content" style="display:none;">
+            <div class="card"><div class="card-title">Diario General <button class="btn btn-outline btn-sm" onclick="window.exportToExcel('table_diario')">📥 Excel</button></div>
+                <table id="table_diario"><thead><tr><th>Fecha</th><th>Asiento</th><th>Glosa</th><th>Debe</th><th>Haber</th><th>Acción</th></tr></thead><tbody id="lista_lib_diario"></tbody></table></div>
         </div>
     </div>
 
     <!-- ADMIN -->
     <div class="page" id="page-admin">
-      <h2 data-i18n="nav_adm">Configuración</h2>
-      <div class="card" style="margin-top:20px">
-        <button class="btn btn-secondary" onclick="window.buscarActualizaciones()">🔄 Sincronizar Sistema</button>
-      </div>
-    </div>
-
-    <!-- CLAUDE -->
-    <div class="page" id="page-claude">
-        <h2 data-i18n="nav_ai">Soporte Claude IA</h2>
-        <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;height:70vh; margin-top:20px">
-            <div class="chat-messages" id="chat_box"></div>
-            <div style="padding:15px; background:white; display:flex; gap:10px; border-top:1px solid #eee">
-                <input type="text" id="chat_input" placeholder="Pregunta algo..." style="flex:1">
-                <button class="btn btn-primary" onclick="window.enviarIA()">Enviar</button>
-            </div>
-        </div>
+      <h2 data-i18n="nav_adm">Administración</h2>
+      <div class="card" style="margin-top:20px"><button class="btn btn-secondary" onclick="window.buscarActualizaciones()">🔄 Sincronizar Sistema</button></div>
     </div>
   </div>
 </div>
 
-<!-- WIZARD CARGA COMPROBANTES (ESTILO ABACO) -->
+<!-- WIZARD CARGA (FULL FLUX) -->
 <div class="modal-overlay" id="modal-wizard">
   <div class="modal">
-    <div class="modal-drag-header"><b>Asistente de Carga - Ley 6380</b><button onclick="window.closeModal('modal-wizard')" style="background:none;border:none;cursor:pointer">✕</button></div>
+    <div class="modal-drag-header"><b id="wiz_title_txt">Asistente de Carga Contable</b><button onclick="window.closeModal('modal-wizard')" style="background:none;border:none;cursor:pointer">✕</button></div>
     <div class="modal-body-scroll">
         <div class="wiz-header">
-            <div id="wb-1" class="wiz-bullet active">1</div> <span>Datos</span>
+            <div id="wb-1" class="wiz-bullet active">1</div> <span>Documento</span>
             <div style="flex:1; border-bottom:1px dashed #ddd"></div>
-            <div id="wb-2" class="wiz-bullet">2</div> <span>Cobro/Pago</span>
+            <div id="wb-2" class="wiz-bullet">2</div> <span>Montos</span>
             <div style="flex:1; border-bottom:1px dashed #ddd"></div>
             <div id="wb-3" class="wiz-bullet">3</div> <span>Asiento</span>
         </div>
 
+        <!-- STAGE 1 -->
         <div id="ws-1" class="wiz-step active">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px">
-                <div class="form-group"><label>Cliente Destino</label><select id="wiz_cli"></select></div>
+                <div class="form-group"><label>Cliente Contribuyente</label><select id="wiz_cli"></select></div>
                 <div class="form-group"><label>Operación</label><select id="wiz_oper"><option value="compra">Egreso / Compra</option><option value="venta">Ingreso / Venta</option></select></div>
-                <div class="form-group"><label>RUC Tercero</label><input type="text" id="wiz_ruc_t" placeholder="800000-1"></div>
-                <div class="form-group"><label>Razón Social</label><input type="text" id="wiz_nom_t" placeholder="Empresa S.A."></div>
-                <div class="form-group"><label>Timbrado N°</label><input type="text" id="wiz_timb"></div>
-                <div class="form-group"><label>Factura N°</label><input type="text" id="wiz_nro" placeholder="001-001-0000001"></div>
-                <div class="form-group"><label>Monto Total ₲</label><input type="number" id="wiz_monto" oninput="window.calcIVA()"></div>
-                <div class="form-group"><label>Aplicación IVA</label>
-                    <select id="wiz_iva_tipo" onchange="window.calcIVA()">
-                        <option value="10">Solo 10%</option><option value="5">Solo 5%</option>
-                        <option value="0">Exenta</option><option value="mixta">Mixta (Manual)</option>
-                    </select>
-                </div>
-            </div>
-            <!-- SECCION MIXTA -->
-            <div id="wiz_mixta" style="display:none; margin-top:15px; background:#f8f9fa; padding:15px; border-radius:8px">
-                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px">
-                    <div class="form-group"><label>Gravada 10%</label><input type="number" id="w_10" value="0"></div>
-                    <div class="form-group"><label>Gravada 5%</label><input type="number" id="w_5" value="0"></div>
-                    <div class="form-group"><label>Exenta</label><input type="number" id="w_ex" value="0"></div>
-                </div>
+                <div class="form-group"><label>Tipo Comprobante</label><select id="wiz_tipo_doc"><option value="factura">Factura</option><option value="nc">Nota de Crédito</option><option value="nd">Nota de Débito</option><option value="recibo">Recibo de Dinero</option></select></div>
+                <div class="form-group"><label>Fecha</label><input type="date" id="wiz_fecha"></div>
+                <div class="form-group"><label>RUC Tercero</label><input type="text" id="wiz_ruc_t"></div>
+                <div class="form-group"><label>Razón Social</label><input type="text" id="wiz_nom_t"></div>
+                <div class="form-group"><label>Timbrado (8 dígitos)</label><input type="text" id="wiz_timb" maxlength="8"></div>
+                <div class="form-group"><label>N° Comprobante</label><input type="text" id="wiz_nro" placeholder="001-001-0000001"></div>
             </div>
             <div style="text-align:right; margin-top:20px"><button class="btn btn-primary" onclick="window.wizNext(2)">Siguiente ➡️</button></div>
         </div>
 
+        <!-- STAGE 2 -->
         <div id="ws-2" class="wiz-step">
-            <div class="form-group"><label>Condición:</label><select id="wiz_cond"><option value="contado">Contado</option><option value="credito">Crédito</option></select></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px">
+                <div class="form-group"><label>Monto Total ₲</label><input type="number" id="wiz_monto" oninput="window.calcIVA()"></div>
+                <div class="form-group"><label>Aplicación IVA</label>
+                    <select id="wiz_iva_tipo" onchange="window.calcIVA()">
+                        <option value="10">Solo 10%</option><option value="5">Solo 5%</option>
+                        <option value="0">Exenta</option><option value="mixta">Mixta (Separado)</option>
+                    </select>
+                </div>
+            </div>
+            <div id="wiz_mixta" style="display:none; margin-top:15px; background:#f8f9fa; padding:15px; border-radius:8px">
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px">
+                    <div class="form-group"><label>Grav. 10%</label><input type="number" id="w_10" value="0"></div>
+                    <div class="form-group"><label>Grav. 5%</label><input type="number" id="w_5" value="0"></div>
+                    <div class="form-group"><label>Exenta</label><input type="number" id="w_ex" value="0"></div>
+                </div>
+            </div>
             <div style="text-align:right; margin-top:20px"><button class="btn" onclick="window.wizNext(1)">Atrás</button><button class="btn btn-primary" onclick="window.wizNext(3)">Siguiente ➡️</button></div>
         </div>
 
+        <!-- STAGE 3 -->
         <div id="ws-3" class="wiz-step">
-            <p>Se generará el asiento contable NIIF automáticamente.</p>
-            <div style="text-align:right; margin-top:20px"><button class="btn btn-primary" onclick="window.guardarAsiento()">💾 Finalizar y Guardar</button></div>
+            <div class="form-group"><label>Cuenta de Contrapartida</label><input type="text" id="wiz_cta" list="planCuentas" placeholder="Ej: 1.1.1.01 Caja"></div>
+            <div class="form-group"><label>Glosa del Asiento</label><textarea id="wiz_glosa"></textarea></div>
+            <div style="text-align:right; margin-top:20px"><button class="btn" onclick="window.wizNext(2)">Atrás</button><button class="btn btn-primary" onclick="window.guardarTodo()">💾 Guardar y Finalizar</button></div>
         </div>
     </div>
   </div>
 </div>
 
-<!-- MODAL CLIENTE DETALLADO -->
+<!-- MODAL CLIENTE -->
 <div class="modal-overlay" id="modal-cliente">
   <div class="modal">
     <div class="modal-drag-header"><b>Configurar Cliente</b><button onclick="window.closeModal('modal-cliente')" style="background:none;border:none;cursor:pointer">✕</button></div>
     <div class="modal-body-scroll">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
-            <div class="form-group"><label>RUC / ID:</label><input type="text" id="cli_ruc" placeholder="80000000-0"></div>
+            <div class="form-group"><label>RUC / ID:</label><input type="text" id="cli_ruc"></div>
             <div class="form-group"><label>Nombre y Apellido:</label><input type="text" id="cli_nom"></div>
-            <div class="form-group"><label>Correo Electrónico:</label><input type="email" id="cli_correo"></div>
-            <div class="form-group"><label>Línea / Teléfono:</label><input type="text" id="cli_tel"></div>
+            <div class="form-group"><label>Correo:</label><input type="email" id="cli_correo"></div>
+            <div class="form-group"><label>Teléfono:</label><input type="text" id="cli_tel"></div>
         </div>
-        <div style="margin-top:20px; padding:15px; background:var(--bg); border-radius:10px">
+        <div style="margin-top:15px; padding:15px; background:var(--bg); border-radius:10px">
             <label style="font-weight:700">IMPUESTOS ACTIVOS (LEY 6380):</label>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px">
                 <label><input type="checkbox" id="t_iva"> IVA (120)</label><label><input type="checkbox" id="t_ire_g"> IRE General</label>
@@ -304,9 +271,10 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
 <script>
 window.dbClientes = []; window.editIdx = -1; window.currentCli = -1;
 
+// --- IDIOMAS ---
 const translations = {
-    es: { top_title:"Dashboard Principal", nav_dash:"Dashboard", nav_clients:"Clientes (Cartera)", nav_ai:"Soporte Claude IA", nav_adm:"Perfil / Sistema", nav_logout:"Cerrar Sesión", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido", cli_h2:"Directorio de Clientes", tbl_name:"Razón Social", tbl_actions:"Acción", nav_new:"Nuevo", btn_login:"Ingresar" },
-    en: { top_title:"Main Dashboard", nav_dash:"Dashboard", nav_clients:"Clients Portfolio", nav_ai:"Claude AI Support", nav_adm:"System", nav_logout:"Logout", dash_h2:"ContaPY Accounting 👋", dash_t1:"Quick Access", cli_h2:"Directory", tbl_name:"Name", tbl_actions:"Action", nav_new:"New", btn_login:"Login" }
+    es: { top_title:"Dashboard Principal", nav_dash:"Dashboard", nav_clients:"Clientes (Cartera)", nav_adm:"Perfil / Sistema", nav_logout:"Cerrar Sesión", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido", cli_h2:"Directorio", tbl_name:"Razón Social", tbl_actions:"Acción", nav_new:"Nuevo", btn_login:"Ingresar" },
+    en: { top_title:"Main Dashboard", nav_dash:"Dashboard", nav_clients:"Client Portfolio", nav_adm:"System", nav_logout:"Logout", dash_h2:"ContaPY Accounting 👋", dash_t1:"Quick Access", cli_h2:"Directory", tbl_name:"Name", tbl_actions:"Action", nav_new:"New", btn_login:"Login" }
 };
 
 window.changeLang = function(lang) {
@@ -316,6 +284,7 @@ window.changeLang = function(lang) {
         const key = el.getAttribute('data-i18n');
         if(t[key]) el.innerText = t[key];
     });
+    document.getElementById('txt_topbar').innerText = t.top_title;
 };
 
 window.showPage = function(name, el) {
@@ -328,15 +297,11 @@ window.showPage = function(name, el) {
 window.openModal = function(id) { document.getElementById(id).classList.add('open'); };
 window.closeModal = function(id) { document.getElementById(id).classList.remove('open'); };
 
-window.openModalCliente = function() {
-    document.getElementById('cli_ruc').value = ""; document.getElementById('cli_nom').value = "";
-    window.openModal('modal-cliente');
-    setTimeout(() => document.getElementById('cli_ruc').focus(), 300);
-};
-
+// --- WIZARD LOGIC ---
 window.openWizard = function() {
     const sel = document.getElementById('wiz_cli'); sel.innerHTML = '';
     window.dbClientes.forEach((c,i) => sel.innerHTML += `<option value="${i}">${c.nom}</option>`);
+    document.getElementById('wiz_fecha').value = new Date().toISOString().split('T')[0];
     window.wizNext(1); window.openModal('modal-wizard');
 };
 
@@ -355,10 +320,50 @@ window.calcIVA = function() {
     document.getElementById('wiz_mixta').style.display = (t == 'mixta') ? 'block' : 'none';
 };
 
+window.guardarTodo = async function() {
+    const cliIdx = document.getElementById('wiz_cli').value;
+    const cli = window.dbClientes[cliIdx];
+    const oper = document.getElementById('wiz_oper').value;
+    const monto = parseFloat(document.getElementById('wiz_monto').value);
+    const tasa = document.getElementById('wiz_iva_tipo').value;
+    const tipoDoc = document.getElementById('wiz_tipo_doc').value;
+    
+    let iva = (tasa != '0' && tasa != 'mixta') ? Math.round(monto / (tasa == '10' ? 11 : 21)) : 0;
+    
+    const entry = {
+        id: Date.now(),
+        fecha: document.getElementById('wiz_fecha').value,
+        timbrado: document.getElementById('wiz_timb').value,
+        nro: document.getElementById('wiz_nro').value,
+        ruc_t: document.getElementById('wiz_ruc_t').value,
+        nom_t: document.getElementById('wiz_nom_t').value,
+        total: monto,
+        iva: iva,
+        oper: oper,
+        tipo: tipoDoc,
+        glosa: document.getElementById('wiz_glosa').value
+    };
+
+    if(oper === 'compra') cli.libros.compras.push(entry); else cli.libros.ventas.push(entry);
+    cli.libros.diario.push(entry);
+    
+    await window.saveData();
+    if(window.currentCli != -1) window.renderLibros();
+    window.closeModal('modal-wizard');
+    alert("✅ Registro contable guardado.");
+};
+
+// --- CLIENTES ---
+window.openModalCliente = function() {
+    document.getElementById('cli_ruc').value = ""; document.getElementById('cli_nom').value = "";
+    window.openModal('modal-cliente');
+};
+
 window.guardarCliente = async function() {
     var r = document.getElementById('cli_ruc').value.trim(), n = document.getElementById('cli_nom').value.trim();
     if(!r || !n) return alert("Faltan datos");
     window.dbClientes.push({ruc:r, nom:n, id:Date.now(), libros:{compras:[], ventas:[], diario:[]}});
+    localStorage.setItem('contapy_db_v11', JSON.stringify(window.dbClientes));
     if(window.saveData) await window.saveData();
     window.render(); window.closeModal('modal-cliente');
 };
@@ -368,8 +373,8 @@ window.render = function() {
     const d = document.getElementById('dash-clientes-list');
     if(!t) return; t.innerHTML = ''; d.innerHTML = '';
     window.dbClientes.forEach((c, i) => {
-        t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td><button class="btn btn-outline btn-sm" onclick="window.verCliente(${i})">✏️</button></td></tr>`;
-        d.innerHTML += `<tr onclick="window.verCliente(${i})"><td>${c.ruc}</td><td><b>${c.nom}</b></td></tr>`;
+        t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td><button class="btn btn-outline btn-sm" onclick="window.verCliente(${i})">👁️</button></td></tr>`;
+        d.innerHTML += `<tr onclick="window.verCliente(${i})" style="cursor:pointer"><td>${c.ruc}</td><td><b>${c.nom}</b></td></tr>`;
     });
     document.getElementById('dash_cli_count').innerText = window.dbClientes.length;
 };
@@ -379,15 +384,38 @@ window.verCliente = function(i) {
     const c = window.dbClientes[i];
     document.getElementById('cdet_nombre').innerText = c.nom;
     document.getElementById('cdet_ruc').innerText = "RUC: " + c.ruc;
+    window.renderLibros();
     window.showPage('cliente-detalle');
 };
 
-window.enviarIA = function() {
-    const inp = document.getElementById('chat_input');
-    if(!inp.value) return;
-    document.getElementById('chat_box').innerHTML += `<p style="text-align:right"><b>Tú:</b> ${inp.value}</p>`;
-    inp.value = '';
-    setTimeout(() => { document.getElementById('chat_box').innerHTML += `<p style="color:blue">🤖 <b>Claude:</b> Analizando tu consulta sobre Ley 6380...</p>`; }, 600);
+window.renderLibros = function() {
+    const c = window.dbClientes[window.currentCli];
+    const btnDel = (id) => `<button class="btn btn-sm" onclick="window.deleteEntry(${id})">🗑️</button>`;
+    document.getElementById('lista_lib_compras').innerHTML = c.libros.compras.map(l => `<tr><td>${l.fecha}</td><td>${l.tipo.toUpperCase()}</td><td>${l.nro}</td><td>${l.nom_t}</td><td class="monto">${l.total.toLocaleString()}</td><td class="monto">${l.iva.toLocaleString()}</td><td>${btnDel(l.id)}</td></tr>`).join('');
+    document.getElementById('lista_lib_ventas').innerHTML = c.libros.ventas.map(l => `<tr><td>${l.fecha}</td><td>${l.tipo.toUpperCase()}</td><td>${l.nro}</td><td>${l.nom_t}</td><td class="monto">${l.total.toLocaleString()}</td><td class="monto">${l.iva.toLocaleString()}</td><td>${btnDel(l.id)}</td></tr>`).join('');
+    document.getElementById('lista_lib_diario').innerHTML = c.libros.diario.map(l => `<div style="border-bottom:1px solid #eee; padding:10px"><b>${l.fecha}</b> - ${l.glosa || 'S/G'} <div style="display:flex; justify-content:space-between"><span>${l.tipo.toUpperCase()} ${l.nro}</span><b>₲ ${l.total.toLocaleString()}</b></div></div>`).join('');
+};
+
+window.deleteEntry = async function(id) {
+    if(!confirm("¿Eliminar este registro?")) return;
+    const cli = window.dbClientes[window.currentCli];
+    cli.libros.compras = cli.libros.compras.filter(e => e.id !== id);
+    cli.libros.ventas = cli.libros.ventas.filter(e => e.id !== id);
+    cli.libros.diario = cli.libros.diario.filter(e => e.id !== id);
+    await window.saveData(); window.renderLibros();
+};
+
+window.exportToExcel = function(tableId) {
+    let table = document.getElementById(tableId);
+    let html = table.outerHTML;
+    window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+};
+
+window.switchClientTab = function(t, el) {
+    document.querySelectorAll('.ctab-content').forEach(x => x.style.display='none');
+    document.getElementById('ctab_'+t).style.display='block';
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    el.classList.add('active');
 };
 
 window.buscarActualizaciones = function() { window.location.href = window.location.pathname + "?u=" + Date.now(); };
@@ -415,7 +443,7 @@ window.doLogin = function(){}; window.doLogout = function(){}; window.saveData =
   window.doLogin = async function() {
       const u = document.getElementById('lu').value, p = document.getElementById('lp').value;
       try { await signInWithEmailAndPassword(auth, u, p); } 
-      catch (e) { document.getElementById('l-msg').innerText = "Acceso denegado"; }
+      catch (e) { document.getElementById('l-msg').innerText = "Credenciales incorrectas"; }
   };
 
   window.doLogout = async function() { await signOut(auth); location.reload(); };
