@@ -5,11 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ContaPY v1.1 — Premium Cloud Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<!-- Firebase v8 (Estable para escritorio) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
 <style>
 :root {
   --bg:#f0f2f5;--sidebar:#0f1923;--sidebar-hover:#1a2535;--accent:#e63946;
@@ -18,11 +13,11 @@
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
   --shadow-lg:0 8px 32px rgba(0,0,0,.12);
 }
-/* FIX EXE: Habilitar teclado y clics en inputs */
+/* FIX PARA EXE: Habilitar teclado y clics */
 * { box-sizing:border-box; margin:0; padding:0; -webkit-app-region: no-drag; }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
 
-.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;z-index:100;transition:all 0.3s;}
+.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;z-index:100;}
 .sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06); -webkit-app-region: drag;}
 .logo-mark{display:flex;align-items:center;gap:10px}
 .logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:white}
@@ -68,6 +63,15 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
 .monto{font-family:'DM Mono',monospace;text-align:right}
 .debe{color:var(--accent)} .haber{color:var(--success)}
 
+/* TABS */
+.tabs{display:flex;gap:2px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:16px;width:fit-content;flex-wrap:wrap}
+.tab{padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--text-light)}
+.tab.active{background:white;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
+
+/* LIBRO DIARIO ROWS */
+.libro-header{display:grid;grid-template-columns:80px 100px 1fr 110px 110px 80px;gap:8px;padding:7px 10px;font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border)}
+.libro-row{display:grid;grid-template-columns:80px 100px 1fr 110px 110px 80px;gap:8px;padding:9px 10px;border-bottom:1px solid var(--border);font-size:12px;align-items:center}
+
 /* MODALES */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;overflow:auto;}
 .modal-overlay.open{display:flex}
@@ -76,22 +80,14 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
 .modal-body-scroll{padding:24px;overflow-y:auto;flex:1}
 
 /* CHAT CLAUDE */
-.chat-messages { height: 400px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #f8f9fa; }
+.chat-messages { height: 400px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #f8f9fa; border-radius: 8px; }
 .chat-msg { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 13.5px; line-height: 1.5; }
 .chat-msg.claude { background: white; border: 1px solid var(--border); align-self: flex-start; }
 .chat-msg.user { background: var(--accent2); color: white; align-self: flex-end; }
 
-/* TABS */
-.tabs{display:flex;gap:2px;background:var(--bg);border-radius:9px;padding:3px;margin-bottom:16px;width:fit-content;flex-wrap:wrap}
-.tab{padding:6px 14px;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--text-light)}
-.tab.active{background:white;color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.1);font-weight:600}
-
 .login-wrap{position:fixed;inset:0;background:var(--sidebar);display:flex;align-items:center;justify-content:center;z-index:99999}
 .login-card{background:white;border-radius:18px;padding:36px;width:100%;max-width:380px;text-align:center}
 .copyright-footer{padding:15px;text-align:center;font-size:11px;color:rgba(255,255,255,0.4);border-top:1px solid rgba(255,255,255,0.06);line-height:1.5}
-.wiz-step{display:none} .wiz-step.active{display:block}
-.wiz-bullet{width:30px;height:30px;border-radius:50%;background:var(--bg);color:var(--text-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
-.wiz-bullet.active{background:var(--accent);color:white}
 </style>
 </head>
 <body>
@@ -106,9 +102,9 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
     <p style="font-size:12px;color:var(--text-light);margin-bottom:20px">v1.1 Premium Cloud</p>
     <div style="text-align:left">
         <label data-i18n="lbl_user">Usuario / Email</label>
-        <input type="text" id="lu" style="width:100%; margin-bottom:10px">
+        <input type="text" id="lu" placeholder="ejemplo@correo.com" style="width:100%; margin-bottom:10px">
         <label data-i18n="lbl_pass">Contraseña</label>
-        <input type="password" id="lp" style="width:100%; margin-bottom:20px">
+        <input type="password" id="lp" placeholder="••••••••" style="width:100%; margin-bottom:20px">
     </div>
     <button class="btn btn-primary" style="width:100%; height:45px; justify-content:center" onclick="window.doLogin()" data-i18n="btn_login">Ingresar al Sistema</button>
     <p id="l-msg" style="color:red;font-size:11px;margin-top:10px"></p>
@@ -123,13 +119,13 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
   
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_main">Principal</div>
-    <div class="nav-item active" id="nav_dash" onclick="showPage('dashboard',this)">🏠 <span data-i18n="nav_dash">Dashboard</span></div>
-    <div class="nav-item" id="nav_cli" onclick="showPage('clientes',this)">🏢 <span data-i18n="nav_clients">Clientes (Cartera)</span></div>
+    <div class="nav-item active" id="btn_nav_dash" onclick="showPage('dashboard',this)">🏠 <span data-i18n="nav_dash">Dashboard</span></div>
+    <div class="nav-item" id="btn_nav_cli" onclick="showPage('clientes',this)">🏢 <span data-i18n="nav_clients">Clientes (Cartera)</span></div>
   </div>
 
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_billing">Facturación / Tesorería</div>
-    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span data-i18n="nav_sifen">Carga / SIFEN</span></div>
+    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span data-i18n="nav_sifen">Carga Inteligente / SIFEN</span></div>
     <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="openWizard()"><span class="icon">➕</span><span data-i18n="nav_new">Nuevo Asiento</span></div>
   </div>
 
@@ -145,14 +141,14 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
     <div class="nav-item" onclick="showPage('claude',this)" style="color:#f59e0b">🤖 <span data-i18n="nav_ai">Soporte Claude IA</span></div>
   </div>
 
-  <div class="sidebar-section" id="menu_admin" style="display:none">
+  <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_admin">Administración</div>
     <div class="nav-item" id="nav_adm" onclick="showPage('admin',this)">⚙️ <span data-i18n="nav_adm">Perfil / Sistema</span></div>
   </div>
 
   <div style="margin-top:auto">
     <div class="nav-item" style="color:var(--danger)" onclick="window.doLogout()">🚪 <span data-i18n="nav_logout">Cerrar Sesión</span></div>
-    <div class="copyright-footer">Derechos reservados 2026<br>@Jcarlos2028</div>
+    <div class="copyright-footer">Derechos reservados 2026<br>@jcarlos2028</div>
   </div>
 </div>
 
@@ -168,66 +164,91 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
-      <div class="stats-grid">
-        <div class="stat-card blue"><div class="stat-label" data-i18n="lbl_asientos">ASIENTOS</div><div class="stat-value" id="dash_doc_count">0</div></div>
-        <div class="stat-card green"><div class="stat-label" data-i18n="lbl_clientes">CLIENTES</div><div class="stat-value" id="dash_cli_count">0</div></div>
+      <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0;">
+        <div class="stat-card" style="border-top-color:var(--accent2)"><div style="font-size:11px;color:#888" data-i18n="dash_s1">ASIENTOS</div><div class="stat-value" id="dash_doc_count">0</div></div>
+        <div class="stat-card" style="border-top-color:var(--success)"><div style="font-size:11px;color:#888" data-i18n="dash_s2">CLIENTES</div><div class="stat-value" id="dash_cli_count">0</div></div>
       </div>
       <div class="card">
         <h3 data-i18n="dash_t1">Acceso Rápido a Clientes</h3>
-        <table id="dash-clientes-list"></table>
+        <div class="table-wrap"><table>
+          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social</th><th data-i18n="tbl_taxes">Impuestos</th></tr></thead>
+          <tbody id="dash-clientes-list"></tbody>
+        </table></div>
       </div>
     </div>
 
-    <!-- CLIENTES DIRECTORIO -->
+    <!-- DIRECTORIO DE CLIENTES -->
     <div class="page" id="page-clientes">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <h2 data-i18n="cli_h2">Directorio de Clientes</h2>
-        <button class="btn btn-primary" onclick="window.openModalCliente()">+ <span data-i18n="nav_new">Nuevo</span></button>
+        <div style="display:flex; gap:10px">
+            <input type="text" id="search-cliente" placeholder="Buscar..." onkeyup="window.renderClientes()">
+            <button class="btn btn-primary" onclick="window.openModalCliente()">+ <span data-i18n="nav_new">Nuevo</span></button>
+        </div>
       </div>
       <div class="card">
-        <table id="tabla-clientes-list"></table>
+        <div class="table-wrap"><table>
+          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Nombre</th><th data-i18n="tbl_status">Estado</th><th data-i18n="tbl_actions">Acción</th></tr></thead>
+          <tbody id="tabla-clientes-list"></tbody>
+        </table></div>
       </div>
     </div>
 
-    <!-- CLIENTE DETALLE (FLUJO ORIGINAL) -->
+    <!-- CLIENTE DETALLE (Original Flow) -->
     <div class="page" id="page-cliente-detalle">
         <div class="card" style="border-left: 5px solid var(--accent2)">
             <h2 id="cdet_nombre">Nombre Cliente</h2>
             <p id="cdet_ruc" style="font-size:12px;color:var(--text-light)"></p>
+            <div style="margin-top:15px; display:flex; gap:10px">
+                <button class="btn btn-outline btn-sm" onclick="window.openWizardFromProfile()">➕ Comprobante</button>
+                <button class="btn btn-outline btn-sm" onclick="window.showPage('dashboard')">⬅️ Volver</button>
+            </div>
         </div>
         <div class="tabs">
             <div class="tab active" onclick="switchClientTab('compras', this)">Compras</div>
             <div class="tab" onclick="switchClientTab('ventas', this)">Ventas</div>
-            <div class="tab" onclick="switchClientTab('diario', this)">Libro Diario</div>
+            <div class="tab" onclick="switchClientTab('diario', this)">Diario</div>
+            <div class="tab" onclick="switchClientTab('mayor', this)">Mayor</div>
         </div>
-        <div id="ctab_compras" class="ctab-content" style="display:block;"><div class="card"><h3>Libro Compras</h3><table id="lista_lib_compras"></table></div></div>
-        <div id="ctab_ventas" class="ctab-content" style="display:none;"><div class="card"><h3>Libro Ventas</h3><table id="lista_lib_ventas"></table></div></div>
-        <div id="ctab_diario" class="ctab-content" style="display:none;"><div class="card"><h3>Diario General</h3><div id="lista_lib_diario"></div></div></div>
+        <div id="ctab_compras" class="ctab-content" style="display:block;">
+            <div class="card"><table><thead><tr><th>Fecha</th><th>RUC / Proveedor</th><th>Total</th><th>Acción</th></tr></thead><tbody id="lista_lib_compras"></tbody></table></div>
+        </div>
+        <div id="ctab_ventas" class="ctab-content" style="display:none;">
+            <div class="card"><table><thead><tr><th>Fecha</th><th>RUC / Cliente</th><th>Total</th><th>Acción</th></tr></thead><tbody id="lista_lib_ventas"></tbody></table></div>
+        </div>
+        <div id="ctab_diario" class="ctab-content" style="display:none;">
+            <div class="card"><div id="lista_lib_diario"></div></div>
+        </div>
+        <div id="ctab_mayor" class="ctab-content" style="display:none;">
+            <div class="card"><table><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th><th>Saldo</th></tr></thead><tbody id="lista_lib_mayor"></tbody></table></div>
+        </div>
     </div>
 
-    <!-- OTROS MÓDULOS... -->
-    <div class="page" id="page-comprobantes"><h2>Carga Inteligente / SIFEN</h2><div class="card"><p>Conexión e-Kuatia activa...</p></div></div>
-    <div class="page" id="page-iva"><h2>Estado IVA (120)</h2><div class="card">Cargando cálculos...</div></div>
-
-    <!-- IA CLAUDE -->
+    <!-- CLAUDE IA -->
     <div class="page" id="page-claude">
-      <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;height:70vh">
+      <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;height:75vh">
         <div class="chat-messages" id="chat_box">
-            <div class="chat-msg claude">🤖 <b>Claude:</b> ¡Hola! Soy tu asistente contable experto en la Ley 6380/19. ¿En qué puedo ayudarte?</div>
+            <div class="chat-msg claude">🤖 <b>Claude:</b> ¡Hola! Soy tu asistente experto en contabilidad paraguaya (Ley 6380/19). ¿Qué duda tienes hoy?</div>
         </div>
         <div style="padding:15px; background:white; display:flex; gap:10px; border-top: 1px solid var(--border)">
-            <input type="text" id="chat_input" placeholder="..." style="flex:1">
-            <button class="btn btn-primary" onclick="window.enviarIA()">Enviar</button>
+            <input type="text" id="chat_input" placeholder="Pregunta sobre IVA, IRE, IRP..." style="flex:1" onkeydown="if(event.key==='Enter')window.enviarIA()">
+            <button class="btn btn-primary" onclick="window.enviarIA()" data-i18n="btn_send">Enviar</button>
         </div>
       </div>
     </div>
 
-    <!-- ADMIN -->
+    <!-- OTROS MÓDULOS (SIFEN, IVA, ETC) -->
+    <div class="page" id="page-comprobantes"><h2>📥 Carga Inteligente / SIFEN</h2><div class="card">Conectando a e-Kuatia...</div></div>
+    <div class="page" id="page-iva"><h2>📊 Estado de IVA (120)</h2><div class="card">Seleccione un cliente para ver su reporte.</div></div>
+    <div class="page" id="page-ire_general"><h2>💼 Estado IRE General</h2><div class="card">Modulo contable activo.</div></div>
+    <div class="page" id="page-irp"><h2>👤 Estado IRP (515)</h2><div class="card">Modulo de servicios personales activo.</div></div>
+
+    <!-- ADMIN / ACTUALIZACIONES -->
     <div class="page" id="page-admin">
       <h2 data-i18n="nav_adm">Administración</h2>
-      <div class="card" style="margin-top:20px">
-        <div class="card-title" data-i18n="update_title">Actualización de Sistema</div>
-        <p style="font-size:13px; color:var(--text-light); margin-bottom:15px">Sincroniza con Netlify/GitHub para descargar parches visuales.</p>
+      <div class="card" style="margin-top:20px; border-left: 5px solid var(--accent2)">
+        <div class="card-title" data-i18n="update_title">Actualización del Sistema</div>
+        <p style="font-size:13px; color:var(--text-light); margin-bottom:15px" data-i18n="update_desc">Pulse el botón para forzar la sincronización con Netlify y GitHub.</p>
         <button class="btn btn-secondary" onclick="window.buscarActualizaciones()" data-i18n="btn_update">🔄 Sincronizar Ahora</button>
       </div>
     </div>
@@ -237,10 +258,10 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
 <!-- MODALES -->
 <div class="modal-overlay" id="modal-cliente">
   <div class="modal">
-    <div class="modal-drag-header"><b>Datos del Cliente</b><button onclick="window.closeModal()" style="background:none;border:none;cursor:pointer">✕</button></div>
+    <div class="modal-drag-header"><b>Configurar Cliente</b><button onclick="window.closeModal()" style="background:none;border:none;cursor:pointer;font-size:18px">✕</button></div>
     <div style="padding:25px">
         <div class="form-group"><label>RUC:</label><input type="text" id="cli_ruc" placeholder="80000000-0"></div>
-        <div class="form-group"><label>Razón Social:</label><input type="text" id="cli_nom"></div>
+        <div class="form-group"><label data-i18n="tbl_name">Nombre:</label><input type="text" id="cli_nom"></div>
         <div style="text-align:right; margin-top:25px">
             <button class="btn btn-primary" onclick="window.guardarCliente()">💾 Guardar en Nube</button>
         </div>
@@ -249,12 +270,12 @@ tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--tex
 </div>
 
 <script>
-window.dbClientes = []; window.dbUsuarios = []; window.editIdx = -1; window.currentCli = -1;
+window.dbClientes = []; window.editIdx = -1; window.currentCli = -1;
 
 const translations = {
-    es: { top_title:"Dashboard Principal", nav_dash:"Dashboard", nav_clients:"Clientes (Cartera)", nav_ai:"Soporte Claude IA", nav_adm:"Perfil / Sistema", nav_logout:"Cerrar Sesión", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido a Clientes", cli_h2:"Directorio de Clientes", tbl_name:"Razón Social", tbl_actions:"Acción", nav_new:"Nuevo", lbl_user:"Usuario / Email", lbl_pass:"Contraseña", btn_login:"Ingresar al Sistema", lbl_asientos:"ASIENTOS", lbl_clientes:"CLIENTES", update_title:"Actualización de Sistema", btn_update:"🔄 Sincronizar Ahora", menu_main:"Principal", menu_billing:"Facturación", menu_taxes:"Estados Financieros", menu_tools:"Herramientas", menu_admin:"Administración", nav_sifen: "Carga / SIFEN", nav_iva: "IVA (120)", nav_ire: "IRE General", nav_irp: "IRP (515)" },
-    en: { top_title:"Main Dashboard", nav_dash:"Dashboard", nav_clients:"Client Portfolio", nav_ai:"Claude AI Support", nav_adm:"Profile / System", nav_logout:"Sign Out", dash_h2:"ContaPY Accounting Studio 👋", dash_t1:"Quick Client Access", cli_h2:"Client Directory", tbl_name:"Legal Name", tbl_actions:"Action", nav_new:"New", lbl_user:"Username / Email", lbl_pass:"Password", btn_login:"Login to System", lbl_asientos:"ENTRIES", lbl_clientes:"CLIENTS", update_title:"System Update", btn_update:"🔄 Sync Now", menu_main:"Main", menu_billing:"Billing", menu_taxes:"Taxes", menu_tools:"Tools", menu_admin:"Administration", nav_sifen: "Load / SIFEN", nav_iva: "VAT (120)", nav_ire: "CIT General", nav_irp: "PIT (515)" },
-    pt: { top_title:"Painel Principal", nav_dash:"Painel", nav_clients:"Clientes (Carteira)", nav_ai:"Suporte Claude IA", nav_adm:"Perfil / Sistema", nav_logout:"Sair", dash_h2:"Estúdio Contábil ContaPY 👋", dash_t1:"Acesso Rápido aos Clientes", cli_h2:"Diretório de Clientes", tbl_name:"Razão Social", tbl_actions:"Ação", nav_new:"Novo", lbl_user:"Usuário / E-mail", lbl_pass:"Senha", btn_login:"Entrar no Sistema", lbl_asientos:"LANÇAMENTOS", lbl_clientes:"CLIENTES", update_title:"Sincronização Cloud", btn_update:"🔄 Sincronizar Agora", menu_main:"Principal", menu_billing:"Faturamento", menu_taxes:"Demonstrações", menu_tools:"Ferramentas", menu_admin:"Administração", nav_sifen: "Carga / SIFEN", nav_iva: "IVA (120)", nav_ire: "IRE Geral", nav_irp: "IRP (515)" }
+    es: { top_title:"Dashboard Principal", nav_dash:"Dashboard", nav_clients:"Clientes (Cartera)", nav_ai:"Soporte Claude IA", nav_adm:"Perfil / Sistema", nav_logout:"Cerrar Sesión", dash_h2:"Estudio Contable ContaPY 👋", dash_t1:"Acceso Rápido a Clientes", cli_h2:"Directorio de Clientes", tbl_name:"Razón Social", tbl_actions:"Acción", nav_new:"Nuevo", lbl_user:"Usuario / Email", lbl_pass:"Contraseña", btn_login:"Ingresar al Sistema", lbl_asientos:"ASIENTOS", lbl_clientes:"CLIENTES", update_title:"Sincronización Cloud", btn_update:"🔄 Sincronizar Ahora", menu_main:"Principal", menu_billing:"Facturación", menu_taxes:"Estados Financieros", menu_tools:"Herramientas", menu_admin:"Administración", nav_sifen: "Carga / SIFEN", nav_iva: "IVA (120)", nav_ire: "IRE General", nav_irp: "IRP (515)", btn_send:"Enviar", tbl_status:"Estado", tbl_taxes:"Impuestos" },
+    en: { top_title:"Main Dashboard", nav_dash:"Dashboard", nav_clients:"Client Portfolio", nav_ai:"Claude AI Support", nav_adm:"Profile / System", nav_logout:"Sign Out", dash_h2:"ContaPY Accounting Studio 👋", dash_t1:"Quick Client Access", cli_h2:"Client Directory", tbl_name:"Legal Name", tbl_actions:"Action", nav_new:"New", lbl_user:"Username / Email", lbl_pass:"Password", btn_login:"Login to System", lbl_asientos:"ENTRIES", lbl_clientes:"CLIENTS", update_title:"Cloud Update", btn_update:"🔄 Sync Now", menu_main:"Main", menu_billing:"Billing", menu_taxes:"Taxes", menu_tools:"Tools", menu_admin:"Administration", nav_sifen: "Load / SIFEN", nav_iva: "VAT (120)", nav_ire: "CIT General", nav_irp: "PIT (515)", btn_send:"Send", tbl_status:"Status", tbl_taxes:"Taxes" },
+    pt: { top_title:"Painel Principal", nav_dash:"Painel", nav_clients:"Clientes (Carteira)", nav_ai:"Suporte Claude IA", nav_adm:"Perfil / Sistema", nav_logout:"Sair", dash_h2:"Estúdio Contábil ContaPY 👋", dash_t1:"Acesso Rápido aos Clientes", cli_h2:"Diretório de Clientes", tbl_name:"Razão Social", tbl_actions:"Ação", nav_new:"Novo", lbl_user:"Usuário / E-mail", lbl_pass:"Senha", btn_login:"Entrar no Sistema", lbl_asientos:"LANÇAMENTOS", lbl_clientes:"CLIENTES", update_title:"Sincronização Cloud", btn_update:"🔄 Sincronizar Agora", menu_main:"Principal", menu_billing:"Faturamento", menu_taxes:"Demonstrações", menu_tools:"Ferramentas", menu_admin:"Administração", nav_sifen: "Carga / SIFEN", nav_iva: "IVA (120)", nav_ire: "IRE Geral", nav_irp: "IRP (515)", btn_send:"Enviar", tbl_status:"Status", tbl_taxes:"Impostos" }
 };
 
 window.changeLang = function(lang) {
@@ -274,7 +295,6 @@ window.showPage = function(name, el) {
     if(el) el.classList.add('active');
 };
 
-// --- CLIENTES FLOW ORIGINAL ---
 window.openModalCliente = function(idx = -1) {
     window.editIdx = idx;
     document.getElementById('cli_ruc').value = '';
@@ -288,6 +308,7 @@ window.verCliente = function(idx) {
     const c = window.dbClientes[idx];
     document.getElementById('cdet_nombre').innerText = c.nom;
     document.getElementById('cdet_ruc').innerText = "RUC: " + c.ruc;
+    window.renderLibros();
     window.showPage('cliente-detalle');
 };
 
@@ -302,22 +323,27 @@ window.guardarCliente = async function() {
     var r = document.getElementById('cli_ruc').value.trim();
     var n = document.getElementById('cli_nom').value.trim();
     if(!r || !n) return alert("Faltan datos");
-    if(window.editIdx >= 0) window.dbClientes[window.editIdx] = {ruc:r, nom:n, libros:{compras:[], ventas:[], diario:[]}};
+    if(window.editIdx >= 0) window.dbClientes[window.editIdx].ruc = r, window.dbClientes[window.editIdx].nom = n;
     else window.dbClientes.push({ruc:r, nom:n, id:Date.now(), libros:{compras:[], ventas:[], diario:[]}});
     if(window.saveData) await window.saveData();
-    window.render(); window.closeModal('modal-cliente');
+    window.renderClientes(); window.closeModal();
 };
 
-window.render = function() {
+window.renderClientes = function() {
     const t = document.getElementById('tabla-clientes-list');
     const d = document.getElementById('dash-clientes-list');
-    if(!t) return; t.innerHTML = '<thead><tr><th>RUC</th><th>Nombre</th><th>Acción</th></tr></thead>';
-    d.innerHTML = '<thead><tr><th>RUC</th><th>Nombre</th></tr></thead>';
+    if(!t) return; t.innerHTML = ''; d.innerHTML = '';
     window.dbClientes.forEach((c, i) => {
-        t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td><button class="btn btn-outline btn-sm" onclick="window.verCliente(${i})">👁️</button><button class="btn btn-outline btn-sm" onclick="window.openModalCliente(${i})">✏️</button></td></tr>`;
-        d.innerHTML += `<tr onclick="window.verCliente(${i})"><td>${c.ruc}</td><td><b>${c.nom}</b></td></tr>`;
+        t.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td>Activo</td><td><button class="btn btn-outline btn-sm" onclick="window.verCliente(${i})">👁️</button><button class="btn btn-outline btn-sm" onclick="window.openModalCliente(${i})">✏️</button></td></tr>`;
+        d.innerHTML += `<tr onclick="window.verCliente(${i})" style="cursor:pointer"><td>${c.ruc}</td><td><b>${c.nom}</b></td><td>IVA</td></tr>`;
     });
     document.getElementById('dash_cli_count').innerText = window.dbClientes.length;
+};
+
+window.renderLibros = function() {
+    const c = window.dbClientes[window.currentCli];
+    document.getElementById('lista_lib_compras').innerHTML = c.libros.compras.map(l => `<tr><td>${l.fecha}</td><td>${l.tercero}</td><td>${l.bruto}</td></tr>`).join('');
+    document.getElementById('lista_lib_ventas').innerHTML = c.libros.ventas.map(l => `<tr><td>${l.fecha}</td><td>${l.tercero}</td><td>${l.bruto}</td></tr>`).join('');
 };
 
 window.enviarIA = function() {
@@ -325,20 +351,20 @@ window.enviarIA = function() {
     const box = document.getElementById('chat_box');
     if(!inp.value) return;
     box.innerHTML += `<div class="chat-msg user">${inp.value}</div>`;
-    inp.value = ''; box.scrollTop = box.scrollHeight;
+    const val = inp.value; inp.value = ''; box.scrollTop = box.scrollHeight;
     setTimeout(() => {
-        box.innerHTML += `<div class="chat-msg claude">🤖 <b>Claude:</b> Analizando tu consulta tributaria...</div>`;
+        box.innerHTML += `<div class="chat-msg claude">🤖 <b>Claude:</b> Analizando tu consulta sobre "${val}"...</div>`;
         box.scrollTop = box.scrollHeight;
     }, 600);
 };
 
 window.buscarActualizaciones = function() {
-    alert("⌛ Conectando con Netlify para sincronizar v1.1...");
+    alert("⌛ Sincronizando con Netlify para v1.1...");
     window.location.href = window.location.pathname + "?u=" + Date.now();
 };
 
 window.closeModal = function() { document.getElementById('modal-cliente').classList.remove('open'); };
-window.doLogin = function(){}; window.doLogout = function(){}; window.saveData = function(){};
+window.initPlanCuentas = function(){};
 </script>
 
 <script type="module">
@@ -365,10 +391,7 @@ window.doLogin = function(){}; window.doLogout = function(){}; window.saveData =
       catch (e) { document.getElementById('l-msg').innerText = "Credenciales incorrectas"; }
   };
 
-  window.doLogout = async function() {
-      await signOut(auth);
-      location.reload();
-  };
+  window.doLogout = async function() { await signOut(auth); location.reload(); };
 
   window.saveData = async function() {
       await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes });
@@ -380,7 +403,7 @@ window.doLogin = function(){}; window.doLogout = function(){}; window.saveData =
           const snap = await getDoc(doc(db, "sistema", "datos_principales"));
           if (snap.exists()) window.dbClientes = snap.data().clientes || [];
           document.getElementById('menu_admin').style.display = 'block';
-          window.render();
+          window.renderClientes();
           const l = localStorage.getItem('contapy_lang') || 'es';
           document.getElementById('lang_sel').value = l;
           window.changeLang(l);
