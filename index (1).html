@@ -1,694 +1,352 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="referrer" content="no-referrer">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <title> </title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@0.14.17/dist/hls.min.js"></script>
-    <script>
-    var dashLoaded = false;
-    function loadDashIfNeeded(callback) {
-        if (dashLoaded) { callback(); return; }
-        var s = document.createElement('script');
-        s.src = 'https://cdn.dashjs.org/v4.7.4/dash.all.min.js';
-        s.onload = function() { dashLoaded = true; callback(); };
-        s.onerror = function() { callback(); };
-        document.head.appendChild(s);
-    }
-    </script>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background-color: #121212; color: white; padding-bottom: 40px; }
-        .header { background: linear-gradient(135deg, #0b5394, #1a1a2e); padding: 15px; text-align: center; font-size: 22px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.5); letter-spacing: 1px; }
-        .tabs { display: flex; justify-content: center; gap: 6px; background: #1a1a1a; padding: 10px 15px; border-bottom: 2px solid #222; flex-wrap: wrap; }
-        .tab-btn { background: #2a2a2a; color: #aaa; border: 1px solid #444; padding: 9px 20px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; transition: all 0.25s; }
-        .tab-btn:hover { background: #333; color: white; }
-        .tab-btn.active { background: #0b5394; color: white; border-color: #4fa6ff; }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-        .player-container { width: 100%; max-width: 1280px; margin: 20px auto; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; }
-        iframe, video { width: 100%; height: 100%; border: none; }
-        video { cursor: pointer; }
-        .category-title { text-align: center; margin: 22px auto 10px; color: #4fa6ff; font-size: 17px; border-bottom: 1px solid #2a2a2a; padding-bottom: 6px; max-width: 860px; font-weight: bold; }
-        .channels { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 8px 20px; max-width: 860px; margin: 0 auto; }
-        .channel-btn { background: #1e1e1e; color: #ddd; border: 1px solid #333; padding: 11px 14px; font-size: 13px; border-radius: 8px; cursor: pointer; transition: all 0.25s; flex: 1 1 calc(25% - 20px); min-width: 120px; text-align: center; }
-        .channel-btn:hover { background: #0b5394; border-color: #4fa6ff; color: white; }
-        .cam-btn:hover { background: #7d4e00; border-color: #f0a500; color: white; }
-        /* RADIO */
-        #tab-radios { padding: 0 0 40px; }
-        .radio-player-bar { position: sticky; top: 0; z-index: 100; background: #0d0d1a; border-bottom: 2px solid #0b5394; padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .radio-now-info { flex: 1; min-width: 140px; }
-        .radio-now-info .rlabel { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
-        .radio-now-info .rname-big { font-size: 16px; font-weight: bold; color: #4fa6ff; }
-        .radio-now-info .rfreq { font-size: 11px; color: #888; }
-        #main-audio { flex: 2; min-width: 180px; max-width: 380px; }
-        .rbtn-stop { background:#c0392b; border:none; color:white; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold; }
-        .rbtn-stop:hover { background:#e74c3c; }
-        .search-bar-wrap { max-width:900px; margin:12px auto 4px; padding:0 14px; }
-        .search-bar-wrap input { width:100%; padding:9px 14px; border-radius:8px; background:#1e1e2e; border:1px solid #333; color:white; font-size:14px; outline:none; }
-        .search-bar-wrap input:focus { border-color:#4fa6ff; }
-        .search-bar-wrap input::placeholder { color:#555; }
-        .city-group { max-width:940px; margin:14px auto 0; padding:0 10px; }
-        .city-header { display:flex; align-items:center; gap:8px; padding:8px 14px; background:#1a1a2e; border-left:4px solid #0b5394; border-radius:0 6px 6px 0; font-size:12px; font-weight:bold; color:#7ec8ff; text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; cursor:pointer; user-select:none; }
-        .city-header:hover { background:#1e2240; }
-        .city-header .toggle-icon { margin-left:auto; color:#555; }
-        .city-cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(130px,1fr)); gap:8px; padding:0 2px 4px; }
-        .city-cards.collapsed { display:none; }
-        .radio-card { background:#1c1c2e; border:1px solid #2a2a3e; border-radius:10px; padding:12px 8px 10px; text-align:center; cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column; align-items:center; gap:4px; }
-        .radio-card:hover { background:#0b2a4a; border-color:#4fa6ff; transform:translateY(-2px); }
-        .radio-card.playing { background:#0b3d6b; border-color:#4fa6ff; box-shadow:0 0 10px rgba(79,166,255,.3); }
-        .radio-card .freq { font-size:10px; color:#888; font-weight:bold; background:#111; padding:2px 6px; border-radius:8px; }
-        .radio-card .rname { font-size:12px; color:#ddd; font-weight:bold; line-height:1.2; }
-        .radio-card.playing .rname { color:#4fa6ff; }
-        .radio-card .play-icon { font-size:18px; opacity:.5; }
-        .radio-card:hover .play-icon { opacity:1; }
-        .radio-card.playing .play-icon { display:none; }
-        .eq-bars { display:none; gap:2px; align-items:flex-end; height:14px; }
-        .radio-card.playing .eq-bars { display:flex; }
-        .eq-bars span { width:3px; background:#4fa6ff; border-radius:2px; animation:eq .7s ease-in-out infinite alternate; }
-        .eq-bars span:nth-child(2){animation-delay:.15s}
-        .eq-bars span:nth-child(3){animation-delay:.3s}
-        .eq-bars span:nth-child(4){animation-delay:.45s}
-        @keyframes eq { from{height:3px} to{height:14px} }
-        .no-results { text-align:center; color:#555; padding:30px; font-size:14px; display:none; }
-        .paused * { animation-play-state: paused !important; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContaPY v4.0 — Sistema Contable Cloud + Claude IA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f2f5;--sidebar:#0f1923;--sidebar-hover:#1a2535;--accent:#e63946;
+  --accent2:#2196f3;--white:#fff;--card:#fff;--text:#1a1a2e;--text-light:#6b7280;
+  --border:#e5e7eb;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+.sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto;z-index:100;transition:all 0.3s;}
+.sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.logo-text{color:white;font-size:17px;font-weight:700;letter-spacing:-.5px}
+.logo-sub{color:rgba(255,255,255,.3);font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.sidebar-section{padding:12px 10px 2px}
+.sidebar-label{color:rgba(255,255,255,.25);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:0 8px;margin-bottom:3px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;color:rgba(255,255,255,.55);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;margin-bottom:1px}
+.nav-item:hover{background:var(--sidebar-hover);color:rgba(255,255,255,.85)}
+.nav-item.active{background:var(--accent);color:white}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
+.btn-icon { cursor: pointer; font-size: 20px; }
+.content{flex:1;overflow-y:auto;padding:20px;position:relative;}
+.page{display:none} .page.active{display:block}
+.card{background:var(--card);border-radius:10px;padding:18px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:18px}
+.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:10px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);position:relative;overflow:hidden}
+.stat-card.clickable{cursor:pointer;transition:transform 0.1s;}
+.stat-card.clickable:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--accent2)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.stat-card.blue::before{background:var(--accent2)}
+.stat-card.green::before{background:var(--success)}
+.stat-label{font-size:11px;color:var(--text-light);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.stat-value{font-size:22px;font-weight:700;color:var(--text);margin:6px 0 3px;letter-spacing:-1px}
+.stat-sub{font-size:11px;color:var(--text-light)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border);white-space:nowrap}
+tbody td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tbody tr:hover{background:#fafafa}
+.badge-status{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:600}
+.badge-status.ok{background:#d1fae5;color:#065f46}
+.badge-status.info{background:#dbeafe;color:#1e40af}
+.badge-status.inactive{background:#e5e7eb;color:#4b5563}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+label{font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase}
+input,select,textarea{padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
+.btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;transition:0.1s}
+.btn-primary{background:var(--accent);color:white} 
+.btn-secondary{background:var(--accent2);color:white}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:14px;width:90%;max-width:600px;box-shadow:var(--shadow-lg);padding:24px;position:relative}
+.modal-header{margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+.login-wrap{position:fixed;inset:0;background:linear-gradient(135deg,#0f1923 0%,#1a2535 50%,#0f1923 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-card{background:white;border-radius:18px;padding:36px;width:100%;max-width:380px}
+</style>
 </head>
 <body>
-<div class="tabs">
-    <button class="tab-btn active" onclick="showTab('py', this)">🇵🇾 Paraguay</button>
-    <button class="tab-btn" onclick="showTab('eventopy', this)">🏆 Evento PY</button>
-    <button class="tab-btn" onclick="showTab('ar', this)">🇦🇷 Argentina</button>
-    <button class="tab-btn" onclick="showTab('br', this)">🇧🇷 Brasil</button>
-    <button class="tab-btn" onclick="showTab('bo', this)">🇧🇴 Bolivia</button>
-    <button class="tab-btn" onclick="showTab('camaras', this)">🚦 Cámaras</button>
-    <button class="tab-btn" onclick="showTab('latam', this)">🌎 LATAM</button>
-    <button class="tab-btn" onclick="showTab('radios', this)">📻 Radios PY</button>
+
+<!-- PANTALLA DE LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-card">
+    <div style="text-align:center;margin-bottom:28px">
+      <h1 style="font-size:24px;font-weight:800">ContaPY Cloud</h1>
+      <p style="font-size:12px;color:var(--text-light)">Ingrese sus credenciales</p>
+    </div>
+    <div class="form-group"><label>Usuario</label><input type="text" id="lu" placeholder="ejemplo@correo.com"></div>
+    <div class="form-group"><label>Contraseña</label><input type="password" id="lp" placeholder="••••••••"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:15px" onclick="window.doLogin()">Ingresar</button>
+  </div>
 </div>
 
-<!-- ══ PARAGUAY ══ -->
-<div id="tab-py" class="tab-panel active">
-    <div class="player-container" id="py-player">
-        <h3 style="color:#555;text-align:center;padding:20px;">Seleccioná un canal abajo 👇</h3>
-    </div>
-    <div class="category-title">📡 Canales Abiertos</div>
-    <div class="channels">
-        <button class="channel-btn" id="btn-telefuturo" data-tab="py" data-key="telefuturo" data-type="m3u8">📺 Telefuturo</button>
-        <button class="channel-btn" id="btn-npy" data-tab="py" data-key="npy" data-type="m3u8">📺 NPY</button>
-        <button class="channel-btn" id="btn-mega" data-tab="py" data-key="mega" data-type="m3u8">📺 Mega TV</button>
-        <button class="channel-btn" onclick="playTV('py','iframe','https://geo.dailymotion.com/player/x1at3a.html?video=k4nLYiNrBX8W5jDbSlM&autoplay=1')">📺 Trece PY</button>
-        <button class="channel-btn" id="btn-latele" data-tab="py" data-key="latele" data-type="m3u8">📺 LaTele</button>
-        <button class="channel-btn" id="btn-abctv720" data-tab="py" data-key="abctv720" data-type="m3u8">📺 ABC TV</button>
-        <button class="channel-btn" id="btn-abctv480" data-tab="py" data-key="abctv480" data-type="m3u8">📺 ABC TV (480p)</button>
-        <button class="channel-btn" id="btn-rcctv" data-tab="py" data-key="rcctv" data-type="m3u8">📺 RCC TV</button>
-    </div>
-    <div class="category-title">🎬 Entretenimiento / Noticias</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/tropicaliatv')">🎶 Tropicalia</button>
-        <button class="channel-btn" id="btn-canalpro" data-tab="py" data-key="canalpro" data-type="m3u8">📺 Canal Pro</button>
-        <button class="channel-btn" id="btn-poputv" data-tab="py" data-key="poputv" data-type="m3u8">🌐 Popu TV</button>
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/poputv')">🌐 Popu TV (alt)</button>
-        <button class="channel-btn" id="btn-productiva" data-tab="py" data-key="productiva" data-type="m3u8">📰 Productiva</button>
-        <button class="channel-btn" id="btn-venus" data-tab="py" data-key="venus" data-type="m3u8">💫 Venus TV</button>
-        <button class="channel-btn" id="btn-launion" data-tab="py" data-key="launion" data-type="m3u8">🙏 La Unión</button>
-        <button class="channel-btn" id="btn-nandutitv" data-tab="py" data-key="nandutitv" data-type="m3u8">📡 Ñanduti TV</button>
-        <button class="channel-btn" id="btn-chaquena" data-tab="py" data-key="chaquena" data-type="m3u8">🌵 Chaqueña TV</button>
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/monumentaltv')">🏟️ Monumental</button>
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/mitv')">📺 Mi TV</button>
-        <button class="channel-btn" id="btn-gen" data-tab="py" data-key="gen" data-type="m3u8">📡 GEN</button>
-        <button class="channel-btn" id="btn-nandejaranee" data-tab="py" data-key="nandejaranee" data-type="m3u8">🗣️ Ñande Jara Ñe'e</button>
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/heitv')">🌿 HEI</button>
-        <button class="channel-btn" id="btn-lacosta" data-tab="py" data-key="lacosta" data-type="m3u8">🌊 La Costa TV</button>
-    </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v4.0 Cloud</div></div></div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label" data-i18n="menu_main">Principal</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span><span data-i18n="nav_dash">Dashboard</span></div>
+    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span><span data-i18n="nav_clients">Clientes</span></div>
+    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b;font-weight:600"><span class="icon">🤖</span><span data-i18n="nav_ai">Soporte Claude IA</span></div>
+  </div>
+  <div style="margin-top:auto; padding: 20px;">
+      <button class="btn btn-outline" style="width:100%; color: white; border-color: rgba(255,255,255,0.2)" onclick="location.reload()">🚪 Cerrar Sesión</button>
+  </div>
 </div>
 
-<!-- ══ EVENTO PY ══ -->
-<div id="tab-eventopy" class="tab-panel">
-    <div class="player-container" id="eventopy-player">
-        <h3 style="color:#555;text-align:center;padding:20px;">Seleccioná un evento abajo 👇</h3>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title" data-i18n="top_title">Dashboard Principal</div>
+    <select id="lang_sel" onchange="window.changeLang(this.value)" style="padding:4px 8px; font-weight: 600;">
+        <option value="es">🇪🇸 ES</option>
+        <option value="en">🇺🇸 EN</option>
+        <option value="pt">🇧🇷 PT</option>
+    </select>
+  </div>
+
+  <div class="content">
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div style="margin-bottom:20px">
+        <h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2>
+        <p data-i18n="dash_p" style="font-size:12px; color:var(--text-light)">Sincronización Activa con Firebase</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card blue"><div class="stat-label" data-i18n="dash_s1">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div></div>
+        <div class="stat-card green"><div class="stat-label" data-i18n="dash_s2">Clientes Activos</div><div class="stat-value" id="dash_cli_count">0</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏢 Acceso Rápido a Clientes</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social</th><th data-i18n="tbl_contact">Contacto</th><th data-i18n="tbl_taxes">Impuestos</th></tr></thead>
+          <tbody id="dash-clientes-list"></tbody>
+        </table></div>
+      </div>
     </div>
-    <div class="category-title">🏆 Eventos Especiales PY</div>
-    <div class="channels">
-        <button class="channel-btn" id="btn-eventopy1" data-tab="eventopy" data-key="eventopy1" data-type="m3u8">⚽ Tigo Sports 1</button>
-        <button class="channel-btn" id="btn-eventopy2" data-tab="eventopy" data-key="eventopy2" data-type="m3u8">⚽ Tigo Sports 2</button>
-        <button class="channel-btn" id="btn-eventopy3" data-tab="eventopy" data-key="eventopy3" data-type="m3u8">⚽ Tigo Sports 3</button>
+
+    <!-- PÁGINA CLIENTES -->
+    <div class="page" id="page-clientes">
+      <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div><h2 data-i18n="nav_clients">Directorio de Clientes</h2></div>
+          <button class="btn btn-primary" onclick="window.openModalCliente()">+ Nuevo Cliente</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap"><table>
+          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social</th><th>Estado</th><th data-i18n="tbl_actions">Acciones</th></tr></thead>
+          <tbody id="tabla-clientes-list"></tbody>
+        </table></div>
+      </div>
     </div>
+    
+    <!-- PÁGINA CLAUDE -->
+    <div class="page" id="page-gemini">
+        <h2>🤖 Soporte Claude IA</h2>
+        <p>Asistente contable especializado (Próximamente...)</p>
+    </div>
+  </div>
 </div>
 
-<!-- ══ ARGENTINA ══ -->
-<div id="tab-ar" class="tab-panel">
-    <div class="player-container" id="ar-player"><h3 style="color:#555;text-align:center;padding:20px;">Seleccioná un canal abajo 👇</h3></div>
-    <div class="category-title">📺 Canales Abiertos AR</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/eltrece.html')">El Trece</button>
-        <button class="channel-btn" onclick="playTV('ar','m3u8','https://unlimited1-us.dps.live/nettv/nettv.smil/playlist.m3u8')">Net TV</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/telefe.html')">Telefe</button>
+<!-- MODAL CLIENTE -->
+<div class="modal-overlay" id="modal-cliente">
+  <div class="modal">
+    <div class="modal-header"><h3 id="m-cli-title">Configurar Cliente</h3><button onclick="closeModal('modal-cliente')" style="cursor:pointer; border:none; background:none; font-size:20px">✕</button></div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group"><label>RUC</label><input type="text" id="cli_ruc"></div>
+        <div class="form-group"><label>Razón Social</label><input type="text" id="cli_nom"></div>
+        <div class="form-group"><label>Teléfono</label><input type="text" id="cli_tel"></div>
+        <div class="form-group"><label>Correo</label><input type="text" id="cli_correo"></div>
+        <div class="form-group"><label>Tipo</label><select id="cli_tipo"><option value="fisica">Física</option><option value="juridica">Jurídica</option></select></div>
+        <div class="form-group"><label>Estado</label><select id="cli_estado"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div>
     </div>
-    <div class="category-title">⚽ Deportes AR</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/espn.html')">ESPN</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/espn2.html')">ESPN 2</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/espn3.html')">ESPN 3</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/espnar.html')">ESPN AR</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/espnpremiumargentina.html')">ESPN Premium</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/tycsports.html')">TyC Sports</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/tntsports.html')">TNT Sports</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/foxsports.html')">Fox Sports</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/foxsports2.html')">Fox Sports 2</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/directvsports.html')">DirecTV Sports</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/directvsports2.html')">DirecTV Sports 2</button>
+    <div style="margin-top: 15px;">
+        <label style="display:block; margin-bottom: 10px;">Impuestos Aplicables:</label>
+        <label><input type="checkbox" id="tax_iva" checked> IVA</label> &nbsp;
+        <label><input type="checkbox" id="tax_ire_gen"> IRE General</label> &nbsp;
+        <label><input type="checkbox" id="tax_ire_sim"> IRE Simple</label> &nbsp;
+        <label><input type="checkbox" id="tax_irp"> IRP</label>
     </div>
-    <div class="category-title">🎬 Entretenimiento AR</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/tnt.html')">TNT</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/warnerchannel.html')">Warner Bros</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/tntnovelas.html')">TNT Novelas</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/space.html')">Space</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/axn.html')">AXN</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/sony.html')">Sony</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/cinemax.html')">Cinemax</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/multipremier.html')">Multipremier</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/starchannel.html')">Star Channel</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/goldenpremier.html')">Golden Premier</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/goldenedge.html')">Golden Edge</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/goldenplus.html')">Golden Plus</button>
+    <div style="margin-top: 25px; text-align: right;">
+        <button class="btn btn-outline" onclick="closeModal('modal-cliente')">Cancelar</button>
+        <button class="btn btn-primary" onclick="window.guardarCliente()">💾 Guardar Cliente</button>
     </div>
-    <div class="category-title">🔬 Documentales AR</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/natgeo.html')">Nat Geo</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/discoverychannel.html')">Discovery</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/history.html')">History</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/history2.html')">History 2</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/animalplanet.html')">Animal Planet</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/amc.html')">AMC</button>
-    </div>
-    <div class="category-title">👶 Infantiles AR</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/disneychannel.html')">Disney Channel</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/cartoonnetwork.html')">Cartoon Network</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/tooncast.html')">Tooncast</button>
-        <button class="channel-btn" onclick="playTV('ar','iframe','https://embed.saohgdasregions.fun/embed2/fmhotkids.html')">FM Hot Kids</button>
-    </div>
-</div>
-
-<!-- ══ BRASIL ══ -->
-<div id="tab-br" class="tab-panel">
-    <div class="player-container" id="br-player"><h3 style="color:#555;text-align:center;padding:20px;">Seleccioná un canal abajo 👇</h3></div>
-
-    <div class="category-title">📺 Canales Abiertos BR</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('br','m3u8','https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8')">TV Cultura</button>
-        <button class="channel-btn" id="btn-br_sbt" data-tab="br" data-key="br_sbt" data-type="auto">📺 SBT</button>
-        <button class="channel-btn" id="btn-br_record" data-tab="br" data-key="br_record" data-type="auto">📺 Record TV</button>
-        <button class="channel-btn" id="btn-br_cnnbrasil" data-tab="br" data-key="br_cnnbrasil" data-type="auto">📺 CNN Brasil</button>
-        <button class="channel-btn" id="btn-br_bandnews" data-tab="br" data-key="br_bandnews" data-type="auto">📺 Band News</button>
-        <button class="channel-btn" onclick="playTV('br','iframe','https://www3.embedtv.best/band')">📺 Band</button>
-    </div>
-
-    <div class="category-title">📺 Globo BR</div>
-    <div class="channels">
-        <button class="channel-btn" id="btn-br_globosp" data-tab="br" data-key="br_globosp" data-type="auto">🌐 Globo SP</button>
-        <button class="channel-btn" id="btn-br_globorj" data-tab="br" data-key="br_globorj" data-type="auto">🌐 Globo RJ</button>
-        <button class="channel-btn" id="btn-br_globomg" data-tab="br" data-key="br_globomg" data-type="auto">🌐 Globo MG</button>
-        <button class="channel-btn" id="btn-br_globors" data-tab="br" data-key="br_globors" data-type="auto">🌐 Globo RS</button>
-        <button class="channel-btn" id="btn-br_globoam" data-tab="br" data-key="br_globoam" data-type="auto">🌐 Globo AM</button>
-    </div>
-
-    <div class="category-title">🎬 Entretenimiento BR</div>
-    <div class="channels">
-        <button class="channel-btn" id="btn-br_tnt" data-tab="br" data-key="br_tnt" data-type="auto">🎬 TNT</button>
-        <button class="channel-btn" id="btn-br_warner" data-tab="br" data-key="br_warner" data-type="auto">🎬 Warner Bros</button>
-        <button class="channel-btn" id="btn-br_sony" data-tab="br" data-key="br_sony" data-type="auto">🎬 Sony</button>
-        <button class="channel-btn" onclick="playTV('br','iframe','https://www3.embedtv.best/studiouniversal')">🎬 Studio Universal</button>
-        <button class="channel-btn" id="btn-br_star" data-tab="br" data-key="br_star" data-type="auto">🎬 Star Channel</button>
-        <button class="channel-btn" onclick="playTV('br','iframe','https://www3.embedtv.best/viva')">📺 Viva TV</button>
-        <button class="channel-btn" id="btn-br_comedy" data-tab="br" data-key="br_comedy" data-type="auto">😂 Comedy Central</button>
-        <button class="channel-btn" id="btn-br_adultswim" data-tab="br" data-key="br_adultswim" data-type="auto">🌙 Adult Swim</button>
-        <button class="channel-btn" id="btn-br_telecinepipoca" data-tab="br" data-key="br_telecinepipoca" data-type="auto">🍿 Telecine Pipoca</button>
-        <button class="channel-btn" id="btn-br_telecinepremium" data-tab="br" data-key="br_telecinepremium" data-type="auto">🍿 Telecine Premium</button>
-        <button class="channel-btn" id="btn-br_foodnetwork" data-tab="br" data-key="br_foodnetwork" data-type="auto">🍽️ Food Network</button>
-        <button class="channel-btn" id="btn-br_universal" data-tab="br" data-key="br_universal" data-type="auto">📺 Universal TV</button>
-    </div>
-
-    <div class="category-title">🔬 Documentales BR</div>
-    <div class="channels">
-        <button class="channel-btn" id="btn-br_history" data-tab="br" data-key="br_history" data-type="auto">📜 History</button>
-        <button class="channel-btn" id="btn-br_history2" data-tab="br" data-key="br_history2" data-type="auto">📜 History 2</button>
-        <button class="channel-btn" id="btn-br_animalplanet" data-tab="br" data-key="br_animalplanet" data-type="auto">🐾 Animal Planet</button>
-        <button class="channel-btn" id="btn-br_discoveryid" data-tab="br" data-key="br_discoveryid" data-type="auto">🔍 Discovery ID</button>
-        <button class="channel-btn" id="btn-br_fishtv" data-tab="br" data-key="br_fishtv" data-type="auto">🐟 Fish TV</button>
-    </div>
-
-    <div class="category-title">👶 Infantiles BR</div>
-    <div class="channels">
-        <button class="channel-btn" id="btn-br_cartoonito" data-tab="br" data-key="br_cartoonito" data-type="auto">🧸 Cartoonito</button>
-        <button class="channel-btn" id="btn-br_chaves247" data-tab="br" data-key="br_chaves247" data-type="auto">📺 El Chavo 24/7</button>
-        <button class="channel-btn" id="btn-br_simpsons247" data-tab="br" data-key="br_simpsons247" data-type="auto">📺 Simpsons 24/7</button>
-    </div>
-
-    <div class="category-title">⚽ Deportes BR</div>
-    <div class="channels">
-        <button class="channel-btn" id="btn-br_bandsports" data-tab="br" data-key="br_bandsports" data-type="auto">⚽ Band Sports</button>
-    </div>
-</div>
-
-<!-- ══ BOLIVIA ══ -->
-<div id="tab-bo" class="tab-panel">
-    <div class="player-container" id="bo-player"><h3 style="color:#555;text-align:center;padding:20px;">Seleccioná un canal abajo 👇</h3></div>
-    <div class="category-title">📺 Canales Bolivia</div>
-    <div class="channels">
-        <button class="channel-btn" id="btn-btv" data-tab="bo" data-key="btv" data-type="m3u8">📺 BTV</button>
-        <button class="channel-btn" onclick="playTV('bo','iframe','https://www.boliviatv.bo/principal/vivo71.php')">📺 BTV (web)</button>
-        <button class="channel-btn" id="btn-atb" data-tab="bo" data-key="atb" data-type="m3u8">📺 ATB</button>
-        <button class="channel-btn" id="btn-reduno" data-tab="bo" data-key="reduno" data-type="m3u8">📺 Red Uno</button>
-        <button class="channel-btn" onclick="playTV('bo','iframe','https://www.reduno.com.bo/senal-en-vivo')">📺 Red Uno (web)</button>
-    </div>
-</div>
-
-<!-- ══ CÁMARAS ══ -->
-<div id="tab-camaras" class="tab-panel">
-    <div class="player-container" id="cam-player">
-        <h3 style="color:#555;text-align:center;padding:20px;">Seleccioná una cámara 👇</h3>
-    </div>
-    <div class="category-title">🚦 Puente de la Amistad — Foz do Iguaçu</div>
-    <div class="channels">
-        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://izidisplay.com/AoVivo/Ponte')">🎥 Atacado Connect</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/V2tjeGMyRXhjRmhQU0dSUFVYcFdlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/V1ZWb1UwMUhUa2xVVkZwTlpWUm5PUT09K1I=/fozpontedaamizadesentidoparaguai.stream/')">🎥 Sentido Paraguay</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/V2tjeGMyRXhjRmhQU0dSUFVYcFdlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/V1ZWb1UwMUhUa2xVVkZwTlpWUm5PUT09K1I=/fozpontedaamizadesentidobrasil.stream/')">🎥 Sentido Brasil</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/dmlkZW8wNC5sb2dpY2Fob3N0LmNvbS5icisx/16:9/YUhSMGNITTZMeTg5K1o=/fozaduanapontedaamizade.stream/')">🎥 Aduana BR-277</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portaldacidade//false/false/V2tjeGMyRXhjRmhQU0dST1lWUldlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/aHR0cHM6Ly8rMQ==/fozsentidopontedaamizade01.stream/')">🎥 BR-277 Sent. Ponte</button>
-    </div>
-    <div class="category-title">🏙️ Encarnación</div>
-    <div class="channels">
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://mia.rtsp.me/Ox-OyIeILvrILZ_iwrmCcg/1773664486/hls/3NsfyZGe.m3u8')">🎥 Costanera Encarnación</button>
-    </div>
-    <div class="category-title">🌍 Cámaras Internacionales</div>
-    <div class="channels">
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge04.balticlivecam.com/blc/p_IT_Rome_Colosseum/tracks-v1a1/mono.ts.m3u8?token=baca823a6b62dfd3c0ae9b2a8490ffdc%3A1773695041824')">🏛️ Coliseo — Roma</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge01.balticlivecam.com/blc/p_ES_Costa_Adeje_Tenerife/tracks-v1/mono.ts.m3u8?token=2844bbe12f637b7ed6567d29dbb38420%3A1773695075634')">🌴 Costa Adeje — Canarias</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge01.balticlivecam.com/blc/Israel1/index.m3u8?token=87a0c35879c931af61ce77b2313dd5b9:1773701554507')">🇮🇱 Tel Aviv — Israel</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge04.balticlivecam.com/blc/p_BR_Cascavel_centro/index.m3u8?token=ce04b8dfe9a7978481d8012d22d76940:1773695174148')">🏙️ Centro — Cascavel BR</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge04.balticlivecam.com/blc/p_BR_Guaruja_Praca_das_Bandeiras/index.m3u8?token=67f9965d77ae5776f321fd50adb5a38d:1773695223249')">🚩 Plaza Banderas — BR</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge01.balticlivecam.com/blc/p_BR_Ilhabela_Praia_do_Curral/index.m3u8?token=5ce0390fa9f8fe1426d65b1b221c7f42:1773695324323')">🏖️ Praia do Curral — BR</button>
-    </div>
-</div>
-
-<!-- ══ LATAM ══ -->
-<div id="tab-latam" class="tab-panel">
-    <div class="player-container" id="latam-player"><h3 style="color:#555;text-align:center;padding:20px;">Seleccioná un canal abajo 👇</h3></div>
-    <div class="category-title">😂 Comedia / Entretenimiento</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/tnt.html')">TNT</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/warnerchannel.html')">Warner Bros</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/tntnovelas.html')">TNT Novelas</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/tntseries.html')">TNT Series</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/axn.html')">AXN</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/sony.html')">Sony</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/universalchannel.html')">Universal</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/studiouniversal.html')">Studio Universal</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/space.html')">Space</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/fx.html')">FX</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/pasiones.html')">Pasiones</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/tlnovelas.html')">TL Novelas</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/unicable.html')">Unicable</button>
-    </div>
-    <div class="category-title">🎬 Películas</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/cinemax.html')">Cinemax</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/cinecanal.html')">Cinecanal</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/starchannel.html')">Star Channel</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/multipremier.html')">Multipremier</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/goldenpremier.html')">Golden Premier</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/goldenedge.html')">Golden Edge</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/goldenplus.html')">Golden Plus</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/amc.html')">AMC</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/syfy.html')">SyFy</button>
-    </div>
-    <div class="category-title">⚽ Deportes LATAM</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/espn.html')">ESPN</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/espn2.html')">ESPN 2</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/espn3.html')">ESPN 3</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/espn4.html')">ESPN 4</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/espn5.html')">ESPN 5</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/espnpremium.html')">ESPN Premium</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/tntsports.html')">TNT Sports</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/foxsports.html')">Fox Sports</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/foxsports2.html')">Fox Sports 2</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/foxsports3.html')">Fox Sports 3</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/directvsports.html')">DirecTV Sports</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/directvsports2.html')">DirecTV Sports 2</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/tycsports.html')">TyC Sports</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/tudn.html')">TUDN</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/nba.html')">NBA</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/daznf1.html')">DAZN F1</button>
-    </div>
-    <div class="category-title">🔬 Documentales LATAM</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/natgeo.html')">Nat Geo</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/discoverychannel.html')">Discovery</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/discoveryworld.html')">Discovery World</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/history.html')">History</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/history2.html')">History 2</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/animalplanet.html')">Animal Planet</button>
-    </div>
-    <div class="category-title">👶 Infantiles LATAM</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/disneychannel.html')">Disney Channel</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/cartoonnetwork.html')">Cartoon Network</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/tooncast.html')">Tooncast</button>
-    </div>
-    <div class="category-title">📡 Noticias LATAM</div>
-    <div class="channels">
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/cnn.html')">CNN</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/rcn.html')">RCN</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/caracol.html')">Caracol</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/americatv.html')">América TV</button>
-        <button class="channel-btn" onclick="playTV('latam','iframe','https://embed.saohgdasregions.fun/embed2/univision.html')">Univision</button>
-    </div>
-</div>
-
-<!-- ══ RADIOS ══ -->
-<div id="tab-radios" class="tab-panel">
-    <div class="radio-player-bar">
-        <div class="radio-now-info">
-            <div class="rlabel">📻 Escuchando</div>
-            <div class="rname-big" id="rname-big">—</div>
-            <div class="rfreq" id="rfreq">Seleccioná una radio abajo</div>
-        </div>
-        <audio id="main-audio" controls></audio>
-        <button class="rbtn-stop" onclick="stopRadio()">⏹ Parar</button>
-    </div>
-    <div class="search-bar-wrap">
-        <input type="text" id="radio-search" placeholder="🔍 Buscar radio..." oninput="filterRadios()" autocomplete="off">
-    </div>
-    <div id="no-results" class="no-results">Sin resultados 😕</div>
-
-    <div class="city-group" id="grp-asufm">
-        <div class="city-header" onclick="toggleGroup('grp-asufm')">📻 Asunción <span class="toggle-icon">▾</span></div>
-        <div class="city-cards" id="cards-grp-asufm">
-            <div class="radio-card" onclick="playRadio(this,'https://cast1.asurahosting.com/proxy/montecarlonew/stream','Montecarlo','100.9 FM')"><span class="freq">100.9 FM</span><span class="rname">Montecarlo</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://rfs1.farra.com.py:9433/stream','Farra','101.3 FM')"><span class="freq">101.3 FM</span><span class="rname">Farra</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://rds3.desdeparaguay.net/movtropicalia/movtropicalia.stream/playlist.m3u8','Tropicalia','93.9 FM')"><span class="freq">93.9 FM</span><span class="rname">Tropicalia</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-        </div>
-    </div>
-    <div class="city-group" id="grp-caaguazu">
-        <div class="city-header" onclick="toggleGroup('grp-caaguazu')">📍 Caaguazú <span class="toggle-icon">▾</span></div>
-        <div class="city-cards" id="cards-grp-caaguazu">
-            <div class="radio-card" onclick="playRadio(this,'https://copacorc.desdeparaguay.net/rcaaguazu/rcaaguazu_py_all/playlist.m3u8','Radio Caaguazú','640 AM')"><span class="freq">640 AM</span><span class="rname">Radio Caaguazú</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://stream.creativamedia.com.py:1936/horizonte/horizonte/playlist.m3u8','Radio Horizonte','106.3 FM')"><span class="freq">106.3 FM</span><span class="rname">Horizonte</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://stream.creativamedia.com.py:1936/cndtv/cndtv/playlist.m3u8','CND','TV/Online')"><span class="freq">TV/Online</span><span class="rname">CND</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://stream.creativamedia.com.py:1936/seven/seven/playlist.m3u8','Seven Radio','Online')"><span class="freq">Online</span><span class="rname">Seven Radio</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-        </div>
-    </div>
-    <div class="city-group" id="grp-cde">
-        <div class="city-header" onclick="toggleGroup('grp-cde')">📍 CDE & Minga Guazú <span class="toggle-icon">▾</span></div>
-        <div class="city-cards" id="cards-grp-cde">
-            <div class="radio-card" onclick="playRadio(this,'https://copacorit.desdeparaguay.net/ritapiru/ritapiru_py_all/playlist.m3u8','Radio Itapiru','660 AM')"><span class="freq">660 AM</span><span class="rname">Radio Itapiru</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacort.desdeparaguay.net/rtranscontinental/rtranscontinental_py_all/playlist.m3u8','Transcontinental','98.1 FM')"><span class="freq">98.1 FM</span><span class="rname">Transcontinental</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacorev.desdeparaguay.net/elverbo/elverbo_py_all/playlist.m3u8','Radio El Verbo','Online')"><span class="freq">Online</span><span class="rname">El Verbo</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://stream.radiosenpy.com:1936/altoparana/altoparana/playlist.m3u8','Alto Paraná','TV/Online')"><span class="freq">TV/Online</span><span class="rname">Alto Paraná</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacormg.desdeparaguay.net/rmingaguazu/rmingaguazu_py_all/playlist.m3u8','Radio Minga Guazú','96.1 FM')"><span class="freq">96.1 FM</span><span class="rname">Minga Guazú</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacorpp.desdeparaguay.net/rpaipuku/rpaipuku_py_all/playlist.m3u8','Radio Paí Puku','AM/FM')"><span class="freq">AM/FM</span><span class="rname">Paí Puku</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-        </div>
-    </div>
-    <div class="city-group" id="grp-santarita">
-        <div class="city-header" onclick="toggleGroup('grp-santarita')">📍 Santa Rita & Naranjal <span class="toggle-icon">▾</span></div>
-        <div class="city-cards" id="cards-grp-santarita">
-            <div class="radio-card" onclick="playRadio(this,'https://stm01.dialpy.com:8020/radiomaxima','Máxima FM','99.9 FM')"><span class="freq">99.9 FM</span><span class="rname">Máxima FM</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://stm01.dialpy.com:8030/radioemanuel','Radio Emanuel','102.3 FM')"><span class="freq">102.3 FM</span><span class="rname">Radio Emanuel</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://stm01.dialpy.com:8010/radio102','Radio Viva','102.3 FM')"><span class="freq">102.3 FM</span><span class="rname">Radio Viva</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacorp.desdeparaguay.net/rprogresos/rprogresos_py_all/playlist.m3u8','Progresos','103.5 FM')"><span class="freq">103.5 FM</span><span class="rname">Progresos</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacorl.desdeparaguay.net/rlatina/rlatina_py_all/playlist.m3u8','Radio Latina','95.9 FM')"><span class="freq">95.9 FM</span><span class="rname">Latina</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacori.desdeparaguay.net/rintegracion/rintegracion_py_all/playlist.m3u8','Integración','104.3 FM')"><span class="freq">104.3 FM</span><span class="rname">Integración</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacorn.desdeparaguay.net/rnaranjal/rnaranjal_py_all/playlist.m3u8','Radio Naranjal','103.5 FM')"><span class="freq">103.5 FM</span><span class="rname">Radio Naranjal</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-        </div>
-    </div>
-    <div class="city-group" id="grp-natalio">
-        <div class="city-header" onclick="toggleGroup('grp-natalio')">📍 Itapúa — Natalio <span class="toggle-icon">▾</span></div>
-        <div class="city-cards" id="cards-grp-natalio">
-            <div class="radio-card" onclick="playRadio(this,'https://copacornat.desdeparaguay.net/rnatalio/rnatalio_py_all/playlist.m3u8','Radio Natalio','101.5 FM')"><span class="freq">101.5 FM</span><span class="rname">Radio Natalio</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://copacorli.desdeparaguay.net/rlibertad/rlibertad_py_all/playlist.m3u8','Radio Libertad','94.5 FM')"><span class="freq">94.5 FM</span><span class="rname">Libertad</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-        </div>
-    </div>
-    <div class="city-group" id="grp-asuncion-am">
-        <div class="city-header" onclick="toggleGroup('grp-asuncion-am')">📻 Asunción / Central <span class="toggle-icon">▾</span></div>
-        <div class="city-cards" id="cards-grp-asuncion-am">
-            <div class="radio-card" onclick="playRadio(this,'https://www.desde-paraguay.com/movemisoras2/movemisoras2.stream/playlist.m3u8?k=8d6b4cbda0ba464f9e57170bb2265dcd60358a88cd7f8b1710e672042ad38ec2&exp=1773707622','Emisoras Paraguay','106.1 FM')"><span class="freq">106.1 FM</span><span class="rname">Emisoras PY</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-        </div>
-    </div>
+  </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════
-// CARGA DE CANALES DESDE GITHUB — fuente única de verdad
-// ═══════════════════════════════════════════════════
-var CANALES_URL = 'https://raw.githubusercontent.com/jcarlos2028/tv-camaras/main/canales.json';
-var canales = {};
+// VARIABLES GLOBALES
+window.dbUsuarios = []; 
+window.dbClientes = []; 
+window.totalDocs = 0; 
+window.editandoCliIdx = -1;
 
-function cargarCanales(callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', CANALES_URL + '?t=' + Date.now(), true);
-    xhr.timeout = 8000;
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            try { canales = JSON.parse(xhr.responseText); } catch(e) {}
-        }
-        if (callback) callback();
+// 1. DICCIONARIO DE TRADUCCIÓN
+const translations = {
+    es: {
+        nav_dash: "Dashboard", nav_clients: "Clientes (Cartera)", nav_ai: "Soporte Claude IA",
+        dash_h2: "Estudio Contable ContaPY 👋", top_title: "Dashboard Principal",
+        tbl_name: "Razón Social", tbl_contact: "Contacto", tbl_actions: "Acciones",
+        dash_p: "Sincronización Activa con Firebase", dash_s1: "Asientos Generados", dash_s2: "Clientes Activos"
+    },
+    en: {
+        nav_dash: "Dashboard", nav_clients: "Clients", nav_ai: "Claude AI Support",
+        dash_h2: "ContaPY Accounting Studio 👋", top_title: "Main Dashboard",
+        tbl_name: "Legal Name", tbl_contact: "Contact", tbl_actions: "Actions",
+        dash_p: "Active Sync with Firebase", dash_s1: "Total Entries", dash_s2: "Active Clients"
+    },
+    pt: {
+        nav_dash: "Painel", nav_clients: "Clientes", nav_ai: "Suporte Claude IA",
+        dash_h2: "Estúdio Contábil ContaPY 👋", top_title: "Painel Principal",
+        tbl_name: "Razão Social", tbl_contact: "Contato", tbl_actions: "Ações",
+        dash_p: "Sincronização Ativa Firebase", dash_s1: "Lançamentos", dash_s2: "Clientes"
+    }
+};
+
+// 2. CAMBIO DE IDIOMA
+window.changeLang = function(lang) {
+    localStorage.setItem('contapy_lang', lang);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) el.textContent = translations[lang][key];
+    });
+};
+
+// 3. INTERFAZ
+function showPage(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if(el) el.classList.add('active');
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// 4. CLIENTES
+window.openModalCliente = function(idx = -1) {
+    window.editandoCliIdx = idx;
+    // Limpiar campos
+    document.getElementById('cli_ruc').value = '';
+    document.getElementById('cli_nom').value = '';
+    document.getElementById('cli_tel').value = '';
+    document.getElementById('cli_correo').value = '';
+    
+    if(idx >= 0) {
+        const c = window.dbClientes[idx];
+        document.getElementById('cli_ruc').value = c.ruc;
+        document.getElementById('cli_nom').value = c.nom;
+        document.getElementById('cli_tel').value = c.tel;
+        document.getElementById('cli_correo').value = c.correo;
+        document.getElementById('m-cli-title').textContent = "Editar Cliente";
+    } else {
+        document.getElementById('m-cli-title').textContent = "Nuevo Cliente";
+    }
+    openModal('modal-cliente');
+};
+
+window.guardarCliente = async function() {
+    const ruc = document.getElementById('cli_ruc').value;
+    const nom = document.getElementById('cli_nom').value;
+    if(!ruc || !nom) return alert("RUC y Nombre son obligatorios");
+
+    const tx = [];
+    if(document.getElementById('tax_iva').checked) tx.push('IVA');
+    if(document.getElementById('tax_ire_gen').checked) tx.push('IRE General');
+    
+    const obj = {
+        ruc: ruc, nom: nom, tel: document.getElementById('cli_tel').value,
+        correo: document.getElementById('cli_correo').value,
+        tipo: document.getElementById('cli_tipo').value,
+        estado: document.getElementById('cli_estado').value,
+        taxes: tx
     };
-    xhr.onerror = function() { if (callback) callback(); };
-    xhr.ontimeout = function() { if (callback) callback(); };
-    xhr.send();
-}
 
-// ─────────────────────────────────────────────────
-// Detecta si un valor del JSON es iframe o m3u8/url
-// y ejecuta la reproducción correcta
-// ─────────────────────────────────────────────────
-function playFromKey(tab, key) {
-    var val = canales[key];
-    if (!val || val.length < 5) return;
-    if (val.trim().startsWith('<iframe') || val.trim().startsWith('<IFRAME')) {
-        // Extraer src del iframe
-        var match = val.match(/src=["']([^"']+)["']/i);
-        if (match) {
-            playTV(tab, 'iframe', match[1]);
-        } else {
-            // Si no se puede extraer src, mostrar el iframe directamente
-            var c = document.getElementById(tab + '-player');
-            if (c) { c.innerHTML = val; window.scrollTo({top:0,behavior:'smooth'}); }
-        }
+    if(window.editandoCliIdx >= 0) {
+        Object.assign(window.dbClientes[window.editandoCliIdx], obj);
     } else {
-        // Es una URL directa — detectar tipo
-        var type = val.includes('.m3u8') ? 'm3u8' : (val.includes('.mpd') ? 'mpd' : 'iframe');
-        playTV(tab, type, val);
+        obj.id = Date.now();
+        obj.libros = { compras:[], ventas:[], recibos:[], retenciones:[], diario:[] };
+        window.dbClientes.push(obj);
     }
-}
 
-// ─────────────────────────────────────────────────
-// Vincular todos los botones con data-key al JSON
-// ─────────────────────────────────────────────────
-function vincularBotones() {
-    document.querySelectorAll('[data-key]').forEach(function(btn) {
-        var key = btn.getAttribute('data-key');
-        var tab = btn.getAttribute('data-tab');
-        if (!tab || !key) return;
-        btn.onclick = function() { playFromKey(tab, key); };
+    await window.saveData();
+    window.renderClientes();
+    closeModal('modal-cliente');
+    alert("✅ Cliente guardado.");
+};
+
+window.renderClientes = function() {
+    const tb = document.getElementById('tabla-clientes-list');
+    const db = document.getElementById('dash-clientes-list');
+    if(!tb) return;
+    tb.innerHTML = ''; if(db) db.innerHTML = '';
+    
+    let activos = 0;
+    window.dbClientes.forEach((c, i) => {
+        if(c.estado === 'activo') activos++;
+        const badge = c.estado === 'activo' ? 'ok' : 'inactive';
+        tb.innerHTML += `<tr><td>${c.ruc}</td><td><strong>${c.nom}</strong></td><td><span class="badge-status ${badge}">${c.estado}</span></td><td><button class="btn btn-outline btn-sm" onclick="window.openModalCliente(${i})">✏️</button></td></tr>`;
+        if(db && c.estado === 'activo') db.innerHTML += `<tr><td>${c.ruc}</td><td>${c.nom}</td><td>${c.tel}</td><td>${c.taxes.join(', ')}</td></tr>`;
     });
-}
+    document.getElementById('dash_cli_count').textContent = activos;
+};
 
-// Iniciar
-cargarCanales(vincularBotones);
+// Función Placeholder (será sobreescrita por Firebase)
+window.saveData = async function() { console.log("Cargando Nube..."); };
+window.doLogin = async function() { console.log("Cargando Nube..."); };
+</script>
 
-// ═══════════════════════════════════════════════════
-// TABS
-// ═══════════════════════════════════════════════════
-function showTab(name, btn) {
-    // Limpiar reproductores activos
-    Object.keys(hlsInstances).forEach(function(tab) {
-        try {
-            var c = document.getElementById(tab + '-player');
-            if (c) { var v = c.querySelector('video'); if (v) { v.pause(); v.src = ''; } var f = c.querySelector('iframe'); if (f) f.src = 'about:blank'; }
-            if (hlsInstances[tab]) { hlsInstances[tab].destroy(); delete hlsInstances[tab]; }
-        } catch(e) {}
-    });
-    var cam = document.getElementById('cam-player');
-    if (cam) { var cv = cam.querySelector('video'); if (cv) { cv.pause(); cv.src=''; } var cf = cam.querySelector('iframe'); if (cf) cf.src='about:blank'; }
-    if (camHls) { camHls.destroy(); camHls = null; }
+<!-- FIREBASE MODULE -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-    document.getElementById('tab-' + name).classList.add('active');
-    btn.classList.add('active');
-}
+  const firebaseConfig = {
+    apiKey: "AIzaSyBn3tcXb3WpVojYmMX603L68jhOqzW8abg",
+    authDomain: "contapy-f85f9.firebaseapp.com",
+    projectId: "contapy-f85f9",
+    storageBucket: "contapy-f85f9.firebasestorage.app",
+    messagingSenderId: "230770781636",
+    appId: "1:230770781636:web:5114af83fb351c15b68891"
+  };
 
-// ═══════════════════════════════════════════════════
-// TV PLAYERS
-// ═══════════════════════════════════════════════════
-var hlsInstances = {};
-var dashInstances = {};
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-function playTV(tab, type, url) {
-    var c = document.getElementById(tab + '-player');
-    if (!c) return;
-    c.innerHTML = '';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-    if (hlsInstances[tab]) { hlsInstances[tab].destroy(); delete hlsInstances[tab]; }
-    if (dashInstances[tab]) { try { dashInstances[tab].reset(); } catch(e) {} delete dashInstances[tab]; }
+  window.doLogin = async function() {
+      const u = document.getElementById('lu').value;
+      const p = document.getElementById('lp').value;
+      try { await signInWithEmailAndPassword(auth, u, p); } catch(e) { alert("Acceso denegado"); }
+  };
 
-    if (type === 'iframe') {
-        c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer"></iframe>';
-    } else {
-        c.innerHTML = '<video id="vid-' + tab + '" controls autoplay playsinline style="width:100%;height:100%"></video>';
-        var v = document.getElementById('vid-' + tab);
-        v.addEventListener('dblclick', function() {
-            if (v.requestFullscreen) v.requestFullscreen();
-            else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
-        });
-        if (url.includes('.mpd') || type === 'mpd') {
-            loadDashIfNeeded(function() {
-                if (typeof dashjs !== 'undefined') {
-                    var player = dashjs.MediaPlayer().create();
-                    dashInstances[tab] = player;
-                    player.initialize(v, url, true);
-                }
-            });
-        } else if (Hls.isSupported()) {
-            var hls = new Hls();
-            hlsInstances[tab] = hls;
-            hls.loadSource(url);
-            hls.attachMedia(v);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() { v.play(); });
-        } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
-            v.src = url;
-            v.addEventListener('loadedmetadata', function() { v.play(); });
-        }
-    }
-}
+  window.saveData = async function() {
+      try { await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes, totalDocs: window.totalDocs }); } catch(e) { console.error(e); }
+  };
 
-// ═══════════════════════════════════════════════════
-// CÁMARAS
-// ═══════════════════════════════════════════════════
-var camHls = null;
-var camDash = null;
-
-function playCAM(type, url) {
-    var c = document.getElementById('cam-player');
-    c.innerHTML = '';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-    if (camHls) { camHls.destroy(); camHls = null; }
-    if (camDash) { try { camDash.reset(); } catch(e) {} camDash = null; }
-    if (type === 'iframe') {
-        c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer"></iframe>';
-    } else {
-        c.innerHTML = '<video id="camv" controls autoplay playsinline style="width:100%;height:100%"></video>';
-        var v = document.getElementById('camv');
-        v.addEventListener('dblclick', function() {
-            if (v.requestFullscreen) v.requestFullscreen();
-            else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
-        });
-        if (Hls.isSupported()) {
-            camHls = new Hls(); camHls.loadSource(url); camHls.attachMedia(v);
-            camHls.on(Hls.Events.MANIFEST_PARSED, function() { v.play(); });
-        } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
-            v.src = url; v.addEventListener('loadedmetadata', function() { v.play(); });
-        }
-    }
-}
-
-// ═══════════════════════════════════════════════════
-// RADIOS
-// ═══════════════════════════════════════════════════
-var activeCard = null;
-var radioHls = null;
-
-function playRadio(card, url, name, freq) {
-    if (activeCard) activeCard.classList.remove('playing');
-    activeCard = card;
-    card.classList.add('playing');
-    document.getElementById('rname-big').textContent = name;
-    document.getElementById('rfreq').textContent = freq;
-    var audio = document.getElementById('main-audio');
-    if (url.includes('.m3u8')) {
-        audio.src = '';
-        if (radioHls) { radioHls.destroy(); radioHls = null; }
-        if (Hls.isSupported()) {
-            radioHls = new Hls();
-            radioHls.loadSource(url);
-            radioHls.attachMedia(audio);
-            radioHls.on(Hls.Events.MANIFEST_PARSED, function() { audio.play(); });
-        } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-            audio.src = url; audio.play();
-        }
-    } else {
-        if (radioHls) { radioHls.destroy(); radioHls = null; }
-        audio.src = url; audio.load(); audio.play().catch(function(){});
-    }
-}
-
-function stopRadio() {
-    var audio = document.getElementById('main-audio');
-    audio.pause(); audio.src = '';
-    if (radioHls) { radioHls.destroy(); radioHls = null; }
-    if (activeCard) { activeCard.classList.remove('playing'); activeCard = null; }
-    document.getElementById('rname-big').textContent = '—';
-    document.getElementById('rfreq').textContent = 'Seleccioná una radio abajo';
-}
-
-function toggleGroup(id) {
-    var cards = document.getElementById('cards-' + id);
-    var icon = cards.previousElementSibling.querySelector('.toggle-icon');
-    cards.classList.toggle('collapsed');
-    icon.textContent = cards.classList.contains('collapsed') ? '▸' : '▾';
-}
-
-function filterRadios() {
-    var q = document.getElementById('radio-search').value.toLowerCase();
-    var total = 0;
-    document.querySelectorAll('.radio-card').forEach(function(c) {
-        var match = !q || c.textContent.toLowerCase().includes(q);
-        c.style.display = match ? '' : 'none';
-        if (match) total++;
-    });
-    document.querySelectorAll('.city-group').forEach(function(g) {
-        var vis = Array.from(g.querySelectorAll('.radio-card')).some(function(c) { return c.style.display !== 'none'; });
-        g.style.display = vis ? '' : 'none';
-        if (vis && q) {
-            g.querySelector('.city-cards').classList.remove('collapsed');
-            g.querySelector('.toggle-icon').textContent = '▾';
-        }
-    });
-    document.getElementById('no-results').style.display = total === 0 ? 'block' : 'none';
-}
-
-// ═══════════════════════════════════════════════════
-// LIMPIEZA DE MEMORIA (Smart TV)
-// ═══════════════════════════════════════════════════
-function cleanAll() {
-    Object.keys(hlsInstances).forEach(function(tab) {
-        try { var c = document.getElementById(tab+'-player'); if(c){var v=c.querySelector('video');if(v){v.pause();v.src='';v.load();}var f=c.querySelector('iframe');if(f)f.src='about:blank';} if(hlsInstances[tab]){hlsInstances[tab].destroy();delete hlsInstances[tab];} } catch(e) {}
-    });
-    try { var cam=document.getElementById('cam-player'); if(cam){var cv=cam.querySelector('video');if(cv){cv.pause();cv.src='';cv.load();}var cf=cam.querySelector('iframe');if(cf)cf.src='about:blank';} if(camHls){camHls.destroy();camHls=null;} } catch(e) {}
-    try { var audio=document.getElementById('main-audio'); if(audio){audio.pause();audio.src='';audio.load();} if(radioHls){radioHls.destroy();radioHls=null;} if(activeCard){activeCard.classList.remove('playing');activeCard=null;} } catch(e) {}
-}
-
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden) { cleanAll(); document.body.classList.add('paused'); try{if(window.gc)window.gc();}catch(e){} }
-    else { document.body.classList.remove('paused'); }
-});
-window.addEventListener('blur', cleanAll);
-window.addEventListener('beforeunload', cleanAll);
-document.addEventListener('keydown', function(e) {
-    if (e.keyCode === 8 || e.keyCode === 27 || e.keyCode === 10009) cleanAll();
-});
-setInterval(function() {
-    var hayVideo = false;
-    document.querySelectorAll('video').forEach(function(v) { if(!v.paused) hayVideo=true; });
-    if (!hayVideo && !activeCard) cleanAll();
-}, 300000);
+  onAuthStateChanged(auth, async (user) => {
+      if (user) {
+          document.getElementById('login-wrap').style.display = 'none';
+          const snap = await getDoc(doc(db, "sistema", "datos_principales"));
+          if(snap.exists()) {
+              window.dbClientes = snap.data().clientes || [];
+              window.totalDocs = snap.data().totalDocs || 0;
+          }
+          const l = localStorage.getItem('contapy_lang') || 'es';
+          document.getElementById('lang_sel').value = l;
+          window.changeLang(l);
+          window.renderClientes();
+      } else {
+          document.getElementById('login-wrap').style.display = 'flex';
+      }
+  });
 </script>
 </body>
 </html>
