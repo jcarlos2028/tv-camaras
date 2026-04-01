@@ -62,6 +62,7 @@ tbody tr:hover{background:#fafafa}
 .form-section{background:var(--card);border-radius:10px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:14px}
 .form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
 .form-grid.col2{grid-template-columns:repeat(2,1fr)}
+.form-grid.col3{grid-template-columns:repeat(3,1fr)}
 .form-group{display:flex;flex-direction:column;gap:5px}
 label{font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppercase}
 input,select,textarea{padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);outline:none}
@@ -592,8 +593,18 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
                     <div class="form-group"><label>Rol del Tercero</label><select id="wiz_rol_tercero"><option value="proveedor">Proveedor (Pasivo)</option><option value="cliente">Cliente (Activo)</option><option value="acreedor">Acreedor Vario (Pasivo)</option><option value="deudor">Deudor Vario (Activo)</option></select></div>
                 </div>
                 
-                <div class="form-grid col2" style="margin-bottom:14px">
-                    <div class="form-group" id="wiz_box_timbrado"><label>Timbrado</label><input type="text" id="wiz_timbrado"></div>
+                <div class="form-grid col3" style="margin-bottom:14px">
+                    <div class="form-group" id="wiz_box_tipo_timb">
+                        <label>Tipo Timbrado</label>
+                        <select id="wiz_tipo_timb">
+                            <option value="PREIMPRESO">Pre-impreso</option>
+                            <option value="ELECTRONICO">Electrónico</option>
+                            <option value="AUTOIMPRESOR">Autoimpreso</option>
+                            <option value="VIRTUAL">Virtual</option>
+                            <option value="ELECTRONICO (NO VERIFICADO)">Electrónico (no verif.)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="wiz_box_timbrado"><label>Timbrado / CDC</label><input type="text" id="wiz_timbrado" oninput="if(this.value.length===44) document.getElementById('wiz_tipo_timb').value='ELECTRONICO';"></div>
                     <div class="form-group"><label>N° Comprobante</label><input type="text" id="wiz_nro" placeholder="001-001-0000123"></div>
                 </div>
                 
@@ -1028,6 +1039,8 @@ window.openWizardFromProfile = function() {
     document.getElementById('wiz_monto').value="0"; document.getElementById('wiz_m10').value="0"; document.getElementById('wiz_m5').value="0"; document.getElementById('wiz_mex').value="0"; 
     document.getElementById('wiz_monto_recibo').value="0"; document.getElementById('wiz_iva_tasa').value="10";
     document.getElementById('wiz_glosa').value=""; document.getElementById('wiz_nro').value=""; document.getElementById('wiz_ruc').value=""; document.getElementById('wiz_tercero').value=""; document.getElementById('wiz_cuenta_sel').value=""; 
+    document.getElementById('wiz_tipo_timb').value="PREIMPRESO";
+    document.getElementById('wiz_timbrado').value="";
     window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard'); 
 };
 window.openWizard = function() { 
@@ -1036,6 +1049,8 @@ window.openWizard = function() {
     document.getElementById('wiz_monto').value="0"; document.getElementById('wiz_m10').value="0"; document.getElementById('wiz_m5').value="0"; document.getElementById('wiz_mex').value="0"; 
     document.getElementById('wiz_monto_recibo').value="0"; document.getElementById('wiz_iva_tasa').value="10";
     document.getElementById('wiz_glosa').value=""; document.getElementById('wiz_nro').value=""; document.getElementById('wiz_ruc').value=""; document.getElementById('wiz_tercero').value=""; document.getElementById('wiz_cuenta_sel').value=""; 
+    document.getElementById('wiz_tipo_timb').value="PREIMPRESO";
+    document.getElementById('wiz_timbrado').value="";
     window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard'); 
 };
 
@@ -1053,13 +1068,13 @@ window.editarComprobante = function(cliIdx, libro, docIdx) {
       document.getElementById('wiz_nro').value = r.nro; document.getElementById('wiz_monto_recibo').value = r.bruto; 
   } else { 
       document.getElementById('wiz_timbrado').value=r.timbrado||""; document.getElementById('wiz_nro').value = r.nro;
+      document.getElementById('wiz_tipo_timb').value = r.tipo_timb || "PREIMPRESO";
       document.getElementById('wiz_monto').value = r.bruto;
       
       var m10 = (r.grav10||0) + (r.iva10||0);
       var m5 = (r.grav5||0) + (r.iva5||0);
       var mEx = (r.exe||0);
       
-      // Fallback por si la base anterior no tenia desglose
       if(m10===0 && m5===0 && mEx===0) {
           if(r.tasa_iva === 10) m10 = r.bruto;
           else if(r.tasa_iva === 5) m5 = r.bruto;
@@ -1106,11 +1121,17 @@ window.cargarDocsRef = function() {
 
 window.toggleWizardTipo = function() {
   var t = document.getElementById('wiz_tipo').value, isRec = (t==='recibo'), isRet = (t==='retencion'), isFact = (t==='factura');
-  document.getElementById('blk_factura').style.display = isRet ? 'none' : 'block'; document.getElementById('blk_retencion').style.display = isRet ? 'block' : 'none';
+  document.getElementById('blk_factura').style.display = isRet ? 'none' : 'block'; 
+  document.getElementById('blk_retencion').style.display = isRet ? 'block' : 'none';
   document.getElementById('wiz_box_compact').style.display = isRec ? 'none' : 'grid'; 
   document.getElementById('wiz_box_recibo_monto').style.display = isRec ? 'block' : 'none'; 
-  document.getElementById('div_iva_res').style.display = isRec ? 'none' : 'block'; document.getElementById('opt_credito').style.display = isRec ? 'none' : 'block';
-  document.getElementById('wiz_box_cuenta').style.display = (isFact) ? 'block' : 'none'; document.getElementById('wiz_box_timbrado').style.display = isRec ? 'none' : 'flex';
+  document.getElementById('div_iva_res').style.display = isRec ? 'none' : 'block'; 
+  document.getElementById('opt_credito').style.display = isRec ? 'none' : 'block';
+  document.getElementById('wiz_box_cuenta').style.display = (isFact) ? 'block' : 'none'; 
+  
+  document.getElementById('wiz_box_timbrado').style.display = isRec ? 'none' : 'flex';
+  document.getElementById('wiz_box_tipo_timb').style.display = isRec ? 'none' : 'flex';
+  
   document.getElementById('wiz_box_taxes').style.display = (isFact || isRet) ? 'block' : 'none';
   if(isFact || isRet) { document.getElementById('wiz_box_ref').style.display = 'none'; } else { document.getElementById('wiz_box_ref').style.display = 'block'; window.cargarDocsRef(); }
   if(isRec) { document.getElementById('wiz_pago_tipo').value = 'caja'; document.getElementById('wiz_box_mixta').style.display = 'none'; }
@@ -1182,6 +1203,7 @@ window.guardarAsientoWizard = function() {
 
   obj.nro = document.getElementById('wiz_nro').value || "S/N"; obj.condicion = (mtd === 'credito') ? 'credito' : 'contado';
   obj.timbrado = tipo==='retencion'? (document.getElementById('ret_timbrado').value||"S/T") : (document.getElementById('wiz_timbrado').value||"S/T");
+  obj.tipo_timb = isRec ? "" : document.getElementById('wiz_tipo_timb').value;
   
   obj.bruto = tot; obj.grav10 = neto10; obj.grav5 = neto5; obj.exe = mex; obj.iva10 = i10; obj.iva5 = i5; obj.iva = i10 + i5; obj.neto = neto10 + neto5 + mex; obj.tasa_iva = t;
 
@@ -1355,10 +1377,15 @@ window.exportarLibroAvanzado = function(tipoLibro) {
         var cuotas = cond === 'CRE' ? '1' : '';
 
         var timb = r.timbrado || "";
-        var tipoTimb = "PREIMPRESO";
-        if (timb.length === 44) tipoTimb = "ELECTRONICO";
-        else if (timb.startsWith("13") || timb.length >= 8) tipoTimb = "ELECTRONICO";
-        else if (timb.startsWith("15") || timb.startsWith("16")) tipoTimb = "AUTOIMPRESOR";
+        
+        // LEER EL TIPO TIMBRADO ELEGIDO (O usar heurística para viejos)
+        var tipoTimb = r.tipo_timb || "";
+        if (!tipoTimb) {
+            tipoTimb = "PREIMPRESO";
+            if (timb.length === 44) tipoTimb = "ELECTRONICO";
+            else if (timb.startsWith("13") || timb.length >= 8) tipoTimb = "ELECTRONICO";
+            else if (timb.startsWith("15") || timb.startsWith("16")) tipoTimb = "AUTOIMPRESOR";
+        }
 
         var docNro = r.nro || "";
         var cdc = "";
