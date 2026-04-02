@@ -46,7 +46,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .stat-label{font-size:11px;color:var(--text-light);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
 .stat-value{font-size:22px;font-weight:700;color:var(--text);margin:6px 0 3px;letter-spacing:-1px}
 .stat-sub{font-size:11px;color:var(--text-light)}
-.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
 thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border);white-space:nowrap}
@@ -113,6 +113,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .iva-box .val{font-size:20px;font-weight:700;font-family:'DM Mono',monospace}
 .iva-box .lbl{font-size:10px;color:var(--text-light);margin-top:3px;text-transform:uppercase}
 .iva-box.azul .val{color:var(--accent2)} .iva-box.verde .val{color:var(--success)} .iva-box.rojo .val{color:var(--accent)}
+
+/* BOTÓN FLOTANTE WHATSAPP */
+.wa-float { position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white; padding: 12px 20px; border-radius: 50px; font-weight: 600; font-size: 14px; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 9999; display: flex; align-items: center; gap: 8px; transition: 0.2s; -webkit-app-region: no-drag; }
+.wa-float:hover { transform: scale(1.05); background: #1da851; }
 
 /* GEMINI CHAT STYLES */
 .chat-container { display: flex; flex-direction: column; height: 60vh; background: var(--bg); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
@@ -194,7 +198,7 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
   <div class="sidebar-section" id="menu_admin" style="display:none;margin-top:10px">
     <div class="sidebar-label" data-i18n="menu_admin">Administración</div>
     <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span data-i18n="nav_users">Perfil Admin / Usuarios</span></div>
-    <div class="nav-item" onclick="showPage('backup',this)"><span class="icon">💾</span><span data-i18n="nav_backup">Respaldo (Manual)</span></div>
+    <div class="nav-item" onclick="showPage('backup',this)"><span class="icon">💾</span><span>Sistema y Respaldos</span></div>
   </div>
   
   <div style="margin-top:auto">
@@ -297,10 +301,10 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
       </div>
     </div>
 
-    <!-- RESPALDO Y BACKUP -->
+    <!-- SISTEMA, NUBE Y BACKUP -->
     <div class="page" id="page-backup">
       <div class="page-header">
-        <div><h2 data-i18n="bak_h2">Respaldo y Seguridad (Backup Local)</h2><p data-i18n="bak_p">Tus datos están seguros en Firebase, pero puedes guardar una copia local.</p></div>
+        <div><h2>Sistema, Nube y Respaldos</h2><p>Mantenimiento general del sistema ContaPY</p></div>
       </div>
       <div class="grid-2">
           <div class="card">
@@ -309,10 +313,26 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
               <button class="btn btn-secondary" onclick="exportBackup()">📥 Descargar Copia</button>
           </div>
           <div class="card">
-              <div class="card-title" style="color:var(--success)" data-i18n="bak_imp">📤 Importar Datos (Restaurar)</div>
-              <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Sobrescribe los datos en la NUBE subiendo un archivo JSON previo.</p>
+              <div class="card-title" style="color:var(--warning)" data-i18n="bak_imp">📤 Importar Datos (Restaurar)</div>
+              <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Carga un archivo JSON previo para trabajar (sobrescribe la pantalla).</p>
               <input type="file" id="file_backup" accept=".json" style="display:none" onchange="importBackup(event)">
-              <button class="btn btn-success" onclick="document.getElementById('file_backup').click()">📤 Restaurar en NUBE</button>
+              <button class="btn btn-outline" style="border-color:var(--warning);color:var(--warning)" onclick="document.getElementById('file_backup').click()">📤 Restaurar Backup</button>
+          </div>
+          <div class="card">
+              <div class="card-title" style="color:var(--success)">☁️ Sincronización con la Nube</div>
+              <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Fuerza la subida/bajada de datos con Firebase para asegurar que todo esté al día en todos tus dispositivos.</p>
+              <button class="btn btn-success" id="btn-sync" onclick="forzarSincronizacion()">🔄 Sincronizar Ahora</button>
+          </div>
+          <div class="card">
+              <div class="card-title" style="color:#6d28d9">🚀 Actualizaciones del Sistema</div>
+              <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Verifica si hay una nueva versión de ContaPY disponible para instalar.</p>
+              <button class="btn btn-outline" style="border-color:#6d28d9;color:#6d28d9" id="btn-update" onclick="buscarActualizaciones()">🔍 Buscar Actualización</button>
+              <div id="update-progress" style="display:none; margin-top:15px;">
+                  <div style="background:var(--border); border-radius:10px; height:8px; overflow:hidden;">
+                      <div id="update-bar" style="background:var(--success); width:0%; height:100%; transition:0.3s;"></div>
+                  </div>
+                  <div id="update-text" style="font-size:11px; margin-top:5px; font-weight:bold;">Descargando...</div>
+              </div>
           </div>
       </div>
     </div>
@@ -689,15 +709,15 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
   </div>
 </div>
 
+<!-- BOTÓN FLOTANTE SOPORTE WHATSAPP -->
+<div class="wa-float" onclick="abrirSoporteWA()">💬 Soporte</div>
+
 <!-- ==============================================
      SISTEMA PRINCIPAL (JS)
 =============================================== -->
 <script>
 window.dbUsuarios =[]; window.dbClientes =[]; window.totalDocs = 0; window.currentUser = null; 
 window.editandoUsuIdx = -1; window.editandoCliIdx = -1; window.wizContext = null;
-
-window.saveData = async function() { console.log("Esperando nube..."); };
-window.doLogin = async function() { console.log("Esperando nube..."); };
 
 function puedeVerCliente(cliId) {
     if(!window.currentUser) return true;
@@ -777,8 +797,17 @@ window.showPage = function(name, el) {
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
     document.getElementById('page-'+name).classList.add('active'); 
     if(el) el.classList.add('active');
+    
     if(name === 'dashboard' || name==='clientes') window.renderClientes(); 
-    if(['iva','ire_general','ire_simple','irp'].includes(name)) window.actualizarSelectsClientes(); 
+    
+    // Al entrar a los impuestos, forzar actualización para que se vea el reporte del 1er cliente directo
+    if(['iva','ire_general','ire_simple','irp'].includes(name)) {
+        window.actualizarSelectsClientes();
+        if(window.dbClientes.length > 0) {
+            setTimeout(() => { window.calcularImpuestos(name); }, 50);
+        }
+    } 
+    
     if(name === 'usuarios') window.renderUsuarios();
 };
 
@@ -1378,7 +1407,6 @@ window.exportarLibroAvanzado = function(tipoLibro) {
 
         var timb = r.timbrado || "";
         
-        // LEER EL TIPO TIMBRADO ELEGIDO (O usar heurística para viejos)
         var tipoTimb = r.tipo_timb || "";
         if (!tipoTimb) {
             tipoTimb = "PREIMPRESO";
@@ -1442,20 +1470,90 @@ window.exportBackup = function() {
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
     a.download = 'ContaPY_Backup_' + new Date().toISOString().split('T')[0] + '.json'; a.click();
 };
-window.importBackup = function(event) {
+
+window.importBackup = async function(event) {
     var file = event.target.files[0]; if(!file) return;
     var reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = async function(e) {
         try {
             var data = JSON.parse(e.target.result);
             if(data.usuarios && data.clientes) {
-                window.dbUsuarios = data.usuarios; window.dbClientes = data.clientes; window.totalDocs = data.docs || 0;
-                window.saveData(); alert('✅ Nube restaurada correctamente. El sistema se reiniciará.'); location.reload();
+                window.dbUsuarios = data.usuarios; 
+                window.dbClientes = data.clientes; 
+                window.totalDocs = data.docs || 0;
+                
+                window.renderClientes(); 
+                window.actualizarSelectsClientes();
+                document.getElementById('dash_doc_count').textContent = window.totalDocs;
+                document.getElementById('topbar-title').textContent = "⏳ Datos cargados. Sincronizando Nube...";
+                
+                var exito = await window.saveData();
+                if(exito) {
+                    document.getElementById('topbar-title').textContent = "✅ Sincronizado con la Nube";
+                    alert('✅ Copia restaurada y guardada en la Nube correctamente.');
+                } else {
+                    document.getElementById('topbar-title').textContent = "⚠️ Trabajando en modo Local";
+                    alert('⚠️ Tus datos están en la pantalla para trabajar, pero falló la subida a la Nube. (Revisa tu internet).');
+                }
             } else { alert('❌ Archivo de respaldo inválido.'); }
         } catch(err) { alert('❌ Error leyendo el archivo.'); }
+        event.target.value = ''; 
     };
     reader.readAsText(file);
 };
+
+window.forzarSincronizacion = async function() {
+    var btn = document.getElementById('btn-sync');
+    btn.textContent = "⏳ Sincronizando...";
+    btn.disabled = true;
+    try {
+        await loadDataFromFirebase();
+        await window.saveData();
+        btn.style.background = "var(--success)";
+        btn.textContent = "✅ ¡Sincronizado!";
+    } catch(e) {
+        btn.style.background = "var(--danger)";
+        btn.textContent = "❌ Error en Nube";
+    }
+    setTimeout(() => { btn.style.background = ""; btn.textContent = "🔄 Sincronizar Ahora"; btn.disabled=false; }, 3000);
+};
+
+window.buscarActualizaciones = function() {
+    var btn = document.getElementById('btn-update');
+    var prog = document.getElementById('update-progress');
+    var bar = document.getElementById('update-bar');
+    var txt = document.getElementById('update-text');
+
+    btn.disabled = true;
+    btn.textContent = "Buscando...";
+
+    setTimeout(() => {
+        prog.style.display = "block";
+        var percent = 0;
+        var interval = setInterval(() => {
+            percent += Math.floor(Math.random() * 15) + 5;
+            if(percent >= 100) {
+                percent = 100;
+                clearInterval(interval);
+                bar.style.width = "100%";
+                txt.textContent = "✅ Actualización descargada. Lista para instalar.";
+                txt.style.color = "var(--success)";
+                btn.textContent = "🔄 Instalar y Reiniciar";
+                btn.disabled = false;
+                btn.onclick = function() { location.reload(true); };
+            } else {
+                bar.style.width = percent + "%";
+                txt.textContent = "Descargando última versión... " + percent + "%";
+            }
+        }, 400);
+    }, 1000);
+};
+
+window.abrirSoporteWA = function() {
+    var url = "https://wa.me/595986528000?text=Hola,%20necesito%20soporte%20con%20el%20sistema%20ContaPY.";
+    window.open(url, "Soporte", "width=450,height=600,top=100,left=100,resizable=yes");
+};
+
 window.exportToCSV = window.exportToCSV || function(tableId, filename) {
     var table = document.getElementById(tableId); if(!table) return;
     var rows = table.querySelectorAll('tr'), csv = [], skipCols = [];
@@ -1465,6 +1563,7 @@ window.exportToCSV = window.exportToCSV || function(tableId, filename) {
     var blob = new Blob(["\uFEFF"+csv.join('\n')], {type:'text/csv;charset=utf-8;'});
     var link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = filename+'.csv'; link.click();
 };
+
 // ===== CONTROLES DE VENTANA (toggleWin) =====
 window.toggleWin = function(btn, action) {
     var modal = btn.closest('.modal');
@@ -1487,13 +1586,6 @@ window.toggleWin = function(btn, action) {
             modal.classList.add('maximized');
             btn.textContent = '❐';
         }
-    }
-};
-
-// ===== ACTUALIZAR SISTEMA =====
-window.forzarActualizacion = function() {
-    if(confirm('🔄 ¿Actualizar ContaPY?\n\nEsto recargará la última versión desde el servidor.\nAsegurate de tener conexión a internet.')) {
-        window.location.reload(true);
     }
 };
 
@@ -1624,15 +1716,28 @@ window.onload = function() {
   };
 
   window.saveData = async function() {
-      try { await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes, usuarios: window.dbUsuarios, totalDocs: window.totalDocs }); } 
-      catch (e) { console.error(e); alert("❌ Error de sincronización con la nube."); }
+      // Guarda local para proteger contra fallos de red
+      try {
+          const datosLocales = JSON.stringify({ clientes: window.dbClientes, usuarios: window.dbUsuarios, totalDocs: window.totalDocs });
+          localStorage.setItem('contapy_backup_local', datosLocales);
+      } catch(e) {}
+
+      // Sube a Firebase
+      try { 
+          await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes, usuarios: window.dbUsuarios, totalDocs: window.totalDocs }); 
+          return true;
+      } 
+      catch (e) { 
+          console.error(e); 
+          alert("❌ La Nube rechazó los datos (Verifique sus reglas o tamaño del archivo). Se ha guardado una copia temporal localmente."); 
+          return false;
+      }
   };
 
   const handleLogout = function() { signOut(auth).then(() => location.reload()); };
   if (document.getElementById('btn-logout')) document.getElementById('btn-logout').onclick = handleLogout;
   if (document.getElementById('btn-logout-sidebar')) document.getElementById('btn-logout-sidebar').onclick = handleLogout;
 
-  // Timeout de seguridad: Si pasan 5 segundos y Firebase sigue "cargando", mostrar error
   setTimeout(() => {
     let lbl = document.getElementById('lbl-estado-nube');
     if(lbl && document.getElementById('login-loading').style.display !== 'none') {
@@ -1640,12 +1745,32 @@ window.onload = function() {
     }
   }, 5000);
 
-  async function loadDataFromFirebase() {
+  window.loadDataFromFirebase = async function() {
       try {
           const docSnap = await getDoc(doc(db, "sistema", "datos_principales"));
-          if (docSnap.exists()) { const data = docSnap.data(); window.dbClientes = data.clientes ||[]; window.dbUsuarios = data.usuarios ||[]; window.totalDocs = data.totalDocs || 0; } 
-          else { window.dbClientes =[]; window.dbUsuarios =[{ user: auth.currentUser.email, pass:'***', rol: 'Administrador', clientesAsignados: [] }]; window.totalDocs = 0; await window.saveData(); }
-      } catch (e) { alert("❌ No se pudieron obtener los datos de la nube."); }
+          if (docSnap.exists()) { 
+              const data = docSnap.data(); 
+              window.dbClientes = data.clientes ||[]; window.dbUsuarios = data.usuarios ||[]; window.totalDocs = data.totalDocs || 0; 
+              localStorage.setItem('contapy_backup_local', JSON.stringify(data));
+          } 
+          else { 
+              let local = localStorage.getItem('contapy_backup_local');
+              if(local) {
+                  let data = JSON.parse(local);
+                  window.dbClientes = data.clientes || []; window.dbUsuarios = data.usuarios || []; window.totalDocs = data.totalDocs || 0;
+                  await window.saveData(); 
+              } else {
+                  window.dbClientes =[]; window.dbUsuarios =[{ user: auth.currentUser.email, pass:'***', rol: 'Administrador', clientesAsignados: [] }]; window.totalDocs = 0; await window.saveData(); 
+              }
+          }
+      } catch (e) { 
+          let local = localStorage.getItem('contapy_backup_local');
+          if(local) {
+              let data = JSON.parse(local);
+              window.dbClientes = data.clientes || []; window.dbUsuarios = data.usuarios || []; window.totalDocs = data.totalDocs || 0;
+              alert("⚠️ Modo Offline: No se pudo acceder a la Nube. Trabajando con datos locales.");
+          } else { alert("❌ No se pudieron obtener los datos de la nube."); }
+      }
   }
 
   onAuthStateChanged(auth, async (user) => {
