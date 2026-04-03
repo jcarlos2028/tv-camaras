@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" translate="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.firebaseapp.com https://api.anthropic.com https://identitytoolkit.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.firebaseapp.com https://api.anthropic.com https://identitytoolkit.googleapis.com wss://*.firebaseio.com; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:;">
 <title>ContaPY v1.1 — Sistema Contable Cloud + Gemini IA</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -782,6 +783,7 @@ window.showPage = function(name, el) {
     
     if(name === 'dashboard' || name==='clientes') window.renderClientes(); 
     
+    // Al entrar a los impuestos, forzar actualización para que se vea el reporte del 1er cliente directo
     if(['iva','ire_general','ire_simple','irp'].includes(name)) {
         window.actualizarSelectsClientes();
         if(window.dbClientes.length > 0) {
@@ -1281,7 +1283,7 @@ window.openModalImportarDirecto = function() {
 };
 
 window.openModalImportarDirectoGlobal = function() {
-    var cIdx = prompt("Ingrese el ID del cliente (0, 1, 2...) al que desea importar:");
+    var cIdx = prompt("Ingrese el ID del cliente (0, 1, 2...) al que desea importar:\n(Puedes ver su ID en la barra lateral o probando con un número)");
     if(cIdx !== null && window.dbClientes[cIdx]) {
         window.clienteDestinoOculto = parseInt(cIdx);
         document.getElementById('file_import_excel').click();
@@ -1300,7 +1302,6 @@ window.procesarImportacionArchivo = function(event) {
         var filas = txt.trim().split('\n');
         var errorRows = [], parseados =[], cli = window.dbClientes[window.clienteDestinoOculto];
 
-        // Se omite la primera fila si es cabecera
         var inicio = 0;
         if(filas[0].toLowerCase().includes('fecha') || filas[0].toLowerCase().includes('date')) inicio = 1;
 
@@ -1308,42 +1309,119 @@ window.procesarImportacionArchivo = function(event) {
             var f = filas[i];
             if(!f.trim()) continue;
             
-            var col = f.split('\t'); if(col.length<2) col = f.split(';'); if(col.length<2) col = f.split(',');
-            if(col.length < 8) { errorRows.push(f + "\t[Faltan Columnas]"); continue; }
-            
-            var fecha = col[0].trim().replace(/"/g, ''), tipo = col[1].trim().toLowerCase().replace(/"/g, ''), timb = col[2].trim().replace(/"/g, ''), nro = col[3].trim().replace(/"/g, ''), ruc = col[4].trim().replace(/"/g, ''), terc = col[5].trim().replace(/"/g, ''), montoStr = col[6].replace(/"/g, '').replace(/,/g,'').replace(/\./g,'').trim(), tasaStr = col[7].replace(/"/g, '').trim(), rErr =[];
-            
-            var monto = parseFloat(montoStr);
-            var tasa = parseInt(tasaStr);
-            
-            if(isNaN(monto) || monto <= 0) rErr.push("Monto inválido"); if(!['factura','recibo'].includes(tipo)) rErr.push("Tipo doc no soportado");
-            if(rErr.length > 0) errorRows.push(f + "\t[" + rErr.join(' | ') + "]"); else parseados.push({fecha, tipo, timb, nro, ruc, terc, monto, tasa});
+            var col = f.split('\t'); 
+            if(col.length < 5) col = f.split(';'); 
+            if(col.length < 5) col = f.split(',');
+
+            if(col.length >= 20) {
+                // LECTOR DE FORMATO RG90 DE 22 COLUMNAS (El Nuevo)
+                var rawFecha = col[0].trim().replace(/"/g, '');
+                var fParts = rawFecha.split('/');
+                var fecha = fParts.length === 3 ? `${fParts[2]}-${fParts[1]}-${fParts[0]}` : rawFecha;
+
+                var tipoTimb = col[1].trim().replace(/"/g, '');
+                var nro = col[2].trim().replace(/"/g, '');
+                var cdc = col[4].trim().replace(/"/g, '');
+                var timb = col[5].trim().replace(/"/g, '');
+                if(!timb && cdc) timb = cdc;
+
+                var terc = col[7].trim().replace(/"/g, '');
+                var rucNum = col[8].trim().replace(/"/g, '');
+                var dv = col[9].trim().replace(/"/g, '');
+                var ruc = dv ? `${rucNum}-${dv}` : rucNum;
+
+                var montoStr = col[17].replace(/"/g, '').replace(/,/g,'').replace(/\./g,'').trim();
+                var monto = parseFloat(montoStr) || 0;
+
+                var cond = col[19].trim().replace(/"/g, '') === 'CRE' ? 'credito' : 'contado';
+                var tipo = "factura"; 
+
+                var g10 = parseFloat(col[10].replace(/"/g, '').replace(/,/g,'').replace(/\./g,'')) || 0;
+                var g5 = parseFloat(col[11].replace(/"/g, '').replace(/,/g,'').replace(/\./g,'')) || 0;
+                var ex = parseFloat(col[14].replace(/"/g, '').replace(/,/g,'').replace(/\./g,'')) || 0;
+
+                var tasa = 10;
+                if(g10 > 0 && g5 === 0 && ex === 0) tasa = 10;
+                else if(g5 > 0 && g10 === 0 && ex === 0) tasa = 5;
+                else if(ex > 0 && g10 === 0 && g5 === 0) tasa = 0;
+                else if(g10 > 0 || g5 > 0 || ex > 0) tasa = 'mixta';
+
+                if(monto <= 0) errorRows.push(f + " [Monto inválido]");
+                else parseados.push({fecha, tipo, timb, nro, ruc, terc, monto, tasa, cond, tipo_timb: tipoTimb, g10, g5, ex});
+
+            } else if(col.length >= 8) {
+                // LECTOR DE FORMATO VIEJO (8 COLUMNAS)
+                var fecha = col[0].trim().replace(/"/g, ''),
+                    tipo = col[1].trim().toLowerCase().replace(/"/g, ''),
+                    timb = col[2].trim().replace(/"/g, ''),
+                    nro = col[3].trim().replace(/"/g, ''),
+                    ruc = col[4].trim().replace(/"/g, ''),
+                    terc = col[5].trim().replace(/"/g, ''),
+                    montoStr = col[6].replace(/"/g, '').replace(/,/g,'').replace(/\./g,'').trim(),
+                    tasaStr = col[7].replace(/"/g, '').trim();
+
+                var monto = parseFloat(montoStr) || 0;
+                var tasa = parseInt(tasaStr) || 10;
+
+                if(monto <= 0) errorRows.push(f + " [Monto inválido]");
+                else parseados.push({fecha, tipo, timb, nro, ruc, terc, monto, tasa, cond: 'contado', tipo_timb: 'PREIMPRESO'});
+            } else {
+                errorRows.push(f + " [Faltan columnas]");
+            }
         }
 
         if(errorRows.length > 0) {
-            alert(`⚠️ Se detectaron ${errorRows.length} filas con errores. Revise el archivo original y asegúrese de que el monto no tenga puntos ni letras.`);
+            alert(`⚠️ Se detectaron ${errorRows.length} filas con errores. Revise que no haya celdas vacías y que los montos sean solo números.`);
         } 
         if(parseados.length > 0) {
             parseados.forEach(p => {
-                var iva = p.tasa===10?Math.round(p.monto/11):(p.tasa===5?Math.round(p.monto/21):0);
-                var obj = {fecha: p.fecha, tipo: p.tipo, timbrado: p.timb, nro: p.nro, ruc: p.ruc, tercero: p.terc, bruto: p.monto, neto: p.monto-iva, iva: iva, tasa_iva: p.tasa, iva10: (p.tasa===10?iva:0), iva5: (p.tasa===5?iva:0), grav10: (p.tasa===10?p.monto-iva:0), grav5: (p.tasa===5?p.monto-iva:0), exe: (p.tasa===0?p.monto:0), ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion:'contado', rol:'proveedor', impuestos_aplicados: cli.taxes};
+                var iva10 = 0, iva5 = 0, grav10 = 0, grav5 = 0, ex = 0;
+                if(p.tasa === 'mixta') {
+                    grav10 = p.g10 || 0; grav5 = p.g5 || 0; ex = p.ex || 0;
+                    iva10 = Math.round(grav10/11); iva5 = Math.round(grav5/21);
+                } else {
+                    if(p.tasa === 10) { iva10 = Math.round(p.monto/11); grav10 = p.monto - iva10; }
+                    else if(p.tasa === 5) { iva5 = Math.round(p.monto/21); grav5 = p.monto - iva5; }
+                    else { ex = p.monto; }
+                }
+                var ivaTotal = iva10 + iva5;
+                var netoTotal = grav10 + grav5 + ex;
+                
+                var obj = {
+                    fecha: p.fecha, tipo: p.tipo, timbrado: p.timb, nro: p.nro, ruc: p.ruc, tercero: p.terc, 
+                    bruto: p.monto, neto: netoTotal, iva: ivaTotal, tasa_iva: p.tasa, 
+                    iva10: iva10, iva5: iva5, grav10: grav10, grav5: grav5, exe: ex, 
+                    ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion: p.cond || 'contado', rol:'proveedor', 
+                    impuestos_aplicados: cli.taxes, tipo_timb: p.tipo_timb
+                };
+                
                 var cVenta = p.tasa===10 ? '4.1.1.01 Ventas 10%' : (p.tasa===5 ? '4.1.1.02 Ventas 5%' : '4.1.1.03 Ventas Exentas');
                 var cIva = p.tasa===10 ? '2.1.4.01 IVA Débito 10%' : (p.tasa===5 ? '2.1.4.02 IVA Débito 5%' : '');
-                var lin =[{cuenta:'1.1.1.01 Caja', debe:p.monto, haber:0}, {cuenta:cVenta, debe:0, haber:p.monto-iva}]; if(iva>0) lin.push({cuenta:cIva, debe:0, haber:iva});
-                cli.libros.ventas.push(obj); cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación Excel", lineas: lin}); window.totalDocs++;
+                var lin = [{cuenta:'1.1.1.01 Caja', debe:p.monto, haber:0}];
+                
+                if(p.tasa === 'mixta') {
+                    if(grav10>0) lin.push({cuenta:'4.1.1.01 Ventas 10%', debe:0, haber:grav10});
+                    if(grav5>0) lin.push({cuenta:'4.1.1.02 Ventas 5%', debe:0, haber:grav5});
+                    if(ex>0) lin.push({cuenta:'4.1.1.03 Ventas Exentas', debe:0, haber:ex});
+                    if(iva10>0) lin.push({cuenta:'2.1.4.01 IVA Débito 10%', debe:0, haber:iva10});
+                    if(iva5>0) lin.push({cuenta:'2.1.4.02 IVA Débito 5%', debe:0, haber:iva5});
+                } else {
+                    lin.push({cuenta:cVenta, debe:0, haber:netoTotal});
+                    if(ivaTotal>0) lin.push({cuenta:cIva, debe:0, haber:ivaTotal});
+                }
+
+                cli.libros.compras.push(obj); // Se asume que importamos compras como predeterminado
+                cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación CSV", lineas: lin}); 
+                window.totalDocs++;
             });
-            window.saveData(); document.getElementById('dash_doc_count').textContent = window.totalDocs; alert(`✅ Se procesaron e importaron exitosamente ${parseados.length} comprobantes al cliente ${cli.nom}.`);
+            window.saveData(); 
+            document.getElementById('dash_doc_count').textContent = window.totalDocs; 
+            alert(`✅ Se procesaron e importaron exitosamente ${parseados.length} comprobantes al cliente ${cli.nom}.`);
             if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
         }
         event.target.value = '';
     };
     reader.readAsText(file, "UTF-8");
-};
-
-// ===== IMPUESTOS BUSCADORES =====
-window.actualizarSelectsClientes = function() {
-    var opts = window.dbClientes.map((c,i) => { if(puedeVerCliente(c.id)) return `<option value="${i}">${c.nom} (RUC: ${c.ruc})</option>`; return ''; }).join('');
-    document.querySelectorAll('.cli-select').forEach(s => { s.innerHTML = opts; });
 };
 
 window.calcularImpuestos = function(tipo) {
@@ -1376,243 +1454,6 @@ window.calcularImpuestos = function(tipo) {
         cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IRP')) tIng+=v.neto; });
         if(tIng > 80000000) document.getElementById('irp_final').innerHTML = `Supera el MNA. Ingresos: ₲ ${tIng.toLocaleString()}<br>IRP Estimado: ₲ ${(tIng*0.08).toLocaleString()}`;
         else document.getElementById('irp_final').innerHTML = `El cliente no supera el rango incidido (Ingresos: ₲ ${tIng.toLocaleString()})`;
-    }
-};
-
-// ===== EXPORTACIÓN AVANZADA (FORMATO RG90 / HECHAUKA / EXCEL) =====
-window.exportarLibroAvanzado = function(tipoLibro) {
-    if(window.currentCli === undefined || window.currentCli < 0) return;
-    
-    var c = window.dbClientes[window.currentCli];
-    var datos = c.libros[tipoLibro];
-    
-    if(!datos || datos.length === 0) {
-        return alert("❌ No hay datos para exportar en este libro.");
-    }
-
-    var csv = [];
-    var headers = [
-        "FECHA", "TIPO TIMBRADO", "DOCUMENTO", "SERIE", "CDC DOCUMENTO", 
-        "TIMB.", "VENC.", "RAZÓN SOCIAL", "RUC", "DV", 
-        "GRAV. 10%", "GRAV. 5%", "IVA 10%", "IVA 5%", "EXENTAS", 
-        "BASE IMP.", "REDONDEO", "TOTAL", "MON.", "CONDICIÓN", "CUOTAS", "TIPO"
-    ];
-    csv.push(headers.map(h => '"' + h + '"').join(';'));
-
-    datos.forEach(r => {
-        var f = r.fecha ? r.fecha.split('-') : [];
-        var fechaFormateada = f.length === 3 ? `${f[2]}/${f[1]}/${f[0]}` : (r.fecha || "");
-
-        var rucParts = (r.ruc || "").split('-');
-        var rucNum = rucParts[0] || "";
-        var dv = rucParts[1] || "";
-
-        var cond = (r.condicion && r.condicion.toLowerCase() === 'credito') ? 'CRE' : 'CON';
-        var cuotas = cond === 'CRE' ? '1' : '';
-
-        var timb = r.timbrado || "";
-        
-        var tipoTimb = r.tipo_timb || "";
-        if (!tipoTimb) {
-            tipoTimb = "PREIMPRESO";
-            if (timb.length === 44) tipoTimb = "ELECTRONICO";
-            else if (timb.startsWith("13") || timb.length >= 8) tipoTimb = "ELECTRONICO";
-            else if (timb.startsWith("15") || timb.startsWith("16")) tipoTimb = "AUTOIMPRESOR";
-        }
-
-        var docNro = r.nro || "";
-        var cdc = "";
-        if (timb.length === 44) {
-            cdc = timb;
-            timb = ""; 
-        }
-
-        var g10 = r.grav10 || 0;
-        var g5 = r.grav5 || 0;
-        var ex = r.exe || 0;
-        var baseImp = g10 + g5 + ex;
-
-        var row = [
-            fechaFormateada,
-            tipoTimb,
-            docNro,
-            "",             
-            cdc,            
-            timb,           
-            "",             
-            r.tercero || "",
-            rucNum,
-            dv,
-            g10,
-            g5,
-            r.iva10 || 0,
-            r.iva5 || 0,
-            ex,
-            baseImp,
-            0,              
-            r.bruto || 0,
-            "G$",
-            cond,
-            cuotas,
-            "DIRECTO"       
-        ];
-        
-        csv.push(row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(';'));
-    });
-
-    var blob = new Blob(["\uFEFF" + csv.join('\n')], {type: 'text/csv;charset=utf-8;'});
-    
-    // TRUCO PARA ELECTRON Y WEB
-    var url = URL.createObjectURL(blob);
-    var nombreArchivo = (tipoLibro === 'compras' ? 'Libro_Compras_' : 'Libro_Ventas_') + c.ruc + '.csv';
-    
-    var link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', nombreArchivo);
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
-
-// ===== BACKUP / RESTORE =====
-window.exportBackup = function() {
-    var data = { usuarios: window.dbUsuarios, clientes: window.dbClientes, docs: window.totalDocs };
-    var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-    var url = URL.createObjectURL(blob);
-    
-    var a = document.createElement('a');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'ContaPY_Backup_' + new Date().toISOString().split('T')[0] + '.json');
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-};
-
-window.importBackup = async function(event) {
-    var file = event.target.files[0]; if(!file) return;
-    var reader = new FileReader();
-    reader.onload = async function(e) {
-        try {
-            var data = JSON.parse(e.target.result);
-            if(data.usuarios && data.clientes) {
-                window.dbUsuarios = data.usuarios; 
-                window.dbClientes = data.clientes; 
-                window.totalDocs = data.docs || 0;
-                
-                window.renderClientes(); 
-                window.actualizarSelectsClientes();
-                document.getElementById('dash_doc_count').textContent = window.totalDocs;
-                document.getElementById('topbar-title').textContent = "⏳ Datos cargados. Sincronizando Nube...";
-                
-                var exito = await window.saveData();
-                if(exito) {
-                    document.getElementById('topbar-title').textContent = "✅ Sincronizado con la Nube";
-                    alert('✅ Copia restaurada y guardada en la Nube correctamente.');
-                } else {
-                    document.getElementById('topbar-title').textContent = "⚠️ Trabajando en modo Local";
-                    alert('⚠️ Tus datos están en la pantalla para trabajar, pero falló la subida a la Nube. (Revisa tu internet).');
-                }
-            } else { alert('❌ Archivo de respaldo inválido.'); }
-        } catch(err) { alert('❌ Error leyendo el archivo.'); }
-        event.target.value = ''; 
-    };
-    reader.readAsText(file);
-};
-
-window.forzarSincronizacion = async function() {
-    var btn = document.getElementById('btn-sync');
-    btn.textContent = "⏳ Sincronizando...";
-    btn.disabled = true;
-    try {
-        await loadDataFromFirebase();
-        await window.saveData();
-        btn.style.background = "var(--success)";
-        btn.textContent = "✅ ¡Sincronizado!";
-    } catch(e) {
-        btn.style.background = "var(--danger)";
-        btn.textContent = "❌ Error en Nube";
-    }
-    setTimeout(() => { btn.style.background = ""; btn.textContent = "🔄 Sincronizar Ahora"; btn.disabled=false; }, 3000);
-};
-
-window.buscarActualizaciones = function() {
-    var btn = document.getElementById('btn-update');
-    var prog = document.getElementById('update-progress');
-    var bar = document.getElementById('update-bar');
-    var txt = document.getElementById('update-text');
-
-    btn.disabled = true;
-    btn.textContent = "Buscando...";
-
-    setTimeout(() => {
-        prog.style.display = "block";
-        var percent = 0;
-        var interval = setInterval(() => {
-            percent += Math.floor(Math.random() * 15) + 5;
-            if(percent >= 100) {
-                percent = 100;
-                clearInterval(interval);
-                bar.style.width = "100%";
-                txt.textContent = "✅ Actualización descargada. Lista para instalar.";
-                txt.style.color = "var(--success)";
-                btn.textContent = "🔄 Instalar y Reiniciar";
-                btn.disabled = false;
-                btn.onclick = function() { location.reload(true); };
-            } else {
-                bar.style.width = percent + "%";
-                txt.textContent = "Descargando última versión... " + percent + "%";
-            }
-        }, 400);
-    }, 1000);
-};
-
-window.abrirSoporteWA = function() {
-    var url = "https://wa.me/595986528000?text=Hola,%20necesito%20soporte%20con%20el%20sistema%20ContaPY.";
-    window.open(url, "Soporte", "width=450,height=600,top=100,left=100,resizable=yes");
-};
-
-window.exportToCSV = window.exportToCSV || function(tableId, filename) {
-    var table = document.getElementById(tableId); if(!table) return;
-    var rows = table.querySelectorAll('tr'), csv = [], skipCols = [];
-    var headers = rows[0] ? rows[0].querySelectorAll('th,td') : [];
-    for(var h=0;h<headers.length;h++) { if(headers[h].innerText.trim()==='Acción'||headers[h].innerText.trim()==='ACCIÓN') skipCols.push(h); }
-    for(var i=0;i<rows.length;i++) { var row=[], cols=rows[i].querySelectorAll('td,th'); for(var j=0;j<cols.length;j++) { if(skipCols.includes(j)) continue; row.push('"'+cols[j].innerText.replace(/\n/g,' ').trim().replace(/"/g,'""')+'"'); } csv.push(row.join(';')); }
-    var blob = new Blob(["\uFEFF"+csv.join('\n')], {type:'text/csv;charset=utf-8;'});
-    
-    var url = URL.createObjectURL(blob);
-    var link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename+'.csv');
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
-
-// ===== CONTROLES DE VENTANA (toggleWin) =====
-window.toggleWin = function(btn, action) {
-    var modal = btn.closest('.modal');
-    if(!modal) return;
-    if(action === '_') {
-        if(modal.classList.contains('minimized')) {
-            modal.classList.remove('minimized');
-            btn.textContent = '_';
-        } else {
-            modal.classList.remove('maximized');
-            modal.classList.add('minimized');
-        }
-    } else if(action === '□' || action === '❐') {
-        if(modal.classList.contains('maximized')) {
-            modal.classList.remove('maximized');
-            modal.style.cssText = '';
-            btn.textContent = '□';
-        } else {
-            modal.classList.remove('minimized');
-            modal.classList.add('maximized');
-            btn.textContent = '❐';
-        }
     }
 };
 
@@ -1658,13 +1499,11 @@ window.onload = function() {
   };
 
   window.saveData = async function() {
-      // Guarda local para proteger contra fallos de red
       try {
           const datosLocales = JSON.stringify({ clientes: window.dbClientes, usuarios: window.dbUsuarios, totalDocs: window.totalDocs });
           localStorage.setItem('contapy_backup_local', datosLocales);
       } catch(e) {}
 
-      // Sube a Firebase
       try { 
           await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes, usuarios: window.dbUsuarios, totalDocs: window.totalDocs }); 
           return true;
