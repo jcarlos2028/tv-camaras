@@ -702,6 +702,7 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, la
 <script>
 window.dbUsuarios =[]; window.dbClientes =[]; window.totalDocs = 0; window.currentUser = null; 
 window.editandoUsuIdx = -1; window.editandoCliIdx = -1; window.wizContext = null; window.clienteDestinoOculto = null;
+window.tipoLibroDestino = 'compras'; // Variable para saber si importamos compras o ventas
 
 function puedeVerCliente(cliId) {
     if(!window.currentUser) return true;
@@ -784,7 +785,6 @@ window.showPage = function(name, el) {
     
     if(name === 'dashboard' || name==='clientes') window.renderClientes(); 
     
-    // Al entrar a los impuestos, forzar actualización para que se vea el reporte del 1er cliente directo
     if(['iva','ire_general','ire_simple','irp'].includes(name)) {
         window.actualizarSelectsClientes();
         if(window.dbClientes.length > 0) {
@@ -903,10 +903,17 @@ window.verCliente = function(idx) {
     document.getElementById('cdet_ruc').innerHTML = `RUC: ${c.ruc} &nbsp;|&nbsp; Tel: ${c.tel||'-'} &nbsp;|&nbsp; Correo: ${c.correo||'-'}`; 
     window.renderLibros(); window.showPage('cliente-detalle'); document.querySelectorAll('#page-cliente-detalle .tab')[0].click(); 
 };
+
+// MODIFICADO: Ahora detecta en qué pestaña estás para saber dónde importar
 window.switchClientTab = function(tabId, el) { 
     document.querySelectorAll('#page-cliente-detalle .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); 
     document.querySelectorAll('.ctab-content').forEach(c => c.style.display = 'none'); document.getElementById('ctab_' + tabId).style.display = 'block'; 
     if(tabId==='mayor' || tabId==='balance' || tabId==='estado_cuentas') window.renderMayorYBalance(); 
+    
+    // Actualizamos la variable global de importación según la pestaña
+    if(tabId === 'compras' || tabId === 'ventas') {
+        window.tipoLibroDestino = tabId;
+    }
 };
 
 window.renderLibros = function() {
@@ -1375,6 +1382,9 @@ window.procesarImportacionArchivo = function(event) {
             alert(`⚠️ Se detectaron ${errorRows.length} filas con errores. Revise que no haya celdas vacías y que los montos sean solo números.`);
         } 
         if(parseados.length > 0) {
+            // MODIFICACIÓN CRÍTICA: SI ESTÁS EN LA PESTAÑA DE VENTAS, VAN A VENTAS.
+            var destino = window.tipoLibroDestino || 'compras'; 
+
             parseados.forEach(p => {
                 var iva10 = 0, iva5 = 0, grav10 = 0, grav5 = 0, ex = 0;
                 if(p.tasa === 'mixta') {
@@ -1392,7 +1402,7 @@ window.procesarImportacionArchivo = function(event) {
                     fecha: p.fecha, tipo: p.tipo, timbrado: p.timb, nro: p.nro, ruc: p.ruc, tercero: p.terc, 
                     bruto: p.monto, neto: netoTotal, iva: ivaTotal, tasa_iva: p.tasa, 
                     iva10: iva10, iva5: iva5, grav10: grav10, grav5: grav5, exe: ex, 
-                    ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion: p.cond || 'contado', rol:'proveedor', 
+                    ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion: p.cond || 'contado', rol: (destino==='ventas' ? 'cliente' : 'proveedor'), 
                     impuestos_aplicados: cli.taxes, tipo_timb: p.tipo_timb
                 };
                 
@@ -1411,13 +1421,13 @@ window.procesarImportacionArchivo = function(event) {
                     if(ivaTotal>0) lin.push({cuenta:cIva, debe:0, haber:ivaTotal});
                 }
 
-                cli.libros.compras.push(obj); // Se asume que importamos compras como predeterminado
-                cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación CSV", lineas: lin}); 
+                cli.libros[destino].push(obj); 
+                cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación CSV a " + destino, lineas: lin}); 
                 window.totalDocs++;
             });
             window.saveData(); 
             document.getElementById('dash_doc_count').textContent = window.totalDocs; 
-            alert(`✅ Se procesaron e importaron exitosamente ${parseados.length} comprobantes al cliente ${cli.nom}.`);
+            alert(`✅ Se procesaron e importaron exitosamente ${parseados.length} comprobantes al libro de ${destino.toUpperCase()} del cliente ${cli.nom}.`);
             if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
         }
         event.target.value = '';
@@ -1425,36 +1435,47 @@ window.procesarImportacionArchivo = function(event) {
     reader.readAsText(file, "UTF-8");
 };
 
-window.calcularImpuestos = function(tipo) {
-    if(window.dbClientes.length===0) return; var cli = window.dbClientes[document.getElementById(tipo+'_cli_sel').value];
+// ===== EXPORTACIÓN EXCEL PARA OTROS LIBROS (TESORERÍA, ETC) =====
+window.exportToCSV = window.exportToCSV || function(tableId, filename) {
+    var table = document.getElementById(tableId); if(!table) return;
+    var rows = table.querySelectorAll('tr'), csv = [], skipCols = [];
+    var headers = rows[0] ? rows[0].querySelectorAll('th,td') : [];
+    for(var h=0;h<headers.length;h++) { if(headers[h].innerText.trim()==='Acción'||headers[h].innerText.trim()==='ACCIÓN') skipCols.push(h); }
+    for(var i=0;i<rows.length;i++) { var row=[], cols=rows[i].querySelectorAll('td,th'); for(var j=0;j<cols.length;j++) { if(skipCols.includes(j)) continue; row.push('"'+cols[j].innerText.replace(/\n/g,' ').trim().replace(/"/g,'""')+'"'); } csv.push(row.join(';')); }
+    var blob = new Blob(["\uFEFF"+csv.join('\n')], {type:'text/csv;charset=utf-8;'});
     
-    if(tipo === 'iva') {
-        document.getElementById('iva_resultados').style.display = 'block';
-        var tVent = 0, tDeb = 0, tCred = 0;
-        cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IVA')){ tVent+=v.neto; tDeb+=v.iva; }}); 
-        cli.libros.compras.forEach(c => { if(c.impuestos_aplicados && c.impuestos_aplicados.includes('IVA')){ tCred+=c.iva; }});
-        document.getElementById('iva_ventas').textContent = "₲ " + tVent.toLocaleString(); document.getElementById('iva_debito').textContent = "₲ " + tDeb.toLocaleString(); document.getElementById('iva_credito').textContent = "₲ " + tCred.toLocaleString();
-        var final = tDeb - tCred; var elFinal = document.getElementById('iva_final');
-        elFinal.textContent = final >= 0 ? "A Pagar: ₲ " + final.toLocaleString() : "Saldo a Favor: ₲ " + Math.abs(final).toLocaleString(); elFinal.style.color = final >= 0 ? "var(--accent)" : "var(--success)";
-    }
-    if(tipo === 'ire_general') {
-        document.getElementById('ire_resultados').style.display = 'block'; var tIng = 0, tEgr = 0;
-        cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IRE General')) tIng+=v.neto; }); 
-        cli.libros.compras.forEach(c => { if(c.impuestos_aplicados && c.impuestos_aplicados.includes('IRE General')) tEgr+=c.neto; });
-        document.getElementById('ire_ing').textContent = "₲ " + tIng.toLocaleString(); document.getElementById('ire_gas').textContent = "₲ " + tEgr.toLocaleString(); document.getElementById('ire_final').textContent = "₲ " + ((tIng-tEgr)*0.1).toLocaleString();
-    }
-    if(tipo === 'ire_simple') {
-        document.getElementById('ires_resultados').style.display = 'block'; var tIng = 0, tEgr = 0;
-        cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IRE Simple')) tIng+=v.bruto; }); 
-        cli.libros.compras.forEach(c => { if(c.impuestos_aplicados && c.impuestos_aplicados.includes('IRE Simple')) tEgr+=c.bruto; }); 
-        var baseReal = (tIng - tEgr) > 0 ? (tIng - tEgr) : 0, basePres = tIng * 0.30, baseImp = Math.min(baseReal, basePres);
-        document.getElementById('ires_ing').textContent = "₲ " + tIng.toLocaleString(); document.getElementById('ires_egr').textContent = "₲ " + tEgr.toLocaleString(); document.getElementById('ires_base_real').textContent = "₲ " + baseReal.toLocaleString(); document.getElementById('ires_base_pres').textContent = "₲ " + basePres.toLocaleString(); document.getElementById('ires_recomendacion').textContent = baseReal < basePres ? "Renta Neta Real (Menor)" : "Renta Neta Presunta (Menor)"; document.getElementById('ires_impuesto_final').textContent = "IRE a Pagar: ₲ " + (baseImp * 0.10).toLocaleString();
-    }
-    if(tipo === 'irp') {
-        document.getElementById('irp_resultados').style.display = 'block'; var tIng = 0; 
-        cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IRP')) tIng+=v.neto; });
-        if(tIng > 80000000) document.getElementById('irp_final').innerHTML = `Supera el MNA. Ingresos: ₲ ${tIng.toLocaleString()}<br>IRP Estimado: ₲ ${(tIng*0.08).toLocaleString()}`;
-        else document.getElementById('irp_final').innerHTML = `El cliente no supera el rango incidido (Ingresos: ₲ ${tIng.toLocaleString()})`;
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename+'.csv');
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+// ===== CONTROLES DE VENTANA (toggleWin) =====
+window.toggleWin = function(btn, action) {
+    var modal = btn.closest('.modal');
+    if(!modal) return;
+    if(action === '_') {
+        if(modal.classList.contains('minimized')) {
+            modal.classList.remove('minimized');
+            btn.textContent = '_';
+        } else {
+            modal.classList.remove('maximized');
+            modal.classList.add('minimized');
+        }
+    } else if(action === '□' || action === '❐') {
+        if(modal.classList.contains('maximized')) {
+            modal.classList.remove('maximized');
+            modal.style.cssText = '';
+            btn.textContent = '□';
+        } else {
+            modal.classList.remove('minimized');
+            modal.classList.add('maximized');
+            btn.textContent = '❐';
+        }
     }
 };
 
@@ -1525,7 +1546,7 @@ window.onload = function() {
   setTimeout(() => {
     let lbl = document.getElementById('lbl-estado-nube');
     if(lbl && document.getElementById('login-loading').style.display !== 'none') {
-        lbl.innerHTML += `<br><br><span style="color:var(--warning);font-size:11px;">⚠️ Demorando demasiado. Verifique su conexión a internet o Reglas de Firestore.</span>`;
+        lbl.innerHTML += `<br><br><span style="color:var(--warning);font-size:11px;">⚠️ Demorando demasiado. Verifique su conexión a internet.</span>`;
     }
   }, 5000);
 
