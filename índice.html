@@ -200,8 +200,8 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, la
     <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b;font-weight:600"><span class="icon">🤖</span><span>Soporte Gemini IA</span></div>
   </div>
   
-  <!-- AQUÍ ESTÁ EL BOTÓN DE AJUSTES Y RESPALDOS VISIBLE -->
-  <div class="sidebar-section" id="menu_admin" style="display:none;margin-top:10px">
+  <!-- AQUÍ ESTÁ EL BOTÓN DE AJUSTES VISIBLE DE NUEVO -->
+  <div class="sidebar-section" id="menu_admin" style="display:block;margin-top:10px">
     <div class="sidebar-label">Administración</div>
     <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span>Perfil Admin / Usuarios</span></div>
     <div class="nav-item" onclick="showPage('backup',this)"><span class="icon">💾</span><span>Sistema y Respaldos</span></div>
@@ -691,6 +691,22 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, la
             <div class="form-group"><label>Glosa Contable (Diario)</label><textarea id="wiz_glosa" placeholder="Ej: Registro según comprobante..."></textarea></div>
             <div class="modal-actions"><button class="btn btn-outline" onclick="wizNext(2)">⬅️ Atrás</button><button class="btn btn-primary" onclick="guardarAsientoWizard()" style="background:var(--success)">💾 Guardar y Asentar en Nube</button></div>
         </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: IMPORTADOR IA -->
+<div class="modal-overlay" id="modal-import">
+  <div class="modal drag-modal">
+    <div class="modal-drag-header"><span class="m-title">📥 Importador Inteligente (Excel/CSV)</span>
+        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-import')">✕</div></div>
+    </div>
+    <div class="modal-body-scroll">
+        <div class="form-group" style="margin-bottom:15px" id="imp_box_cli"><label>Cliente Destino</label><select id="imp_cli_sel" class="cli-select"></select></div>
+        <div class="form-group"><label>Pegar filas de Excel (Columnas: Fecha | Tipo | Timbrado | Nro | RUC | Razón Social | Monto Total | Tasa IVA)</label>
+            <textarea id="imp_data" style="height:150px;font-family:'DM Mono'"></textarea></div>
+        <div id="imp_errores" style="margin-top:10px;font-size:12px;display:none;flex-direction:column;gap:5px"></div>
+        <div class="modal-actions"><button class="btn btn-primary" onclick="procesarImportacion()">⚙️ Analizar y Guardar en Nube</button></div>
     </div>
   </div>
 </div>
