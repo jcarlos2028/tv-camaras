@@ -9,7 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#f0f2f5;--sidebar:#0f1923;--sidebar-hover:#1a2535;--accent:#e63946;
+  --bg:#f0f2f5;--sidebar:#0f1923;--sidebar-hover:#1a2535;
+  --accent:#00b4d8; /* CELESTE AGUA */
   --accent2:#2196f3;--white:#fff;--card:#fff;--text:#1a1a2e;--text-light:#6b7280;
   --border:#e5e7eb;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
@@ -68,7 +69,7 @@ label{font-size:11px;font-weight:600;color:var(--text-light);text-transform:uppe
 input,select,textarea{padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .btn{padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif;transition:0.1s}
-.btn-primary{background:var(--accent);color:white} .btn-primary:hover{background:#c1121f}
+.btn-primary{background:var(--accent);color:white} .btn-primary:hover{background:#0077b6}
 .btn-secondary{background:var(--accent2);color:white}
 .btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border)} .btn-outline:hover{background:var(--bg)}
 .btn-success{background:var(--success);color:white}
@@ -434,7 +435,7 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, la
       </div>
       <div class="card" style="border-left:4px solid var(--accent2)">
         <div class="card-title">🔍 Consulta de Factura Electrónica (SIFEN - e-Kuatia)</div>
-        <p style="font-size:12px;color:var(--text-light);margin-bottom:15px">Abre la ventana oficial de la DNIT para descargar los comprobantes que luego podrás subir aquí en formato CSV.</p>
+        <p style="font-size:12px;color:var(--text-light);margin-bottom:15px">Abre la ventana oficial de la DNIT para consultar y descargar los comprobantes que luego podrás subir aquí en formato CSV.</p>
         <div style="display:flex;gap:10px">
             <button class="btn btn-secondary" onclick="abrirMiniaturaDNIT()">🌐 Abrir Portal e-Kuatia (DNIT)</button>
         </div>
@@ -692,10 +693,24 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, la
   </div>
 </div>
 
-<!-- BOTÓN FLOTANTE SOPORTE WHATSAPP -->
-<div class="wa-float" onclick="abrirSoporteWA()">💬 Soporte</div>
+<!-- MODAL: IMPORTADOR IA -->
+<div class="modal-overlay" id="modal-import">
+  <div class="modal drag-modal">
+    <div class="modal-drag-header"><span class="m-title">📥 Importador Inteligente (Excel/CSV)</span>
+        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-import')">✕</div></div>
+    </div>
+    <div class="modal-body-scroll">
+        <div class="form-group" style="margin-bottom:15px" id="imp_box_cli"><label>Cliente Destino</label><select id="imp_cli_sel" class="cli-select"></select></div>
+        <div class="form-group"><label>Pegar filas de Excel (Columnas: Fecha | Tipo | Timbrado | Nro | RUC | Razón Social | Monto Total | Tasa IVA)</label>
+            <textarea id="imp_data" style="height:150px;font-family:'DM Mono'"></textarea></div>
+        <div id="imp_errores" style="margin-top:10px;font-size:12px;display:none;flex-direction:column;gap:5px"></div>
+        <div class="modal-actions"><button class="btn btn-primary" onclick="procesarImportacion()">⚙️ Analizar y Guardar en Nube</button></div>
+    </div>
+  </div>
+</div>
 
-<!-- ==============================================
+<!-- BOTÓN FLOTANTE SOPORTE WHATSAPP -->
+<div class="wa-float" onclick="abrirSoporteWA()">💬 Soporte</div><!-- ==============================================
      SISTEMA PRINCIPAL (JS)
 =============================================== -->
 <script>
@@ -708,7 +723,7 @@ function puedeVerCliente(cliId) {
     return window.currentUser.clientesAsignados && window.currentUser.clientesAsignados.includes(cliId);
 }
 
-// ===== CLAUDE IA =====
+// ===== GEMINI IA =====
 var claudeHistory = [];
 var claudeMsgN = 0;
 
@@ -1410,7 +1425,7 @@ window.procesarImportacionArchivo = function(event) {
                     if(ivaTotal>0) lin.push({cuenta:cIva, debe:0, haber:ivaTotal});
                 }
 
-                cli.libros.compras.push(obj); // Se asume que importamos compras como predeterminado
+                cli.libros.compras.push(obj); 
                 cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación CSV", lineas: lin}); 
                 window.totalDocs++;
             });
@@ -1424,36 +1439,47 @@ window.procesarImportacionArchivo = function(event) {
     reader.readAsText(file, "UTF-8");
 };
 
-window.calcularImpuestos = function(tipo) {
-    if(window.dbClientes.length===0) return; var cli = window.dbClientes[document.getElementById(tipo+'_cli_sel').value];
+// ===== EXPORTACIÓN EXCEL PARA OTROS LIBROS (TESORERÍA, ETC) =====
+window.exportToCSV = window.exportToCSV || function(tableId, filename) {
+    var table = document.getElementById(tableId); if(!table) return;
+    var rows = table.querySelectorAll('tr'), csv = [], skipCols = [];
+    var headers = rows[0] ? rows[0].querySelectorAll('th,td') : [];
+    for(var h=0;h<headers.length;h++) { if(headers[h].innerText.trim()==='Acción'||headers[h].innerText.trim()==='ACCIÓN') skipCols.push(h); }
+    for(var i=0;i<rows.length;i++) { var row=[], cols=rows[i].querySelectorAll('td,th'); for(var j=0;j<cols.length;j++) { if(skipCols.includes(j)) continue; row.push('"'+cols[j].innerText.replace(/\n/g,' ').trim().replace(/"/g,'""')+'"'); } csv.push(row.join(';')); }
+    var blob = new Blob(["\uFEFF"+csv.join('\n')], {type:'text/csv;charset=utf-8;'});
     
-    if(tipo === 'iva') {
-        document.getElementById('iva_resultados').style.display = 'block';
-        var tVent = 0, tDeb = 0, tCred = 0;
-        cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IVA')){ tVent+=v.neto; tDeb+=v.iva; }}); 
-        cli.libros.compras.forEach(c => { if(c.impuestos_aplicados && c.impuestos_aplicados.includes('IVA')){ tCred+=c.iva; }});
-        document.getElementById('iva_ventas').textContent = "₲ " + tVent.toLocaleString(); document.getElementById('iva_debito').textContent = "₲ " + tDeb.toLocaleString(); document.getElementById('iva_credito').textContent = "₲ " + tCred.toLocaleString();
-        var final = tDeb - tCred; var elFinal = document.getElementById('iva_final');
-        elFinal.textContent = final >= 0 ? "A Pagar: ₲ " + final.toLocaleString() : "Saldo a Favor: ₲ " + Math.abs(final).toLocaleString(); elFinal.style.color = final >= 0 ? "var(--accent)" : "var(--success)";
-    }
-    if(tipo === 'ire_general') {
-        document.getElementById('ire_resultados').style.display = 'block'; var tIng = 0, tEgr = 0;
-        cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IRE General')) tIng+=v.neto; }); 
-        cli.libros.compras.forEach(c => { if(c.impuestos_aplicados && c.impuestos_aplicados.includes('IRE General')) tEgr+=c.neto; });
-        document.getElementById('ire_ing').textContent = "₲ " + tIng.toLocaleString(); document.getElementById('ire_gas').textContent = "₲ " + tEgr.toLocaleString(); document.getElementById('ire_final').textContent = "₲ " + ((tIng-tEgr)*0.1).toLocaleString();
-    }
-    if(tipo === 'ire_simple') {
-        document.getElementById('ires_resultados').style.display = 'block'; var tIng = 0, tEgr = 0;
-        cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IRE Simple')) tIng+=v.bruto; }); 
-        cli.libros.compras.forEach(c => { if(c.impuestos_aplicados && c.impuestos_aplicados.includes('IRE Simple')) tEgr+=c.bruto; }); 
-        var baseReal = (tIng - tEgr) > 0 ? (tIng - tEgr) : 0, basePres = tIng * 0.30, baseImp = Math.min(baseReal, basePres);
-        document.getElementById('ires_ing').textContent = "₲ " + tIng.toLocaleString(); document.getElementById('ires_egr').textContent = "₲ " + tEgr.toLocaleString(); document.getElementById('ires_base_real').textContent = "₲ " + baseReal.toLocaleString(); document.getElementById('ires_base_pres').textContent = "₲ " + basePres.toLocaleString(); document.getElementById('ires_recomendacion').textContent = baseReal < basePres ? "Renta Neta Real (Menor)" : "Renta Neta Presunta (Menor)"; document.getElementById('ires_impuesto_final').textContent = "IRE a Pagar: ₲ " + (baseImp * 0.10).toLocaleString();
-    }
-    if(tipo === 'irp') {
-        document.getElementById('irp_resultados').style.display = 'block'; var tIng = 0; 
-        cli.libros.ventas.forEach(v => { if(v.impuestos_aplicados && v.impuestos_aplicados.includes('IRP')) tIng+=v.neto; });
-        if(tIng > 80000000) document.getElementById('irp_final').innerHTML = `Supera el MNA. Ingresos: ₲ ${tIng.toLocaleString()}<br>IRP Estimado: ₲ ${(tIng*0.08).toLocaleString()}`;
-        else document.getElementById('irp_final').innerHTML = `El cliente no supera el rango incidido (Ingresos: ₲ ${tIng.toLocaleString()})`;
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename+'.csv');
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+// ===== CONTROLES DE VENTANA (toggleWin) =====
+window.toggleWin = function(btn, action) {
+    var modal = btn.closest('.modal');
+    if(!modal) return;
+    if(action === '_') {
+        if(modal.classList.contains('minimized')) {
+            modal.classList.remove('minimized');
+            btn.textContent = '_';
+        } else {
+            modal.classList.remove('maximized');
+            modal.classList.add('minimized');
+        }
+    } else if(action === '□' || action === '❐') {
+        if(modal.classList.contains('maximized')) {
+            modal.classList.remove('maximized');
+            modal.style.cssText = '';
+            btn.textContent = '□';
+        } else {
+            modal.classList.remove('minimized');
+            modal.classList.add('maximized');
+            btn.textContent = '❐';
+        }
     }
 };
 
@@ -1499,11 +1525,13 @@ window.onload = function() {
   };
 
   window.saveData = async function() {
+      // Guarda local para proteger contra fallos de red
       try {
           const datosLocales = JSON.stringify({ clientes: window.dbClientes, usuarios: window.dbUsuarios, totalDocs: window.totalDocs });
           localStorage.setItem('contapy_backup_local', datosLocales);
       } catch(e) {}
 
+      // Sube a Firebase
       try { 
           await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes, usuarios: window.dbUsuarios, totalDocs: window.totalDocs }); 
           return true;
@@ -1522,7 +1550,7 @@ window.onload = function() {
   setTimeout(() => {
     let lbl = document.getElementById('lbl-estado-nube');
     if(lbl && document.getElementById('login-loading').style.display !== 'none') {
-        lbl.innerHTML += `<br><br><span style="color:var(--warning);font-size:11px;">⚠️ Demorando demasiado. Verifique su conexión a internet.</span>`;
+        lbl.innerHTML += `<br><br><span style="color:var(--warning);font-size:11px;">⚠️ Demorando demasiado. Verifique su conexión a internet o Reglas de Firestore.</span>`;
     }
   }, 5000);
 
