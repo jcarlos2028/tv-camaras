@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="es" translate="no">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google" content="notranslate">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.firebaseapp.com https://api.anthropic.com https://identitytoolkit.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.firebaseio.com https://*.firebaseapp.com https://api.anthropic.com https://identitytoolkit.googleapis.com wss://*.firebaseio.com; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data:;">
-<title>ContaPY v1.1 — Sistema Contable Cloud + Claude IA</title>
+<title>ContaPY v1.1 — Sistema Contable Cloud + Gemini IA</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -29,7 +28,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .nav-item:hover{background:var(--sidebar-hover);color:rgba(255,255,255,.85)}
 .nav-item.active{background:var(--accent);color:white}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;}
-.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0;-webkit-app-region:drag;}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;-webkit-app-region:drag;}
 .topbar-title{font-size:16px;font-weight:700;color:var(--text);flex:1}
 .btn-icon { cursor: pointer; font-size: 20px;-webkit-app-region:no-drag; }
 .content{flex:1;overflow-y:auto;padding:20px;position:relative;}
@@ -130,7 +129,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 /* =========================================
    SOLUCIÓN DEFINITIVA PARA ELECTRON (.EXE)
 ========================================= */
-input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #lang_sel, label, .clickable, .checkbox {
+input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, label, .clickable, .checkbox {
     -webkit-app-region: no-drag !important;
     -webkit-user-select: text !important;
     user-select: text !important;
@@ -145,6 +144,9 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
 <body>
 
 <datalist id="planCuentasRes4814"></datalist>
+
+<!-- INPUT OCULTO PARA IMPORTAR EXCEL -->
+<input type="file" id="file_import_excel" accept=".csv" style="display:none" onchange="procesarImportacionArchivo(event)">
 
 <!-- LOGIN CON FIREBASE -->
 <div class="login-wrap" id="login-wrap">
@@ -168,42 +170,42 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v1.1 Cloud + Claude IA</div></div></div>
+    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v1.1 Cloud + Gemini IA</div></div></div>
   </div>
   <div class="sidebar-section" style="padding-top:5px;padding-bottom:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px">
     <div style="color:var(--success);font-size:11px;font-weight:700" id="sb_user_name">Cargando...</div>
     <div style="color:rgba(255,255,255,0.4);font-size:10px" id="sb_user_rol">Rol</div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_main">Principal</div>
-    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span><span data-i18n="nav_dash">Dashboard</span></div>
-    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span><span data-i18n="nav_clients">Clientes (Cartera)</span></div>
+    <div class="sidebar-label">Principal</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span><span>Dashboard</span></div>
+    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span><span>Clientes (Cartera)</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_billing">Facturación / Tesorería</div>
-    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span data-i18n="nav_sifen">Carga Inteligente / SIFEN</span></div>
-    <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="openWizard()"><span class="icon">➕</span><span data-i18n="nav_new">Nuevo Asiento / Fact.</span></div>
+    <div class="sidebar-label">Facturación / Tesorería</div>
+    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span>Carga Inteligente / SIFEN</span></div>
+    <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="openWizard()"><span class="icon">➕</span><span>Nuevo Asiento / Fact.</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_taxes">Estados Financieros</div>
-    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span><span data-i18n="nav_iva">Estado IVA (120)</span></div>
-    <div class="nav-item" onclick="showPage('ire_general',this)"><span class="icon">💼</span><span data-i18n="nav_ire">Estado IRE General</span></div>
-    <div class="nav-item" onclick="showPage('ire_simple',this)"><span class="icon">📄</span><span data-i18n="nav_ires">Estado IRE Simple</span></div>
-    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span><span data-i18n="nav_irp">Estado IRP (515)</span></div>
+    <div class="sidebar-label">Estados Financieros</div>
+    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span><span>Estado IVA (120)</span></div>
+    <div class="nav-item" onclick="showPage('ire_general',this)"><span class="icon">💼</span><span>Estado IRE General</span></div>
+    <div class="nav-item" onclick="showPage('ire_simple',this)"><span class="icon">📄</span><span>Estado IRE Simple</span></div>
+    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span><span>Estado IRP (515)</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_tools">Herramientas</div>
-    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b;font-weight:600"><span class="icon">🤖</span><span data-i18n="nav_ai">Soporte Claude IA</span></div>
+    <div class="sidebar-label">Herramientas</div>
+    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b;font-weight:600"><span class="icon">🤖</span><span>Soporte Gemini IA</span></div>
   </div>
   <div class="sidebar-section" id="menu_admin" style="display:none;margin-top:10px">
-    <div class="sidebar-label" data-i18n="menu_admin">Administración</div>
-    <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span data-i18n="nav_users">Perfil Admin / Usuarios</span></div>
+    <div class="sidebar-label">Administración</div>
+    <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span>Perfil Admin / Usuarios</span></div>
     <div class="nav-item" onclick="showPage('backup',this)"><span class="icon">💾</span><span>Sistema y Respaldos</span></div>
   </div>
   
   <div style="margin-top:auto">
     <div class="sidebar-section" style="padding-bottom:0">
-      <div class="nav-item" id="btn-logout-sidebar" style="color:var(--danger); font-weight:600"><span class="icon">🚪</span> <span data-i18n="nav_logout">Cerrar Sesión</span></div>
+      <div class="nav-item" id="btn-logout-sidebar" style="color:var(--danger); font-weight:600"><span class="icon">🚪</span> <span>Cerrar Sesión</span></div>
     </div>
     <div class="copyright-footer">&copy; Derechos reservados 2026<br>Desarrollado por <strong style="color:rgba(255,255,255,0.6)">@Jcarlos2028</strong></div>
   </div>
@@ -211,28 +213,22 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
 
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="topbar-title" data-i18n="top_title">Dashboard Principal</div>
-    
-    <!-- SELECTOR DE IDIOMAS -->
-    <select id="lang_sel" onchange="changeLang(this.value)" style="border:1px solid var(--border);border-radius:7px;padding:4px 8px;background:var(--bg);font-weight:600;outline:none;cursor:pointer">
-        <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
-    </select>
-    
+    <div class="topbar-title" id="topbar-title">Dashboard Principal</div>
     <div class="btn-icon" id="btn-logout" title="Cerrar Sesión">🚪</div>
   </div>
 
   <div class="content">
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
-      <div class="page-header"><div><h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2><p data-i18n="dash_p">Sincronización Activa con Firebase</p></div></div>
+      <div class="page-header"><div><h2>Estudio Contable ContaPY 👋</h2><p>Sincronización Activa con Firebase</p></div></div>
       <div class="stats-grid">
-        <div class="stat-card blue"><div class="stat-label" data-i18n="dash_s1">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
-        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label" data-i18n="dash_s2">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
+        <div class="stat-card blue"><div class="stat-label">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
+        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
       </div>
       <div class="card">
-        <div class="card-title" data-i18n="dash_t1">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
+        <div class="card-title">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
         <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social / Nombre</th><th data-i18n="tbl_contact">Contacto</th><th data-i18n="tbl_taxes">Impuestos Activos</th></tr></thead>
+          <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Contacto</th><th>Impuestos Activos</th></tr></thead>
           <tbody id="dash-clientes-list"></tbody>
         </table></div>
       </div>
@@ -241,7 +237,7 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
     <!-- MÓDULO GEMINI IA -->
     <div class="page" id="page-gemini">
       <div class="page-header">
-        <div><h2 data-i18n="ai_h2">🤖 Soporte Asistente Inteligente</h2><p data-i18n="ai_p">Desarrollado con la tecnología de Gemini (Google API)</p></div>
+        <div><h2>🤖 Soporte Asistente Inteligente</h2><p>Desarrollado con la tecnología de Gemini (Google API)</p></div>
         <button class="btn btn-outline" style="border-color:#a78bfa;color:#6d28d9" onclick="configurarGemini()">⚙️ Configurar API Key</button>
       </div>
       <div class="grid-2">
@@ -272,7 +268,7 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
     <!-- CLIENTES DIRECTORIO -->
     <div class="page" id="page-clientes">
       <div class="page-header">
-        <div><h2 data-i18n="cli_h2">Directorio de Clientes</h2><p data-i18n="cli_p">Registro de contribuyentes (Activos e Inactivos)</p></div>
+        <div><h2>Directorio de Clientes</h2><p>Registro de contribuyentes (Activos e Inactivos)</p></div>
         <div style="display:flex;gap:8px;">
           <input type="text" placeholder="🔍 Buscar por RUC o Nombre..." style="width:250px" id="search-cliente" onkeyup="renderClientes()">
           <button class="btn btn-primary" onclick="openModalCliente()">+ Nuevo Cliente</button>
@@ -280,7 +276,7 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
       </div>
       <div class="card">
         <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social / Nombre</th><th data-i18n="tbl_contact">Línea / Correo</th><th data-i18n="tbl_status">Estado / Impuestos</th><th data-i18n="tbl_actions">Acciones</th></tr></thead>
+          <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Línea / Correo</th><th>Estado / Impuestos</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-clientes-list"></tbody>
         </table></div>
       </div>
@@ -289,13 +285,13 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
     <!-- USUARIOS / PERFIL ADMIN -->
     <div class="page" id="page-usuarios">
       <div class="page-header">
-        <div><h2 data-i18n="usr_h2">Gestión de Usuarios y Accesos</h2><p data-i18n="usr_p">Administración de roles y carteras de clientes</p></div>
+        <div><h2>Gestión de Usuarios y Accesos</h2><p>Administración de roles y carteras de clientes</p></div>
         <button class="btn btn-primary" onclick="openModalUsuario()">+ Asignar Accesos / Nuevo Perfil</button>
       </div>
       <div class="card">
         <p style="font-size:12px; margin-bottom:15px; color:var(--text-light)">⚠️ <b>Nota de Nube:</b> Al crear un usuario aquí, asegúrese de haberlo registrado también en Firebase Authentication.</p>
         <div class="table-wrap"><table>
-          <thead><tr><th data-i18n="tbl_usr">Usuario / Correo</th><th data-i18n="tbl_rol">Rol del Sistema</th><th data-i18n="tbl_perms">Permisos / Cartera</th><th data-i18n="tbl_actions">Acciones</th></tr></thead>
+          <thead><tr><th>Usuario / Correo</th><th>Rol del Sistema</th><th>Permisos / Cartera</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-usuarios-list"></tbody>
         </table></div>
       </div>
@@ -308,12 +304,12 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
       </div>
       <div class="grid-2">
           <div class="card">
-              <div class="card-title" style="color:var(--accent2)" data-i18n="bak_exp">📥 Exportar Datos (Crear Backup)</div>
+              <div class="card-title" style="color:var(--accent2)">📥 Exportar Datos (Crear Backup)</div>
               <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Descarga una copia completa de toda tu contabilidad y usuarios en JSON.</p>
               <button class="btn btn-secondary" onclick="exportBackup()">📥 Descargar Copia</button>
           </div>
           <div class="card">
-              <div class="card-title" style="color:var(--warning)" data-i18n="bak_imp">📤 Importar Datos (Restaurar)</div>
+              <div class="card-title" style="color:var(--warning)">📤 Importar Datos (Restaurar)</div>
               <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Carga un archivo JSON previo para trabajar (sobrescribe la pantalla).</p>
               <input type="file" id="file_backup" accept=".json" style="display:none" onchange="importBackup(event)">
               <button class="btn btn-outline" style="border-color:var(--warning);color:var(--warning)" onclick="document.getElementById('file_backup').click()">📤 Restaurar Backup</button>
@@ -346,21 +342,21 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
         </div>
         <div style="display:flex;gap:10px;margin-top:10px;margin-right:40px;flex-wrap:wrap">
           <button class="btn btn-outline" style="background:#ecfdf5; border-color:#10b981; color:#065f46" onclick="abrirMiniaturaDNIT()">🔍 Consultar SIFEN</button>
-          <button class="btn btn-outline" onclick="openModalImportProfile()">📥 Importar Excel / IA</button>
+          <button class="btn btn-outline" onclick="openModalImportarDirecto()">📥 Importar Archivo CSV</button>
           <button class="btn btn-primary" onclick="openWizardFromProfile()">➕ Cargar Comprobante</button>
           <button class="btn btn-secondary" onclick="openAsientoManual()">➕ Asiento Manual Libre</button>
         </div>
       </div>
 
       <div class="tabs" style="margin-bottom:20px;">
-        <div class="tab active" onclick="switchClientTab('compras', this)" data-i18n="tab_comp">Compras</div>
-        <div class="tab" onclick="switchClientTab('ventas', this)" data-i18n="tab_vent">Ventas</div>
-        <div class="tab" onclick="switchClientTab('recibos', this)" data-i18n="tab_teso">Tesorería</div>
-        <div class="tab" onclick="switchClientTab('retenciones', this)" data-i18n="tab_ret">Retenciones</div>
-        <div class="tab" onclick="switchClientTab('diario', this)" data-i18n="tab_diar">Libro Diario</div>
-        <div class="tab" style="background:#dbeafe;color:#1e40af" onclick="switchClientTab('mayor', this)" data-i18n="tab_may">Libro Mayor</div>
-        <div class="tab" style="background:#ede9fe;color:#5b21b6" onclick="switchClientTab('balance', this)" data-i18n="tab_bal">Balance General</div>
-        <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)" data-i18n="tab_est">Estado de Cuentas</div>
+        <div class="tab active" onclick="switchClientTab('compras', this)">Compras</div>
+        <div class="tab" onclick="switchClientTab('ventas', this)">Ventas</div>
+        <div class="tab" onclick="switchClientTab('recibos', this)">Tesorería</div>
+        <div class="tab" onclick="switchClientTab('retenciones', this)">Retenciones</div>
+        <div class="tab" onclick="switchClientTab('diario', this)">Libro Diario</div>
+        <div class="tab" style="background:#dbeafe;color:#1e40af" onclick="switchClientTab('mayor', this)">Libro Mayor</div>
+        <div class="tab" style="background:#ede9fe;color:#5b21b6" onclick="switchClientTab('balance', this)">Balance General</div>
+        <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)">Estado de Cuentas</div>
       </div>
       
       <div id="ctab_compras" class="ctab-content" style="display:block;">
@@ -429,15 +425,17 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
 
     <!-- COMPROBANTES / SIFEN -->
     <div class="page" id="page-comprobantes">
-      <div class="page-header"><div data-i18n="sifen_h2"><h2>Centro de Carga y SIFEN</h2><p>Búsqueda e-Kuatia e Importación IA</p></div>
-        <div style="display:flex;gap:10px"><button class="btn btn-outline" onclick="openModalImportMain()">📥 Importar Excel / IA</button><button class="btn btn-primary" onclick="openWizard()">➕ Carga Manual</button></div>
+      <div class="page-header"><div><h2>Centro de Carga y SIFEN</h2><p>Búsqueda e-Kuatia e Importación Masiva</p></div>
+        <div style="display:flex;gap:10px">
+            <button class="btn btn-outline" onclick="openModalImportarDirectoGlobal()">📥 Importar Archivo CSV</button>
+            <button class="btn btn-primary" onclick="openWizard()">➕ Carga Manual</button>
+        </div>
       </div>
       <div class="card" style="border-left:4px solid var(--accent2)">
         <div class="card-title">🔍 Consulta de Factura Electrónica (SIFEN - e-Kuatia)</div>
-        <p style="font-size:12px;color:var(--text-light);margin-bottom:15px">Ingrese el CDC (Código de Control) de 44 dígitos para verificar validez y recuperar datos directamente desde e-kuatia.</p>
+        <p style="font-size:12px;color:var(--text-light);margin-bottom:15px">Abre la ventana oficial de la DNIT para descargar los comprobantes que luego podrás subir aquí en formato CSV.</p>
         <div style="display:flex;gap:10px">
-            <input type="text" id="sifen_cdc" placeholder="Ej: 01800123456001001000012320260321123456789012" maxlength="44" style="flex:1;font-family:'DM Mono';letter-spacing:1px">
-            <button class="btn btn-secondary" onclick="consultarSIFEN()">Consultar a DNIT</button>
+            <button class="btn btn-secondary" onclick="abrirMiniaturaDNIT()">🌐 Abrir Portal e-Kuatia (DNIT)</button>
         </div>
       </div>
     </div>
@@ -693,22 +691,6 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
   </div>
 </div>
 
-<!-- MODAL: IMPORTADOR IA -->
-<div class="modal-overlay" id="modal-import">
-  <div class="modal drag-modal">
-    <div class="modal-drag-header"><span class="m-title">📥 Importador Inteligente (Excel/CSV)</span>
-        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-import')">✕</div></div>
-    </div>
-    <div class="modal-body-scroll">
-        <div class="form-group" style="margin-bottom:15px" id="imp_box_cli"><label>Cliente Destino</label><select id="imp_cli_sel" class="cli-select"></select></div>
-        <div class="form-group"><label>Pegar filas de Excel (Columnas: Fecha | Tipo | Timbrado | Nro | RUC | Razón Social | Monto Total | Tasa IVA)</label>
-            <textarea id="imp_data" style="height:150px;font-family:'DM Mono'"></textarea></div>
-        <div id="imp_errores" style="margin-top:10px;font-size:12px;display:none;flex-direction:column;gap:5px"></div>
-        <div class="modal-actions"><button class="btn btn-primary" onclick="procesarImportacion()">⚙️ Analizar y Guardar en Nube</button></div>
-    </div>
-  </div>
-</div>
-
 <!-- BOTÓN FLOTANTE SOPORTE WHATSAPP -->
 <div class="wa-float" onclick="abrirSoporteWA()">💬 Soporte</div>
 
@@ -717,7 +699,7 @@ input, select, textarea, button, .btn, .tab, .win-btn, .close-btn, .nav-item, #l
 =============================================== -->
 <script>
 window.dbUsuarios =[]; window.dbClientes =[]; window.totalDocs = 0; window.currentUser = null; 
-window.editandoUsuIdx = -1; window.editandoCliIdx = -1; window.wizContext = null;
+window.editandoUsuIdx = -1; window.editandoCliIdx = -1; window.wizContext = null; window.clienteDestinoOculto = null;
 
 function puedeVerCliente(cliId) {
     if(!window.currentUser) return true;
@@ -749,7 +731,7 @@ window.enviarMensajeIA = async function() {
     var lDiv = document.createElement('div');
     lDiv.id = lid;
     lDiv.style.cssText = 'background:white;border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;max-width:85%;padding:10px 14px;border-radius:12px;font-size:13px;color:#9ca3af;font-style:italic';
-    lDiv.textContent = '🤖 Claude está escribiendo...';
+    lDiv.textContent = '🤖 Gemini IA está escribiendo...';
     box.appendChild(lDiv);
     box.scrollTop = box.scrollHeight;
     claudeHistory.push({ role: 'user', content: txt });
@@ -758,7 +740,7 @@ window.enviarMensajeIA = async function() {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 model: 'claude-sonnet-4-20250514', max_tokens: 1000,
-                system: 'Sos Claude, el asistente de soporte integrado en ContaPY v1.1, un sistema contable paraguayo desarrollado por @Jcarlos2028. Ayudás a contadores con: Ley 6380/2019 (IVA Art.80-101, IRE General/Simple/ReSiMo, IRP Art.47-70, INR Art.71-79), plan de cuentas NIIF adaptado a Paraguay, asientos contables, libros legales, SIFEN/e-kuatia, formularios SET (120, 500, 515, 525), sistema Marangatú y Tesakã. Respondé siempre en español, de forma clara, práctica y concisa. Citá artículos de ley cuando sea relevante.',
+                system: 'Eres un asistente experto contable de Paraguay (Ley 6380/2019).',
                 messages: claudeHistory
             })
         });
@@ -766,11 +748,11 @@ window.enviarMensajeIA = async function() {
         var reply = (data.content && data.content[0]) ? data.content[0].text : 'Sin respuesta.';
         reply = reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
         var el2 = document.getElementById(lid);
-        if(el2) { el2.innerHTML = '<strong>🤖 Claude:</strong><br>' + reply; el2.style.color = 'var(--text)'; el2.style.fontStyle = 'normal'; }
+        if(el2) { el2.innerHTML = '<strong>🤖 Gemini IA:</strong><br>' + reply; el2.style.color = 'var(--text)'; el2.style.fontStyle = 'normal'; }
         claudeHistory.push({ role: 'assistant', content: (data.content && data.content[0]) ? data.content[0].text : '' });
     } catch(e) {
         var el2 = document.getElementById(lid);
-        if(el2) { el2.innerHTML = '❌ Error de conexión con Claude.'; el2.style.color = 'var(--danger)'; el2.style.fontStyle = 'normal'; }
+        if(el2) { el2.innerHTML = '❌ Error de conexión con Gemini IA.'; el2.style.color = 'var(--danger)'; el2.style.fontStyle = 'normal'; }
     }
     box.scrollTop = box.scrollHeight;
 };
@@ -800,7 +782,6 @@ window.showPage = function(name, el) {
     
     if(name === 'dashboard' || name==='clientes') window.renderClientes(); 
     
-    // Al entrar a los impuestos, forzar actualización para que se vea el reporte del 1er cliente directo
     if(['iva','ire_general','ire_simple','irp'].includes(name)) {
         window.actualizarSelectsClientes();
         if(window.dbClientes.length > 0) {
@@ -1289,50 +1270,74 @@ window.guardarAsientoWizard = function() {
   window.saveData(); alert(`✅ Asiento ${nAsi} guardado en NUBE correctamente.`); window.closeModal('modal-wizard'); if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
 };
 
-window.abrirMiniaturaDNIT = function(cdcOpcional) {
+window.abrirMiniaturaDNIT = function() {
     window.open('https://ekuatia.set.gov.py/consultas/', 'VentanaDNIT', `width=1000,height=700,top=50,left=100,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes`);
-    if(cdcOpcional && typeof cdcOpcional === 'string') navigator.clipboard.writeText(cdcOpcional).then(() => { alert("✅ CDC copiado al portapapeles.\n\nPuedes hacer 'Clic Derecho -> Pegar' en la miniatura de la DNIT que se acaba de abrir encima."); });
-};
-window.consultarSIFEN = function() {
-    var cdc = document.getElementById('sifen_cdc').value.trim();
-    if(cdc.length !== 44) return alert("❌ El CDC debe tener exactamente 44 dígitos.");
-    window.abrirMiniaturaDNIT(cdc);
 };
 
-// ===== IMPORTACIÓN EXCEL / IA =====
-window.openModalImportMain = function() { document.getElementById('imp_box_cli').style.display='flex'; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; window.openModal('modal-import'); };
-window.openModalImportProfile = function() { document.getElementById('imp_box_cli').style.display='none'; document.getElementById('imp_cli_sel').value=window.currentCli; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; window.openModal('modal-import'); };
+// ===== IMPORTACIÓN EXCEL / ARCHIVOS =====
+window.openModalImportarDirecto = function() {
+    window.clienteDestinoOculto = window.currentCli;
+    document.getElementById('file_import_excel').click();
+};
 
-window.procesarImportacion = function() {
-    var txt = document.getElementById('imp_data').value, errBox = document.getElementById('imp_errores'); errBox.innerHTML = ''; errBox.style.display = 'none'; if(!txt) return alert("Pegue los datos para procesar.");
-    var filas = txt.trim().split('\n'), errorRows = [], parseados =[], cli = window.dbClientes[document.getElementById('imp_cli_sel').value];
-
-    filas.forEach((f, idx) => {
-        var col = f.split('\t'); if(col.length<2) col = f.split(',');
-        if(col.length < 8) { errorRows.push(f + "\t[Faltan Columnas]"); return; }
-        var fecha = col[0].trim(), tipo = col[1].trim().toLowerCase(), timb = col[2].trim(), nro = col[3].trim(), ruc = col[4].trim(), terc = col[5].trim(), monto = parseFloat(col[6].replace(/,/g,'').trim()), tasa = parseInt(col[7].trim()), rErr =[];
-        if(isNaN(monto) || monto <= 0) rErr.push("Monto inválido"); if(!['factura','recibo'].includes(tipo)) rErr.push("Tipo doc no soportado");
-        if(rErr.length > 0) errorRows.push(f + "\t[" + rErr.join(' | ') + "]"); else parseados.push({fecha, tipo, timb, nro, ruc, terc, monto, tasa});
-    });
-
-    if(errorRows.length > 0) {
-        var csvContent = "Fecha\tTipo\tTimbrado\tNro\tRUC\tTercero\tMonto\tTasa\tERRORES\n" + errorRows.join("\n");
-        var blob = new Blob(["\uFEFF"+csvContent], {type: "text/csv;charset=utf-8;"});
-        var link = document.createElement("a"); link.href = window.URL.createObjectURL(blob); link.download = "Errores_Importacion.csv"; document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        errBox.style.display = 'flex'; errBox.innerHTML = `<strong style="color:var(--warning)">⚠️ Se descargó un Excel con ${errorRows.length} filas erróneas para corregir.</strong>`;
-    } 
-    if(parseados.length > 0) {
-        parseados.forEach(p => {
-            var iva = p.tasa===10?Math.round(p.monto/11):(p.tasa===5?Math.round(p.monto/21):0);
-            var obj = {fecha: p.fecha, tipo: p.tipo, timbrado: p.timb, nro: p.nro, ruc: p.ruc, tercero: p.terc, bruto: p.monto, neto: p.monto-iva, iva: iva, tasa_iva: p.tasa, iva10: (p.tasa===10?iva:0), iva5: (p.tasa===5?iva:0), grav10: (p.tasa===10?p.monto-iva:0), grav5: (p.tasa===5?p.monto-iva:0), exe: (p.tasa===0?p.monto:0), ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion:'contado', rol:'proveedor', impuestos_aplicados: cli.taxes};
-            var cVenta = p.tasa===10 ? '4.1.1.01 Ventas 10%' : (p.tasa===5 ? '4.1.1.02 Ventas 5%' : '4.1.1.03 Ventas Exentas');
-            var cIva = p.tasa===10 ? '2.1.4.01 IVA Débito 10%' : (p.tasa===5 ? '2.1.4.02 IVA Débito 5%' : '');
-            var lin =[{cuenta:'1.1.1.01 Caja', debe:p.monto, haber:0}, {cuenta:cVenta, debe:0, haber:p.monto-iva}]; if(iva>0) lin.push({cuenta:cIva, debe:0, haber:iva});
-            cli.libros.ventas.push(obj); cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación Excel", lineas: lin}); window.totalDocs++;
-        });
-        window.saveData(); document.getElementById('dash_doc_count').textContent = window.totalDocs; alert(`✅ Se procesaron e importaron exitosamente ${parseados.length} comprobantes al cliente ${cli.nom}.`);
-        if(errorRows.length===0) window.closeModal('modal-import'); if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
+window.openModalImportarDirectoGlobal = function() {
+    var cIdx = prompt("Ingrese el ID del cliente (0, 1, 2...) al que desea importar:");
+    if(cIdx !== null && window.dbClientes[cIdx]) {
+        window.clienteDestinoOculto = parseInt(cIdx);
+        document.getElementById('file_import_excel').click();
+    } else {
+        if(cIdx !== null) alert("❌ ID de cliente no válido.");
     }
+};
+
+window.procesarImportacionArchivo = function(event) {
+    var file = event.target.files[0];
+    if(!file) return;
+    
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var txt = e.target.result;
+        var filas = txt.trim().split('\n');
+        var errorRows = [], parseados =[], cli = window.dbClientes[window.clienteDestinoOculto];
+
+        // Se omite la primera fila si es cabecera
+        var inicio = 0;
+        if(filas[0].toLowerCase().includes('fecha') || filas[0].toLowerCase().includes('date')) inicio = 1;
+
+        for(var i = inicio; i < filas.length; i++) {
+            var f = filas[i];
+            if(!f.trim()) continue;
+            
+            var col = f.split('\t'); if(col.length<2) col = f.split(';'); if(col.length<2) col = f.split(',');
+            if(col.length < 8) { errorRows.push(f + "\t[Faltan Columnas]"); continue; }
+            
+            var fecha = col[0].trim().replace(/"/g, ''), tipo = col[1].trim().toLowerCase().replace(/"/g, ''), timb = col[2].trim().replace(/"/g, ''), nro = col[3].trim().replace(/"/g, ''), ruc = col[4].trim().replace(/"/g, ''), terc = col[5].trim().replace(/"/g, ''), montoStr = col[6].replace(/"/g, '').replace(/,/g,'').replace(/\./g,'').trim(), tasaStr = col[7].replace(/"/g, '').trim(), rErr =[];
+            
+            var monto = parseFloat(montoStr);
+            var tasa = parseInt(tasaStr);
+            
+            if(isNaN(monto) || monto <= 0) rErr.push("Monto inválido"); if(!['factura','recibo'].includes(tipo)) rErr.push("Tipo doc no soportado");
+            if(rErr.length > 0) errorRows.push(f + "\t[" + rErr.join(' | ') + "]"); else parseados.push({fecha, tipo, timb, nro, ruc, terc, monto, tasa});
+        }
+
+        if(errorRows.length > 0) {
+            alert(`⚠️ Se detectaron ${errorRows.length} filas con errores. Revise el archivo original y asegúrese de que el monto no tenga puntos ni letras.`);
+        } 
+        if(parseados.length > 0) {
+            parseados.forEach(p => {
+                var iva = p.tasa===10?Math.round(p.monto/11):(p.tasa===5?Math.round(p.monto/21):0);
+                var obj = {fecha: p.fecha, tipo: p.tipo, timbrado: p.timb, nro: p.nro, ruc: p.ruc, tercero: p.terc, bruto: p.monto, neto: p.monto-iva, iva: iva, tasa_iva: p.tasa, iva10: (p.tasa===10?iva:0), iva5: (p.tasa===5?iva:0), grav10: (p.tasa===10?p.monto-iva:0), grav5: (p.tasa===5?p.monto-iva:0), exe: (p.tasa===0?p.monto:0), ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion:'contado', rol:'proveedor', impuestos_aplicados: cli.taxes};
+                var cVenta = p.tasa===10 ? '4.1.1.01 Ventas 10%' : (p.tasa===5 ? '4.1.1.02 Ventas 5%' : '4.1.1.03 Ventas Exentas');
+                var cIva = p.tasa===10 ? '2.1.4.01 IVA Débito 10%' : (p.tasa===5 ? '2.1.4.02 IVA Débito 5%' : '');
+                var lin =[{cuenta:'1.1.1.01 Caja', debe:p.monto, haber:0}, {cuenta:cVenta, debe:0, haber:p.monto-iva}]; if(iva>0) lin.push({cuenta:cIva, debe:0, haber:iva});
+                cli.libros.ventas.push(obj); cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación Excel", lineas: lin}); window.totalDocs++;
+            });
+            window.saveData(); document.getElementById('dash_doc_count').textContent = window.totalDocs; alert(`✅ Se procesaron e importaron exitosamente ${parseados.length} comprobantes al cliente ${cli.nom}.`);
+            if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
+        }
+        event.target.value = '';
+    };
+    reader.readAsText(file, "UTF-8");
 };
 
 // ===== IMPUESTOS BUSCADORES =====
@@ -1456,19 +1461,33 @@ window.exportarLibroAvanzado = function(tipoLibro) {
     });
 
     var blob = new Blob(["\uFEFF" + csv.join('\n')], {type: 'text/csv;charset=utf-8;'});
-    var link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    
+    // TRUCO PARA ELECTRON Y WEB
+    var url = URL.createObjectURL(blob);
     var nombreArchivo = (tipoLibro === 'compras' ? 'Libro_Compras_' : 'Libro_Ventas_') + c.ruc + '.csv';
-    link.download = nombreArchivo;
+    
+    var link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', nombreArchivo);
+    link.style.display = 'none';
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
 };
 
 // ===== BACKUP / RESTORE =====
 window.exportBackup = function() {
     var data = { usuarios: window.dbUsuarios, clientes: window.dbClientes, docs: window.totalDocs };
     var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-    var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-    a.download = 'ContaPY_Backup_' + new Date().toISOString().split('T')[0] + '.json'; a.click();
+    var url = URL.createObjectURL(blob);
+    
+    var a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'ContaPY_Backup_' + new Date().toISOString().split('T')[0] + '.json');
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 };
 
 window.importBackup = async function(event) {
@@ -1561,7 +1580,15 @@ window.exportToCSV = window.exportToCSV || function(tableId, filename) {
     for(var h=0;h<headers.length;h++) { if(headers[h].innerText.trim()==='Acción'||headers[h].innerText.trim()==='ACCIÓN') skipCols.push(h); }
     for(var i=0;i<rows.length;i++) { var row=[], cols=rows[i].querySelectorAll('td,th'); for(var j=0;j<cols.length;j++) { if(skipCols.includes(j)) continue; row.push('"'+cols[j].innerText.replace(/\n/g,' ').trim().replace(/"/g,'""')+'"'); } csv.push(row.join(';')); }
     var blob = new Blob(["\uFEFF"+csv.join('\n')], {type:'text/csv;charset=utf-8;'});
-    var link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = filename+'.csv'; link.click();
+    
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename+'.csv');
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 };
 
 // ===== CONTROLES DE VENTANA (toggleWin) =====
@@ -1589,93 +1616,8 @@ window.toggleWin = function(btn, action) {
     }
 };
 
-// ===== SISTEMA DE IDIOMAS (changeLang + diccionarios) =====
-var i18nTexts = {
-    es: {
-        menu_main:'Principal', nav_dash:'Dashboard', nav_clients:'Clientes (Cartera)',
-        menu_billing:'Facturación / Tesorería', nav_sifen:'Carga Inteligente / SIFEN',
-        nav_new:'Nuevo Asiento / Fact.', menu_taxes:'Estados Financieros',
-        nav_iva:'Estado IVA (120)', nav_ire:'Estado IRE General', nav_ires:'Estado IRE Simple',
-        nav_irp:'Estado IRP (515)', menu_tools:'Herramientas', nav_ai:'Soporte Claude IA',
-        menu_admin:'Administración', nav_users:'Perfil Admin / Usuarios',
-        nav_backup:'Respaldo (Manual)', nav_logout:'Cerrar Sesión',
-        top_title:'Dashboard Principal', dash_h2:'Estudio Contable ContaPY 👋',
-        dash_p:'Sincronización Activa con Firebase', dash_s1:'Asientos Generados',
-        dash_s2:'Clientes Asignados', dash_t1:'🏢 Acceso Rápido a Clientes (Tu Cartera)',
-        ai_h2:'🤖 Soporte Claude IA', ai_p:'Asistente especializado en contabilidad paraguaya — Ley 6380/2019',
-        cli_h2:'Directorio de Clientes', cli_p:'Registro de contribuyentes (Activos e Inactivos)',
-        usr_h2:'Gestión de Usuarios y Accesos', usr_p:'Administración de roles y carteras',
-        bak_h2:'Respaldo y Seguridad (Backup Local)', bak_p:'Tus datos están seguros en Firebase.',
-        bak_exp:'📥 Exportar Datos (Crear Backup)', bak_imp:'📤 Importar Datos (Restaurar)',
-        tbl_name:'Razón Social / Nombre', tbl_contact:'Contacto', tbl_taxes:'Impuestos Activos',
-        tbl_status:'Estado / Impuestos', tbl_actions:'Acciones', tbl_usr:'Usuario / Correo',
-        tbl_rol:'Rol del Sistema', tbl_perms:'Permisos / Cartera',
-        tab_comp:'Compras', tab_vent:'Ventas', tab_teso:'Tesorería', tab_ret:'Retenciones',
-        tab_diar:'Libro Diario', tab_may:'Libro Mayor', tab_bal:'Balance General', tab_est:'Estado de Cuentas'
-    },
-    en: {
-        menu_main:'Main', nav_dash:'Dashboard', nav_clients:'Clients (Portfolio)',
-        menu_billing:'Billing / Treasury', nav_sifen:'Smart Load / SIFEN',
-        nav_new:'New Entry / Invoice', menu_taxes:'Financial Statements',
-        nav_iva:'VAT Status (120)', nav_ire:'CIT General', nav_ires:'CIT Simple',
-        nav_irp:'PIT Status (515)', menu_tools:'Tools', nav_ai:'Claude AI Support',
-        menu_admin:'Administration', nav_users:'Admin Profile / Users',
-        nav_backup:'Backup (Manual)', nav_logout:'Sign Out',
-        top_title:'Main Dashboard', dash_h2:'ContaPY Accounting Studio 👋',
-        dash_p:'Active Sync with Firebase', dash_s1:'Generated Entries',
-        dash_s2:'Assigned Clients', dash_t1:'🏢 Quick Access to Clients',
-        ai_h2:'🤖 Claude AI Support', ai_p:'Specialized assistant — Paraguayan accounting',
-        cli_h2:'Client Directory', cli_p:'Active and Inactive taxpayers',
-        usr_h2:'User & Access Management', usr_p:'Role and portfolio administration',
-        bak_h2:'Backup & Security', bak_p:'Your data is safe in Firebase.',
-        bak_exp:'📥 Export Data (Backup)', bak_imp:'📤 Import Data (Restore)',
-        tbl_name:'Company Name', tbl_contact:'Contact', tbl_taxes:'Active Taxes',
-        tbl_status:'Status / Taxes', tbl_actions:'Actions', tbl_usr:'User / Email',
-        tbl_rol:'System Role', tbl_perms:'Permissions / Portfolio',
-        tab_comp:'Purchases', tab_vent:'Sales', tab_teso:'Treasury', tab_ret:'Withholdings',
-        tab_diar:'Journal', tab_may:'Ledger', tab_bal:'Balance Sheet', tab_est:'Account Status'
-    },
-    pt: {
-        menu_main:'Principal', nav_dash:'Painel', nav_clients:'Clientes (Carteira)',
-        menu_billing:'Faturação / Tesouraria', nav_sifen:'Carga Inteligente / SIFEN',
-        nav_new:'Novo Lançamento / Fat.', menu_taxes:'Demonstrações Financeiras',
-        nav_iva:'Estado IVA (120)', nav_ire:'Estado IRE Geral', nav_ires:'Estado IRE Simples',
-        nav_irp:'Estado IRP (515)', menu_tools:'Ferramentas', nav_ai:'Suporte Claude IA',
-        menu_admin:'Administração', nav_users:'Perfil Admin / Usuários',
-        nav_backup:'Backup (Manual)', nav_logout:'Sair',
-        top_title:'Painel Principal', dash_h2:'Estúdio Contábil ContaPY 👋',
-        dash_p:'Sincronização Ativa com Firebase', dash_s1:'Lançamentos Gerados',
-        dash_s2:'Clientes Atribuídos', dash_t1:'🏢 Acesso Rápido a Clientes',
-        ai_h2:'🤖 Suporte Claude IA', ai_p:'Assistente especializado — contabilidade paraguaia',
-        cli_h2:'Diretório de Clientes', cli_p:'Contribuintes ativos e inativos',
-        usr_h2:'Gestão de Usuários e Acessos', usr_p:'Administração de funções e carteiras',
-        bak_h2:'Backup e Segurança', bak_p:'Seus dados estão seguros no Firebase.',
-        bak_exp:'📥 Exportar Dados (Backup)', bak_imp:'📤 Importar Dados (Restaurar)',
-        tbl_name:'Razão Social / Nome', tbl_contact:'Contato', tbl_taxes:'Impostos Ativos',
-        tbl_status:'Status / Impostos', tbl_actions:'Ações', tbl_usr:'Usuário / E-mail',
-        tbl_rol:'Função no Sistema', tbl_perms:'Permissões / Carteira',
-        tab_comp:'Compras', tab_vent:'Vendas', tab_teso:'Tesouraria', tab_ret:'Retenções',
-        tab_diar:'Diário', tab_may:'Razão', tab_bal:'Balanço', tab_est:'Estado de Contas'
-    }
-};
-
-window.changeLang = function(lang) {
-    var texts = i18nTexts[lang] || i18nTexts['es'];
-    document.querySelectorAll('[data-i18n]').forEach(function(el) {
-        var key = el.getAttribute('data-i18n');
-        if(texts[key]) el.textContent = texts[key];
-    });
-    try { localStorage.setItem('contapy_lang', lang); } catch(e) { try { sessionStorage.setItem('contapy_lang', lang); } catch(e2) {} }
-};
-
 window.onload = function() {
     window.initPlanCuentas();
-    var l = 'es';
-    try { l = localStorage.getItem('contapy_lang') || 'es'; } catch(e) { try { l = sessionStorage.getItem('contapy_lang') || 'es'; } catch(e2) { l = 'es'; } }
-    var langSel = document.getElementById('lang_sel');
-    if(langSel) langSel.value = l;
-    window.changeLang(l);
-    
     // REDUNDANCIA EXTRA PARA ELECTRON
     setTimeout(function() {
         document.querySelectorAll('input, select, textarea, button, .btn').forEach(function(el) {
