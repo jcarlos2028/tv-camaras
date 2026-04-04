@@ -1723,30 +1723,211 @@ window.cdcOnInput=function(input){
   if(btn){var ok=v.length===44;btn.style.opacity=ok?'1':'0.4';btn.style.pointerEvents=ok?'auto':'none';}
 };
 
+// ── CDC: 3-layer strategy ────────────────────────────────
+// Capa 1: fetch() directo (funciona con extensión CORS Unblock activa)
+// Capa 2: Firebase Function proxy (funciona sin extensión)
+// Capa 3: Formulario manual asistido (siempre funciona)
+
+window.CDC_FIREBASE_FUNC_URL = ''; // Completar con la URL de tu Firebase Function
+// Ejemplo: 'https://us-central1-contapy-f85f9.cloudfunctions.net/consultarCDC'
+
 window.cdcConsultar=async function(){
   var cdc=(document.getElementById('cdc_inp')?.value||'').trim();
   if(cdc.length!==44) return;
-  var lb=document.getElementById('cdc_loading_box');var fill=document.getElementById('cdc_loading_fill');var txt=document.getElementById('cdc_loading_txt');
+  var lb=document.getElementById('cdc_loading_box');
+  var fill=document.getElementById('cdc_loading_fill');
+  var txt=document.getElementById('cdc_loading_txt');
   if(lb) lb.style.display='block';
-  var pasos=['Conectando con SIFEN...','Validando CDC...','Descargando DE...','Verificando estado...','Procesando IVA...'];
+
+  var pasos=['Conectando con SIFEN...','Validando CDC...','Descargando datos...','Procesando IVA...'];
   var pct=0,si=0;
-  var iv=setInterval(function(){pct+=20;if(fill) fill.style.width=pct+'%';if(txt&&pasos[si]) txt.textContent=pasos[si++];if(pct>=100) clearInterval(iv);},400);
+  var iv=setInterval(function(){
+    pct=Math.min(pct+15,90);
+    if(fill) fill.style.width=pct+'%';
+    if(txt&&pasos[si]) txt.textContent=pasos[si++];
+  },500);
+
   try{
-    // Intentar consulta real con proxy CORS
     var resultado=null;
-    try{ resultado=await window.cdcFetchProxy(cdc); } catch(e){ console.warn('Proxy falló, usando simulación:', e.message); }
-    if(!resultado){
-      // Simulación demo cuando no hay conectividad con SIFEN
-      resultado={cdc:cdc,valido:true,estado:'AP',ruc:'80071234-0',rs:'Distribuidora El Sol S.A.',timb:'12345678',nro:'001-001-0000045',fecha:new Date().toISOString().substring(0,10),total:5500000,m10:5000000,iva10:500000,m5:0,iva5:0,exento:0};
+
+    // ── CAPA 1: fetch() directo a DNIT ───────────────────────
+    // Funciona si el usuario tiene la extensión CORS Unblock activa en Chrome
+    // Extensión: https://chrome.google.com/webstore/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino
+    try{
+      if(txt) txt.textContent='Intentando conexión directa con DNIT...';
+      resultado=await window.cdcFetchDirecto(cdc);
+      if(txt) txt.textContent='✓ Datos obtenidos directamente de DNIT';
+    }catch(e1){
+      console.info('[CDC] Capa 1 (directo) falló:',e1.message,'. Intentando Firebase Function...');
+
+      // ── CAPA 2: Firebase Function como proxy ─────────────────
+      if(window.CDC_FIREBASE_FUNC_URL){
+        try{
+          if(txt) txt.textContent='Consultando vía Firebase Function...';
+          resultado=await window.cdcFetchFirebase(cdc);
+          if(txt) txt.textContent='✓ Datos obtenidos vía Firebase';
+        }catch(e2){
+          console.info('[CDC] Capa 2 (Firebase) falló:',e2.message,'. Mostrando formulario manual...');
+        }
+      }
+
+      // ── CAPA 3: Formulario manual asistido ───────────────────
+      if(!resultado){
+        clearInterval(iv);
+        if(lb) lb.style.display='none';
+        window.cdcMostrarFormularioManual(cdc);
+        return;
+      }
     }
-    clearInterval(iv);if(lb) lb.style.display='none';
+
+    clearInterval(iv);
+    if(fill) fill.style.width='100%';
+    if(lb) setTimeout(function(){lb.style.display='none';},400);
     cdcDatos=resultado;
     window.cdcMostrarPaso2();
+
   }catch(e){
-    clearInterval(iv);if(lb) lb.style.display='none';
-    if(txt){txt.textContent='❌ Error al consultar DNIT: '+e.message;txt.style.color='var(--danger)';}
+    clearInterval(iv);
+    if(lb) lb.style.display='none';
+    if(txt){txt.textContent='❌ Error inesperado: '+e.message;txt.style.color='var(--danger)';}
     if(lb) lb.style.display='block';
   }
+};
+
+// ── CAPA 1: fetch directo (requiere extensión CORS) ──────
+window.cdcFetchDirecto=async function(cdc){
+  var url='https://ekuatia.set.gov.py/consultas/rest/se/consulta?nCdc='+cdc;
+  var resp=await fetch(url,{
+    signal:AbortSignal.timeout(12000),
+    headers:{'Accept':'application/json','X-Requested-With':'XMLHttpRequest'}
+  });
+  if(!resp.ok) throw new Error('HTTP '+resp.status);
+  var json=await resp.json();
+  return window.cdcParsearRespuesta(cdc,json);
+};
+
+// ── CAPA 2: Firebase Function proxy ──────────────────────
+window.cdcFetchFirebase=async function(cdc){
+  var url=window.CDC_FIREBASE_FUNC_URL;
+  if(!url) throw new Error('URL de Firebase Function no configurada');
+  var resp=await fetch(url,{
+    method:'POST',
+    signal:AbortSignal.timeout(15000),
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({data:{cdc:cdc}})
+  });
+  if(!resp.ok) throw new Error('Firebase Function HTTP '+resp.status);
+  var json=await resp.json();
+  // Firebase callable functions devuelven { result: {...} }
+  var d=json.result||json;
+  if(!d.ok) throw new Error(d.error||'Respuesta inválida de Firebase');
+  return d;
+};
+
+// ── Parser unificado de respuesta DNIT ───────────────────
+window.cdcParsearRespuesta=function(cdc,json){
+  var de=json?.rDE?.DE??json;
+  var sub=de?.gTotSub??{};
+  var em=de?.gEmis??{};
+  var op=de?.gDatGralOpe?.gOpeCom??{};
+  var est=json?.dEstado??json?.estado??'AP';
+  return{
+    ok:true,cdc:cdc,
+    valido:est!=='CC'&&est!=='CA'&&est!=='RE',
+    estado:est,
+    ruc:em.dRucEm??cdc.substring(9,17),
+    rs:em.dNomEm??'',
+    timb:de.dDVId??'',
+    nro:op.dNComprobante??'',
+    fecha:de.dFeEmiDE??'',
+    total:parseFloat(sub.dTotGralOpe??0),
+    m10:parseFloat(sub.dTotOpe10??0),
+    iva10:parseFloat(sub.dIVA10??0),
+    m5:parseFloat(sub.dTotOpe5??0),
+    iva5:parseFloat(sub.dIVA5??0),
+    exento:parseFloat(sub.dTotOpExe??0)
+  };
+};
+
+// ── CAPA 3: Formulario manual asistido ───────────────────
+window.cdcMostrarFormularioManual=function(cdc){
+  var p1=document.getElementById('cdc_paso1');
+  if(!p1) return;
+  var existing=document.getElementById('cdc_manual_form');
+  if(existing) existing.remove();
+
+  var div=document.createElement('div');
+  div.id='cdc_manual_form';
+  div.style.cssText='margin-top:14px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:16px';
+  div.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:#fffbeb;border:1px solid #fde047;border-radius:8px;font-size:12.5px;color:#92400e">
+      <span style="font-size:18px">⚠️</span>
+      <div>
+        <strong>Conexión directa no disponible.</strong> Activá la extensión 
+        <a href="https://chrome.google.com/webstore/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino" target="_blank" style="color:var(--accent2)">CORS Unblock</a>
+        en Chrome, o completá los datos manualmente desde 
+        <a href="https://ekuatia.set.gov.py/consultas/" target="_blank" style="color:var(--accent2)">e-Kuatia</a>.
+      </div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--text-light);text-transform:uppercase;margin-bottom:10px">Datos de la Factura Electrónica</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div class="form-group"><label>RUC del Emisor</label><input type="text" id="man_ruc" placeholder="80071234-0"></div>
+      <div class="form-group"><label>Razón Social</label><input type="text" id="man_rs" placeholder="Empresa S.A."></div>
+      <div class="form-group"><label>Timbrado</label><input type="text" id="man_timb" placeholder="12345678"></div>
+      <div class="form-group"><label>N° Comprobante</label><input type="text" id="man_nro" placeholder="001-001-0000123"></div>
+      <div class="form-group"><label>Fecha Emisión</label><input type="date" id="man_fecha"></div>
+      <div class="form-group"><label>Estado</label>
+        <select id="man_estado">
+          <option value="AP">Aprobado (AP)</option>
+          <option value="CA">Cancelado (CA)</option>
+          <option value="RE">Rechazado (RE)</option>
+        </select>
+      </div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--text-light);text-transform:uppercase;margin-bottom:10px">Montos (IVA incluido)</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+      <div class="form-group"><label>Total ₲</label><input type="number" id="man_total" value="0" style="font-family:'DM Mono'" oninput="cdcManualCalc()"></div>
+      <div class="form-group"><label>Base 10% ₲</label><input type="number" id="man_m10" value="0" style="font-family:'DM Mono'" oninput="cdcManualCalc()"></div>
+      <div class="form-group"><label>Base 5% ₲</label><input type="number" id="man_m5" value="0" style="font-family:'DM Mono'" oninput="cdcManualCalc()"></div>
+      <div class="form-group"><label>Exento ₲</label><input type="number" id="man_exe" value="0" style="font-family:'DM Mono'" oninput="cdcManualCalc()"></div>
+    </div>
+    <div id="man_iva_preview" style="background:#eff6ff;padding:10px;border-radius:7px;font-size:12px;color:var(--accent2);margin-bottom:14px">
+      IVA 10%: ₲ 0 &nbsp;|&nbsp; IVA 5%: ₲ 0
+    </div>
+    <button class="btn btn-success" onclick="cdcConfirmarManual('${cdc}')">✓ Confirmar y continuar con estos datos</button>
+  `;
+  p1.appendChild(div);
+
+  // Fecha por defecto: hoy
+  var fd=document.getElementById('man_fecha');
+  if(fd) fd.value=new Date().toISOString().substring(0,10);
+};
+
+window.cdcManualCalc=function(){
+  var m10=parseFloat(document.getElementById('man_m10')?.value||0);
+  var m5=parseFloat(document.getElementById('man_m5')?.value||0);
+  var i10=Math.round(m10/11);
+  var i5=Math.round(m5/21);
+  var prev=document.getElementById('man_iva_preview');
+  if(prev) prev.innerHTML='IVA 10%: ₲ '+i10.toLocaleString('es-PY')+' &nbsp;|&nbsp; IVA 5%: ₲ '+i5.toLocaleString('es-PY');
+};
+
+window.cdcConfirmarManual=function(cdc){
+  var g=function(id){return document.getElementById(id)?.value||'';};
+  var n=function(id){return parseFloat(document.getElementById(id)?.value||0);};
+  var m10=n('man_m10'),m5=n('man_m5');
+  var i10=Math.round(m10/11),i5=Math.round(m5/21);
+  var est=g('man_estado');
+  cdcDatos={
+    ok:true,cdc:cdc,
+    valido:est==='AP',estado:est,
+    ruc:g('man_ruc'),rs:g('man_rs'),
+    timb:g('man_timb'),nro:g('man_nro'),fecha:g('man_fecha'),
+    total:n('man_total'),m10:m10,iva10:i10,m5:m5,iva5:i5,
+    exento:n('man_exe')
+  };
+  var f=document.getElementById('cdc_manual_form');if(f) f.remove();
+  window.cdcMostrarPaso2();
 };
 
 window.cdcFetchProxy=async function(cdc){
