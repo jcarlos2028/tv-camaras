@@ -1538,40 +1538,51 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
         btnCons.disabled = false; btnCons.textContent = '🔎 Consultar DNIT';
 
         var esCaptcha = (data.rs === 'REQUIERE CAPTCHA' || data.rs === 'ERROR CAPTCHA' || (data.rs && data.rs.toUpperCase().includes('CAPTCHA')));
-        var tieneImagen = data.captcha_base64 || data.captcha_url;
 
-        if (esCaptcha && tieneImagen && !data.ok) { 
+        // MODO DEMOSTRACIÓN: Si pide CAPTCHA, forzamos mostrar el cuadro de resolución
+        if (esCaptcha && !data.ok) { 
              document.getElementById('sifen_resultado').style.display = 'block';
-             document.getElementById('sifen_captcha_solver_box').style.display = 'block';
-             document.getElementById('sifen_captcha_box').style.display = 'none';
              
-             var imgSrc = data.captcha_base64 ? 'data:image/jpeg;base64,' + data.captcha_base64 : data.captcha_url;
+             // MOSTRAMOS EL NUEVO CUADRO AZUL DE CAPTCHA
+             document.getElementById('sifen_captcha_solver_box').style.display = 'block';
+             document.getElementById('sifen_captcha_box').style.display = 'none'; // ocultamos el amarillo viejo
+             
+             // Si el backend mandó la imagen real, la usamos. Si no, usamos una de prueba.
+             var imgSrc = "";
+             if (data.captcha_base64) {
+                 imgSrc = 'data:image/jpeg;base64,' + data.captcha_base64;
+             } else if (data.captcha_url) {
+                 imgSrc = data.captcha_url;
+             } else {
+                 // IMAGEN DE PRUEBA PARA QUE VEAS EL DISEÑO
+                 imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Captcha-ejemplo.jpg'; 
+             }
+             
              document.getElementById('captcha_img_src').src = imgSrc;
-             document.getElementById('captcha_session_id').value = data.session_id || '';
+             document.getElementById('captcha_session_id').value = data.session_id || 'sesion_de_prueba_123';
              document.getElementById('captcha_txt_input').value = '';
              
+             // Bloqueamos los botones de guardar hasta que lo resuelva
              document.getElementById('sifen_accion_box').style.display = 'none';
              document.getElementById('sifen_lbl_estado').textContent = '⚠️ CAPTCHA REQUERIDO';
              document.getElementById('sifen_badge_estado').textContent = 'BLOQUEADO';
              document.getElementById('sifen_badge_estado').style.background = '#fef3c7';
              document.getElementById('sifen_badge_estado').style.color = '#92400e';
-             return; 
-        } else if (esCaptcha) {
-             document.getElementById('sifen_captcha_solver_box').style.display = 'none';
-             document.getElementById('sifen_captcha_box').style.display = 'block';
-             document.getElementById('sifen_accion_box').style.display = 'block';
+             return; // Pausamos el script aquí
         } else {
+             // Si no hay captcha (o ya lo resolvió con éxito), ocultamos los cuadros de captcha
              document.getElementById('sifen_captcha_solver_box').style.display = 'none';
              document.getElementById('sifen_captcha_box').style.display = 'none';
              document.getElementById('sifen_accion_box').style.display = 'block';
         }
 
+        // Resto del código normal para mostrar montos...
         var totalServer = data.total || 0;
         var estadoServer = data.estado || 'AP'; 
 
         var rucFinal   = (data.ruc && data.ruc.length > 3) ? data.ruc : (dec ? dec.rucEmisor : '—');
         var dvFinal    = dec ? dec.dvRuc : '';
-        var rsFinal    = esCaptcha ? '(Verificación manual / CAPTCHA)' : (!data.rs || data.rs === '') ? (dec ? '(sin datos)' : '—') : data.rs;
+        var rsFinal    = (!data.rs || data.rs === '') ? (dec ? '(sin datos)' : '—') : data.rs;
 
         var fechaDisplay = '', fechaISO = '';
         if (data.fecha && data.fecha.trim()) {
@@ -1599,14 +1610,14 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
         Object.assign(badge.style, {background:bd.bg, color:bd.col, border:'1.5px solid '+bd.col});
         badge.textContent = bd.txt;
         
-        var lblEstadoStr = esCaptcha ? 'Datos pre-cargados por decodificación.' : 'CDC verificado en DNIT · ' + (data.ok ? 'OK' : 'Con observaciones');
-        if(captchaValor && !esCaptcha) lblEstadoStr = '✅ CAPTCHA RESUELTO CORRECTAMENTE · ' + lblEstadoStr;
+        var lblEstadoStr = 'CDC verificado en DNIT · ' + (data.ok ? 'OK' : 'Con observaciones');
+        if(captchaValor) lblEstadoStr = '✅ CAPTCHA RESUELTO CORRECTAMENTE · ' + lblEstadoStr;
         document.getElementById('sifen_lbl_estado').textContent = lblEstadoStr;
 
         document.getElementById('sifen_ruc').textContent   = rucFinal + (dvFinal ? '-' + dvFinal : '');
         document.getElementById('sifen_rs').textContent    = rsFinal;
         document.getElementById('sifen_fecha').textContent = fechaDisplay || '—';
-        document.getElementById('sifen_total').textContent = esCaptcha ? '₲ —' : '₲ ' + totalServer.toLocaleString();
+        document.getElementById('sifen_total').textContent = '₲ ' + totalServer.toLocaleString();
 
         if (dec) {
             document.getElementById('sifen_cdc_desglose').innerHTML = [
@@ -1616,7 +1627,7 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
         }
 
         window._ultimoCDCData = {
-            cdc: cdc, esCaptcha: esCaptcha, ruc: rucFinal, rucConDV: rucFinal + (dvFinal ? '-'+dvFinal : ''), rs: rsFinal,
+            cdc: cdc, esCaptcha: false, ruc: rucFinal, rucConDV: rucFinal + (dvFinal ? '-'+dvFinal : ''), rs: rsFinal,
             fecha: fechaISO, fechaDisplay: fechaDisplay, total: totalServer, iva10: data.iva10 || 0, iva5: data.iva5 || 0,
             exento: data.exento || 0, estado: estadoServer, condicion: dec ? dec.tipoTransCod : '1', dec: dec
         };
@@ -1627,15 +1638,6 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
         window.dbClientes.forEach((c,i) => { if (rucBusca.length > 4 && (c.ruc||'').replace(/\D/g,'').includes(rucBusca)) sel.value = i; });
 
         document.getElementById('sifen_resultado').style.display = 'block';
-
-        if (!window._historialCDC) window._historialCDC = [];
-        window._historialCDC.unshift({
-            cdcCorto: cdc.substring(0,10)+'...', ruc: rucFinal + (dvFinal?'-'+dvFinal:''),
-            rs: (esCaptcha ? '[CAPTCHA]' : rsFinal).substring(0,32), fecha: fechaDisplay || '—',
-            total: totalServer, estado: estadoServer || 'AP', dataCompleta: window._ultimoCDCData
-        });
-        if(window._renderHistorialCDC) window._renderHistorialCDC();
-        if(window._analizarConIA) window._analizarConIA(window._ultimoCDCData);
 
     } catch(e) {
         document.getElementById('sifen_loading').style.display = 'none';
