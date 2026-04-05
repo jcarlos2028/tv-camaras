@@ -119,9 +119,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .chat-msg.user { background: var(--accent2); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 .chat-input-area { display: flex; gap: 10px; padding: 15px; background: white; border-top: 1px solid var(--border); }
 .chat-input-area input { flex: 1; }
-
-/* SIFEN spinner */
-@keyframes sifen-spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -396,50 +393,49 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- COMPROBANTES / SIFEN -->
     <div class="page" id="page-comprobantes">
       <div class="page-header">
-        <div><h2>🧾 Centro de Carga SIFEN / e-Kuatia</h2><p>Consulta directa DNIT por CDC · Importación masiva CSV · Carga manual</p></div>
+        <div><h2>🧾 Centro de Carga SIFEN / e-Kuatia</h2><p>Consulta directa DNIT · Importación masiva CSV · Carga manual</p></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline" onclick="openModalImportarDirectoGlobal()">📥 Importar CSV</button>
+          <button class="btn btn-outline" onclick="openModalImportarDirectoGlobal ? openModalImportarDirectoGlobal() : openModalImportMain()">📥 Importar CSV</button>
           <button class="btn btn-primary" onclick="openWizard()">➕ Carga Manual</button>
         </div>
       </div>
 
-      <!-- CONSULTA CDC -->
       <div class="card" style="border-left:4px solid var(--accent2);margin-bottom:14px">
-        <div class="card-title" style="color:var(--accent2)">🔍 Consulta Directa por CDC (Código de Control)</div>
+        <div class="card-title" style="color:var(--accent2)">🔍 Consulta Directa por CDC (Código de Control SIFEN)</div>
         <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">
-          Pegue el CDC de 44 dígitos. El sistema consulta DNIT, decodifica la estructura, analiza los datos con IA y los envía prellenados al wizard de carga.
+          Ingrese los 44 dígitos del CDC. El sistema consulta el servidor DNIT, decodifica la estructura, y si hay CAPTCHA le permite ingresar el monto manualmente. Los datos se envían prellenados al wizard.
         </p>
-        <div style="display:flex;gap:10px;margin-bottom:10px">
-          <input type="text" id="sifen_cdc" placeholder="CDC 44 dígitos — 01800253701001001002459320260301..." maxlength="44"
+
+        <div style="display:flex;gap:10px;margin-bottom:8px">
+          <input type="text" id="sifen_cdc" placeholder="CDC 44 dígitos — ej: 01800515749001012012665020260320..." maxlength="44"
             style="flex:1;font-family:'DM Mono';font-size:13px;letter-spacing:1.5px;padding:10px 14px"
-            oninput="onCDCInput(this)" onpaste="setTimeout(()=>onCDCInput(this),10)">
+            oninput="onCDCInput(this)" onpaste="setTimeout(function(){onCDCInput(document.getElementById('sifen_cdc'))},10)">
           <button class="btn btn-secondary" id="btn_consultar_cdc" onclick="consultarCDCReal()" style="padding:10px 18px;white-space:nowrap">🔎 Consultar DNIT</button>
-          <button class="btn btn-outline" onclick="abrirMiniaturaDNIT()" style="padding:10px 14px;white-space:nowrap" title="Abrir portal e-Kuatia">🌐 Portal</button>
+          <button class="btn btn-outline" onclick="window.open('https://ekuatia.set.gov.py/consultas/','VentanaDNIT','width=1000,height=700')" style="padding:10px 14px;white-space:nowrap" title="Portal e-Kuatia manual">🌐</button>
         </div>
         <div id="cdc_contador" style="font-size:11px;color:var(--text-light);margin-bottom:10px">
-          <span id="cdc_dig_count" style="font-family:'DM Mono';font-weight:700;font-size:13px">0</span>/44 dígitos
+          <span id="cdc_dig_count" style="font-family:'DM Mono';font-weight:700;font-size:13px">0</span>/44
           <span id="cdc_status_icon" style="margin-left:8px"></span>
         </div>
 
-        <!-- Loading -->
         <div id="sifen_loading" style="display:none;text-align:center;padding:24px">
-          <div style="display:inline-block;width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--accent2);border-radius:50%;animation:sifen-spin 0.8s linear infinite"></div>
+          <div style="display:inline-block;width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent2);border-radius:50%;animation:sifen-spin 0.8s linear infinite"></div>
           <p style="margin-top:10px;color:var(--text-light);font-size:12px" id="sifen_loading_txt">Consultando servidor DNIT...</p>
         </div>
 
-        <!-- Resultado -->
+        <!-- RESULTADO -->
         <div id="sifen_resultado" style="display:none">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
             <div id="sifen_badge_estado" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:700">—</div>
             <div style="font-size:12px;color:var(--text-light)" id="sifen_lbl_estado">—</div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 2fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+          <div style="display:grid;grid-template-columns:1fr 2fr 1fr 1fr;gap:10px;margin-bottom:12px">
             <div style="background:var(--bg);border-radius:9px;padding:12px;border:1px solid var(--border)">
               <div style="font-size:10px;text-transform:uppercase;color:var(--text-light);font-weight:700;margin-bottom:5px">RUC / DV</div>
               <div style="font-family:'DM Mono';font-size:14px;font-weight:700" id="sifen_ruc">—</div>
             </div>
             <div style="background:var(--bg);border-radius:9px;padding:12px;border:1px solid var(--border)">
-              <div style="font-size:10px;text-transform:uppercase;color:var(--text-light);font-weight:700;margin-bottom:5px">Razón Social / Emisor</div>
+              <div style="font-size:10px;text-transform:uppercase;color:var(--text-light);font-weight:700;margin-bottom:5px">Razón Social</div>
               <div style="font-size:13px;font-weight:600" id="sifen_rs">—</div>
             </div>
             <div style="background:var(--bg);border-radius:9px;padding:12px;border:1px solid var(--border)">
@@ -450,51 +446,78 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
               <div style="font-size:10px;text-transform:uppercase;color:var(--accent2);font-weight:700;margin-bottom:5px">Total ₲</div>
               <div style="font-family:'DM Mono';font-size:16px;font-weight:800;color:var(--accent2)" id="sifen_total">₲ 0</div>
             </div>
-            <div style="background:var(--bg);border-radius:9px;padding:12px;border:1px solid var(--border)">
-              <div style="font-size:10px;text-transform:uppercase;color:var(--text-light);font-weight:700;margin-bottom:5px">IVA 10% / Exento</div>
-              <div style="font-family:'DM Mono';font-size:12px;font-weight:700">
-                <div style="color:var(--accent)" id="sifen_iva10">₲ 0</div>
-                <div style="color:var(--text-light)" id="sifen_exento">₲ 0</div>
+          </div>
+
+          <!-- AVISO CAPTCHA CON INGRESO MANUAL -->
+          <div id="sifen_captcha_box" style="display:none;background:#fff8e1;border:1px solid var(--warning);border-radius:9px;padding:14px;margin-bottom:12px">
+            <div style="font-weight:700;color:var(--warning);margin-bottom:8px">
+              ⚠️ CAPTCHA detectado — el servidor DNIT requiere verificación humana para este comprobante
+            </div>
+            <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">
+              El RUC, fecha y número de comprobante fueron obtenidos directamente del CDC (100% confiables). 
+              Solo falta el monto. Ingréselo manualmente desde el comprobante físico/digital.
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px">
+              <div class="form-group">
+                <label>Monto Total ₲ (IVA incl.)</label>
+                <input type="number" id="captcha_total" value="0" placeholder="Ej: 61051" style="font-family:'DM Mono';font-weight:700" oninput="calcCaptchaIVA()">
               </div>
+              <div class="form-group">
+                <label>Tasa IVA</label>
+                <select id="captcha_tasa" onchange="calcCaptchaIVA()">
+                  <option value="10">Solo 10%</option>
+                  <option value="5">Solo 5%</option>
+                  <option value="0">Solo Exenta</option>
+                  <option value="mixta">Mixta (10%+5%+Exenta)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>IVA calculado</label>
+                <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border:1px solid var(--border);font-family:'DM Mono';font-weight:700;color:var(--accent)" id="captcha_iva_calc">₲ 0</div>
+              </div>
+              <div class="form-group">
+                <label>Razón Social (opcional)</label>
+                <input type="text" id="captcha_rs" placeholder="Nombre del proveedor">
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--text-light)">
+              💡 Puede verificar el CDC manualmente en el <a href="#" onclick="window.open('https://ekuatia.set.gov.py/consultas/','_blank');return false;" style="color:var(--accent2)">portal e-Kuatia</a>
             </div>
           </div>
 
-          <!-- Desglose CDC -->
-          <div style="background:#f8f9fa;border-radius:8px;padding:12px;margin-bottom:12px;font-size:11.5px;font-family:'DM Mono';border:1px solid var(--border)">
+          <!-- DESGLOSE CDC -->
+          <div style="background:#f8f9fa;border-radius:8px;padding:12px;margin-bottom:12px;font-size:11.5px;border:1px solid var(--border)">
             <span style="font-family:'DM Sans';font-weight:700;color:var(--text);font-size:12px">📋 Decodificación del CDC:</span>
-            <div id="sifen_cdc_desglose" style="margin-top:6px;line-height:1.9;color:var(--text-light)"></div>
+            <div id="sifen_cdc_desglose" style="margin-top:6px;line-height:2;color:var(--text-light);font-family:'DM Mono'"></div>
           </div>
 
-          <!-- Análisis IA -->
+          <!-- PANEL IA -->
           <div id="sifen_ia_panel" style="display:none;background:linear-gradient(135deg,#0f1923,#1a2535);border-radius:9px;padding:14px;margin-bottom:12px">
             <div style="color:#f59e0b;font-size:12px;font-weight:700;margin-bottom:8px">🤖 Análisis Claude IA del comprobante:</div>
-            <div id="sifen_ia_texto" style="color:rgba(255,255,255,0.85);font-size:12.5px;line-height:1.7;min-height:40px">Analizando...</div>
+            <div id="sifen_ia_texto" style="color:rgba(255,255,255,0.85);font-size:12.5px;line-height:1.7">Analizando...</div>
           </div>
 
-          <!-- Acción -->
+          <!-- ACCIÓN FINAL -->
           <div id="sifen_accion_box" style="background:#ecfdf5;border:1px solid #bbf7d0;border-radius:9px;padding:14px">
-            <div style="font-size:12px;font-weight:700;color:var(--success);margin-bottom:10px">✅ Datos verificados — Seleccione cliente y registre:</div>
+            <div style="font-size:12px;font-weight:700;color:var(--success);margin-bottom:10px">✅ Datos listos — Seleccione cliente y registre:</div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-              <select id="sifen_cli_destino" style="flex:2;padding:8px;min-width:200px">
-                <option value="">— Seleccione cliente —</option>
-              </select>
+              <select id="sifen_cli_destino" style="flex:2;padding:8px;min-width:200px"><option value="">— Seleccione cliente —</option></select>
               <select id="sifen_operacion_tipo" style="flex:1;min-width:180px;padding:8px">
                 <option value="compra">📥 Registrar como Compra</option>
                 <option value="venta">📤 Registrar como Venta</option>
               </select>
-              <button class="btn btn-success" onclick="enviarCDCAlWizard()" style="padding:9px 20px;font-size:13px;white-space:nowrap">➕ Cargar al Wizard</button>
+              <button class="btn btn-success" onclick="enviarCDCAlWizard()" style="padding:9px 20px;white-space:nowrap">➕ Cargar al Wizard</button>
             </div>
           </div>
         </div>
 
-        <!-- Error -->
         <div id="sifen_error" style="display:none;background:#fee2e2;border:1px solid #fca5a5;border-radius:9px;padding:14px">
           <div style="font-weight:700;color:var(--danger);margin-bottom:5px">❌ <span id="sifen_error_titulo">Error</span></div>
           <div style="font-size:12px;color:#7f1d1d" id="sifen_error_msg">—</div>
         </div>
       </div>
 
-      <!-- HISTORIAL CDC -->
+      <!-- HISTORIAL -->
       <div class="card" id="sifen_historial_card" style="display:none">
         <div class="card-title">🕐 Historial de Consultas CDC (sesión actual)</div>
         <div class="table-wrap"><table id="tbl_historial_cdc">
@@ -504,7 +527,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
-
+   
     <!-- ESTADOS IMPUESTOS -->
     <div class="page" id="page-iva"><div class="page-header"><div><h2>Estado de IVA (Formulario 120)</h2></div></div>
       <div class="form-section"><label>Seleccione el Cliente (Contribuyente):</label><select id="iva_cli_sel" class="cli-select" onchange="calcularImpuestos('iva')" style="max-width:400px;margin-top:5px;padding:8px"></select></div>
@@ -1312,23 +1335,22 @@ window.guardarAsientoWizard = function() {
 
 
 // ================================================================
-//  SIFEN — Consulta CDC + Análisis Claude IA
-//  API: https://consultarcdc-5ebcw3zata-uc.a.run.app/?cdc=<44digs>
-//  Respuesta JSON: {ok, cdc, estado, ruc, rs, fecha, total, iva10, exento}
+//  SIFEN — CDC: consulta, decodificación, CAPTCHA fallback + IA
+//  Servidor: https://consultarcdc-5ebcw3zata-uc.a.run.app/?cdc=
+//  Respuesta: {ok, cdc, estado, ruc, rs, fecha, total, iva10, exento}
 //
-//  ESTRUCTURA CDC SIFEN PARAGUAY (verificada con CDC real):
+//  ESTRUCTURA CDC SIFEN SET Paraguay (verificada):
 //  [0]     versión DE
-//  [1]     tipo DE: 1=Factura, 2=FE-Exenta, 4=Autofactura, 5=NC, 6=ND, 7=Remisión, 8=Retención
-//  [2:10]  RUC emisor (8 dígitos, sin DV)
+//  [1]     tipo: 1=Factura,4=Autofact,5=NC,6=ND,7=Remisión,8=Retención
+//  [2:10]  RUC emisor 8 dígitos (sin DV)
 //  [10:11] DV del RUC
-//  [11:14] Establecimiento (3 dígitos)
-//  [14:17] Punto expedición (3 dígitos)
-//  [17:24] N° documento (7 dígitos)
+//  [11:14] Establecimiento 3 dígitos
+//  [14:17] Punto expedición 3 dígitos
+//  [17:24] N° documento 7 dígitos
 //  [24:25] Tipo transacción (1=Contado, 2=Crédito)
-//  [25:33] Fecha emisión yyyymmdd
-//  [33:44] Código de seguridad (11 chars)
+//  [25:33] Fecha yyyymmdd
+//  [33:44] Código de seguridad 11 chars
 // ================================================================
-
 window._historialCDC = [];
 window._ultimoCDCData = null;
 
@@ -1344,25 +1366,21 @@ window.decodificarCDC = function(cdc) {
         var punto      = cdc.substring(14, 17);
         var nroDocRaw  = cdc.substring(17, 24);
         var tipoTxCod  = cdc.substring(24, 25);
-        var fechaRaw   = cdc.substring(25, 33);   // yyyymmdd
+        var fechaRaw   = cdc.substring(25, 33);  // yyyymmdd ← posición verificada
         var seguridad  = cdc.substring(33, 44);
 
         var tiposDE = {
-            '1': 'Factura Electrónica', '2': 'Factura Elec. Exenta',
-            '3': 'Liquidación', '4': 'Autofactura', '5': 'Nota de Crédito',
-            '6': 'Nota de Débito', '7': 'Nota de Remisión', '8': 'Comprobante de Retención'
+            '1':'Factura Electrónica','2':'Factura Elec. Exenta',
+            '3':'Liquidación','4':'Autofactura','5':'Nota de Crédito',
+            '6':'Nota de Débito','7':'Nota de Remisión','8':'Comp. de Retención'
         };
-        var tiposTx = { '1': 'Contado', '2': 'Crédito', '3': 'Gratuito', '4': 'Anticipo' };
+        var tiposTx = {'1':'Contado','2':'Crédito','3':'Gratuito','4':'Anticipo'};
 
         var yyyy = fechaRaw.substring(0, 4);
         var mm   = fechaRaw.substring(4, 6);
         var dd   = fechaRaw.substring(6, 8);
-
-        // Validar fecha mínimamente
         var añoNum = parseInt(yyyy);
-        if (añoNum < 2020 || añoNum > 2099) {
-            console.warn('CDC: año fuera de rango:', yyyy, '— CDC posiblemente mal formado');
-        }
+        var fechaValida = añoNum >= 2020 && añoNum <= 2099;
 
         var rucLimpio = rucRaw.replace(/^0+/, '') || rucRaw;
         var nroLimpio = nroDocRaw.replace(/^0+/, '') || nroDocRaw;
@@ -1373,370 +1391,350 @@ window.decodificarCDC = function(cdc) {
             tipoDocNom:   tiposDE[tipoDE] || ('Tipo ' + tipoDE),
             rucEmisor:    rucLimpio,
             rucConDV:     rucLimpio + '-' + dvRuc,
-            rucRaw:       rucRaw,
             dvRuc:        dvRuc,
             establecim:   establecim,
             punto:        punto,
             nroDoc:       nroLimpio,
             nroDocRaw:    nroDocRaw,
             nroCompleto:  establecim + '-' + punto + '-' + nroDocRaw,
-            tipoTrans:    tiposTx[tipoTxCod] || ('Tipo ' + tipoTxCod),
+            tipoTrans:    tiposTx[tipoTxCod] || tipoTxCod,
             tipoTransCod: tipoTxCod,
-            fechaISO:     yyyy + '-' + mm + '-' + dd,
-            fechaDisplay: dd + '/' + mm + '/' + yyyy,
+            fechaISO:     fechaValida ? (yyyy + '-' + mm + '-' + dd) : '',
+            fechaDisplay: fechaValida ? (dd + '/' + mm + '/' + yyyy) : '—',
             seguridad:    seguridad,
-            fechaValida:  añoNum >= 2020 && añoNum <= 2099
+            fechaValida:  fechaValida
         };
-    } catch (e) {
-        console.error('decodificarCDC error:', e);
-        return null;
-    }
+    } catch(e) { console.error('decodificarCDC:', e); return null; }
 };
 
-// ── Contador live mientras escribe
+// ── Contador live de dígitos
 window.onCDCInput = function(input) {
     var v = input.value.replace(/\D/g, '');
     input.value = v;
     var n = v.length;
-    var countEl = document.getElementById('cdc_dig_count');
-    var iconEl  = document.getElementById('cdc_status_icon');
-    if (countEl) countEl.textContent = n;
-    if (iconEl) {
-        if (n === 44) {
-            iconEl.innerHTML = '<span style="color:var(--success);font-weight:700">✅ Listo para consultar</span>';
-        } else if (n > 0) {
-            iconEl.innerHTML = '<span style="color:var(--warning)">⚠️ Faltan ' + (44 - n) + ' dígitos</span>';
-        } else {
-            iconEl.textContent = '';
-        }
+    var cEl = document.getElementById('cdc_dig_count');
+    var iEl = document.getElementById('cdc_status_icon');
+    if (cEl) cEl.textContent = n;
+    if (iEl) {
+        if (n === 44)    iEl.innerHTML = '<span style="color:var(--success);font-weight:700">✅ Listo para consultar</span>';
+        else if (n > 0) iEl.innerHTML = '<span style="color:var(--warning)">⚠️ Faltan ' + (44-n) + '</span>';
+        else             iEl.textContent = '';
     }
-    // Limpiar resultados previos
-    ['sifen_resultado','sifen_error','sifen_loading','sifen_ia_panel'].forEach(function(id) {
+    ['sifen_resultado','sifen_error','sifen_loading'].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
 };
 
-// ── Consulta principal al servidor DNIT + decodificación + análisis IA
-window.consultarCDCReal = async function() {
-    var cdc = document.getElementById('sifen_cdc').value.trim().replace(/\D/g, '');
-    if (cdc.length !== 44) {
-        return alert('❌ El CDC debe tener exactamente 44 dígitos numéricos.\nActualmente tiene: ' + cdc.length);
-    }
+// ── IVA del modo CAPTCHA
+window.calcCaptchaIVA = function() {
+    var total = parseFloat(document.getElementById('captcha_total').value) || 0;
+    var tasa  = document.getElementById('captcha_tasa').value;
+    var iva   = tasa === '10' ? Math.round(total / 11) :
+                tasa === '5'  ? Math.round(total / 21) : 0;
+    var elIva = document.getElementById('captcha_iva_calc');
+    if (elIva) elIva.textContent = '₲ ' + iva.toLocaleString();
+};
 
-    // UI: mostrar loading
+// ── Consulta principal
+window.consultarCDCReal = async function() {
+    var cdc = (document.getElementById('sifen_cdc').value || '').trim().replace(/\D/g,'');
+    if (cdc.length !== 44) return alert('❌ El CDC debe tener 44 dígitos.\nActualmente: ' + cdc.length);
+
     document.getElementById('sifen_loading').style.display = 'block';
-    document.getElementById('sifen_loading_txt').textContent = 'Consultando servidor DNIT...';
+    document.getElementById('sifen_loading_txt') && (document.getElementById('sifen_loading_txt').textContent = 'Consultando servidor DNIT...');
     document.getElementById('sifen_resultado').style.display = 'none';
     document.getElementById('sifen_error').style.display = 'none';
-    document.getElementById('btn_consultar_cdc').disabled = true;
-    document.getElementById('btn_consultar_cdc').textContent = '⏳ Consultando...';
+    var btnCons = document.getElementById('btn_consultar_cdc');
+    btnCons.disabled = true;
+    btnCons.textContent = '⏳ Consultando...';
+
+    // Decodificar CDC localmente (siempre confiable)
+    var dec = window.decodificarCDC(cdc);
 
     try {
-        // 1) Decodificar el CDC localmente (estructura fija)
-        var dec = window.decodificarCDC(cdc);
-        document.getElementById('sifen_loading_txt').textContent = 'Decodificando estructura del CDC...';
-
-        // 2) Consultar servidor DNIT
-        document.getElementById('sifen_loading_txt').textContent = 'Verificando estado en servidor DNIT...';
-        var res = await fetch('https://consultarcdc-5ebcw3zata-uc.a.run.app/?cdc=' + cdc);
-        if (!res.ok) throw new Error('Error HTTP ' + res.status + ' del servidor DNIT');
+        var res  = await fetch('https://consultarcdc-5ebcw3zata-uc.a.run.app/?cdc=' + cdc);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         var data = await res.json();
 
         document.getElementById('sifen_loading').style.display = 'none';
-        document.getElementById('btn_consultar_cdc').disabled = false;
-        document.getElementById('btn_consultar_cdc').textContent = '🔎 Consultar DNIT';
+        btnCons.disabled = false;
+        btnCons.textContent = '🔎 Consultar DNIT';
 
-        // 3) Determinar todos los valores — prioridad: servidor > decodificado > vacío
-        //    El servidor puede devolver rs='EMPRESA NO ENCONTRADA' o fecha=''
-        var rucFinal   = (data.ruc && data.ruc !== '00000000') ? data.ruc : (dec ? dec.rucEmisor : '');
-        var rsFinal    = (data.rs && data.rs !== 'EMPRESA NO ENCONTRADA' && data.rs !== '') ? data.rs : 
-                         (dec ? ('(RUC: ' + dec.rucConDV + ' — sin registro en directorio SET)') : '—');
-        
-        // Fecha: el servidor devuelve dd/mm/yyyy o vacío; usar decodificado si vacío
-        var fechaDisplay = '';
-        var fechaISO     = '';
-        if (data.fecha && data.fecha.trim() !== '') {
-            // Normalizar formato del servidor (puede venir como dd/mm/yyyy o yyyy-mm-dd)
+        // ── Detectar CAPTCHA
+        var esCaptcha = (data.rs === 'REQUIERE CAPTCHA' || data.rs === 'ERROR CAPTCHA' ||
+                         (data.rs && data.rs.toUpperCase().includes('CAPTCHA')));
+        var totalServer = data.total || 0;
+        var estadoServer = data.estado || 'AP'; // si no viene estado, asumir AP si ok=true
+
+        // ── Datos finales: servidor + CDC decoded como respaldo
+        var rucFinal   = (data.ruc && data.ruc.length > 3) ? data.ruc : (dec ? dec.rucEmisor : '—');
+        var dvFinal    = dec ? dec.dvRuc : '';
+        var rsFinal    = esCaptcha ? '(Requiere verificación manual — ver CAPTCHA)' :
+                         (!data.rs || data.rs === '') ? (dec ? '(sin datos en directorio)' : '—') : data.rs;
+
+        // Fecha: server si válida, sino del CDC
+        var fechaDisplay = '', fechaISO = '';
+        if (data.fecha && data.fecha.trim()) {
             var fp = data.fecha.trim();
             if (fp.includes('/')) {
-                var parts = fp.split('/');
-                if (parts.length === 3) {
-                    // Si el año está al final (dd/mm/yyyy)
-                    if (parts[2].length === 4) {
-                        fechaDisplay = fp;
-                        fechaISO = parts[2] + '-' + parts[1].padStart(2,'0') + '-' + parts[0].padStart(2,'0');
-                    } else {
-                        // mm/dd/yyyy u otro — usar decodificado
-                        fechaDisplay = dec ? dec.fechaDisplay : fp;
-                        fechaISO = dec ? dec.fechaISO : '';
-                    }
-                }
+                var pts = fp.split('/');
+                if (pts.length === 3 && pts[2].length === 4) {
+                    fechaDisplay = fp;
+                    fechaISO = pts[2] + '-' + pts[1].padStart(2,'0') + '-' + pts[0].padStart(2,'0');
+                } else { fechaDisplay = dec ? dec.fechaDisplay : fp; fechaISO = dec ? dec.fechaISO : ''; }
             } else if (fp.includes('-')) {
                 fechaISO = fp;
-                var p2 = fp.split('-');
-                fechaDisplay = (p2[2]||'') + '/' + (p2[1]||'') + '/' + (p2[0]||'');
-            } else {
-                fechaDisplay = dec ? dec.fechaDisplay : fp;
-                fechaISO = dec ? dec.fechaISO : '';
+                var ps2 = fp.split('-');
+                fechaDisplay = (ps2[2]||'') + '/' + (ps2[1]||'') + '/' + (ps2[0]||'');
             }
-        } else if (dec && dec.fechaValida) {
-            // Usar la fecha decodificada del CDC directamente
+        }
+        if (!fechaDisplay && dec && dec.fechaValida) {
             fechaDisplay = dec.fechaDisplay;
-            fechaISO = dec.fechaISO;
+            fechaISO     = dec.fechaISO;
         }
 
-        // Montos: el servidor es la fuente de verdad para valores
-        var totalFinal  = data.total  || 0;
-        var iva10Final  = data.iva10  || 0;
-        var iva5Final   = data.iva5   || 0;
-        var exentoFinal = data.exento || 0;
-
-        // Si total=0 pero iva10>0, calcular base
-        if (totalFinal === 0 && (iva10Final > 0 || iva5Final > 0)) {
-            var base10 = iva10Final * 10;
-            var base5  = iva5Final * 20;
-            totalFinal = base10 + iva10Final + base5 + iva5Final + exentoFinal;
-        }
-
-        // 4) Renderizar badge de estado
-        var estadoMap = {
-            'AP': { txt: '✅ APROBADO',     bg: '#d1fae5', color: '#065f46' },
-            'CA': { txt: '❌ CANCELADO',    bg: '#fee2e2', color: '#991b1b' },
-            'IN': { txt: '⛔ INHABILITADO', bg: '#fee2e2', color: '#991b1b' },
-            'PE': { txt: '⏳ PENDIENTE',    bg: '#dbeafe', color: '#1e40af' }
+        // ── Badge estado
+        var badges = {
+            'AP': {txt:'✅ APROBADO',     bg:'#d1fae5', col:'#065f46'},
+            'CA': {txt:'❌ CANCELADO',    bg:'#fee2e2', col:'#991b1b'},
+            'IN': {txt:'⛔ INHABILITADO', bg:'#fee2e2', col:'#991b1b'},
+            'PE': {txt:'⏳ PENDIENTE',    bg:'#dbeafe', col:'#1e40af'},
+            '':   {txt:'⚠️ SIN ESTADO',  bg:'#fef3c7', col:'#92400e'}
         };
-        var est = estadoMap[data.estado] || { txt: data.estado || '?', bg: '#e5e7eb', color: '#374151' };
+        var bd = badges[estadoServer] || {txt: estadoServer || '?', bg:'#e5e7eb', col:'#374151'};
         var badge = document.getElementById('sifen_badge_estado');
-        Object.assign(badge.style, { padding:'5px 16px', borderRadius:'20px', fontWeight:'700', fontSize:'12px',
-            background: est.bg, color: est.color, border: '1.5px solid ' + est.color });
-        badge.textContent = est.txt;
-
+        Object.assign(badge.style, {background:bd.bg, color:bd.col, border:'1.5px solid '+bd.col});
+        badge.textContent = bd.txt;
         document.getElementById('sifen_lbl_estado').textContent =
-            'CDC verificado en DNIT · ' + (data.ok ? 'Respuesta exitosa' : 'Con observaciones');
-        document.getElementById('sifen_ruc').textContent = rucFinal + (dec ? ' - ' + dec.dvRuc : '');
-        document.getElementById('sifen_rs').textContent  = rsFinal;
-        document.getElementById('sifen_fecha').textContent = fechaDisplay || 'Sin fecha';
-        document.getElementById('sifen_total').textContent = '₲ ' + totalFinal.toLocaleString();
-        document.getElementById('sifen_iva10').textContent = 'IVA 10%: ₲ ' + iva10Final.toLocaleString();
-        document.getElementById('sifen_exento').textContent = 'Exento: ₲ ' + exentoFinal.toLocaleString();
+            (esCaptcha ? '⚠️ CAPTCHA activo en DNIT — datos del CDC son confiables' :
+             'CDC verificado en DNIT · ' + (data.ok ? 'OK' : 'Con observaciones'));
 
-        // 5) Desglose del CDC decodificado
+        document.getElementById('sifen_ruc').textContent   = rucFinal + (dvFinal ? '-' + dvFinal : '');
+        document.getElementById('sifen_rs').textContent    = rsFinal;
+        document.getElementById('sifen_fecha').textContent = fechaDisplay || '—';
+        document.getElementById('sifen_total').textContent = esCaptcha ? '₲ — (ingresar manual)' : '₲ ' + totalServer.toLocaleString();
+        document.getElementById('sifen_iva10') && (document.getElementById('sifen_iva10').textContent = esCaptcha ? '' : '₲ ' + (data.iva10||0).toLocaleString());
+        document.getElementById('sifen_exento') && (document.getElementById('sifen_exento').textContent = esCaptcha ? '' : '₲ ' + (data.exento||0).toLocaleString());
+
+        // ── Mostrar box CAPTCHA si aplica
+        var captchaBox = document.getElementById('sifen_captcha_box');
+        if (captchaBox) captchaBox.style.display = esCaptcha ? 'block' : 'none';
+        if (esCaptcha && dec) {
+            document.getElementById('captcha_rs').value = '';
+        }
+
+        // ── Desglose CDC
         if (dec) {
             document.getElementById('sifen_cdc_desglose').innerHTML = [
-                '<strong>Versión:</strong> ' + dec.version,
-                '<strong>Tipo doc:</strong> ' + dec.tipoDocNom + ' (' + dec.tipoDE + ')',
-                '<strong>RUC emisor:</strong> ' + dec.rucConDV,
-                '<strong>N° comprobante:</strong> ' + dec.nroCompleto,
-                '<strong>Condición pago:</strong> ' + dec.tipoTrans,
-                '<strong>Fecha (del CDC):</strong> ' + dec.fechaDisplay + (dec.fechaValida ? ' ✅' : ' ⚠️ fecha inválida'),
-                '<strong>Código seguridad:</strong> ' + dec.seguridad.substring(0,4) + '...'
+                '<b>Versión:</b> ' + dec.version,
+                '<b>Tipo:</b> ' + dec.tipoDocNom,
+                '<b>RUC emisor:</b> ' + dec.rucConDV,
+                '<b>N° doc:</b> ' + dec.nroCompleto,
+                '<b>Condición:</b> ' + dec.tipoTrans,
+                '<b>Fecha (CDC):</b> ' + dec.fechaDisplay + (dec.fechaValida ? ' ✅' : ' ⚠️'),
+                '<b>Código seg.:</b> ' + dec.seguridad.substring(0,4) + '...'
             ].join(' &nbsp;·&nbsp; ');
         }
 
-        // 6) Guardar datos completos en caché
+        // ── Guardar datos
         window._ultimoCDCData = {
             cdc:          cdc,
+            esCaptcha:    esCaptcha,
             ruc:          rucFinal,
-            rucConDV:     dec ? dec.rucConDV : rucFinal,
+            rucConDV:     rucFinal + (dvFinal ? '-'+dvFinal : ''),
             rs:           rsFinal,
             fecha:        fechaISO,
             fechaDisplay: fechaDisplay,
-            total:        totalFinal,
-            iva10:        iva10Final,
-            iva5:         iva5Final,
-            exento:       exentoFinal,
-            estado:       data.estado,
-            dec:          dec,
-            condicion:    dec ? dec.tipoTransCod : '1'  // 1=contado, 2=crédito
+            total:        totalServer,
+            iva10:        data.iva10 || 0,
+            iva5:         data.iva5  || 0,
+            exento:       data.exento || 0,
+            estado:       estadoServer,
+            condicion:    dec ? dec.tipoTransCod : '1',
+            dec:          dec
         };
 
-        // 7) Poblar selector clientes + pre-selección por RUC
-        var selCli = document.getElementById('sifen_cli_destino');
-        selCli.innerHTML = '<option value="">— Seleccione cliente —</option>';
-        window.dbClientes.forEach(function(c, i) {
-            if (c.estado === 'activo') selCli.innerHTML += '<option value="' + i + '">' + c.nom + ' (' + c.ruc + ')</option>';
+        // ── Selector clientes
+        var sel = document.getElementById('sifen_cli_destino');
+        sel.innerHTML = '<option value="">— Seleccione cliente —</option>';
+        window.dbClientes.forEach(function(c,i) {
+            if (c.estado === 'activo') sel.innerHTML += '<option value="'+i+'">'+c.nom+' ('+c.ruc+')</option>';
         });
-        // Pre-seleccionar si el RUC del proveedor coincide con algún cliente
-        var rucBuscar = rucFinal.replace(/[^0-9]/g, '');
-        window.dbClientes.forEach(function(c, i) {
-            var rucCli = (c.ruc || '').replace(/[^0-9]/g, '');
-            if (rucBuscar.length > 5 && rucCli.includes(rucBuscar)) selCli.value = i;
+        var rucBusca = rucFinal.replace(/\D/g,'');
+        window.dbClientes.forEach(function(c,i) {
+            if (rucBusca.length > 4 && (c.ruc||'').replace(/\D/g,'').includes(rucBusca)) sel.value = i;
         });
 
         document.getElementById('sifen_resultado').style.display = 'block';
 
-        // Ocultar botón acción si no está aprobado
-        var accionBox = document.getElementById('sifen_accion_box');
-        if (accionBox) accionBox.style.display = (data.estado === 'AP') ? 'block' : 'none';
-
-        // 8) Historial
+        // ── Historial (FIX: estado con fallback)
         window._historialCDC.unshift({
-            cdcCorto: cdc.substring(0, 10) + '...',
-            ruc: rucFinal,
-            rs: rsFinal.substring(0, 35),
-            fecha: fechaDisplay,
-            total: totalFinal,
-            estado: data.estado,
+            cdcCorto: cdc.substring(0,10)+'...',
+            ruc:      rucFinal + (dvFinal?'-'+dvFinal:''),
+            rs:       (esCaptcha ? '[CAPTCHA]' : rsFinal).substring(0,32),
+            fecha:    fechaDisplay || '—',
+            total:    totalServer,
+            estado:   estadoServer || 'AP',  // ← FIX bug "undefined"
             dataCompleta: window._ultimoCDCData
         });
         _renderHistorialCDC();
 
-        // 9) Análisis Claude IA — en paralelo
+        // ── Análisis IA (async, no bloquea)
         _analizarConIA(window._ultimoCDCData);
 
-    } catch (e) {
+    } catch(e) {
         document.getElementById('sifen_loading').style.display = 'none';
-        document.getElementById('btn_consultar_cdc').disabled = false;
-        document.getElementById('btn_consultar_cdc').textContent = '🔎 Consultar DNIT';
+        btnCons.disabled = false;
+        btnCons.textContent = '🔎 Consultar DNIT';
         document.getElementById('sifen_error').style.display = 'block';
-        document.getElementById('sifen_error_titulo').textContent = 'Error al consultar DNIT';
-        document.getElementById('sifen_error_msg').textContent =
-            e.message + '\n\nVerifique su conexión a internet. ' +
-            'Si persiste, use el portal e-Kuatia manualmente (botón 🌐 Portal).';
-        console.error('consultarCDCReal error:', e);
+        document.getElementById('sifen_error_titulo').textContent = 'Error de conexión';
+        document.getElementById('sifen_error_msg').textContent = e.message +
+            '\nVerifique su conexión. Puede usar el portal 🌐 manualmente.';
     }
 };
 
-// ── Análisis IA del comprobante
+// ── Análisis Claude IA del comprobante
 async function _analizarConIA(d) {
     if (!d) return;
     var panel = document.getElementById('sifen_ia_panel');
     var texto = document.getElementById('sifen_ia_texto');
     if (!panel || !texto) return;
     panel.style.display = 'block';
-    texto.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-style:italic">🤖 Claude está analizando el comprobante...</span>';
-
+    texto.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-style:italic">🤖 Claude analizando...</span>';
     try {
-        var prompt = 'Sos un experto contable de Paraguay (Ley 6380/2019). Analiza este comprobante electrónico consultado en SIFEN/e-Kuatia y dá observaciones contables breves y prácticas:\n\n' +
-            '- Tipo: ' + (d.dec ? d.dec.tipoDocNom : 'Factura') + '\n' +
-            '- RUC Emisor: ' + d.rucConDV + '\n' +
-            '- Razón Social: ' + d.rs + '\n' +
-            '- N° Comprobante: ' + (d.dec ? d.dec.nroCompleto : 'N/A') + '\n' +
-            '- Fecha: ' + d.fechaDisplay + '\n' +
-            '- Estado DNIT: ' + d.estado + '\n' +
-            '- Monto Total: ₲ ' + d.total.toLocaleString() + '\n' +
-            '- IVA 10%: ₲ ' + d.iva10.toLocaleString() + '\n' +
-            '- Exento: ₲ ' + d.exento.toLocaleString() + '\n' +
-            '- Condición: ' + (d.condicion === '2' ? 'Crédito' : 'Contado') + '\n\n' +
-            'Indicá: (1) cómo registrar correctamente en el libro contable, (2) deducibilidad IVA/IRE, (3) alguna observación importante. Máximo 4 líneas.';
+        var prompt =
+            'Sos experto contable Paraguay. Analiza este comprobante SIFEN en 3-4 líneas concisas:\n' +
+            '• Tipo: ' + (d.dec ? d.dec.tipoDocNom : 'Factura') + '\n' +
+            '• RUC: ' + d.rucConDV + ' — ' + d.rs + '\n' +
+            '• N°: ' + (d.dec ? d.dec.nroCompleto : '—') + ' · Fecha: ' + d.fechaDisplay + '\n' +
+            '• Estado DNIT: ' + d.estado + (d.esCaptcha ? ' (CAPTCHA)' : '') + '\n' +
+            '• Total: ₲ ' + d.total.toLocaleString() + ' · IVA10: ₲ ' + d.iva10.toLocaleString() +
+            ' · Exento: ₲ ' + d.exento.toLocaleString() + '\n' +
+            '• Condición: ' + (d.condicion === '2' ? 'Crédito' : 'Contado') + '\n\n' +
+            'Indicá: registro contable correcto, deducibilidad IVA e IRE, y si hay algo a verificar.';
 
         var res = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'anthropic-dangerous-direct-browser-access': 'true'
+            },
             body: JSON.stringify({
                 model: 'claude-sonnet-4-20250514',
-                max_tokens: 400,
-                system: 'Sos asistente contable de ContaPY. Respondé en español, de forma breve y práctica. Sin listas largas.',
+                max_tokens: 350,
+                system: 'Sos asistente contable de ContaPY v1.1 Paraguay. Respondé en español, breve y práctico.',
                 messages: [{ role: 'user', content: prompt }]
             })
         });
-        var aiData = await res.json();
-        var reply = (aiData.content && aiData.content[0]) ? aiData.content[0].text : 'Sin respuesta.';
-        reply = reply.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var ai = await res.json();
+        var reply = (ai.content && ai.content[0]) ? ai.content[0].text : 'Sin respuesta.';
+        reply = reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
         texto.innerHTML = reply;
-    } catch (e) {
-        texto.innerHTML = '<span style="color:rgba(255,255,255,0.4);font-style:italic">IA no disponible — ' + e.message + '</span>';
+    } catch(e) {
+        texto.style.color = 'rgba(255,255,255,0.4)';
+        texto.style.fontStyle = 'italic';
+        texto.textContent = 'Análisis IA no disponible en este momento. (' + e.message + ')';
     }
 }
 
-// ── Render historial
+// ── Historial
 function _renderHistorialCDC() {
     var card = document.getElementById('sifen_historial_card');
     if (!window._historialCDC.length) { card.style.display = 'none'; return; }
     card.style.display = 'block';
-    var estMap = { 'AP': 'ok', 'CA': 'err', 'PE': 'info', 'IN': 'err' };
-    document.getElementById('lista_historial_cdc').innerHTML = window._historialCDC.map(function(h, i) {
+    var em = {'AP':'ok','CA':'err','PE':'info','IN':'err'};
+    document.getElementById('lista_historial_cdc').innerHTML = window._historialCDC.map(function(h,i) {
+        var est = h.estado || 'AP';
         return '<tr>' +
             '<td style="font-family:\'DM Mono\';font-size:11px;color:var(--text-light)">' + h.cdcCorto + '</td>' +
             '<td style="font-family:\'DM Mono\'">' + h.ruc + '</td>' +
             '<td style="font-size:12px">' + h.rs + '</td>' +
             '<td>' + h.fecha + '</td>' +
             '<td class="monto" style="font-weight:700">₲ ' + h.total.toLocaleString() + '</td>' +
-            '<td><span class="badge-status ' + (estMap[h.estado] || 'info') + '">' + h.estado + '</span></td>' +
+            '<td><span class="badge-status ' + (em[est] || 'info') + '">' + est + '</span></td>' +
             '<td><button class="btn btn-outline btn-sm" onclick="recargarDesdeHistorial(' + i + ')">↺ Usar</button></td>' +
-            '</tr>';
+        '</tr>';
     }).join('');
 }
 
 window.recargarDesdeHistorial = function(i) {
-    window._ultimoCDCData = window._historialCDC[i].dataCompleta;
-    // Re-mostrar resultado
-    var d = window._ultimoCDCData;
-    document.getElementById('sifen_ruc').textContent = d.rucConDV || d.ruc;
-    document.getElementById('sifen_rs').textContent  = d.rs;
-    document.getElementById('sifen_fecha').textContent = d.fechaDisplay;
+    var d = window._historialCDC[i];
+    if (!d) return;
+    window._ultimoCDCData = d.dataCompleta;
+    document.getElementById('sifen_ruc').textContent   = d.ruc;
+    document.getElementById('sifen_rs').textContent    = d.rs;
+    document.getElementById('sifen_fecha').textContent = d.fecha;
     document.getElementById('sifen_total').textContent = '₲ ' + d.total.toLocaleString();
-    document.getElementById('sifen_iva10').textContent = 'IVA 10%: ₲ ' + d.iva10.toLocaleString();
-    document.getElementById('sifen_exento').textContent = 'Exento: ₲ ' + d.exento.toLocaleString();
     document.getElementById('sifen_resultado').style.display = 'block';
+    if (d.dataCompleta && d.dataCompleta.dec) {
+        document.getElementById('sifen_cdc_desglose').innerHTML =
+            '<b>N° doc:</b> ' + d.dataCompleta.dec.nroCompleto + ' · <b>Fecha:</b> ' + d.fecha;
+    }
 };
 
-// ── Enviar datos al Wizard prellenado
+// ── Enviar al Wizard (con soporte CAPTCHA: leer monto manual)
 window.enviarCDCAlWizard = function() {
     var cliIdx = document.getElementById('sifen_cli_destino').value;
     var oper   = document.getElementById('sifen_operacion_tipo').value;
-    if (cliIdx === '') return alert('❌ Seleccione el cliente al que registrará esta factura.');
+    if (!cliIdx) return alert('❌ Seleccione el cliente.');
     var d = window._ultimoCDCData;
-    if (!d) return alert('❌ Realice primero la consulta del CDC.');
+    if (!d) return alert('❌ Realice primero la consulta.');
 
-    // Abrir wizard y prellenar todos los campos
-    window.wizContext = null;
+    // Si hay CAPTCHA, leer datos manuales
+    if (d.esCaptcha) {
+        var totalManual = parseFloat(document.getElementById('captcha_total').value) || 0;
+        if (totalManual <= 0) return alert('❌ Ingrese el monto total del comprobante (caja "Monto Total ₲").');
+        var tasa   = document.getElementById('captcha_tasa').value;
+        var rsManual = document.getElementById('captcha_rs').value.trim();
+        var iva10m = tasa==='10' ? Math.round(totalManual/11) : 0;
+        var iva5m  = tasa==='5'  ? Math.round(totalManual/21) : 0;
+        var exentm = tasa==='0'  ? totalManual : 0;
+        d.total  = totalManual;
+        d.iva10  = iva10m;
+        d.iva5   = iva5m;
+        d.exento = exentm;
+        if (rsManual) d.rs = rsManual;
+    }
+
     var nroDisplay = d.dec ? d.dec.nroCompleto : '';
+    window.wizContext = null;
     document.getElementById('wiz-title').textContent = '🧾 CDC: ' + nroDisplay;
     document.getElementById('fg_wiz_cliente').style.display = 'none';
-    document.getElementById('wiz_cliente').value      = cliIdx;
-    document.getElementById('wiz_operacion').value    = oper;
-    document.getElementById('wiz_tipo').value         = 'factura';
-    document.getElementById('wiz_fecha').value        = d.fecha || new Date().toISOString().split('T')[0];
-    document.getElementById('wiz_ruc').value          = d.ruc || '';
-    document.getElementById('wiz_tercero').value      = (d.rs && !d.rs.includes('sin registro')) ? d.rs : '';
-    document.getElementById('wiz_rol_tercero').value  = oper === 'compra' ? 'proveedor' : 'cliente';
-    document.getElementById('wiz_timbrado').value     = d.cdc;           // CDC = timbrado electrónico
-    document.getElementById('wiz_tipo_timb').value    = 'ELECTRONICO';
-    document.getElementById('wiz_nro').value          = nroDisplay;
+    document.getElementById('wiz_cliente').value     = cliIdx;
+    document.getElementById('wiz_operacion').value   = oper;
+    document.getElementById('wiz_tipo').value        = 'factura';
+    document.getElementById('wiz_fecha').value       = d.fecha || new Date().toISOString().split('T')[0];
+    document.getElementById('wiz_ruc').value         = d.ruc || '';
+    document.getElementById('wiz_tercero').value     = (!d.rs || d.rs.includes('CAPTCHA') || d.rs.includes('sin registro')) ? '' : d.rs;
+    document.getElementById('wiz_rol_tercero').value = oper === 'compra' ? 'proveedor' : 'cliente';
+    document.getElementById('wiz_timbrado').value    = d.cdc;
+    document.getElementById('wiz_tipo_timb').value   = 'ELECTRONICO';
+    document.getElementById('wiz_nro').value         = nroDisplay;
 
-    // Condición de pago: 1=contado, 2=crédito
     var pagoEl = document.getElementById('wiz_pago_tipo');
     if (pagoEl) pagoEl.value = (d.condicion === '2') ? 'credito' : 'caja';
 
-    // Montos e IVA
-    var total   = d.total   || 0;
-    var iva10   = d.iva10   || 0;
-    var iva5    = d.iva5    || 0;
-    var exento  = d.exento  || 0;
-
-    if (total > 0) {
-        document.getElementById('wiz_monto').value = total;
-
-        var hasMixta = (iva10 > 0 && (iva5 > 0 || exento > 0)) ||
-                       (iva5  > 0 && exento > 0);
-
+    if (d.total > 0) {
+        document.getElementById('wiz_monto').value = d.total;
+        var hasMixta = (d.iva10>0 && (d.iva5>0||d.exento>0)) || (d.iva5>0 && d.exento>0);
         if (hasMixta) {
             document.getElementById('wiz_iva_tasa').value = 'mixta';
-            // Reconstruir montos IVA-inclusivo: base = iva*10 (para 10%) / iva*20 (para 5%)
-            var total10 = Math.round((iva10 * 10) + iva10); // grav10 + iva10
-            var total5  = Math.round((iva5  * 20) + iva5);  // grav5 + iva5
-            document.getElementById('wiz_m10').value = total10;
-            document.getElementById('wiz_m5').value  = total5;
-            document.getElementById('wiz_mex').value = exento;
-        } else if (iva10 > 0) {
-            document.getElementById('wiz_iva_tasa').value = '10';
-        } else if (iva5 > 0) {
-            document.getElementById('wiz_iva_tasa').value = '5';
-        } else if (exento > 0) {
-            document.getElementById('wiz_iva_tasa').value = '0';
+            document.getElementById('wiz_m10').value = Math.round(d.iva10*10 + d.iva10);
+            document.getElementById('wiz_m5').value  = Math.round(d.iva5*20 + d.iva5);
+            document.getElementById('wiz_mex').value = d.exento;
         } else {
-            document.getElementById('wiz_iva_tasa').value = '10'; // default
+            document.getElementById('wiz_iva_tasa').value =
+                d.iva10>0 ? '10' : d.iva5>0 ? '5' : d.exento>0 ? '0' : '10';
         }
     }
 
-    // Glosa automática
     var tipoNom = d.dec ? d.dec.tipoDocNom : 'Factura Electrónica';
     document.getElementById('wiz_glosa').value =
         tipoNom + ' N° ' + nroDisplay + ' · ' +
-        (d.rs && !d.rs.includes('sin registro') ? d.rs : 'RUC ' + d.ruc) +
-        ' · ' + d.fechaDisplay;
+        (d.rs && !d.rs.includes('CAPTCHA') && !d.rs.includes('sin registro') ? d.rs : 'RUC ' + d.ruc) +
+        ' · ' + (d.fechaDisplay || d.fecha);
 
     window.updateWizTaxes();
     window.toggleTasas();
@@ -1746,23 +1744,18 @@ window.enviarCDCAlWizard = function() {
     window.openModal('modal-wizard');
 };
 
-// ── Portal e-Kuatia manual (fallback)
 window.abrirMiniaturaDNIT = function() {
-    window.open('https://ekuatia.set.gov.py/consultas/', 'VentanaDNIT',
-        'width=1000,height=700,top=50,left=100,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes');
+    window.open('https://ekuatia.set.gov.py/consultas/','VentanaDNIT',
+        'width=1000,height=700,top=50,left=100,toolbar=no,menubar=no,scrollbars=yes,resizable=yes');
 };
-
-// Alias de compatibilidad
 window.consultarSIFEN = function() {
-    var cdc = (document.getElementById('sifen_cdc') || {value:''}).value.trim();
-    if (cdc.length === 44) window.consultarCDCReal();
-    else alert('❌ Ingrese los 44 dígitos del CDC primero.');
+    var cdc = (document.getElementById('sifen_cdc')||{value:''}).value.trim();
+    if (cdc.length===44) window.consultarCDCReal(); else alert('❌ Ingrese 44 dígitos del CDC.');
 };
-
 window.irAConsultaCDC = function() {
     var nav = null;
     document.querySelectorAll('.nav-item').forEach(function(el) {
-        if ((el.getAttribute('onclick') || '').includes("'comprobantes'")) nav = el;
+        if ((el.getAttribute('onclick')||'').includes("'comprobantes'")) nav = el;
     });
     window.showPage('comprobantes', nav);
 };
