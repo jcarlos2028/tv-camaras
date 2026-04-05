@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v4.0 — Sistema Contable Cloud Edition</title>
+<title>ContaPY v4.1 — Sistema Contable Cloud Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -119,6 +119,45 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .chat-msg.user { background: var(--accent2); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 .chat-input-area { display: flex; gap: 10px; padding: 15px; background: white; border-top: 1px solid var(--border); }
 .chat-input-area input { flex: 1; }
+
+/* ============ BALANCE / ESTADO RESULTADOS STYLES ============ */
+.fin-section-header{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 12px;margin:8px 0 2px;border-radius:6px;display:flex;justify-content:space-between;align-items:center}
+.fin-section-header.activo{background:#dbeafe;color:#1e40af}
+.fin-section-header.pasivo{background:#fee2e2;color:#991b1b}
+.fin-section-header.patrimonio{background:#d1fae5;color:#065f46}
+.fin-section-header.ingreso{background:#d1fae5;color:#065f46}
+.fin-section-header.gasto{background:#fee2e2;color:#991b1b}
+.fin-section-header.resultado{background:#fef3c7;color:#92400e}
+.fin-group-header{font-size:11px;font-weight:600;color:var(--text-light);padding:6px 12px 2px;text-transform:uppercase;letter-spacing:.3px;border-top:1px solid var(--border);margin-top:4px}
+.fin-row{display:flex;justify-content:space-between;align-items:center;padding:5px 12px;font-size:12.5px;border-radius:5px;gap:8px}
+.fin-row:hover{background:#f9fafb}
+.fin-row .fin-code{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-light);min-width:70px;flex-shrink:0}
+.fin-row .fin-name{flex:1;color:var(--text)}
+.fin-row .fin-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;min-width:110px;text-align:right}
+.fin-row .fin-val.pos{color:var(--accent2)}
+.fin-row .fin-val.neg{color:var(--accent)}
+.fin-row .fin-val.zero{color:var(--text-light)}
+.fin-subtotal{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;font-size:12px;font-weight:700;border-top:1px solid var(--border);margin-top:4px}
+.fin-total-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;font-size:13px;font-weight:700;border-top:2px solid;margin-top:6px;border-radius:7px}
+.fin-total-row.activo{border-color:var(--accent2);background:#eff6ff;color:#1e40af}
+.fin-total-row.pasivo{border-color:var(--accent);background:#fff0f0;color:#991b1b}
+.fin-total-row.patrimonio{border-color:var(--success);background:#ecfdf5;color:#065f46}
+.fin-total-row.ingreso{border-color:var(--success);background:#ecfdf5;color:#065f46}
+.fin-total-row.gasto{border-color:var(--accent);background:#fff0f0;color:#991b1b}
+.fin-total-row.resultado-final{border-color:var(--warning);background:#fef3c7;color:#92400e;font-size:14px}
+.fin-add-btn{display:flex;align-items:center;gap:5px;padding:4px 10px;font-size:11px;color:var(--accent2);cursor:pointer;border:1px dashed var(--accent2);border-radius:6px;background:transparent;font-family:'DM Sans',sans-serif;font-weight:600;margin:4px 12px}
+.fin-add-btn:hover{background:#eff6ff}
+.plan-cuentas-panel{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;max-height:200px;overflow-y:auto;font-size:11.5px}
+.plan-cuentas-item{padding:3px 6px;border-radius:4px;cursor:pointer;display:flex;gap:8px;align-items:center}
+.plan-cuentas-item:hover{background:var(--accent2);color:white}
+.plan-cuentas-item .pci-code{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-light);min-width:60px}
+.plan-cuentas-item:hover .pci-code{color:rgba(255,255,255,.8)}
+.balance-equil-banner{padding:12px 16px;border-radius:9px;font-size:13px;font-weight:700;text-align:center;margin-top:10px}
+.balance-equil-banner.ok{background:#d1fae5;color:#065f46;border:2px solid var(--success)}
+.balance-equil-banner.err{background:#fee2e2;color:#991b1b;border:2px solid var(--danger)}
+.rdo-highlight{background:linear-gradient(135deg,var(--accent2),#1976d2);color:white;padding:14px 18px;border-radius:10px;text-align:center;margin:10px 0}
+.rdo-highlight .val{font-size:24px;font-weight:800;font-family:'DM Mono',monospace;display:block}
+.rdo-highlight .lbl{font-size:11px;opacity:.8;margin-top:3px}
 </style>
 </head>
 <body>
@@ -147,7 +186,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v4.0 Cloud + AI</div></div></div>
+    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v4.1 Cloud + AI</div></div></div>
   </div>
   <div class="sidebar-section" style="padding-top:5px;padding-bottom:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px">
     <div style="color:var(--success);font-size:11px;font-weight:700" id="sb_user_name">Cargando...</div>
@@ -173,6 +212,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   <div class="sidebar-section">
     <div class="sidebar-label" data-i18n="menu_tools">Herramientas</div>
     <div class="nav-item" onclick="showPage('gemini',this)" style="color:#a78bfa;font-weight:600"><span class="icon">🤖</span><span data-i18n="nav_ai">Soporte IA (Gemini)</span></div>
+    <div class="nav-item" onclick="showPage('plan_cuentas',this)" style="color:#f59e0b;font-weight:600"><span>📋</span><span>Plan de Cuentas (Res. 49/14)</span></div>
   </div>
   <div class="sidebar-section" id="menu_admin" style="display:none;margin-top:10px">
     <div class="sidebar-label" data-i18n="menu_admin">Administración</div>
@@ -192,7 +232,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   <div class="topbar">
     <div class="topbar-title" id="topbar-title" data-i18n="top_title">Dashboard Principal</div>
     
-    <!-- SELECTOR DE IDIOMAS -->
     <select id="lang_sel" onchange="changeLang(this.value)" style="border:1px solid var(--border);border-radius:7px;padding:4px 8px;background:var(--bg);font-weight:600;outline:none;cursor:pointer">
         <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
     </select>
@@ -245,6 +284,33 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
                   </ul>
               </div>
           </div>
+      </div>
+    </div>
+
+    <!-- PLAN DE CUENTAS COMPLETO RG 49/14 -->
+    <div class="page" id="page-plan_cuentas">
+      <div class="page-header">
+        <div><h2>📋 Plan de Cuentas — Resolución General 49/14</h2><p>Plan oficial DNIT · Gestión completa de cuentas del sistema</p></div>
+        <button class="btn btn-primary" onclick="openModalNuevaCuenta()">➕ Nueva Cuenta Personalizada</button>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap">
+          <input type="text" id="search_plan" placeholder="🔍 Buscar cuenta por código o nombre..." style="flex:1;min-width:200px" oninput="renderPlanCuentas()">
+          <select id="filter_clase" onchange="renderPlanCuentas()" style="padding:8px">
+            <option value="">Todas las clases</option>
+            <option value="1">1 - Activo</option>
+            <option value="2">2 - Pasivo</option>
+            <option value="3">3 - Patrimonio Neto</option>
+            <option value="4">4 - Ingresos</option>
+            <option value="5">5 - Costos y Gastos</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Código</th><th>Nombre de la Cuenta</th><th>Clase</th><th>Naturaleza</th><th>Tipo</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-plan-cuentas"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -303,7 +369,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- PANEL CLIENTE DETALLE -->
     <div class="page" id="page-cliente-detalle">
       <div class="page-header" style="position:relative;background:var(--card);padding:20px;border-radius:10px;box-shadow:var(--shadow);border:1px solid var(--border)">
-        <div class="close-btn" onclick="showPage('dashboard')" title="Cerrar" style="position:absolute;top:10px;right:10px">✕</div>
+        <div class="close-btn" onclick="showPage('dashboard')" title="Cerrar" style="position:absolute;top:10px;right:10px;cursor:pointer">✕</div>
         <div><h2 id="cdet_nombre" style="color:var(--accent2);margin-bottom:4px">Nombre del Cliente</h2>
           <p id="cdet_ruc" style="font-weight:600;color:var(--text);font-size:13px">RUC: --- | Contacto: ---</p>
         </div>
@@ -315,7 +381,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
       </div>
 
-      <div class="tabs" style="margin-bottom:20px;">
+      <div class="tabs" style="margin-bottom:20px;margin-top:15px;">
         <div class="tab active" onclick="switchClientTab('compras', this)" data-i18n="tab_comp">Compras</div>
         <div class="tab" onclick="switchClientTab('ventas', this)" data-i18n="tab_vent">Ventas</div>
         <div class="tab" onclick="switchClientTab('recibos', this)" data-i18n="tab_teso">Tesorería</div>
@@ -323,6 +389,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div class="tab" onclick="switchClientTab('diario', this)" data-i18n="tab_diar">Libro Diario</div>
         <div class="tab" style="background:#dbeafe;color:#1e40af" onclick="switchClientTab('mayor', this)" data-i18n="tab_may">Libro Mayor</div>
         <div class="tab" style="background:#ede9fe;color:#5b21b6" onclick="switchClientTab('balance', this)" data-i18n="tab_bal">Balance General</div>
+        <div class="tab" style="background:#d1fae5;color:#065f46;font-weight:700" onclick="switchClientTab('estado_resultados', this)">Estado de Resultados ★</div>
         <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)" data-i18n="tab_est">Estado de Cuentas</div>
       </div>
       
@@ -366,16 +433,36 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
       </div>
 
+      <!-- ====== BALANCE GENERAL MEJORADO ====== -->
       <div id="ctab_balance" class="ctab-content" style="display:none;">
-        <div class="grid-2">
-          <div class="card"><div class="card-title" style="color:var(--accent2)">ACTIVOS</div>
-            <div id="bal_activos" style="padding-bottom:10px"></div>
-            <div style="font-weight:700;font-size:15px;color:var(--accent2);border-top:2px solid var(--border);padding-top:10px;text-align:right" id="tot_activos">Total Activos: ₲ 0</div>
+        <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px">
+          <div style="flex:1;min-width:280px">
+            <div class="card" style="padding:14px">
+              <div class="card-title" style="color:var(--accent2)">📋 Plan de Cuentas Disponible</div>
+              <input type="text" id="bal_search_cta" placeholder="🔍 Buscar cuenta..." style="width:100%;margin-bottom:8px" oninput="renderPlanCuentasPanel('bal')">
+              <div class="plan-cuentas-panel" id="bal_plan_panel"></div>
+              <p style="font-size:10px;color:var(--text-light);margin-top:6px">👆 Haz clic en una cuenta para agregarla a la sección correspondiente del Balance</p>
+            </div>
           </div>
-          <div class="card"><div class="card-title" style="color:var(--accent)">PASIVOS Y PATRIMONIO</div>
-            <div id="bal_pasivos" style="padding-bottom:10px"></div>
-            <div id="bal_patri" style="padding-bottom:10px"></div>
-            <div style="font-weight:700;font-size:15px;color:var(--accent);border-top:2px solid var(--border);padding-top:10px;text-align:right" id="tot_pas_pat">Total Pas+Pat: ₲ 0</div>
+          <div style="flex:2;min-width:380px">
+            <div id="balance_general_content"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== ESTADO DE RESULTADOS ====== -->
+      <div id="ctab_estado_resultados" class="ctab-content" style="display:none;">
+        <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px">
+          <div style="flex:1;min-width:280px">
+            <div class="card" style="padding:14px">
+              <div class="card-title" style="color:var(--success)">📋 Plan de Cuentas — Ingresos y Gastos</div>
+              <input type="text" id="er_search_cta" placeholder="🔍 Buscar cuenta..." style="width:100%;margin-bottom:8px" oninput="renderPlanCuentasPanel('er')">
+              <div class="plan-cuentas-panel" id="er_plan_panel"></div>
+              <p style="font-size:10px;color:var(--text-light);margin-top:6px">👆 Haz clic en una cuenta para agregarla al Estado de Resultados</p>
+            </div>
+          </div>
+          <div style="flex:2;min-width:380px">
+            <div id="estado_resultados_content"></div>
           </div>
         </div>
       </div>
@@ -403,7 +490,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       <div class="card" style="border-left:4px solid var(--accent2);margin-bottom:14px">
         <div class="card-title" style="color:var(--accent2)">🔍 Consulta Directa por CDC (Código de Control SIFEN)</div>
         <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">
-          Ingrese los 44 dígitos del CDC. El sistema consulta el servidor DNIT, decodifica la estructura, y si hay CAPTCHA le permite ingresar el monto manualmente. Los datos se envían prellenados al wizard.
+          Ingrese los 44 dígitos del CDC. El sistema consulta el servidor DNIT, decodifica la estructura, y si hay CAPTCHA le permite ingresar el monto manualmente o resolverlo.
         </p>
 
         <div style="display:flex;gap:10px;margin-bottom:8px">
@@ -423,7 +510,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
           <p style="margin-top:10px;color:var(--text-light);font-size:12px" id="sifen_loading_txt">Consultando servidor DNIT...</p>
         </div>
 
-        <!-- RESULTADO -->
+        <!-- RESULTADO SIFEN -->
         <div id="sifen_resultado" style="display:none">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
             <div id="sifen_badge_estado" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:700">—</div>
@@ -448,14 +535,27 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             </div>
           </div>
 
-          <!-- AVISO CAPTCHA CON INGRESO MANUAL -->
+          <!-- NUEVO: RESOLVER CAPTCHA DESDE EL SISTEMA -->
+          <div id="sifen_captcha_solver_box" style="display:none;background:#eff6ff;border:1px solid var(--accent2);border-radius:9px;padding:16px;margin-bottom:12px;text-align:center;">
+            <div style="font-weight:700;color:var(--accent2);margin-bottom:8px;font-size:14px">🛡️ Verificación de Seguridad DNIT (CAPTCHA)</div>
+            <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">El servidor de la SET requiere que resuelvas este CAPTCHA para descargar los montos.</p>
+            
+            <img id="captcha_img_src" src="" alt="Cargando CAPTCHA..." style="border:1px solid #ccc;border-radius:6px;margin-bottom:12px;max-width:250px;height:auto;display:inline-block;background:white;padding:5px;">
+            
+            <div style="display:flex;gap:10px;justify-content:center;align-items:center;">
+                <input type="text" id="captcha_txt_input" placeholder="Escribe el código..." style="width:200px;text-align:center;font-family:'DM Mono';font-weight:700;font-size:16px;text-transform:uppercase;" onkeydown="if(event.key==='Enter')enviarCaptchaApi()">
+                <button class="btn btn-primary" onclick="enviarCaptchaApi()" style="padding:10px 20px">Validar e Importar</button>
+            </div>
+            <input type="hidden" id="captcha_session_id">
+          </div>
+
+          <!-- AVISO CAPTCHA CON INGRESO MANUAL (Fallback) -->
           <div id="sifen_captcha_box" style="display:none;background:#fff8e1;border:1px solid var(--warning);border-radius:9px;padding:14px;margin-bottom:12px">
             <div style="font-weight:700;color:var(--warning);margin-bottom:8px">
-              ⚠️ CAPTCHA detectado — el servidor DNIT requiere verificación humana para este comprobante
+              ⚠️ El sistema no pudo obtener la imagen del CAPTCHA automáticamente.
             </div>
             <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">
-              El RUC, fecha y número de comprobante fueron obtenidos directamente del CDC (100% confiables). 
-              Solo falta el monto. Ingréselo manualmente desde el comprobante físico/digital.
+              El RUC, fecha y número fueron obtenidos del CDC. Ingrese el monto total manualmente.
             </p>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px">
               <div class="form-group">
@@ -479,9 +579,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
                 <label>Razón Social (opcional)</label>
                 <input type="text" id="captcha_rs" placeholder="Nombre del proveedor">
               </div>
-            </div>
-            <div style="margin-top:10px;font-size:11px;color:var(--text-light)">
-              💡 Puede verificar el CDC manualmente en el <a href="#" onclick="window.open('https://ekuatia.set.gov.py/consultas/','_blank');return false;" style="color:var(--accent2)">portal e-Kuatia</a>
             </div>
           </div>
 
@@ -582,7 +679,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <div class="modal-overlay" id="modal-usuario">
   <div class="modal drag-modal">
     <div class="modal-drag-header"><span class="m-title">👥 Perfil de Usuario (Accesos)</span>
-        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-usuario')">✕</div></div>
+        <div class="win-controls"><div class="win-btn close" onclick="closeModal('modal-usuario')">✕</div></div>
     </div>
     <div class="modal-body-scroll">
         <div class="form-grid col2">
@@ -607,7 +704,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <div class="modal-overlay" id="modal-asiento-manual">
   <div class="modal drag-modal">
     <div class="modal-drag-header"><span class="m-title">✍️ Asiento Manual Libre / Ajuste</span>
-        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-asiento-manual')">✕</div></div>
+        <div class="win-controls"><div class="win-btn close" onclick="closeModal('modal-asiento-manual')">✕</div></div>
     </div>
     <div class="modal-body-scroll">
         <div class="form-grid col2"><div class="form-group"><label>Fecha del Asiento</label><input type="date" id="am_fecha"></div><div class="form-group"><label>Glosa General</label><input type="text" id="am_glosa" placeholder="Concepto del asiento"></div></div>
@@ -623,7 +720,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <div class="modal-overlay" id="modal-honorarios">
   <div class="modal drag-modal">
     <div class="modal-drag-header"><span class="m-title">💰 Control de Honorarios Mensuales</span>
-        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-honorarios')">✕</div></div>
+        <div class="win-controls"><div class="win-btn close" onclick="closeModal('modal-honorarios')">✕</div></div>
     </div>
     <div class="modal-body-scroll">
         <div style="display:flex;justify-content:space-between;margin-bottom:10px">
@@ -642,7 +739,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <div class="modal-overlay" id="modal-cliente">
   <div class="modal drag-modal">
     <div class="modal-drag-header"><span class="m-title" id="m-cli-title">🏢 Configurar Cliente</span>
-        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-cliente')">✕</div></div>
+        <div class="win-controls"><div class="win-btn close" onclick="closeModal('modal-cliente')">✕</div></div>
     </div>
     <div class="modal-body-scroll">
         <div class="form-grid col2">
@@ -663,11 +760,29 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
 </div>
 
+<!-- MODAL: NUEVA CUENTA PERSONALIZADA -->
+<div class="modal-overlay" id="modal-nueva-cuenta">
+  <div class="modal drag-modal" style="max-width:520px">
+    <div class="modal-drag-header"><span class="m-title">➕ Nueva Cuenta Personalizada</span><div class="win-controls"><div class="win-btn close" onclick="closeModal('modal-nueva-cuenta')">✕</div></div></div>
+    <div class="modal-body-scroll">
+      <div class="notif">📌 <span>Las cuentas nuevas seguirán la jerarquía del Plan de Cuentas Res. 49/14 y se integrarán automáticamente en el Balance y Estado de Resultados.</span></div>
+      <div class="form-grid col2" style="gap:14px">
+        <div class="form-group"><label>Código de Cuenta</label><input type="text" id="nc_codigo" placeholder="Ej: 1.01.03.10 o 5.01.15"></div>
+        <div class="form-group"><label>Nombre de la Cuenta</label><input type="text" id="nc_nombre" placeholder="Ej: Deudores Varios Especiales"></div>
+        <div class="form-group"><label>Clase (se detecta automáticamente)</label><select id="nc_clase"><option value="1">1 — Activo</option><option value="2">2 — Pasivo</option><option value="3">3 — Patrimonio Neto</option><option value="4">4 — Ingresos</option><option value="5">5 — Costos y Gastos</option></select></div>
+        <div class="form-group"><label>Naturaleza</label><select id="nc_naturaleza"><option value="deudora">Deudora (Activo/Gasto)</option><option value="acreedora">Acreedora (Pasivo/Ingreso)</option></select></div>
+        <div class="form-group" style="grid-column:span 2"><label>Descripción / Uso</label><input type="text" id="nc_desc" placeholder="Para qué se usa esta cuenta..."></div>
+      </div>
+      <div class="modal-actions"><button class="btn btn-outline" onclick="closeModal('modal-nueva-cuenta')">Cancelar</button><button class="btn btn-primary" onclick="guardarNuevaCuenta()">💾 Agregar al Sistema</button></div>
+    </div>
+  </div>
+</div>
+
 <!-- WIZARD: CARGA COMPROBANTES (MULTITASA TILDABLE) -->
 <div class="modal-overlay" id="modal-wizard">
   <div class="modal drag-modal" style="width:680px">
     <div class="modal-drag-header"><span class="m-title" id="wiz-title">🧾 Asistente de Carga Contable</span>
-        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-wizard')">✕</div></div>
+        <div class="win-controls"><div class="win-btn close" onclick="closeModal('modal-wizard')">✕</div></div>
     </div>
     <div class="modal-body-scroll" style="overflow:visible">
         <div class="wiz-header">
@@ -773,7 +888,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <div class="modal-overlay" id="modal-import">
   <div class="modal drag-modal">
     <div class="modal-drag-header"><span class="m-title">📥 Importador Inteligente (Excel/CSV)</span>
-        <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-import')">✕</div></div>
+        <div class="win-controls"><div class="win-btn close" onclick="closeModal('modal-import')">✕</div></div>
     </div>
     <div class="modal-body-scroll">
         <div class="form-group" style="margin-bottom:15px" id="imp_box_cli"><label>Cliente Destino</label><select id="imp_cli_sel" class="cli-select"></select></div>
@@ -839,23 +954,6 @@ window.enviarMensajeIA = async function() {
     }
 };
 
-window.initPlanCuentas = function() {
-    var dl = document.getElementById('planCuentasRes4814'); dl.innerHTML='';
-    var ctas =[
-        "1.1.1.01 Caja", "1.1.1.02 Recaudaciones a Depositar", "1.1.1.03 Banco Cta. Cte.", 
-        "1.1.2.01 Clientes Locales", "1.1.2.02 Deudores Varios", "1.1.3.01 Mercaderías", 
-        "1.1.5.01 IVA Crédito 10%", "1.1.5.02 IVA Crédito 5%", "1.1.5.03 IVA Crédito Exento", "1.1.5.04 Ret. a Favor", 
-        "1.2.1.01 Propiedades, Planta y Equipo", "1.2.1.02 Depreciación Acumulada", 
-        "2.1.1.01 Proveedores Locales", "2.1.2.01 Acreedores Varios", "2.1.3.01 Sueldos a Pagar", 
-        "2.1.4.01 IVA Débito 10%", "2.1.4.02 IVA Débito 5%", "2.1.4.06 Ret. a Pagar", 
-        "3.1.1.01 Capital Social", "3.1.2.01 Resultados Acumulados", "3.1.3.01 Resultado del Ejercicio", 
-        "4.1.1.01 Ventas 10%", "4.1.1.02 Ventas 5%", "4.1.1.03 Ventas Exentas", 
-        "5.1.1.01 Compras 10%", "5.1.1.02 Compras 5%", "5.1.1.03 Compras Exentas", "5.1.2.01 Gastos Administrativos",
-        "5.1.2.02 Combustibles y Lubricantes", "5.1.2.03 Papelería y Útiles", "5.1.2.04 Honorarios Profesionales"
-    ];
-    ctas.forEach(c => { var opt = document.createElement('option'); opt.value = c; dl.appendChild(opt); });
-};
-
 window.showPage = function(name, el) { 
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
@@ -864,6 +962,7 @@ window.showPage = function(name, el) {
     if(name === 'dashboard' || name==='clientes') window.renderClientes(); 
     if(['iva','ire_general','ire_simple','irp'].includes(name)) window.actualizarSelectsClientes(); 
     if(name === 'usuarios') window.renderUsuarios();
+    if(name === 'plan_cuentas') window.renderPlanCuentas();
 };
 
 window.openModal = function(id){ document.getElementById(id).classList.add('open'); };
@@ -973,11 +1072,15 @@ window.verCliente = function(idx) {
     document.getElementById('cdet_nombre').textContent = c.nom; 
     document.getElementById('cdet_ruc').innerHTML = `RUC: ${c.ruc} &nbsp;|&nbsp; Tel: ${c.tel||'-'} &nbsp;|&nbsp; Correo: ${c.correo||'-'}`; 
     window.renderLibros(); window.showPage('cliente-detalle'); document.querySelectorAll('#page-cliente-detalle .tab')[0].click(); 
+    // Para renderizar el balance Res 49/14
+    setTimeout(function() { window.initTabsBalance(); window.renderFinancieros(); }, 100);
 };
 window.switchClientTab = function(tabId, el) { 
     document.querySelectorAll('#page-cliente-detalle .tab').forEach(t => t.classList.remove('active')); el.classList.add('active'); 
     document.querySelectorAll('.ctab-content').forEach(c => c.style.display = 'none'); document.getElementById('ctab_' + tabId).style.display = 'block'; 
-    if(tabId==='mayor' || tabId==='balance' || tabId==='estado_cuentas') window.renderMayorYBalance(); 
+    if(tabId==='mayor' || tabId==='balance' || tabId==='estado_cuentas' || tabId==='estado_resultados') window.renderMayorYBalance(); 
+    if(tabId==='balance'){ window.renderBalanceGeneral(); window.renderPlanCuentasPanel('bal'); }
+    if(tabId==='estado_resultados'){ window.renderEstadoResultados(); window.renderPlanCuentasPanel('er'); }
 };
 
 window.renderLibros = function() {
@@ -1006,24 +1109,20 @@ window.renderLibros = function() {
   });
 };
 
+// Se sobrescribe más abajo con renderFinancieros
 window.renderMayorYBalance = function() {
   var c = window.dbClientes[window.currentCli]; var cuentas = {}; 
   c.libros.diario.forEach(asi => { asi.lineas.forEach(lin => { if(!cuentas[lin.cuenta]) cuentas[lin.cuenta] = { debe:0, haber:0 }; cuentas[lin.cuenta].debe += (lin.debe || 0); cuentas[lin.cuenta].haber += (lin.haber || 0); }); });
 
-  var htmlMayor = "", tAct = 0, tPas = 0, tPat = 0, tIng = 0, tEgr = 0, actHtml="", pasHtml="", patHtml="";
+  var htmlMayor = "";
   Object.keys(cuentas).sort().forEach(cta => {
       var d = cuentas[cta].debe, h = cuentas[cta].haber, clase = cta.charAt(0), saldo = 0, nat = "";
       if(clase==='1' || clase==='5'){ saldo = d - h; nat="Deudora"; } else { saldo = h - d; nat="Acreedora"; }
       if(saldo!==0) {
         htmlMayor += `<tr><td><strong style="font-family:'DM Mono'">${cta}</strong></td><td class="monto">${d.toLocaleString()}</td><td class="monto">${h.toLocaleString()}</td><td class="monto" style="font-weight:700;color:var(--accent2)">${saldo.toLocaleString()}</td><td><span class="badge-status ok">${nat}</span></td></tr>`;
-        var bR = `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px"><span>${cta}</span><span style="font-family:'DM Mono'">₲ ${saldo.toLocaleString()}</span></div>`;
-        if(clase==='1'){ tAct += saldo; actHtml+=bR; } else if(clase==='2'){ tPas += saldo; pasHtml+=bR; } else if(clase==='3'){ tPat += saldo; patHtml+=bR; } else if(clase==='4') tIng+=saldo; else if(clase==='5') tEgr+=saldo;
       }
   });
-  document.getElementById('lista_lib_mayor').innerHTML = htmlMayor; var rdo = tIng - tEgr; tPat += rdo;
-  patHtml += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--border);font-size:12.5px;margin-top:10px;font-weight:700"><span>3.x Resultado Ejercicio</span><span style="font-family:'DM Mono';color:${rdo>=0?'var(--success)':'var(--danger)'}">₲ ${rdo.toLocaleString()}</span></div>`;
-  document.getElementById('bal_activos').innerHTML = actHtml || "<i>Sin movimientos</i>"; document.getElementById('tot_activos').textContent = "Total Activos: ₲ " + tAct.toLocaleString();
-  document.getElementById('bal_pasivos').innerHTML = pasHtml || "<i>Sin movimientos</i>"; document.getElementById('bal_patri').innerHTML = patHtml; document.getElementById('tot_pas_pat').textContent = "Total Pas+Pat: ₲ " + (tPas+tPat).toLocaleString();
+  document.getElementById('lista_lib_mayor').innerHTML = htmlMayor;
 
   // ESTADO DE CUENTAS 
   var terceros = {};
@@ -1040,6 +1139,9 @@ window.renderMayorYBalance = function() {
       hEst += `<tr><td><strong style="font-family:'DM Mono'">${o.ruc}</strong><br><span style="font-size:11px">${o.tercero}</span></td><td><span class="badge-status ${o.rol==='cliente'||o.rol==='deudor'?'ok':'info'}">${o.rol.toUpperCase()}</span></td><td class="monto">₲ ${o.fact.toLocaleString()}</td><td class="monto">₲ ${o.cp.toLocaleString()}</td><td class="monto" style="font-weight:700;color:${saldo>0?'var(--danger)':'var(--text)'}">₲ ${saldo.toLocaleString()}</td></tr>`;
   });
   document.getElementById('lista_estado_cuentas').innerHTML = hEst || "<tr><td colspan='5' style='text-align:center'>No hay operaciones a crédito.</td></tr>";
+
+  // Call the new Balance engine
+  if(window.renderFinancieros) window.renderFinancieros();
 };
 
 // ===== ASIENTO MANUAL =====
@@ -1083,6 +1185,9 @@ window.guardarAsientoManual = function() {
     var lin =[]; document.querySelectorAll('#am_lineas tr').forEach(tr => { var cta=tr.querySelector('.am-cta').value.trim(), d=parseFloat(tr.querySelector('.am-deb').value)||0, h=parseFloat(tr.querySelector('.am-hab').value)||0; if(cta && (d>0||h>0)) lin.push({cuenta:cta, debe:d, haber:h}); });
     if(lin.length===0) return alert("❌ Debe ingresar al menos una cuenta válida.");
     
+    // Check custom accounts
+    lin.forEach(function(l){var cod=l.cuenta.split(' ')[0];var plan=getPlanCompleto();if(!plan.find(function(p){return p.cod===cod||(cod+' '+p.nom)===l.cuenta;})){if(confirm('La cuenta "'+l.cuenta+'" no existe en el Plan de Cuentas.\n¿Desea agregarla como cuenta personalizada ahora?')){window.openModalNuevaCuenta(cod);}}});
+  
     if(window.editandoAsientoRef) {
         var cli = window.dbClientes[window.currentCli];
         var idx = cli.libros.diario.findIndex(a => a.asiento === window.editandoAsientoRef);
@@ -1253,9 +1358,9 @@ window.guardarAsientoWizard = function() {
   var appliedTaxes = Array.from(document.querySelectorAll('.wiz-tax-chk:checked')).map(cb => cb.value);
   obj.impuestos_aplicados = appliedTaxes;
 
-  var ctaCajaBanco = (mtd === 'banco') ? '1.1.1.03 Banco Cta. Cte.' : '1.1.1.01 Caja';
+  var ctaCajaBanco = (mtd === 'banco') ? '1.01.02.01 BANCOS' : '1.01.01.01 CAJA';
   var ctaComercial = '';
-  if(obj.rol === 'cliente') ctaComercial = '1.1.2.01 Clientes Locales'; else if(obj.rol === 'proveedor') ctaComercial = '2.1.1.01 Proveedores Locales'; else if(obj.rol === 'acreedor') ctaComercial = '2.1.2.01 Acreedores Varios'; else if(obj.rol === 'deudor') ctaComercial = '1.1.2.02 Deudores Varios';
+  if(obj.rol === 'cliente') ctaComercial = '1.01.03.01 DEUDORES POR VENTAS'; else if(obj.rol === 'proveedor') ctaComercial = '2.01.01.01 PROVEEDORES LOCALES'; else if(obj.rol === 'acreedor') ctaComercial = '2.01.01.04 OTROS ACREEDORES'; else if(obj.rol === 'deudor') ctaComercial = '1.01.03.02 DEUDORES POR PRÉSTAMOS';
 
   var isRec = (tipo === 'recibo');
   var t = document.getElementById('wiz_iva_tasa').value;
@@ -1280,26 +1385,26 @@ window.guardarAsientoWizard = function() {
   
   obj.bruto = tot; obj.grav10 = neto10; obj.grav5 = neto5; obj.exe = mex; obj.iva10 = i10; obj.iva5 = i5; obj.iva = i10 + i5; obj.neto = neto10 + neto5 + mex; obj.tasa_iva = t;
 
-  var selCta = document.getElementById('wiz_cuenta_sel').value.trim() || (oper==='compra'?'5.1.1.01 Compras Generales':'4.1.1.01 Ventas Generales');
+  var selCta = document.getElementById('wiz_cuenta_sel').value.trim() || (oper==='compra'?'5.03.06 Otros Gastos':'4.01.01 Ventas de Mercaderías');
 
   if(tipo === 'retencion') {
       var rtN = Math.round((parseFloat(document.getElementById('ret_bruto').value)||0)*((parseFloat(document.getElementById('ret_tasa').value)||0)/100));
       obj.nro=document.getElementById('ret_nro').value||"S/N"; obj.bruto=rtN; obj.neto=rtN; obj.iva=0; obj.tasa_ret=document.getElementById('ret_tasa').value; obj.ruc=document.getElementById('ret_ruc').value; obj.tercero=document.getElementById('ret_tercero').value;
-      lin.push({cuenta: oper==='compra'?'2.1.4.06 Ret. a Pagar':'1.1.5.04 Ret. a Favor', debe: oper==='venta'?rtN:0, haber: oper==='compra'?rtN:0}); lin.push({cuenta: ctaCajaBanco, debe: oper==='compra'?rtN:0, haber: oper==='venta'?rtN:0});
+      lin.push({cuenta: oper==='compra'?'2.01.03.01.03 RETENCIONES A PAGAR':'1.01.03.05.02 RETENCIONES DE IVA', debe: oper==='venta'?rtN:0, haber: oper==='compra'?rtN:0}); lin.push({cuenta: ctaCajaBanco, debe: oper==='compra'?rtN:0, haber: oper==='venta'?rtN:0});
   } else if (tipo === 'factura') {
       var ctaDestino = (mtd === 'credito') ? ctaComercial : ctaCajaBanco;
       if(oper==='compra') { 
           if(neto10 > 0) lin.push({cuenta: selCta, debe: neto10, haber: 0}); 
           if(neto5 > 0) lin.push({cuenta: selCta, debe: neto5, haber: 0}); 
           if(mex > 0) lin.push({cuenta: selCta, debe: mex, haber: 0}); 
-          if(i10>0) lin.push({cuenta: '1.1.5.01 IVA Crédito 10%', debe: i10, haber: 0}); 
-          if(i5>0) lin.push({cuenta: '1.1.5.02 IVA Crédito 5%', debe: i5, haber: 0}); 
+          if(i10>0) lin.push({cuenta: '1.01.03.05.01 IVA - CRÉDITO FISCAL', debe: i10, haber: 0}); 
+          if(i5>0) lin.push({cuenta: '1.01.03.05.01 IVA - CRÉDITO FISCAL', debe: i5, haber: 0}); 
           lin.push({cuenta: ctaDestino, debe: 0, haber: tot}); 
       } 
       else { 
           lin.push({cuenta: ctaDestino, debe: tot, haber: 0}); 
-          if(i10>0) lin.push({cuenta: '2.1.4.01 IVA Débito 10%', debe: 0, haber: i10}); 
-          if(i5>0) lin.push({cuenta: '2.1.4.02 IVA Débito 5%', debe: 0, haber: i5}); 
+          if(i10>0) lin.push({cuenta: '2.01.03.01.02 IVA A PAGAR', debe: 0, haber: i10}); 
+          if(i5>0) lin.push({cuenta: '2.01.03.01.02 IVA A PAGAR', debe: 0, haber: i5}); 
           if(neto10 > 0) lin.push({cuenta: selCta, debe: 0, haber: neto10}); 
           if(neto5 > 0) lin.push({cuenta: selCta, debe: 0, haber: neto5}); 
           if(mex > 0) lin.push({cuenta: selCta, debe: 0, haber: mex}); 
@@ -1314,15 +1419,15 @@ window.guardarAsientoWizard = function() {
           if(neto10 > 0) lin.push({cuenta: selCta, debe: 0, haber: neto10}); 
           if(neto5 > 0) lin.push({cuenta: selCta, debe: 0, haber: neto5}); 
           if(mex > 0) lin.push({cuenta: selCta, debe: 0, haber: mex}); 
-          if(i10>0) lin.push({cuenta: '1.1.5.01 IVA Crédito 10%', debe: 0, haber: i10}); 
-          if(i5>0) lin.push({cuenta: '1.1.5.02 IVA Crédito 5%', debe: 0, haber: i5}); 
+          if(i10>0) lin.push({cuenta: '1.01.03.05.01 IVA - CRÉDITO FISCAL', debe: 0, haber: i10}); 
+          if(i5>0) lin.push({cuenta: '1.01.03.05.01 IVA - CRÉDITO FISCAL', debe: 0, haber: i5}); 
       } 
       else { 
           if(neto10 > 0) lin.push({cuenta: selCta, debe: neto10, haber: 0}); 
           if(neto5 > 0) lin.push({cuenta: selCta, debe: neto5, haber: 0}); 
           if(mex > 0) lin.push({cuenta: selCta, debe: mex, haber: 0}); 
-          if(i10>0) lin.push({cuenta: '2.1.4.01 IVA Débito 10%', debe: i10, haber: 0}); 
-          if(i5>0) lin.push({cuenta: '2.1.4.02 IVA Débito 5%', debe: i5, haber: 0}); 
+          if(i10>0) lin.push({cuenta: '2.01.03.01.02 IVA A PAGAR', debe: i10, haber: 0}); 
+          if(i5>0) lin.push({cuenta: '2.01.03.01.02 IVA A PAGAR', debe: i5, haber: 0}); 
           lin.push({cuenta: ctaDestNC, debe: 0, haber: tot}); 
       }
   }
@@ -1333,28 +1438,12 @@ window.guardarAsientoWizard = function() {
   window.saveData(); alert(`✅ Asiento ${nAsi} guardado en NUBE correctamente.`); window.closeModal('modal-wizard'); if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
 };
 
-
 // ================================================================
-//  SIFEN — CDC: consulta, decodificación, CAPTCHA fallback + IA
-//  Servidor: https://consultarcdc-5ebcw3zata-uc.a.run.app/?cdc=
-//  Respuesta: {ok, cdc, estado, ruc, rs, fecha, total, iva10, exento}
-//
-//  ESTRUCTURA CDC SIFEN SET Paraguay (verificada):
-//  [0]     versión DE
-//  [1]     tipo: 1=Factura,4=Autofact,5=NC,6=ND,7=Remisión,8=Retención
-//  [2:10]  RUC emisor 8 dígitos (sin DV)
-//  [10:11] DV del RUC
-//  [11:14] Establecimiento 3 dígitos
-//  [14:17] Punto expedición 3 dígitos
-//  [17:24] N° documento 7 dígitos
-//  [24:25] Tipo transacción (1=Contado, 2=Crédito)
-//  [25:33] Fecha yyyymmdd
-//  [33:44] Código de seguridad 11 chars
+//  MÓDULO SIFEN — CDC: consulta, decodificación, CAPTCHA
 // ================================================================
 window._historialCDC = [];
 window._ultimoCDCData = null;
 
-// ── Decodificar CDC con posiciones exactas verificadas
 window.decodificarCDC = function(cdc) {
     if (!cdc || cdc.length !== 44) return null;
     try {
@@ -1366,7 +1455,7 @@ window.decodificarCDC = function(cdc) {
         var punto      = cdc.substring(14, 17);
         var nroDocRaw  = cdc.substring(17, 24);
         var tipoTxCod  = cdc.substring(24, 25);
-        var fechaRaw   = cdc.substring(25, 33);  // yyyymmdd ← posición verificada
+        var fechaRaw   = cdc.substring(25, 33);
         var seguridad  = cdc.substring(33, 44);
 
         var tiposDE = {
@@ -1376,305 +1465,187 @@ window.decodificarCDC = function(cdc) {
         };
         var tiposTx = {'1':'Contado','2':'Crédito','3':'Gratuito','4':'Anticipo'};
 
-        var yyyy = fechaRaw.substring(0, 4);
-        var mm   = fechaRaw.substring(4, 6);
-        var dd   = fechaRaw.substring(6, 8);
-        var añoNum = parseInt(yyyy);
-        var fechaValida = añoNum >= 2020 && añoNum <= 2099;
+        var yyyy = fechaRaw.substring(0, 4); var mm = fechaRaw.substring(4, 6); var dd = fechaRaw.substring(6, 8);
+        var añoNum = parseInt(yyyy); var fechaValida = añoNum >= 2020 && añoNum <= 2099;
 
         var rucLimpio = rucRaw.replace(/^0+/, '') || rucRaw;
         var nroLimpio = nroDocRaw.replace(/^0+/, '') || nroDocRaw;
 
         return {
-            version:      version,
-            tipoDE:       tipoDE,
-            tipoDocNom:   tiposDE[tipoDE] || ('Tipo ' + tipoDE),
-            rucEmisor:    rucLimpio,
-            rucConDV:     rucLimpio + '-' + dvRuc,
-            dvRuc:        dvRuc,
-            establecim:   establecim,
-            punto:        punto,
-            nroDoc:       nroLimpio,
-            nroDocRaw:    nroDocRaw,
-            nroCompleto:  establecim + '-' + punto + '-' + nroDocRaw,
-            tipoTrans:    tiposTx[tipoTxCod] || tipoTxCod,
-            tipoTransCod: tipoTxCod,
-            fechaISO:     fechaValida ? (yyyy + '-' + mm + '-' + dd) : '',
+            version: version, tipoDE: tipoDE, tipoDocNom: tiposDE[tipoDE] || ('Tipo ' + tipoDE),
+            rucEmisor: rucLimpio, rucConDV: rucLimpio + '-' + dvRuc, dvRuc: dvRuc,
+            establecim: establecim, punto: punto, nroDoc: nroLimpio, nroDocRaw: nroDocRaw,
+            nroCompleto: establecim + '-' + punto + '-' + nroDocRaw,
+            tipoTrans: tiposTx[tipoTxCod] || tipoTxCod, tipoTransCod: tipoTxCod,
+            fechaISO: fechaValida ? (yyyy + '-' + mm + '-' + dd) : '',
             fechaDisplay: fechaValida ? (dd + '/' + mm + '/' + yyyy) : '—',
-            seguridad:    seguridad,
-            fechaValida:  fechaValida
+            seguridad: seguridad, fechaValida: fechaValida
         };
     } catch(e) { console.error('decodificarCDC:', e); return null; }
 };
 
-// ── Contador live de dígitos
 window.onCDCInput = function(input) {
-    var v = input.value.replace(/\D/g, '');
-    input.value = v;
-    var n = v.length;
-    var cEl = document.getElementById('cdc_dig_count');
-    var iEl = document.getElementById('cdc_status_icon');
+    var v = input.value.replace(/\D/g, ''); input.value = v; var n = v.length;
+    var cEl = document.getElementById('cdc_dig_count'), iEl = document.getElementById('cdc_status_icon');
     if (cEl) cEl.textContent = n;
     if (iEl) {
-        if (n === 44)    iEl.innerHTML = '<span style="color:var(--success);font-weight:700">✅ Listo para consultar</span>';
+        if (n === 44) iEl.innerHTML = '<span style="color:var(--success);font-weight:700">✅ Listo para consultar</span>';
         else if (n > 0) iEl.innerHTML = '<span style="color:var(--warning)">⚠️ Faltan ' + (44-n) + '</span>';
-        else             iEl.textContent = '';
+        else iEl.textContent = '';
     }
-    ['sifen_resultado','sifen_error','sifen_loading'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
+    ['sifen_resultado','sifen_error','sifen_loading'].forEach(id => { var el = document.getElementById(id); if (el) el.style.display = 'none'; });
 };
 
-// ── IVA del modo CAPTCHA
 window.calcCaptchaIVA = function() {
     var total = parseFloat(document.getElementById('captcha_total').value) || 0;
     var tasa  = document.getElementById('captcha_tasa').value;
-    var iva   = tasa === '10' ? Math.round(total / 11) :
-                tasa === '5'  ? Math.round(total / 21) : 0;
+    var iva   = tasa === '10' ? Math.round(total / 11) : tasa === '5' ? Math.round(total / 21) : 0;
     var elIva = document.getElementById('captcha_iva_calc');
     if (elIva) elIva.textContent = '₲ ' + iva.toLocaleString();
 };
 
-// ── Consulta principal
-window.consultarCDCReal = async function() {
+window.enviarCaptchaApi = function() {
+    var txt = document.getElementById('captcha_txt_input').value.trim();
+    var session = document.getElementById('captcha_session_id').value;
+    if(!txt) return alert("❌ Por favor ingrese el código de la imagen.");
+    window.consultarCDCReal(txt, session);
+};
+
+window.consultarCDCReal = async function(captchaValor = null, captchaSession = null) {
     var cdc = (document.getElementById('sifen_cdc').value || '').trim().replace(/\D/g,'');
     if (cdc.length !== 44) return alert('❌ El CDC debe tener 44 dígitos.\nActualmente: ' + cdc.length);
 
     document.getElementById('sifen_loading').style.display = 'block';
-    document.getElementById('sifen_loading_txt') && (document.getElementById('sifen_loading_txt').textContent = 'Consultando servidor DNIT...');
+    document.getElementById('sifen_loading_txt').textContent = captchaValor ? 'Validando CAPTCHA en la SET...' : 'Consultando servidor DNIT...';
     document.getElementById('sifen_resultado').style.display = 'none';
     document.getElementById('sifen_error').style.display = 'none';
+    
     var btnCons = document.getElementById('btn_consultar_cdc');
-    btnCons.disabled = true;
-    btnCons.textContent = '⏳ Consultando...';
+    btnCons.disabled = true; btnCons.textContent = '⏳ Consultando...';
 
-    // Decodificar CDC localmente (siempre confiable)
     var dec = window.decodificarCDC(cdc);
 
     try {
-        var res  = await fetch('https://consultarcdc-5ebcw3zata-uc.a.run.app/?cdc=' + cdc);
+        var urlApi = 'https://consultarcdc-5ebcw3zata-uc.a.run.app/?cdc=' + cdc;
+        if (captchaValor) urlApi += '&captcha_txt=' + encodeURIComponent(captchaValor);
+        if (captchaSession) urlApi += '&session=' + encodeURIComponent(captchaSession);
+
+        var res  = await fetch(urlApi);
         if (!res.ok) throw new Error('HTTP ' + res.status);
         var data = await res.json();
 
         document.getElementById('sifen_loading').style.display = 'none';
-        btnCons.disabled = false;
-        btnCons.textContent = '🔎 Consultar DNIT';
+        btnCons.disabled = false; btnCons.textContent = '🔎 Consultar DNIT';
 
-        // ── Detectar CAPTCHA
-        var esCaptcha = (data.rs === 'REQUIERE CAPTCHA' || data.rs === 'ERROR CAPTCHA' ||
-                         (data.rs && data.rs.toUpperCase().includes('CAPTCHA')));
+        var esCaptcha = (data.rs === 'REQUIERE CAPTCHA' || data.rs === 'ERROR CAPTCHA' || (data.rs && data.rs.toUpperCase().includes('CAPTCHA')));
+        var tieneImagen = data.captcha_base64 || data.captcha_url;
+
+        if (esCaptcha && tieneImagen && !data.ok) { 
+             document.getElementById('sifen_resultado').style.display = 'block';
+             document.getElementById('sifen_captcha_solver_box').style.display = 'block';
+             document.getElementById('sifen_captcha_box').style.display = 'none';
+             
+             var imgSrc = data.captcha_base64 ? 'data:image/jpeg;base64,' + data.captcha_base64 : data.captcha_url;
+             document.getElementById('captcha_img_src').src = imgSrc;
+             document.getElementById('captcha_session_id').value = data.session_id || '';
+             document.getElementById('captcha_txt_input').value = '';
+             
+             document.getElementById('sifen_accion_box').style.display = 'none';
+             document.getElementById('sifen_lbl_estado').textContent = '⚠️ CAPTCHA REQUERIDO';
+             document.getElementById('sifen_badge_estado').textContent = 'BLOQUEADO';
+             document.getElementById('sifen_badge_estado').style.background = '#fef3c7';
+             document.getElementById('sifen_badge_estado').style.color = '#92400e';
+             return; 
+        } else if (esCaptcha) {
+             document.getElementById('sifen_captcha_solver_box').style.display = 'none';
+             document.getElementById('sifen_captcha_box').style.display = 'block';
+             document.getElementById('sifen_accion_box').style.display = 'block';
+        } else {
+             document.getElementById('sifen_captcha_solver_box').style.display = 'none';
+             document.getElementById('sifen_captcha_box').style.display = 'none';
+             document.getElementById('sifen_accion_box').style.display = 'block';
+        }
+
         var totalServer = data.total || 0;
-        var estadoServer = data.estado || 'AP'; // si no viene estado, asumir AP si ok=true
+        var estadoServer = data.estado || 'AP'; 
 
-        // ── Datos finales: servidor + CDC decoded como respaldo
         var rucFinal   = (data.ruc && data.ruc.length > 3) ? data.ruc : (dec ? dec.rucEmisor : '—');
         var dvFinal    = dec ? dec.dvRuc : '';
-        var rsFinal    = esCaptcha ? '(Requiere verificación manual — ver CAPTCHA)' :
-                         (!data.rs || data.rs === '') ? (dec ? '(sin datos en directorio)' : '—') : data.rs;
+        var rsFinal    = esCaptcha ? '(Verificación manual / CAPTCHA)' : (!data.rs || data.rs === '') ? (dec ? '(sin datos)' : '—') : data.rs;
 
-        // Fecha: server si válida, sino del CDC
         var fechaDisplay = '', fechaISO = '';
         if (data.fecha && data.fecha.trim()) {
             var fp = data.fecha.trim();
             if (fp.includes('/')) {
                 var pts = fp.split('/');
                 if (pts.length === 3 && pts[2].length === 4) {
-                    fechaDisplay = fp;
-                    fechaISO = pts[2] + '-' + pts[1].padStart(2,'0') + '-' + pts[0].padStart(2,'0');
+                    fechaDisplay = fp; fechaISO = pts[2] + '-' + pts[1].padStart(2,'0') + '-' + pts[0].padStart(2,'0');
                 } else { fechaDisplay = dec ? dec.fechaDisplay : fp; fechaISO = dec ? dec.fechaISO : ''; }
             } else if (fp.includes('-')) {
-                fechaISO = fp;
-                var ps2 = fp.split('-');
-                fechaDisplay = (ps2[2]||'') + '/' + (ps2[1]||'') + '/' + (ps2[0]||'');
+                fechaISO = fp; var ps2 = fp.split('-'); fechaDisplay = (ps2[2]||'') + '/' + (ps2[1]||'') + '/' + (ps2[0]||'');
             }
         }
-        if (!fechaDisplay && dec && dec.fechaValida) {
-            fechaDisplay = dec.fechaDisplay;
-            fechaISO     = dec.fechaISO;
-        }
+        if (!fechaDisplay && dec && dec.fechaValida) { fechaDisplay = dec.fechaDisplay; fechaISO = dec.fechaISO; }
 
-        // ── Badge estado
         var badges = {
-            'AP': {txt:'✅ APROBADO',     bg:'#d1fae5', col:'#065f46'},
-            'CA': {txt:'❌ CANCELADO',    bg:'#fee2e2', col:'#991b1b'},
+            'AP': {txt:'✅ APROBADO', bg:'#d1fae5', col:'#065f46'},
+            'CA': {txt:'❌ CANCELADO', bg:'#fee2e2', col:'#991b1b'},
             'IN': {txt:'⛔ INHABILITADO', bg:'#fee2e2', col:'#991b1b'},
-            'PE': {txt:'⏳ PENDIENTE',    bg:'#dbeafe', col:'#1e40af'},
-            '':   {txt:'⚠️ SIN ESTADO',  bg:'#fef3c7', col:'#92400e'}
+            'PE': {txt:'⏳ PENDIENTE', bg:'#dbeafe', col:'#1e40af'},
+            '':   {txt:'⚠️ SIN ESTADO', bg:'#fef3c7', col:'#92400e'}
         };
         var bd = badges[estadoServer] || {txt: estadoServer || '?', bg:'#e5e7eb', col:'#374151'};
         var badge = document.getElementById('sifen_badge_estado');
         Object.assign(badge.style, {background:bd.bg, color:bd.col, border:'1.5px solid '+bd.col});
         badge.textContent = bd.txt;
-        document.getElementById('sifen_lbl_estado').textContent =
-            (esCaptcha ? '⚠️ CAPTCHA activo en DNIT — datos del CDC son confiables' :
-             'CDC verificado en DNIT · ' + (data.ok ? 'OK' : 'Con observaciones'));
+        
+        var lblEstadoStr = esCaptcha ? 'Datos pre-cargados por decodificación.' : 'CDC verificado en DNIT · ' + (data.ok ? 'OK' : 'Con observaciones');
+        if(captchaValor && !esCaptcha) lblEstadoStr = '✅ CAPTCHA RESUELTO CORRECTAMENTE · ' + lblEstadoStr;
+        document.getElementById('sifen_lbl_estado').textContent = lblEstadoStr;
 
         document.getElementById('sifen_ruc').textContent   = rucFinal + (dvFinal ? '-' + dvFinal : '');
         document.getElementById('sifen_rs').textContent    = rsFinal;
         document.getElementById('sifen_fecha').textContent = fechaDisplay || '—';
-        document.getElementById('sifen_total').textContent = esCaptcha ? '₲ — (ingresar manual)' : '₲ ' + totalServer.toLocaleString();
-        document.getElementById('sifen_iva10') && (document.getElementById('sifen_iva10').textContent = esCaptcha ? '' : '₲ ' + (data.iva10||0).toLocaleString());
-        document.getElementById('sifen_exento') && (document.getElementById('sifen_exento').textContent = esCaptcha ? '' : '₲ ' + (data.exento||0).toLocaleString());
+        document.getElementById('sifen_total').textContent = esCaptcha ? '₲ —' : '₲ ' + totalServer.toLocaleString();
 
-        // ── Mostrar box CAPTCHA si aplica
-        var captchaBox = document.getElementById('sifen_captcha_box');
-        if (captchaBox) captchaBox.style.display = esCaptcha ? 'block' : 'none';
-        if (esCaptcha && dec) {
-            document.getElementById('captcha_rs').value = '';
-        }
-
-        // ── Desglose CDC
         if (dec) {
             document.getElementById('sifen_cdc_desglose').innerHTML = [
-                '<b>Versión:</b> ' + dec.version,
-                '<b>Tipo:</b> ' + dec.tipoDocNom,
-                '<b>RUC emisor:</b> ' + dec.rucConDV,
-                '<b>N° doc:</b> ' + dec.nroCompleto,
-                '<b>Condición:</b> ' + dec.tipoTrans,
-                '<b>Fecha (CDC):</b> ' + dec.fechaDisplay + (dec.fechaValida ? ' ✅' : ' ⚠️'),
-                '<b>Código seg.:</b> ' + dec.seguridad.substring(0,4) + '...'
+                '<b>Versión:</b> ' + dec.version, '<b>Tipo:</b> ' + dec.tipoDocNom, '<b>RUC:</b> ' + dec.rucConDV,
+                '<b>N° doc:</b> ' + dec.nroCompleto, '<b>Condición:</b> ' + dec.tipoTrans, '<b>Fecha:</b> ' + dec.fechaDisplay
             ].join(' &nbsp;·&nbsp; ');
         }
 
-        // ── Guardar datos
         window._ultimoCDCData = {
-            cdc:          cdc,
-            esCaptcha:    esCaptcha,
-            ruc:          rucFinal,
-            rucConDV:     rucFinal + (dvFinal ? '-'+dvFinal : ''),
-            rs:           rsFinal,
-            fecha:        fechaISO,
-            fechaDisplay: fechaDisplay,
-            total:        totalServer,
-            iva10:        data.iva10 || 0,
-            iva5:         data.iva5  || 0,
-            exento:       data.exento || 0,
-            estado:       estadoServer,
-            condicion:    dec ? dec.tipoTransCod : '1',
-            dec:          dec
+            cdc: cdc, esCaptcha: esCaptcha, ruc: rucFinal, rucConDV: rucFinal + (dvFinal ? '-'+dvFinal : ''), rs: rsFinal,
+            fecha: fechaISO, fechaDisplay: fechaDisplay, total: totalServer, iva10: data.iva10 || 0, iva5: data.iva5 || 0,
+            exento: data.exento || 0, estado: estadoServer, condicion: dec ? dec.tipoTransCod : '1', dec: dec
         };
 
-        // ── Selector clientes
-        var sel = document.getElementById('sifen_cli_destino');
-        sel.innerHTML = '<option value="">— Seleccione cliente —</option>';
-        window.dbClientes.forEach(function(c,i) {
-            if (c.estado === 'activo') sel.innerHTML += '<option value="'+i+'">'+c.nom+' ('+c.ruc+')</option>';
-        });
+        var sel = document.getElementById('sifen_cli_destino'); sel.innerHTML = '<option value="">— Seleccione cliente —</option>';
+        window.dbClientes.forEach((c,i) => { if (c.estado === 'activo') sel.innerHTML += '<option value="'+i+'">'+c.nom+' ('+c.ruc+')</option>'; });
         var rucBusca = rucFinal.replace(/\D/g,'');
-        window.dbClientes.forEach(function(c,i) {
-            if (rucBusca.length > 4 && (c.ruc||'').replace(/\D/g,'').includes(rucBusca)) sel.value = i;
-        });
+        window.dbClientes.forEach((c,i) => { if (rucBusca.length > 4 && (c.ruc||'').replace(/\D/g,'').includes(rucBusca)) sel.value = i; });
 
         document.getElementById('sifen_resultado').style.display = 'block';
 
-        // ── Historial (FIX: estado con fallback)
+        if (!window._historialCDC) window._historialCDC = [];
         window._historialCDC.unshift({
-            cdcCorto: cdc.substring(0,10)+'...',
-            ruc:      rucFinal + (dvFinal?'-'+dvFinal:''),
-            rs:       (esCaptcha ? '[CAPTCHA]' : rsFinal).substring(0,32),
-            fecha:    fechaDisplay || '—',
-            total:    totalServer,
-            estado:   estadoServer || 'AP',  // ← FIX bug "undefined"
-            dataCompleta: window._ultimoCDCData
+            cdcCorto: cdc.substring(0,10)+'...', ruc: rucFinal + (dvFinal?'-'+dvFinal:''),
+            rs: (esCaptcha ? '[CAPTCHA]' : rsFinal).substring(0,32), fecha: fechaDisplay || '—',
+            total: totalServer, estado: estadoServer || 'AP', dataCompleta: window._ultimoCDCData
         });
-        _renderHistorialCDC();
-
-        // ── Análisis IA (async, no bloquea)
-        _analizarConIA(window._ultimoCDCData);
+        if(window._renderHistorialCDC) window._renderHistorialCDC();
+        if(window._analizarConIA) window._analizarConIA(window._ultimoCDCData);
 
     } catch(e) {
         document.getElementById('sifen_loading').style.display = 'none';
-        btnCons.disabled = false;
-        btnCons.textContent = '🔎 Consultar DNIT';
+        btnCons.disabled = false; btnCons.textContent = '🔎 Consultar DNIT';
         document.getElementById('sifen_error').style.display = 'block';
-        document.getElementById('sifen_error_titulo').textContent = 'Error de conexión';
-        document.getElementById('sifen_error_msg').textContent = e.message +
-            '\nVerifique su conexión. Puede usar el portal 🌐 manualmente.';
+        document.getElementById('sifen_error_titulo').textContent = 'Error de conexión / Servidor';
+        document.getElementById('sifen_error_msg').textContent = e.message + '\nVerifique la conexión o el backend de Cloud Run.';
     }
 };
 
-// ── Análisis Claude IA del comprobante
-async function _analizarConIA(d) {
-    if (!d) return;
-    var panel = document.getElementById('sifen_ia_panel');
-    var texto = document.getElementById('sifen_ia_texto');
-    if (!panel || !texto) return;
-    panel.style.display = 'block';
-    texto.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-style:italic">🤖 Claude analizando...</span>';
-    try {
-        var prompt =
-            'Sos experto contable Paraguay. Analiza este comprobante SIFEN en 3-4 líneas concisas:\n' +
-            '• Tipo: ' + (d.dec ? d.dec.tipoDocNom : 'Factura') + '\n' +
-            '• RUC: ' + d.rucConDV + ' — ' + d.rs + '\n' +
-            '• N°: ' + (d.dec ? d.dec.nroCompleto : '—') + ' · Fecha: ' + d.fechaDisplay + '\n' +
-            '• Estado DNIT: ' + d.estado + (d.esCaptcha ? ' (CAPTCHA)' : '') + '\n' +
-            '• Total: ₲ ' + d.total.toLocaleString() + ' · IVA10: ₲ ' + d.iva10.toLocaleString() +
-            ' · Exento: ₲ ' + d.exento.toLocaleString() + '\n' +
-            '• Condición: ' + (d.condicion === '2' ? 'Crédito' : 'Contado') + '\n\n' +
-            'Indicá: registro contable correcto, deducibilidad IVA e IRE, y si hay algo a verificar.';
-
-        var res = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'anthropic-dangerous-direct-browser-access': 'true'
-            },
-            body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 350,
-                system: 'Sos asistente contable de ContaPY v1.1 Paraguay. Respondé en español, breve y práctico.',
-                messages: [{ role: 'user', content: prompt }]
-            })
-        });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        var ai = await res.json();
-        var reply = (ai.content && ai.content[0]) ? ai.content[0].text : 'Sin respuesta.';
-        reply = reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-        texto.innerHTML = reply;
-    } catch(e) {
-        texto.style.color = 'rgba(255,255,255,0.4)';
-        texto.style.fontStyle = 'italic';
-        texto.textContent = 'Análisis IA no disponible en este momento. (' + e.message + ')';
-    }
-}
-
-// ── Historial
-function _renderHistorialCDC() {
-    var card = document.getElementById('sifen_historial_card');
-    if (!window._historialCDC.length) { card.style.display = 'none'; return; }
-    card.style.display = 'block';
-    var em = {'AP':'ok','CA':'err','PE':'info','IN':'err'};
-    document.getElementById('lista_historial_cdc').innerHTML = window._historialCDC.map(function(h,i) {
-        var est = h.estado || 'AP';
-        return '<tr>' +
-            '<td style="font-family:\'DM Mono\';font-size:11px;color:var(--text-light)">' + h.cdcCorto + '</td>' +
-            '<td style="font-family:\'DM Mono\'">' + h.ruc + '</td>' +
-            '<td style="font-size:12px">' + h.rs + '</td>' +
-            '<td>' + h.fecha + '</td>' +
-            '<td class="monto" style="font-weight:700">₲ ' + h.total.toLocaleString() + '</td>' +
-            '<td><span class="badge-status ' + (em[est] || 'info') + '">' + est + '</span></td>' +
-            '<td><button class="btn btn-outline btn-sm" onclick="recargarDesdeHistorial(' + i + ')">↺ Usar</button></td>' +
-        '</tr>';
-    }).join('');
-}
-
-window.recargarDesdeHistorial = function(i) {
-    var d = window._historialCDC[i];
-    if (!d) return;
-    window._ultimoCDCData = d.dataCompleta;
-    document.getElementById('sifen_ruc').textContent   = d.ruc;
-    document.getElementById('sifen_rs').textContent    = d.rs;
-    document.getElementById('sifen_fecha').textContent = d.fecha;
-    document.getElementById('sifen_total').textContent = '₲ ' + d.total.toLocaleString();
-    document.getElementById('sifen_resultado').style.display = 'block';
-    if (d.dataCompleta && d.dataCompleta.dec) {
-        document.getElementById('sifen_cdc_desglose').innerHTML =
-            '<b>N° doc:</b> ' + d.dataCompleta.dec.nroCompleto + ' · <b>Fecha:</b> ' + d.fecha;
-    }
-};
-
-// ── Enviar al Wizard (con soporte CAPTCHA: leer monto manual)
 window.enviarCDCAlWizard = function() {
     var cliIdx = document.getElementById('sifen_cli_destino').value;
     var oper   = document.getElementById('sifen_operacion_tipo').value;
@@ -1682,7 +1653,6 @@ window.enviarCDCAlWizard = function() {
     var d = window._ultimoCDCData;
     if (!d) return alert('❌ Realice primero la consulta.');
 
-    // Si hay CAPTCHA, leer datos manuales
     if (d.esCaptcha) {
         var totalManual = parseFloat(document.getElementById('captcha_total').value) || 0;
         if (totalManual <= 0) return alert('❌ Ingrese el monto total del comprobante (caja "Monto Total ₲").');
@@ -1691,10 +1661,7 @@ window.enviarCDCAlWizard = function() {
         var iva10m = tasa==='10' ? Math.round(totalManual/11) : 0;
         var iva5m  = tasa==='5'  ? Math.round(totalManual/21) : 0;
         var exentm = tasa==='0'  ? totalManual : 0;
-        d.total  = totalManual;
-        d.iva10  = iva10m;
-        d.iva5   = iva5m;
-        d.exento = exentm;
+        d.total  = totalManual; d.iva10  = iva10m; d.iva5   = iva5m; d.exento = exentm;
         if (rsManual) d.rs = rsManual;
     }
 
@@ -1710,7 +1677,6 @@ window.enviarCDCAlWizard = function() {
     document.getElementById('wiz_tercero').value     = (!d.rs || d.rs.includes('CAPTCHA') || d.rs.includes('sin registro')) ? '' : d.rs;
     document.getElementById('wiz_rol_tercero').value = oper === 'compra' ? 'proveedor' : 'cliente';
     document.getElementById('wiz_timbrado').value    = d.cdc;
-    document.getElementById('wiz_tipo_timb').value   = 'ELECTRONICO';
     document.getElementById('wiz_nro').value         = nroDisplay;
 
     var pagoEl = document.getElementById('wiz_pago_tipo');
@@ -1725,42 +1691,60 @@ window.enviarCDCAlWizard = function() {
             document.getElementById('wiz_m5').value  = Math.round(d.iva5*20 + d.iva5);
             document.getElementById('wiz_mex').value = d.exento;
         } else {
-            document.getElementById('wiz_iva_tasa').value =
-                d.iva10>0 ? '10' : d.iva5>0 ? '5' : d.exento>0 ? '0' : '10';
+            document.getElementById('wiz_iva_tasa').value = d.iva10>0 ? '10' : d.iva5>0 ? '5' : d.exento>0 ? '0' : '10';
         }
     }
 
     var tipoNom = d.dec ? d.dec.tipoDocNom : 'Factura Electrónica';
-    document.getElementById('wiz_glosa').value =
-        tipoNom + ' N° ' + nroDisplay + ' · ' +
-        (d.rs && !d.rs.includes('CAPTCHA') && !d.rs.includes('sin registro') ? d.rs : 'RUC ' + d.ruc) +
-        ' · ' + (d.fechaDisplay || d.fecha);
+    document.getElementById('wiz_glosa').value = tipoNom + ' N° ' + nroDisplay + ' · ' + (d.rs && !d.rs.includes('CAPTCHA') && !d.rs.includes('sin registro') ? d.rs : 'RUC ' + d.ruc) + ' · ' + (d.fechaDisplay || d.fecha);
 
-    window.updateWizTaxes();
-    window.toggleTasas();
-    window.toggleWizardTipo();
-    window.calcWizIva();
-    window.wizNext(1);
-    window.openModal('modal-wizard');
+    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard');
 };
 
-window.abrirMiniaturaDNIT = function() {
-    window.open('https://ekuatia.set.gov.py/consultas/','VentanaDNIT',
-        'width=1000,height=700,top=50,left=100,toolbar=no,menubar=no,scrollbars=yes,resizable=yes');
-};
-window.consultarSIFEN = function() {
-    var cdc = (document.getElementById('sifen_cdc')||{value:''}).value.trim();
-    if (cdc.length===44) window.consultarCDCReal(); else alert('❌ Ingrese 44 dígitos del CDC.');
-};
-window.irAConsultaCDC = function() {
-    var nav = null;
-    document.querySelectorAll('.nav-item').forEach(function(el) {
-        if ((el.getAttribute('onclick')||'').includes("'comprobantes'")) nav = el;
-    });
-    window.showPage('comprobantes', nav);
+async function _analizarConIA(d) {
+    if (!d) return;
+    var panel = document.getElementById('sifen_ia_panel'); var texto = document.getElementById('sifen_ia_texto');
+    if (!panel || !texto) return;
+    panel.style.display = 'block'; texto.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-style:italic">🤖 Claude analizando...</span>';
+    try {
+        var apiKey = localStorage.getItem('gemini_api_key');
+        if(!apiKey) throw new Error("Sin API Key de Google");
+        var prompt = 'Sos experto contable Paraguay. Analiza este comprobante SIFEN en 3 líneas:\n' + '• Tipo: ' + (d.dec ? d.dec.tipoDocNom : 'Factura') + '\n' + '• RUC: ' + d.rucConDV + ' — ' + d.rs + '\n' + '• N°: ' + (d.dec ? d.dec.nroCompleto : '—') + ' · Fecha: ' + d.fechaDisplay + '\n' + '• Estado DNIT: ' + d.estado + (d.esCaptcha ? ' (CAPTCHA)' : '') + '\n' + '• Total: ₲ ' + d.total.toLocaleString() + ' · IVA10: ₲ ' + d.iva10.toLocaleString() + '\n' + '• Condición: ' + (d.condicion === '2' ? 'Crédito' : 'Contado') + '\n\n' + 'Indicá: registro contable sugerido y deducibilidad IVA/IRE.';
+        
+        var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ contents:[{parts:[{text: prompt}]}] })
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var ai = await res.json();
+        var reply = ai.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+        texto.innerHTML = reply;
+    } catch(e) {
+        texto.style.color = 'rgba(255,255,255,0.4)'; texto.style.fontStyle = 'italic';
+        texto.textContent = 'Análisis IA no disponible (' + e.message + ')';
+    }
+}
+
+function _renderHistorialCDC() {
+    var card = document.getElementById('sifen_historial_card');
+    if (!window._historialCDC || !window._historialCDC.length) { card.style.display = 'none'; return; }
+    card.style.display = 'block'; var em = {'AP':'ok','CA':'err','PE':'info','IN':'err'};
+    document.getElementById('lista_historial_cdc').innerHTML = window._historialCDC.map(function(h,i) {
+        var est = h.estado || 'AP';
+        return `<tr><td style="font-family:'DM Mono';font-size:11px;color:var(--text-light)">${h.cdcCorto}</td><td style="font-family:'DM Mono'">${h.ruc}</td><td style="font-size:12px">${h.rs}</td><td>${h.fecha}</td><td class="monto" style="font-weight:700">₲ ${h.total.toLocaleString()}</td><td><span class="badge-status ${em[est] || 'info'}">${est}</span></td><td><button class="btn btn-outline btn-sm" onclick="recargarDesdeHistorial(${i})">↺ Usar</button></td></tr>`;
+    }).join('');
+}
+
+window.recargarDesdeHistorial = function(i) {
+    var d = window._historialCDC[i]; if (!d) return; window._ultimoCDCData = d.dataCompleta;
+    document.getElementById('sifen_ruc').textContent = d.ruc; document.getElementById('sifen_rs').textContent = d.rs;
+    document.getElementById('sifen_fecha').textContent = d.fecha; document.getElementById('sifen_total').textContent = '₲ ' + d.total.toLocaleString();
+    document.getElementById('sifen_resultado').style.display = 'block';
+    if (d.dataCompleta && d.dataCompleta.dec) { document.getElementById('sifen_cdc_desglose').innerHTML = '<b>N° doc:</b> ' + d.dataCompleta.dec.nroCompleto + ' · <b>Fecha:</b> ' + d.fecha; }
 };
 
-
+window.abrirMiniaturaDNIT = function() { window.open('https://ekuatia.set.gov.py/consultas/','VentanaDNIT','width=1000,height=700,top=50,left=100,toolbar=no,menubar=no,scrollbars=yes,resizable=yes'); };
+window.irAConsultaCDC = function() { window.showPage('comprobantes'); };
 
 // ===== IMPORTACIÓN EXCEL / IA =====
 window.openModalImportMain = function() { document.getElementById('imp_box_cli').style.display='flex'; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; window.openModal('modal-import'); };
@@ -1788,9 +1772,9 @@ window.procesarImportacion = function() {
         parseados.forEach(p => {
             var iva = p.tasa===10?Math.round(p.monto/11):(p.tasa===5?Math.round(p.monto/21):0);
             var obj = {fecha: p.fecha, tipo: p.tipo, timbrado: p.timb, nro: p.nro, ruc: p.ruc, tercero: p.terc, bruto: p.monto, neto: p.monto-iva, iva: iva, tasa_iva: p.tasa, iva10: (p.tasa===10?iva:0), iva5: (p.tasa===5?iva:0), grav10: (p.tasa===10?p.monto-iva:0), grav5: (p.tasa===5?p.monto-iva:0), exe: (p.tasa===0?p.monto:0), ref_asiento: "IMP-"+Math.floor(Math.random()*9000), condicion:'contado', rol:'proveedor', impuestos_aplicados: cli.taxes};
-            var cVenta = p.tasa===10 ? '4.1.1.01 Ventas 10%' : (p.tasa===5 ? '4.1.1.02 Ventas 5%' : '4.1.1.03 Ventas Exentas');
-            var cIva = p.tasa===10 ? '2.1.4.01 IVA Débito 10%' : (p.tasa===5 ? '2.1.4.02 IVA Débito 5%' : '');
-            var lin =[{cuenta:'1.1.1.01 Caja', debe:p.monto, haber:0}, {cuenta:cVenta, debe:0, haber:p.monto-iva}]; if(iva>0) lin.push({cuenta:cIva, debe:0, haber:iva});
+            var cVenta = p.tasa===10 ? '4.01.01 Ventas 10%' : (p.tasa===5 ? '4.01.01 Ventas 5%' : '4.01.01 Ventas Exentas');
+            var cIva = p.tasa===10 ? '2.01.03.01.02 IVA A PAGAR' : (p.tasa===5 ? '2.01.03.01.02 IVA A PAGAR' : '');
+            var lin =[{cuenta:'1.01.01.01 CAJA', debe:p.monto, haber:0}, {cuenta:cVenta, debe:0, haber:p.monto-iva}]; if(iva>0) lin.push({cuenta:cIva, debe:0, haber:iva});
             cli.libros.ventas.push(obj); cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación Excel", lineas: lin}); window.totalDocs++;
         });
         window.saveData(); document.getElementById('dash_doc_count').textContent = window.totalDocs; alert(`✅ Se procesaron e importaron exitosamente ${parseados.length} comprobantes al cliente ${cli.nom}.`);
@@ -1839,18 +1823,17 @@ window.calcularImpuestos = function(tipo) {
 
 window.onload = function() {
     window.initPlanCuentas(); 
-    var l = localStorage.getItem('contapy_lang') || 'es'; document.getElementById('lang_sel').value = l; window.changeLang(l); 
+    var l = localStorage.getItem('contapy_lang') || 'es'; document.getElementById('lang_sel').value = l; 
 };
 </script>
 
 <!-- ==============================================
-     MÓDULO FIREBASE (CONEXIÓN EN LA NUBE)
+     MÓDULO FIREBASE (MODO COMPAT - LOCAL FRIENDLY)
 =============================================== -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+<script>
   const firebaseConfig = {
     apiKey: "AIzaSyBn3tcXb3WpVojYmMX603L68jhOqzW8abg",
     authDomain: "contapy-f85f9.firebaseapp.com",
@@ -1860,34 +1843,58 @@ window.onload = function() {
     appId: "1:230770781636:web:5114af83fb351c15b68891"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
   window.doLogin = async function() {
       const u = document.getElementById('lu').value, p = document.getElementById('lp').value, btn = document.getElementById('btn-login');
       btn.textContent = "☁️ Verificando...";
-      try { await signInWithEmailAndPassword(auth, u, p); } catch (error) { btn.textContent = "Ingresar al Sistema"; alert("❌ Error: Correo o contraseña incorrectos."); }
+      try { 
+          await auth.signInWithEmailAndPassword(u, p); 
+      } catch (error) { 
+          btn.textContent = "Ingresar al Sistema"; 
+          alert("❌ Error: Correo o contraseña incorrectos."); 
+      }
   };
 
   window.saveData = async function() {
-      try { await setDoc(doc(db, "sistema", "datos_principales"), { clientes: window.dbClientes, usuarios: window.dbUsuarios, totalDocs: window.totalDocs }); } 
+      try { 
+          await db.collection("sistema").doc("datos_principales").set({ 
+              clientes: window.dbClientes, 
+              usuarios: window.dbUsuarios, 
+              totalDocs: window.totalDocs, 
+              planCustom: window.PLAN_CUENTAS_CUSTOM || [] 
+          }); 
+      } 
       catch (e) { console.error(e); alert("❌ Error de sincronización con la nube."); }
   };
 
-  const handleLogout = function() { signOut(auth).then(() => location.reload()); };
+  const handleLogout = function() { auth.signOut().then(() => location.reload()); };
   if (document.getElementById('btn-logout')) document.getElementById('btn-logout').onclick = handleLogout;
   if (document.getElementById('btn-logout-sidebar')) document.getElementById('btn-logout-sidebar').onclick = handleLogout;
 
   async function loadDataFromFirebase() {
       try {
-          const docSnap = await getDoc(doc(db, "sistema", "datos_principales"));
-          if (docSnap.exists()) { const data = docSnap.data(); window.dbClientes = data.clientes ||[]; window.dbUsuarios = data.usuarios ||[]; window.totalDocs = data.totalDocs || 0; } 
-          else { window.dbClientes =[]; window.dbUsuarios =[{ user: auth.currentUser.email, pass:'***', rol: 'Administrador', clientesAsignados: [] }]; window.totalDocs = 0; await window.saveData(); }
+          const docSnap = await db.collection("sistema").doc("datos_principales").get();
+          if (docSnap.exists) { 
+              const data = docSnap.data(); 
+              window.dbClientes = data.clientes ||[]; 
+              window.dbUsuarios = data.usuarios ||[]; 
+              window.totalDocs = data.totalDocs || 0; 
+              window.PLAN_CUENTAS_CUSTOM = data.planCustom || [];
+          } 
+          else { 
+              window.dbClientes =[]; 
+              window.dbUsuarios =[{ user: auth.currentUser.email, pass:'***', rol: 'Administrador', clientesAsignados: [] }]; 
+              window.totalDocs = 0; 
+              window.PLAN_CUENTAS_CUSTOM = []; 
+              await window.saveData(); 
+          }
       } catch (e) { alert("❌ No se pudieron obtener los datos de la nube."); }
   }
 
-  onAuthStateChanged(auth, async (user) => {
+  auth.onAuthStateChanged(async (user) => {
       if (user) {
           document.getElementById('login-card').style.display = 'none';
           document.getElementById('login-loading').style.display = 'block';
@@ -1895,6 +1902,7 @@ window.onload = function() {
           
           await loadDataFromFirebase();
           
+          window.PLAN_CUENTAS_CUSTOM = window.PLAN_CUENTAS_CUSTOM || [];
           window.currentUser = window.dbUsuarios.find(u => u.user === user.email);
           if(!window.currentUser) { window.currentUser = { user: user.email, pass:'***', rol: 'Administrador', clientesAsignados:[] }; window.dbUsuarios.push(window.currentUser); window.saveData(); }
           
@@ -1903,11 +1911,364 @@ window.onload = function() {
           document.getElementById('sb_user_rol').textContent = window.currentUser.rol;
           document.getElementById('menu_admin').style.display = window.currentUser.rol === 'Administrador' ? 'block' : 'none';
           
-          window.renderClientes(); window.actualizarSelectsClientes(); window.showPage('dashboard');
+          window.initPlanCuentas(); window.renderClientes(); window.actualizarSelectsClientes(); window.showPage('dashboard');
       } else {
-          document.getElementById('login-loading').style.display = 'none'; document.getElementById('login-card').style.display = 'block'; document.getElementById('btn-login').textContent = "Ingresar al Sistema";
+          document.getElementById('login-loading').style.display = 'none'; 
+          document.getElementById('login-card').style.display = 'block'; 
+          document.getElementById('btn-login').textContent = "Ingresar al Sistema";
       }
   });
+</script>
+
+<script>
+// ============================================================
+//  MÓDULO: BALANCE GENERAL + ESTADO DE RESULTADOS
+//  Basado en Resolución General N° 49/14 - SET Paraguay
+// ============================================================
+window.PLAN_RES4914 = {
+  // ACTIVO CORRIENTE
+  "1.01.01.01": { nombre: "RECAUDACIONES A DEPOSITAR", tipo: "activo_corriente" },
+  "1.01.01.02": { nombre: "CAJA", tipo: "activo_corriente" },
+  "1.01.01.03": { nombre: "FONDOS FIJOS", tipo: "activo_corriente" },
+  "1.01.01.04": { nombre: "BANCOS", tipo: "activo_corriente" },
+  "1.01.02.01": { nombre: "INVERSIONES FINANCIERAS (CP)", tipo: "activo_corriente" },
+  "1.01.02.02": { nombre: "INVERSIONES EN ENTIDADES VINCULADAS (CP)", tipo: "activo_corriente" },
+  "1.01.02.03": { nombre: "OTRAS INVERSIONES (CP)", tipo: "activo_corriente" },
+  "1.01.03.01": { nombre: "DEUDORES POR VENTAS", tipo: "activo_corriente" },
+  "1.01.03.02": { nombre: "DEUDORES POR PRÉSTAMOS", tipo: "activo_corriente" },
+  "1.01.03.05.01": { nombre: "ANTICIPOS Y RETENCIONES DE IMPUESTO", tipo: "activo_corriente" },
+  "1.01.03.05.02": { nombre: "RETENCIONES DE IVA", tipo: "activo_corriente" },
+  "1.01.03.05.03": { nombre: "IVA – CRÉDITO FISCAL", tipo: "activo_corriente" },
+  "1.01.04.01": { nombre: "MERCADERÍAS", tipo: "activo_corriente" },
+  "1.01.04.03": { nombre: "PRODUCTOS TERMINADOS", tipo: "activo_corriente" },
+  "1.01.04.05": { nombre: "MATERIAS PRIMAS", tipo: "activo_corriente" },
+  "1.01.05.01": { nombre: "ALQUILERES PAGADOS POR ADELANTADO", tipo: "activo_corriente" },
+  "1.01.05.02": { nombre: "SEGUROS A DEVENGAR", tipo: "activo_corriente" },
+  // ACTIVO NO CORRIENTE
+  "1.02.01.01": { nombre: "DEUDORES POR VENTAS (LP)", tipo: "activo_no_corriente" },
+  "1.02.03.01": { nombre: "INVERSIONES FINANCIERAS (LP)", tipo: "activo_no_corriente" },
+  "1.02.03.02": { nombre: "INVERSIONES EN ENTIDADES VINCULADAS (LP)", tipo: "activo_no_corriente" },
+  "1.02.03.03": { nombre: "INVERSIONES INMOBILIARIAS", tipo: "activo_no_corriente" },
+  "1.02.04.01": { nombre: "INMUEBLES", tipo: "activo_no_corriente" },
+  "1.02.04.02": { nombre: "RODADOS / TRANSPORTES", tipo: "activo_no_corriente" },
+  "1.02.04.03": { nombre: "MUEBLES, ÚTILES Y ENSERES", tipo: "activo_no_corriente" },
+  "1.02.04.04": { nombre: "MAQUINARIAS", tipo: "activo_no_corriente" },
+  "1.02.04.05": { nombre: "EQUIPOS", tipo: "activo_no_corriente" },
+  "1.02.04.06": { nombre: "HERRAMIENTAS", tipo: "activo_no_corriente" },
+  "1.02.04.99": { nombre: "(-) DEPRECIACIÓN ACUMULADA", tipo: "activo_no_corriente", negativo: true },
+  "1.02.05.01": { nombre: "DERECHOS FIDUCIARIOS", tipo: "activo_no_corriente" },
+  "1.02.07.01": { nombre: "LICENCIAS, MARCAS Y PATENTES", tipo: "activo_no_corriente" },
+  "1.02.07.02": { nombre: "FRANQUICIAS", tipo: "activo_no_corriente" },
+  // PASIVO CORRIENTE
+  "2.01.01.01": { nombre: "PROVEEDORES LOCALES", tipo: "pasivo_corriente" },
+  "2.01.01.02": { nombre: "PROVEEDORES DEL EXTERIOR", tipo: "pasivo_corriente" },
+  "2.01.01.04": { nombre: "OTROS ACREEDORES", tipo: "pasivo_corriente" },
+  "2.01.02.01": { nombre: "PRÉSTAMOS DE BANCOS Y ENTIDADES FINANCIERAS (CP)", tipo: "pasivo_corriente" },
+  "2.01.02.04": { nombre: "OTROS PRÉSTAMOS A PAGAR (CP)", tipo: "pasivo_corriente" },
+  "2.01.02.05": { nombre: "INTERESES A PAGAR (CP)", tipo: "pasivo_corriente" },
+  "2.01.03.01.01": { nombre: "IMPUESTO A LA RENTA A PAGAR", tipo: "pasivo_corriente" },
+  "2.01.03.01.02": { nombre: "IVA A PAGAR", tipo: "pasivo_corriente" },
+  "2.01.03.01.03": { nombre: "RETENCIONES DE IMPUESTOS A INGRESAR", tipo: "pasivo_corriente" },
+  "2.01.03.02": { nombre: "OBLIGACIONES LABORALES Y CARGAS SOCIALES", tipo: "pasivo_corriente" },
+  "2.01.03.03": { nombre: "DIVIDENDOS A PAGAR", tipo: "pasivo_corriente" },
+  "2.01.04.03": { nombre: "PROVISIÓN PARA BENEFICIOS A EMPLEADOS (CP)", tipo: "pasivo_corriente" },
+  "2.01.05.01": { nombre: "ANTICIPOS DE CLIENTES (CP)", tipo: "pasivo_corriente" },
+  // PASIVO NO CORRIENTE
+  "2.02.01.01": { nombre: "PROVEEDORES LOCALES (LP)", tipo: "pasivo_no_corriente" },
+  "2.02.02.01": { nombre: "PRÉSTAMOS DE BANCOS Y ENTIDADES FINANCIERAS (LP)", tipo: "pasivo_no_corriente" },
+  "2.02.02.02": { nombre: "PRÉSTAMOS DE SOCIOS O ENTIDADES VINCULADAS (LP)", tipo: "pasivo_no_corriente" },
+  "2.02.02.03": { nombre: "ARRENDAMIENTOS FINANCIEROS (LP)", tipo: "pasivo_no_corriente" },
+  "2.02.03.01": { nombre: "PASIVOS POR IMPUESTOS DIFERIDOS", tipo: "pasivo_no_corriente" },
+  "2.02.04.03": { nombre: "PROVISIONES PARA BENEFICIOS A EMPLEADOS (LP)", tipo: "pasivo_no_corriente" },
+  // PATRIMONIO NETO
+  "3.01.01.01": { nombre: "CAPITAL SUSCRIPTO", tipo: "patrimonio" },
+  "3.01.01.02": { nombre: "(-) CAPITAL A INTEGRAR", tipo: "patrimonio", negativo: true },
+  "3.02.01": { nombre: "RESERVA LEGAL", tipo: "patrimonio" },
+  "3.02.02.01": { nombre: "RESERVA DE REVALÚO FISCAL", tipo: "patrimonio" },
+  "3.02.02.02": { nombre: "RESERVA DE REVALÚO TÉCNICO", tipo: "patrimonio" },
+  "3.02.03": { nombre: "OTRAS RESERVAS", tipo: "patrimonio" },
+  "3.03.01": { nombre: "RESULTADOS ACUMULADOS", tipo: "patrimonio" },
+  "3.03.02": { nombre: "RESULTADO DEL EJERCICIO", tipo: "patrimonio" },
+  // INGRESOS
+  "4.01.01": { nombre: "VENTAS DE MERCADERÍAS GRAVADAS POR IVA", tipo: "ingreso" },
+  "4.01.02": { nombre: "VENTAS DE MERCADERÍAS EXENTAS", tipo: "ingreso" },
+  "4.09":    { nombre: "VENTAS DE SERVICIOS GRAVADOS", tipo: "ingreso" },
+  "4.11":    { nombre: "OTRAS VENTAS EXENTAS DEL IVA", tipo: "ingreso" },
+  "4.98":    { nombre: "(-) DESCUENTOS CONCEDIDOS", tipo: "ingreso", negativo: true },
+  "4.99":    { nombre: "(-) DEVOLUCIONES", tipo: "ingreso", negativo: true },
+  "7.01.01": { nombre: "INGRESOS POR ACTIVOS BIOLÓGICOS", tipo: "ingreso" },
+  "8.01":    { nombre: "INTERESES GANADOS", tipo: "otros_ingresos" },
+  "8.02":    { nombre: "COMISIONES COBRADAS", tipo: "otros_ingresos" },
+  "8.03":    { nombre: "DESCUENTOS OBTENIDOS", tipo: "otros_ingresos" },
+  "8.05":    { nombre: "RESULTADO POR DIFERENCIA DE CAMBIO (ING)", tipo: "otros_ingresos" },
+  // COSTOS Y GASTOS
+  "5.01.01": { nombre: "COSTO DE MERCADERÍAS GRAVADAS POR IVA", tipo: "costo" },
+  "5.01.02": { nombre: "COSTO DE MERCADERÍAS EXENTAS", tipo: "costo" },
+  "5.09":    { nombre: "COSTO DE SERVICIOS GRAVADOS", tipo: "costo" },
+  "10.01.01": { nombre: "SUELDOS Y JORNALES (VENTAS)", tipo: "gasto_venta" },
+  "10.01.02": { nombre: "APORTE PATRONAL (VENTAS)", tipo: "gasto_venta" },
+  "10.02":   { nombre: "COMISIONES PAGADAS SOBRE VENTAS", tipo: "gasto_venta" },
+  "10.04":   { nombre: "PUBLICIDAD Y PROPAGANDA", tipo: "gasto_venta" },
+  "10.05":   { nombre: "FLETES PAGADOS", tipo: "gasto_venta" },
+  "11.01.01": { nombre: "SUELDOS Y JORNALES (ADMIN)", tipo: "gasto_admin" },
+  "11.01.02": { nombre: "APORTE PATRONAL (ADMIN)", tipo: "gasto_admin" },
+  "11.04":   { nombre: "HONORARIOS PROFESIONALES", tipo: "gasto_admin" },
+  "11.05":   { nombre: "ALQUILERES", tipo: "gasto_admin" },
+  "11.06":   { nombre: "AGUA, LUZ, TELÉFONO E INTERNET", tipo: "gasto_admin" },
+  "11.08":   { nombre: "COMBUSTIBLES Y LUBRICANTES", tipo: "gasto_admin" },
+  "11.09":   { nombre: "REPARACIONES Y MANTENIMIENTOS", tipo: "gasto_admin" },
+  "11.10":   { nombre: "SEGUROS PAGADOS", tipo: "gasto_admin" },
+  "11.11":   { nombre: "ÚTILES DE OFICINA", tipo: "gasto_admin" },
+  "11.17":   { nombre: "IMPUESTOS, PATENTES Y TASAS", tipo: "gasto_admin" },
+  "11.18":   { nombre: "MULTAS Y SANCIONES", tipo: "gasto_admin" },
+  "13.01":   { nombre: "INTERESES PAGADOS A ENTIDADES BANCARIAS", tipo: "gasto_financiero" },
+  "13.02":   { nombre: "OTROS INTERESES PAGADOS", tipo: "gasto_financiero" },
+  "13.03":   { nombre: "COMISIONES Y GASTOS BANCARIOS", tipo: "gasto_financiero" },
+  "13.04":   { nombre: "RESULTADO POR DIFERENCIA DE CAMBIO (EGR)", tipo: "gasto_financiero" },
+  "14.02":   { nombre: "(-) CONSTITUCIÓN DE PREVISIONES", tipo: "prevision" },
+  "15.01":   { nombre: "DEPRECIACIONES DEL EJERCICIO", tipo: "depreciacion" },
+  "15.02":   { nombre: "AMORTIZACIONES DEL EJERCICIO", tipo: "depreciacion" },
+  "17.01":   { nombre: "UTILIDAD/PÉRDIDA EN VENTA DE ACTIVOS FIJOS", tipo: "otros_no_op" },
+  "17.02":   { nombre: "UTILIDAD/PÉRDIDA EN VENTA DE INVERSIONES", tipo: "otros_no_op" },
+  "17.03":   { nombre: "CUENTAS INCOBRABLES RECUPERADAS", tipo: "otros_no_op" },
+  "19":      { nombre: "IMPUESTO A LA RENTA", tipo: "impuesto_renta" },
+};
+
+window.TIPO_A_CLASE = {
+  "activo_corriente": "1", "activo_no_corriente": "1",
+  "pasivo_corriente": "2", "pasivo_no_corriente": "2",
+  "patrimonio": "3",
+  "ingreso": "4", "otros_ingresos": "4",
+  "costo": "5", "gasto_venta": "5", "gasto_admin": "5",
+  "gasto_financiero": "5", "prevision": "5", "depreciacion": "5",
+  "otros_no_op": "5", "impuesto_renta": "5"
+};
+
+window.agregarNuevaCuenta = function(tipo) {
+  var codigo = prompt("Ingrese el código de la nueva cuenta (ej: 1.01.01.05):");
+  if (!codigo || !codigo.trim()) return; codigo = codigo.trim();
+  if (window.PLAN_RES4914[codigo]) return alert("⚠️ Esa cuenta ya existe: " + window.PLAN_RES4914[codigo].nombre);
+  var nombre = prompt("Nombre de la cuenta:"); if (!nombre || !nombre.trim()) return;
+  
+  window.PLAN_RES4914[codigo] = { nombre: nombre.trim().toUpperCase(), tipo: tipo };
+  
+  var dl = document.getElementById('planCuentasRes4814');
+  if (dl) { var opt = document.createElement('option'); opt.value = codigo + " " + nombre.trim().toUpperCase(); dl.appendChild(opt); }
+  
+  if (window.currentCli !== undefined) {
+    var cli = window.dbClientes[window.currentCli];
+    if (!cli.cuentasPersonalizadas) cli.cuentasPersonalizadas = {};
+    cli.cuentasPersonalizadas[codigo] = { nombre: nombre.trim().toUpperCase(), tipo: tipo };
+    window.saveData();
+  }
+  alert("✅ Cuenta " + codigo + " agregada. Se aplicará en los libros y estados financieros.");
+  window.renderFinancieros();
+};
+
+window.renderFinancieros = function() {
+  if (window.currentCli === undefined) return;
+  var cli = window.dbClientes[window.currentCli];
+  
+  if (cli.cuentasPersonalizadas) {
+    Object.keys(cli.cuentasPersonalizadas).forEach(function(cod) {
+      if (!window.PLAN_RES4914[cod]) window.PLAN_RES4914[cod] = cli.cuentasPersonalizadas[cod];
+    });
+  }
+
+  var saldos = {};
+  cli.libros.diario.forEach(function(asiento) {
+    asiento.lineas.forEach(function(linea) {
+      var ctaRaw = (linea.cuenta || "").trim();
+      var cod = null;
+      Object.keys(window.PLAN_RES4914).forEach(function(k) {
+        if (ctaRaw.startsWith(k) || ctaRaw.toUpperCase().indexOf(window.PLAN_RES4914[k].nombre.substring(0, 10)) >= 0) {
+          if (!cod || k.length > cod.length) cod = k;
+        }
+      });
+      if (!cod) {
+        var firstChar = ctaRaw.charAt(0);
+        if (firstChar === '1') cod = '__activo__';
+        else if (firstChar === '2') cod = '__pasivo__';
+        else if (firstChar === '3') cod = '__patrimonio__';
+        else if (firstChar === '4') cod = '__ingreso__';
+        else if (firstChar === '5') cod = '__costo__';
+      }
+      if (!saldos[cod]) saldos[cod] = { debe: 0, haber: 0, cuenta: ctaRaw };
+      saldos[cod].debe += (linea.debe || 0);
+      saldos[cod].haber += (linea.haber || 0);
+    });
+  });
+
+  var valorCuenta = function(cod) {
+    var s = saldos[cod]; if (!s) return 0;
+    var info = window.PLAN_RES4914[cod]; var tipo = info ? info.tipo : '';
+    var clase = window.TIPO_A_CLASE[tipo] || '1';
+    if (clase === '1' || clase === '5') return s.debe - s.haber;
+    return s.haber - s.debe;
+  };
+
+  var fmt = function(n) { if (n === 0) return "–"; return (n < 0 ? "(" : "") + "₲ " + Math.abs(Math.round(n)).toLocaleString('es-PY') + (n < 0 ? ")" : ""); };
+  var fmtColor = function(n, invertir) { var positivo = invertir ? n < 0 : n > 0; var color = positivo ? "var(--success)" : (n < 0 ? "var(--accent)" : "var(--text-light)"); return '<span style="font-family:\'DM Mono\';font-weight:700;color:' + color + '">' + fmt(n) + '</span>'; };
+
+  var grupos = { activo_corriente: [], activo_no_corriente: [], pasivo_corriente: [], pasivo_no_corriente: [], patrimonio: [] };
+
+  Object.keys(window.PLAN_RES4914).sort().forEach(function(cod) {
+    var info = window.PLAN_RES4914[cod]; var val = valorCuenta(cod);
+    if (grupos[info.tipo] !== undefined) grupos[info.tipo].push({ cod: cod, nombre: info.nombre, val: val, negativo: info.negativo });
+  });
+
+  var edrGrupos = { ingreso: [], otros_ingresos: [], costo: [], gasto_venta: [], gasto_admin: [], gasto_financiero: [], prevision: [], depreciacion: [], otros_no_op: [], impuesto_renta: [] };
+  Object.keys(window.PLAN_RES4914).sort().forEach(function(cod) {
+    var info = window.PLAN_RES4914[cod]; var val = valorCuenta(cod);
+    if (edrGrupos[info.tipo] !== undefined) edrGrupos[info.tipo].push({ cod: cod, nombre: info.nombre, val: val, negativo: info.negativo });
+  });
+
+  var sumGrupo = function(g) { return g.reduce(function(a,b) { return a + (b.negativo ? -Math.abs(b.val) : b.val); }, 0); };
+  var totActCte = sumGrupo(grupos.activo_corriente); var totActNoCte = sumGrupo(grupos.activo_no_corriente); var totActivo = totActCte + totActNoCte;
+  var totPasCte = sumGrupo(grupos.pasivo_corriente); var totPasNoCte = sumGrupo(grupos.pasivo_no_corriente); var totPasivo = totPasCte + totPasNoCte;
+
+  var sumGrupoEdr = function(g) { return g.reduce(function(a,b) { return a + (b.negativo ? -Math.abs(b.val) : b.val); }, 0); };
+  var totalIngresos = sumGrupoEdr(edrGrupos.ingreso); var totalCostos = sumGrupoEdr(edrGrupos.costo); var ganBruta = totalIngresos - totalCostos;
+  var otrosIng = sumGrupoEdr(edrGrupos.otros_ingresos); var ganBrutaTotal = ganBruta + otrosIng;
+  var gastosVenta = sumGrupoEdr(edrGrupos.gasto_venta); var gastosAdmin = sumGrupoEdr(edrGrupos.gasto_admin);
+  var ganAntesFinan = ganBrutaTotal - gastosVenta - gastosAdmin;
+  var gastosFinan = sumGrupoEdr(edrGrupos.gasto_financiero); var previsiones = sumGrupoEdr(edrGrupos.prevision); var depreciaciones = sumGrupoEdr(edrGrupos.depreciacion);
+  var ganOperativa = ganAntesFinan - gastosFinan + previsiones - depreciaciones;
+  var otrosNoOp = sumGrupoEdr(edrGrupos.otros_no_op); var ganAntesImp = ganOperativa + otrosNoOp;
+  var impRenta = sumGrupoEdr(edrGrupos.impuesto_renta); var ganNeta = ganAntesImp - impRenta;
+
+  var totPatrimonio = sumGrupo(grupos.patrimonio) + ganNeta; var totPasivoPatrimonio = totPasivo + totPatrimonio;
+
+  var renderFilaEdr = function(cod, nombre, val, negativo, esSubtotal, indent) {
+    var neto = negativo ? -Math.abs(val) : val; var ind = indent ? 'padding-left:' + (indent * 14) + 'px;' : '';
+    if (esSubtotal) return '<div style="display:flex;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:6px;margin:6px 0;' + ind + '"><span style="font-weight:700;font-size:13px">' + nombre + '</span>' + fmtColor(neto, false) + '</div>';
+    if (val === 0) return '';
+    return '<div style="display:flex;justify-content:space-between;padding:5px 10px;border-bottom:1px dashed var(--border);font-size:12.5px;' + ind + '"><span style="color:var(--text-light)">' + (cod !== '__' ? '<code style="font-size:10px;margin-right:6px;color:var(--accent2)">' + cod + '</code>' : '') + nombre + '</span>' + fmtColor(neto, false) + '</div>';
+  };
+
+  var edrHTML = '';
+  edrHTML += '<div style="color:var(--success);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;border-bottom:2px solid var(--success);margin-bottom:6px">4 — INGRESOS OPERATIVOS</div>';
+  edrGrupos.ingreso.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, i.negativo, false, 1); });
+  edrHTML += renderFilaEdr('__', 'TOTAL INGRESOS NETOS', totalIngresos, false, true, 0);
+
+  edrHTML += '<div style="color:var(--accent);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;border-bottom:2px solid var(--accent);margin:10px 0 6px">5 — COSTOS OPERATIVOS (−)</div>';
+  edrGrupos.costo.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, false, false, 1); });
+  edrHTML += renderFilaEdr('__', 'TOTAL COSTOS', totalCostos, false, true, 0);
+
+  edrHTML += '<div style="background:' + (ganBruta >= 0 ? '#d1fae5' : '#fee2e2') + ';padding:10px;border-radius:8px;margin:10px 0;display:flex;justify-content:space-between"><span style="font-weight:800;font-size:14px">6 — GANANCIA / PÉRDIDA BRUTA EN VENTAS</span>' + fmtColor(ganBruta, false) + '</div>';
+
+  if (edrGrupos.otros_ingresos.some(function(i) { return i.val !== 0; })) {
+    edrHTML += '<div style="color:var(--accent2);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;margin:10px 0 6px">8 — OTROS INGRESOS</div>';
+    edrGrupos.otros_ingresos.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, i.negativo, false, 1); });
+    edrHTML += renderFilaEdr('__', 'GANANCIA BRUTA TOTAL (9)', ganBrutaTotal, false, true, 0);
+  }
+
+  edrHTML += '<div style="color:var(--accent);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;border-bottom:2px solid #f59e0b;margin:10px 0 6px">10 — GASTOS DE VENTAS (−)</div>';
+  edrGrupos.gasto_venta.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, false, false, 1); });
+
+  edrHTML += '<div style="color:var(--accent);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;border-bottom:2px solid #f59e0b;margin:10px 0 6px">11 — GASTOS DE ADMINISTRACIÓN (−)</div>';
+  edrGrupos.gasto_admin.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, false, false, 1); });
+
+  var totGVA = gastosVenta + gastosAdmin;
+  edrHTML += renderFilaEdr('__', 'TOTAL GASTOS OPERATIVOS', totGVA, false, true, 0);
+  edrHTML += '<div style="background:' + (ganAntesFinan >= 0 ? '#dbeafe' : '#fee2e2') + ';padding:10px;border-radius:8px;margin:10px 0;display:flex;justify-content:space-between"><span style="font-weight:800;font-size:14px">12 — GANANCIAS ANTES DE GASTOS FINANCIEROS</span>' + fmtColor(ganAntesFinan, false) + '</div>';
+
+  if (edrGrupos.gasto_financiero.some(function(i) { return i.val !== 0; }) || edrGrupos.prevision.some(function(i) { return i.val !== 0; }) || edrGrupos.depreciacion.some(function(i) { return i.val !== 0; })) {
+    edrHTML += '<div style="color:var(--accent);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;margin:10px 0 6px">13 — GASTOS BANCARIOS Y FINANCIEROS (−)</div>';
+    edrGrupos.gasto_financiero.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, false, false, 1); });
+    edrHTML += '<div style="color:var(--text-light);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;margin:6px 0">14 — PREVISIONES</div>';
+    edrGrupos.prevision.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, i.negativo, false, 1); });
+    edrHTML += '<div style="color:var(--text-light);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;margin:6px 0">15 — DEPRECIACIONES Y AMORTIZACIONES (−)</div>';
+    edrGrupos.depreciacion.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, false, false, 1); });
+  }
+
+  edrHTML += '<div style="background:' + (ganOperativa >= 0 ? '#ecfdf5' : '#fee2e2') + ';padding:10px;border-radius:8px;margin:10px 0;display:flex;justify-content:space-between"><span style="font-weight:800;font-size:14px">16 — GANANCIAS (O PÉRDIDAS) OPERATIVAS</span>' + fmtColor(ganOperativa, false) + '</div>';
+
+  if (edrGrupos.otros_no_op.some(function(i) { return i.val !== 0; })) {
+    edrHTML += '<div style="color:var(--accent2);font-weight:700;font-size:12px;text-transform:uppercase;padding:8px 10px;margin:6px 0">17 — OTROS RESULTADOS NO OPERATIVOS</div>';
+    edrGrupos.otros_no_op.forEach(function(i) { edrHTML += renderFilaEdr(i.cod, i.nombre, i.val, i.negativo, false, 1); });
+  }
+
+  edrHTML += '<div style="background:#fff3e0;padding:10px;border-radius:8px;margin:10px 0;display:flex;justify-content:space-between"><span style="font-weight:800;font-size:14px">18 — GANANCIAS ANTES DEL IMPUESTO (18)</span>' + fmtColor(ganAntesImp, false) + '</div>';
+  
+  if (impRenta !== 0) {
+    edrHTML += '<div style="padding:5px 10px;font-size:12.5px;display:flex;justify-content:space-between"><span><code style="font-size:10px;margin-right:6px;color:var(--accent2)">19</code>IMPUESTO A LA RENTA</span>' + fmtColor(-impRenta, false) + '</div>';
+  }
+
+  var colorFinal = ganNeta >= 0 ? 'var(--success)' : 'var(--accent)';
+  edrHTML += '<div style="background:' + (ganNeta >= 0 ? 'linear-gradient(135deg,#10b981,#059669)' : 'linear-gradient(135deg,#ef4444,#b91c1c)') + ';padding:16px 20px;border-radius:10px;margin:14px 0;display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800;font-size:16px;color:white">20 — GANANCIA / PÉRDIDA NETA DEL EJERCICIO</span><span style="font-family:\'DM Mono\';font-weight:800;font-size:20px;color:white">' + fmt(ganNeta) + '</span></div>';
+
+  var renderGrupoBalance = function(items, titulo, total, colorTitulo, tipoAdd) {
+    var html = '<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid ' + colorTitulo + ';padding-bottom:5px;margin-bottom:8px">';
+    html += '<span style="font-weight:800;font-size:12px;text-transform:uppercase;color:' + colorTitulo + '">' + titulo + '</span>';
+    html += '<button class="btn btn-outline btn-sm" style="font-size:10px;padding:2px 8px;border-color:' + colorTitulo + ';color:' + colorTitulo + '" onclick="agregarNuevaCuenta(\'' + tipoAdd + '\')">+ Nueva cuenta</button></div>';
+    
+    var hayValores = false;
+    items.forEach(function(item) {
+      if (item.val === 0) return;
+      hayValores = true;
+      var neto = item.negativo ? -Math.abs(item.val) : item.val;
+      var color = neto >= 0 ? 'var(--text)' : 'var(--accent)';
+      html += '<div style="display:flex;justify-content:space-between;padding:5px 8px;border-bottom:1px dashed var(--border);font-size:12px">';
+      html += '<span><code style="font-size:9px;margin-right:5px;color:var(--accent2)">' + item.cod + '</code>' + item.nombre + '</span>';
+      html += '<span style="font-family:\'DM Mono\';color:' + color + '">' + fmt(neto) + '</span></div>';
+    });
+    if (!hayValores) html += '<div style="color:var(--text-light);font-size:12px;padding:5px 8px;font-style:italic">Sin movimientos en este grupo</div>';
+    
+    html += '<div style="display:flex;justify-content:space-between;padding:7px 8px;background:var(--bg);border-radius:6px;margin-top:6px">';
+    html += '<span style="font-weight:700;font-size:12px">SUBTOTAL</span>';
+    html += '<span style="font-family:\'DM Mono\';font-weight:800;color:' + colorTitulo + '">' + fmt(total) + '</span></div></div>';
+    return html;
+  };
+
+  var balActHTML = '';
+  balActHTML += renderGrupoBalance(grupos.activo_corriente, '1.01 — Activo Corriente', totActCte, 'var(--accent2)', 'activo_corriente');
+  balActHTML += renderGrupoBalance(grupos.activo_no_corriente, '1.02 — Activo No Corriente', totActNoCte, 'var(--accent2)', 'activo_no_corriente');
+
+  var balPasHTML = '';
+  balPasHTML += renderGrupoBalance(grupos.pasivo_corriente, '2.01 — Pasivo Corriente', totPasCte, 'var(--accent)', 'pasivo_corriente');
+  balPasHTML += renderGrupoBalance(grupos.pasivo_no_corriente, '2.02 — Pasivo No Corriente', totPasNoCte, 'var(--accent)', 'pasivo_no_corriente');
+
+  var patrimonioConRdo = grupos.patrimonio.slice();
+  if (ganNeta !== 0) {
+    var rdoIdx = patrimonioConRdo.findIndex(function(i) { return i.cod === '3.03.02'; });
+    if (rdoIdx >= 0) patrimonioConRdo[rdoIdx] = { cod: '3.03.02', nombre: 'RESULTADO DEL EJERCICIO', val: ganNeta, negativo: false };
+    else patrimonioConRdo.push({ cod: '3.03.02', nombre: 'RESULTADO DEL EJERCICIO', val: ganNeta, negativo: false });
+  }
+  balPasHTML += renderGrupoBalance(patrimonioConRdo, '3 — Patrimonio Neto', totPatrimonio, 'var(--success)', 'patrimonio');
+
+  var tabBalance = document.getElementById('ctab_balance');
+  if (tabBalance) {
+    tabBalance.innerHTML = 
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">' +
+        '<div class="card">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-weight:800;font-size:16px;color:var(--accent2)">ACTIVO</div></div>' +
+          balActHTML +
+          '<div style="display:flex;justify-content:space-between;padding:10px;background:linear-gradient(90deg,#dbeafe,#eff6ff);border-radius:8px;margin-top:10px">' +
+            '<span style="font-weight:800;font-size:14px;color:var(--accent2)">TOTAL ACTIVO</span><span style="font-family:\'DM Mono\';font-weight:800;font-size:16px;color:var(--accent2)">' + fmt(totActivo) + '</span>' +
+          '</div></div>' +
+        '<div class="card">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-weight:800;font-size:16px;color:var(--accent)">PASIVO Y PATRIMONIO NETO</div></div>' +
+          balPasHTML +
+          '<div style="display:flex;justify-content:space-between;padding:10px;background:linear-gradient(90deg,#fee2e2,#fef2f2);border-radius:8px;margin-top:10px">' +
+            '<span style="font-weight:800;font-size:14px;color:var(--accent)">TOTAL PASIVO + PATRIMONIO NETO</span><span style="font-family:\'DM Mono\';font-weight:800;font-size:16px;color:var(--accent)">' + fmt(totPasivoPatrimonio) + '</span>' +
+          '</div></div></div>' +
+      '<div style="text-align:center;padding:10px;border-radius:8px;background:' + (Math.abs(totActivo - totPasivoPatrimonio) < 1 ? '#d1fae5' : '#fee2e2') + ';font-weight:700;font-size:13px;margin-bottom:14px">' +
+        (Math.abs(totActivo - totPasivoPatrimonio) < 1 ? '✅ Balance cuadrado: Activo = Pasivo + Patrimonio Neto' : '⚠️ Balance NO cuadra. Diferencia: ' + fmt(totActivo - totPasivoPatrimonio)) +
+      '</div>';
+  }
+
+  var tabEdr = document.getElementById('ctab_estado_resultados');
+  if (tabEdr) {
+    tabEdr.innerHTML = '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-weight:800;font-size:16px;color:var(--text)">Estado de Resultados — Res. 49/14</div><div style="display:flex;gap:8px"><button class="btn btn-outline btn-sm" onclick="agregarNuevaCuenta(\'ingreso\')">+ Ingreso</button><button class="btn btn-outline btn-sm" onclick="agregarNuevaCuenta(\'gasto_admin\')">+ Gasto</button><button class="btn btn-outline btn-sm" onclick="agregarNuevaCuenta(\'costo\')">+ Costo</button></div></div>' + edrHTML + '</div>';
+  }
+};
+
+window.initTabsBalance = function() {
+  if (document.getElementById('ctab_estado_resultados')) return;
+};
+
+console.log("✅ Sistema Total Listo.");
 </script>
 </body>
 </html>
