@@ -155,9 +155,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .balance-equil-banner{padding:12px 16px;border-radius:9px;font-size:13px;font-weight:700;text-align:center;margin-top:10px}
 .balance-equil-banner.ok{background:#d1fae5;color:#065f46;border:2px solid var(--success)}
 .balance-equil-banner.err{background:#fee2e2;color:#991b1b;border:2px solid var(--danger)}
-.rdo-highlight{background:linear-gradient(135deg,var(--accent2),#1976d2);color:white;padding:14px 18px;border-radius:10px;text-align:center;margin:10px 0}
-.rdo-highlight .val{font-size:24px;font-weight:800;font-family:'DM Mono',monospace;display:block}
-.rdo-highlight .lbl{font-size:11px;opacity:.8;margin-top:3px}
 </style>
 </head>
 <body>
@@ -193,36 +190,36 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div style="color:rgba(255,255,255,0.4);font-size:10px" id="sb_user_rol">Rol</div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_main">Principal</div>
-    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span><span data-i18n="nav_dash">Dashboard</span></div>
-    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span><span data-i18n="nav_clients">Clientes (Cartera)</span></div>
+    <div class="sidebar-label">Principal</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span><span>Dashboard</span></div>
+    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span><span>Clientes (Cartera)</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_billing">Facturación / Tesorería</div>
-    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span data-i18n="nav_sifen">Carga Inteligente / SIFEN</span></div>
-    <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="openWizard()"><span class="icon">➕</span><span data-i18n="nav_new">Nuevo Asiento / Fact.</span></div>
+    <div class="sidebar-label">Facturación / Tesorería</div>
+    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span>Carga Inteligente / SIFEN</span></div>
+    <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="openWizard()"><span class="icon">➕</span><span>Nuevo Asiento / Fact.</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_taxes">Estados Financieros</div>
-    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span><span data-i18n="nav_iva">Estado IVA (120)</span></div>
-    <div class="nav-item" onclick="showPage('ire_general',this)"><span class="icon">💼</span><span data-i18n="nav_ire">Estado IRE General</span></div>
-    <div class="nav-item" onclick="showPage('ire_simple',this)"><span class="icon">📄</span><span data-i18n="nav_ires">Estado IRE Simple</span></div>
-    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span><span data-i18n="nav_irp">Estado IRP (515)</span></div>
+    <div class="sidebar-label">Estados Financieros</div>
+    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span><span>Estado IVA (120)</span></div>
+    <div class="nav-item" onclick="showPage('ire_general',this)"><span class="icon">💼</span><span>Estado IRE General</span></div>
+    <div class="nav-item" onclick="showPage('ire_simple',this)"><span class="icon">📄</span><span>Estado IRE Simple</span></div>
+    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span><span>Estado IRP (515)</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_tools">Herramientas</div>
-    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#a78bfa;font-weight:600"><span class="icon">🤖</span><span data-i18n="nav_ai">Soporte IA (Gemini)</span></div>
+    <div class="sidebar-label">Herramientas</div>
+    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#a78bfa;font-weight:600"><span class="icon">🤖</span><span>Soporte IA (Gemini)</span></div>
     <div class="nav-item" onclick="showPage('plan_cuentas',this)" style="color:#f59e0b;font-weight:600"><span>📋</span><span>Plan de Cuentas (Res. 49/14)</span></div>
   </div>
   <div class="sidebar-section" id="menu_admin" style="display:none;margin-top:10px">
-    <div class="sidebar-label" data-i18n="menu_admin">Administración</div>
-    <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span data-i18n="nav_users">Perfil Admin / Usuarios</span></div>
-    <div class="nav-item" onclick="showPage('backup',this)"><span class="icon">💾</span><span data-i18n="nav_backup">Respaldo (Manual)</span></div>
+    <div class="sidebar-label">Administración</div>
+    <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span>Perfil Admin / Usuarios</span></div>
+    <div class="nav-item" onclick="showPage('backup',this)"><span class="icon">💾</span><span>Respaldo (Manual)</span></div>
   </div>
   
   <div style="margin-top:auto">
     <div class="sidebar-section" style="padding-bottom:0">
-      <div class="nav-item" id="btn-logout-sidebar" style="color:var(--danger); font-weight:600"><span class="icon">🚪</span> <span data-i18n="nav_logout">Cerrar Sesión</span></div>
+      <div class="nav-item" id="btn-logout-sidebar" style="color:var(--danger); font-weight:600"><span class="icon">🚪</span> <span>Cerrar Sesión</span></div>
     </div>
     <div class="copyright-footer">&copy; Derechos reservados 2026<br>de @jcarlos2028</div>
   </div>
@@ -230,7 +227,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="topbar-title" data-i18n="top_title">Dashboard Principal</div>
+    <div class="topbar-title" id="topbar-title">Dashboard Principal</div>
     
     <select id="lang_sel" onchange="changeLang(this.value)" style="border:1px solid var(--border);border-radius:7px;padding:4px 8px;background:var(--bg);font-weight:600;outline:none;cursor:pointer">
         <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
@@ -242,15 +239,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   <div class="content">
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
-      <div class="page-header"><div><h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2><p data-i18n="dash_p">Sincronización Activa con Firebase</p></div></div>
+      <div class="page-header"><div><h2>Estudio Contable ContaPY 👋</h2><p>Sincronización Activa con Firebase</p></div></div>
       <div class="stats-grid">
-        <div class="stat-card blue"><div class="stat-label" data-i18n="dash_s1">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
-        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label" data-i18n="dash_s2">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
+        <div class="stat-card blue"><div class="stat-label">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
+        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
       </div>
       <div class="card">
-        <div class="card-title" data-i18n="dash_t1">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
+        <div class="card-title">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
         <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social / Nombre</th><th data-i18n="tbl_contact">Contacto</th><th data-i18n="tbl_taxes">Impuestos Activos</th></tr></thead>
+          <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Contacto</th><th>Impuestos Activos</th></tr></thead>
           <tbody id="dash-clientes-list"></tbody>
         </table></div>
       </div>
@@ -259,7 +256,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- MÓDULO GEMINI IA -->
     <div class="page" id="page-gemini">
       <div class="page-header">
-        <div><h2 data-i18n="ai_h2">🤖 Soporte Asistente Inteligente</h2><p data-i18n="ai_p">Desarrollado con la tecnología de Gemini (Google API)</p></div>
+        <div><h2>🤖 Soporte Asistente Inteligente</h2><p>Desarrollado con la tecnología de Gemini (Google API)</p></div>
         <button class="btn btn-outline" style="border-color:#a78bfa;color:#6d28d9" onclick="configurarGemini()">⚙️ Configurar API Key</button>
       </div>
       <div class="grid-2">
@@ -317,7 +314,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- CLIENTES DIRECTORIO -->
     <div class="page" id="page-clientes">
       <div class="page-header">
-        <div><h2 data-i18n="cli_h2">Directorio de Clientes</h2><p data-i18n="cli_p">Registro de contribuyentes (Activos e Inactivos)</p></div>
+        <div><h2>Directorio de Clientes</h2><p>Registro de contribuyentes (Activos e Inactivos)</p></div>
         <div style="display:flex;gap:8px;">
           <input type="text" placeholder="🔍 Buscar por RUC o Nombre..." style="width:250px" id="search-cliente" onkeyup="renderClientes()">
           <button class="btn btn-primary" onclick="openModalCliente()">+ Nuevo Cliente</button>
@@ -325,7 +322,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
       <div class="card">
         <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social / Nombre</th><th data-i18n="tbl_contact">Línea / Correo</th><th data-i18n="tbl_status">Estado / Impuestos</th><th data-i18n="tbl_actions">Acciones</th></tr></thead>
+          <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Línea / Correo</th><th>Estado / Impuestos</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-clientes-list"></tbody>
         </table></div>
       </div>
@@ -334,13 +331,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- USUARIOS / PERFIL ADMIN -->
     <div class="page" id="page-usuarios">
       <div class="page-header">
-        <div><h2 data-i18n="usr_h2">Gestión de Usuarios y Accesos</h2><p data-i18n="usr_p">Administración de roles y carteras de clientes</p></div>
+        <div><h2>Gestión de Usuarios y Accesos</h2><p>Administración de roles y carteras de clientes</p></div>
         <button class="btn btn-primary" onclick="openModalUsuario()">+ Asignar Accesos / Nuevo Perfil</button>
       </div>
       <div class="card">
         <p style="font-size:12px; margin-bottom:15px; color:var(--text-light)">⚠️ <b>Nota de Nube:</b> Al crear un usuario aquí, asegúrese de haberlo registrado también en Firebase Authentication.</p>
         <div class="table-wrap"><table>
-          <thead><tr><th data-i18n="tbl_usr">Usuario / Correo</th><th data-i18n="tbl_rol">Rol del Sistema</th><th data-i18n="tbl_perms">Permisos / Cartera</th><th data-i18n="tbl_actions">Acciones</th></tr></thead>
+          <thead><tr><th>Usuario / Correo</th><th>Rol del Sistema</th><th>Permisos / Cartera</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-usuarios-list"></tbody>
         </table></div>
       </div>
@@ -349,16 +346,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- RESPALDO Y BACKUP -->
     <div class="page" id="page-backup">
       <div class="page-header">
-        <div><h2 data-i18n="bak_h2">Respaldo y Seguridad (Backup Local)</h2><p data-i18n="bak_p">Tus datos están seguros en Firebase, pero puedes guardar una copia local.</p></div>
+        <div><h2>Respaldo y Seguridad (Backup Local)</h2><p>Tus datos están seguros en Firebase, pero puedes guardar una copia local.</p></div>
       </div>
       <div class="grid-2">
           <div class="card">
-              <div class="card-title" style="color:var(--accent2)" data-i18n="bak_exp">📥 Exportar Datos (Crear Backup)</div>
+              <div class="card-title" style="color:var(--accent2)">📥 Exportar Datos (Crear Backup)</div>
               <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Descarga una copia completa de toda tu contabilidad y usuarios en JSON.</p>
               <button class="btn btn-secondary" onclick="exportBackup()">📥 Descargar Copia</button>
           </div>
           <div class="card">
-              <div class="card-title" style="color:var(--success)" data-i18n="bak_imp">📤 Importar Datos (Restaurar)</div>
+              <div class="card-title" style="color:var(--success)">📤 Importar Datos (Restaurar)</div>
               <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Sobrescribe los datos en la NUBE subiendo un archivo JSON previo.</p>
               <input type="file" id="file_backup" accept=".json" style="display:none" onchange="importBackup(event)">
               <button class="btn btn-success" onclick="document.getElementById('file_backup').click()">📤 Restaurar en NUBE</button>
@@ -382,15 +379,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
 
       <div class="tabs" style="margin-bottom:20px;margin-top:15px;">
-        <div class="tab active" onclick="switchClientTab('compras', this)" data-i18n="tab_comp">Compras</div>
-        <div class="tab" onclick="switchClientTab('ventas', this)" data-i18n="tab_vent">Ventas</div>
-        <div class="tab" onclick="switchClientTab('recibos', this)" data-i18n="tab_teso">Tesorería</div>
-        <div class="tab" onclick="switchClientTab('retenciones', this)" data-i18n="tab_ret">Retenciones</div>
-        <div class="tab" onclick="switchClientTab('diario', this)" data-i18n="tab_diar">Libro Diario</div>
-        <div class="tab" style="background:#dbeafe;color:#1e40af" onclick="switchClientTab('mayor', this)" data-i18n="tab_may">Libro Mayor</div>
-        <div class="tab" style="background:#ede9fe;color:#5b21b6" onclick="switchClientTab('balance', this)" data-i18n="tab_bal">Balance General</div>
+        <div class="tab active" onclick="switchClientTab('compras', this)">Compras</div>
+        <div class="tab" onclick="switchClientTab('ventas', this)">Ventas</div>
+        <div class="tab" onclick="switchClientTab('recibos', this)">Tesorería</div>
+        <div class="tab" onclick="switchClientTab('retenciones', this)">Retenciones</div>
+        <div class="tab" onclick="switchClientTab('diario', this)">Libro Diario</div>
+        <div class="tab" style="background:#dbeafe;color:#1e40af" onclick="switchClientTab('mayor', this)">Libro Mayor</div>
+        <div class="tab" style="background:#ede9fe;color:#5b21b6" onclick="switchClientTab('balance', this)">Balance General</div>
         <div class="tab" style="background:#d1fae5;color:#065f46;font-weight:700" onclick="switchClientTab('estado_resultados', this)">Estado de Resultados ★</div>
-        <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)" data-i18n="tab_est">Estado de Cuentas</div>
+        <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)">Estado de Cuentas</div>
       </div>
       
       <div id="ctab_compras" class="ctab-content" style="display:block;">
@@ -482,7 +479,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       <div class="page-header">
         <div><h2>🧾 Centro de Carga SIFEN / e-Kuatia</h2><p>Consulta directa DNIT · Importación masiva CSV · Carga manual</p></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline" onclick="openModalImportarDirectoGlobal ? openModalImportarDirectoGlobal() : openModalImportMain()">📥 Importar CSV</button>
+          <button class="btn btn-outline" onclick="openModalImportMain()">📥 Importar CSV</button>
           <button class="btn btn-primary" onclick="openWizard()">➕ Carga Manual</button>
         </div>
       </div>
@@ -490,7 +487,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       <div class="card" style="border-left:4px solid var(--accent2);margin-bottom:14px">
         <div class="card-title" style="color:var(--accent2)">🔍 Consulta Directa por CDC (Código de Control SIFEN)</div>
         <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">
-          Ingrese los 44 dígitos del CDC. El sistema consulta el servidor DNIT, decodifica la estructura, y si hay CAPTCHA le permite ingresar el monto manualmente o resolverlo.
+          Ingrese los 44 dígitos del CDC. El sistema consulta el servidor DNIT y si detecta CAPTCHA, lo mostrará en pantalla.
         </p>
 
         <div style="display:flex;gap:10px;margin-bottom:8px">
@@ -549,10 +546,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <input type="hidden" id="captcha_session_id">
           </div>
 
-          <!-- AVISO CAPTCHA CON INGRESO MANUAL (Fallback) -->
+          <!-- AVISO CAPTCHA CON INGRESO MANUAL (Fallback si no hay imagen de CAPTCHA) -->
           <div id="sifen_captcha_box" style="display:none;background:#fff8e1;border:1px solid var(--warning);border-radius:9px;padding:14px;margin-bottom:12px">
             <div style="font-weight:700;color:var(--warning);margin-bottom:8px">
-              ⚠️ El sistema no pudo obtener la imagen del CAPTCHA automáticamente.
+              ⚠️ El sistema requiere CAPTCHA pero la API no envió la imagen.
             </div>
             <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">
               El RUC, fecha y número fueron obtenidos del CDC. Ingrese el monto total manualmente.
@@ -1109,7 +1106,6 @@ window.renderLibros = function() {
   });
 };
 
-// Se sobrescribe más abajo con renderFinancieros
 window.renderMayorYBalance = function() {
   var c = window.dbClientes[window.currentCli]; var cuentas = {}; 
   c.libros.diario.forEach(asi => { asi.lineas.forEach(lin => { if(!cuentas[lin.cuenta]) cuentas[lin.cuenta] = { debe:0, haber:0 }; cuentas[lin.cuenta].debe += (lin.debe || 0); cuentas[lin.cuenta].haber += (lin.haber || 0); }); });
@@ -1511,6 +1507,7 @@ window.enviarCaptchaApi = function() {
     window.consultarCDCReal(txt, session);
 };
 
+// LA FUNCIÓN PRINCIPAL QUE CONTROLA EL FLUJO (CON DEMO DE CAPTCHA INCORPORADA)
 window.consultarCDCReal = async function(captchaValor = null, captchaSession = null) {
     var cdc = (document.getElementById('sifen_cdc').value || '').trim().replace(/\D/g,'');
     if (cdc.length !== 44) return alert('❌ El CDC debe tener 44 dígitos.\nActualmente: ' + cdc.length);
@@ -1539,13 +1536,13 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
 
         var esCaptcha = (data.rs === 'REQUIERE CAPTCHA' || data.rs === 'ERROR CAPTCHA' || (data.rs && data.rs.toUpperCase().includes('CAPTCHA')));
 
-        // MODO DEMOSTRACIÓN: Si pide CAPTCHA, forzamos mostrar el cuadro de resolución
+        // SI PIDE CAPTCHA Y AÚN NO LO VALIDAMOS CORRECTAMENTE
         if (esCaptcha && !data.ok) { 
              document.getElementById('sifen_resultado').style.display = 'block';
              
              // MOSTRAMOS EL NUEVO CUADRO AZUL DE CAPTCHA
              document.getElementById('sifen_captcha_solver_box').style.display = 'block';
-             document.getElementById('sifen_captcha_box').style.display = 'none'; // ocultamos el amarillo viejo
+             document.getElementById('sifen_captcha_box').style.display = 'none';
              
              // Si el backend mandó la imagen real, la usamos. Si no, usamos una de prueba.
              var imgSrc = "";
@@ -1554,8 +1551,7 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
              } else if (data.captcha_url) {
                  imgSrc = data.captcha_url;
              } else {
-                 // IMAGEN DE PRUEBA PARA QUE VEAS EL DISEÑO
-                 imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Captcha-ejemplo.jpg'; 
+                 imgSrc = 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Captcha-ejemplo.jpg'; // Imagen DEMO de Wikipedia
              }
              
              document.getElementById('captcha_img_src').src = imgSrc;
@@ -1564,7 +1560,7 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
              
              // Bloqueamos los botones de guardar hasta que lo resuelva
              document.getElementById('sifen_accion_box').style.display = 'none';
-             document.getElementById('sifen_lbl_estado').textContent = '⚠️ CAPTCHA REQUERIDO';
+             document.getElementById('sifen_lbl_estado').textContent = '⚠️ CAPTCHA REQUERIDO POR DNIT';
              document.getElementById('sifen_badge_estado').textContent = 'BLOQUEADO';
              document.getElementById('sifen_badge_estado').style.background = '#fef3c7';
              document.getElementById('sifen_badge_estado').style.color = '#92400e';
@@ -1576,7 +1572,6 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
              document.getElementById('sifen_accion_box').style.display = 'block';
         }
 
-        // Resto del código normal para mostrar montos...
         var totalServer = data.total || 0;
         var estadoServer = data.estado || 'AP'; 
 
@@ -1639,6 +1634,15 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
 
         document.getElementById('sifen_resultado').style.display = 'block';
 
+        if (!window._historialCDC) window._historialCDC = [];
+        window._historialCDC.unshift({
+            cdcCorto: cdc.substring(0,10)+'...', ruc: rucFinal + (dvFinal?'-'+dvFinal:''),
+            rs: rsFinal.substring(0,32), fecha: fechaDisplay || '—',
+            total: totalServer, estado: estadoServer || 'AP', dataCompleta: window._ultimoCDCData
+        });
+        if(window._renderHistorialCDC) window._renderHistorialCDC();
+        if(window._analizarConIA) window._analizarConIA(window._ultimoCDCData);
+
     } catch(e) {
         document.getElementById('sifen_loading').style.display = 'none';
         btnCons.disabled = false; btnCons.textContent = '🔎 Consultar DNIT';
@@ -1654,18 +1658,6 @@ window.enviarCDCAlWizard = function() {
     if (!cliIdx) return alert('❌ Seleccione el cliente.');
     var d = window._ultimoCDCData;
     if (!d) return alert('❌ Realice primero la consulta.');
-
-    if (d.esCaptcha) {
-        var totalManual = parseFloat(document.getElementById('captcha_total').value) || 0;
-        if (totalManual <= 0) return alert('❌ Ingrese el monto total del comprobante (caja "Monto Total ₲").');
-        var tasa   = document.getElementById('captcha_tasa').value;
-        var rsManual = document.getElementById('captcha_rs').value.trim();
-        var iva10m = tasa==='10' ? Math.round(totalManual/11) : 0;
-        var iva5m  = tasa==='5'  ? Math.round(totalManual/21) : 0;
-        var exentm = tasa==='0'  ? totalManual : 0;
-        d.total  = totalManual; d.iva10  = iva10m; d.iva5   = iva5m; d.exento = exentm;
-        if (rsManual) d.rs = rsManual;
-    }
 
     var nroDisplay = d.dec ? d.dec.nroCompleto : '';
     window.wizContext = null;
