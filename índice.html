@@ -468,7 +468,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- COMPROBANTES / SIFEN -->
     <div class="page" id="page-comprobantes">
       <div class="page-header">
-        <div><h2>🧾 Centro de Carga SIFEN / e-Kuatia</h2><p>Consulta directa a la SET. El sistema resolverá tu problema automáticamente.</p></div>
+        <div><h2>🧾 Centro de Carga SIFEN / e-Kuatia</h2><p>Consulta directa DNIT · Importación masiva CSV · Carga manual</p></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn btn-outline" onclick="openModalImportMain()">📥 Importar CSV</button>
           <button class="btn btn-primary" onclick="openWizard()">➕ Carga Manual</button>
@@ -478,7 +478,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       <div class="card" style="border-left:4px solid var(--accent2);margin-bottom:14px">
         <div class="card-title" style="color:var(--accent2)">🔍 Consulta Directa por CDC (Código de Control SIFEN)</div>
         <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">
-          Ingrese los 44 dígitos del CDC. La consulta es 100% real a tu API en Cloud Run.
+          Ingrese los 44 dígitos del CDC. El sistema consulta a tu servidor. Si pide CAPTCHA, lo mostrará. Si el servidor no envía imagen, permite ingreso manual del monto.
         </p>
 
         <div style="display:flex;gap:10px;margin-bottom:8px">
@@ -486,7 +486,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             style="flex:1;font-family:'DM Mono';font-size:13px;letter-spacing:1.5px;padding:10px 14px"
             oninput="onCDCInput(this)" onpaste="setTimeout(function(){onCDCInput(document.getElementById('sifen_cdc'))},10)">
           <button class="btn btn-secondary" id="btn_consultar_cdc" onclick="consultarCDCReal()" style="padding:10px 18px;white-space:nowrap">🔎 Consultar DNIT</button>
-          <button class="btn btn-outline" onclick="window.open('https://ekuatia.set.gov.py/consultas/','VentanaDNIT','width=1000,height=700')" style="padding:10px 14px;white-space:nowrap" title="Portal e-Kuatia manual">🌐</button>
         </div>
         <div id="cdc_contador" style="font-size:11px;color:var(--text-light);margin-bottom:10px">
           <span id="cdc_dig_count" style="font-family:'DM Mono';font-weight:700;font-size:13px">0</span>/44
@@ -502,15 +501,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div id="sifen_resultado" style="display:none">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
             <div id="sifen_badge_estado" style="padding:5px 16px;border-radius:20px;font-size:12px;font-weight:700">—</div>
-            <div style="font-size:12px;color:var(--text-light)" id="sifen_lbl_estado">—</div>
+            <div style="font-size:12px;font-weight:600" id="sifen_lbl_estado">—</div>
           </div>
           
-          <!-- NUEVO: RESOLVER CAPTCHA DESDE EL SISTEMA -->
+          <!-- CAJA RESOLVER CAPTCHA -->
           <div id="sifen_captcha_solver_box" style="display:none;background:#eff6ff;border:1px solid var(--accent2);border-radius:9px;padding:16px;margin-bottom:12px;text-align:center;">
             <div style="font-weight:700;color:var(--accent2);margin-bottom:8px;font-size:14px">🛡️ Verificación de Seguridad DNIT (CAPTCHA)</div>
-            <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">El servidor de la SET requiere que resuelvas este CAPTCHA para descargar los montos.</p>
+            <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">El servidor de la SET requiere que resuelvas este CAPTCHA para descargar el monto.</p>
             
-            <img id="captcha_img_src" src="" alt="Imagen CAPTCHA" style="border:1px solid #ccc;border-radius:6px;margin-bottom:12px;max-width:250px;height:auto;display:inline-block;background:white;padding:5px;">
+            <img id="captcha_img_src" src="" alt="Cargando CAPTCHA..." style="border:1px solid #ccc;border-radius:6px;margin-bottom:12px;max-width:250px;height:auto;display:inline-block;background:white;padding:5px;">
             
             <div style="display:flex;gap:10px;justify-content:center;align-items:center;">
                 <input type="text" id="captcha_txt_input" placeholder="Escribe el código..." style="width:200px;text-align:center;font-family:'DM Mono';font-weight:700;font-size:16px;text-transform:uppercase;" onkeydown="if(event.key==='Enter')enviarCaptchaApi()">
@@ -519,14 +518,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <input type="hidden" id="captcha_session_id">
           </div>
 
-          <!-- FALLBACK SI NO LLEGA LA IMAGEN (Ingreso Manual del monto) -->
+          <!-- FALLBACK MANUAL SI NO MANDA LA IMAGEN EL SERVIDOR -->
           <div id="sifen_captcha_box" style="display:none;background:#fff8e1;border:1px solid var(--warning);border-radius:9px;padding:14px;margin-bottom:12px">
-            <div style="font-weight:700;color:var(--warning);margin-bottom:8px">
-              ⚠️ La SET requiere CAPTCHA pero tu servidor no envió la imagen.
-            </div>
-            <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">
-              El RUC, fecha y número fueron obtenidos del CDC automáticamente. Ingrese el monto total manualmente.
-            </p>
+            <div style="font-weight:700;color:var(--warning);margin-bottom:8px">⚠️ La SET bloqueó el monto (Pide CAPTCHA) y tu servidor no envió la imagen.</div>
+            <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">El RUC, fecha y número fueron obtenidos. <b>Ingrese el monto total manualmente</b> para continuar, o revise el documento original.</p>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px">
               <div class="form-group">
                 <label>Monto Total ₲ (IVA incl.)</label>
@@ -546,13 +541,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
                 <div style="padding:8px 10px;background:var(--bg);border-radius:7px;border:1px solid var(--border);font-family:'DM Mono';font-weight:700;color:var(--accent)" id="captcha_iva_calc">₲ 0</div>
               </div>
               <div class="form-group">
-                <label>Razón Social (opcional)</label>
+                <label>Razón Social (Si la desconoce)</label>
                 <input type="text" id="captcha_rs" placeholder="Nombre del proveedor">
               </div>
             </div>
           </div>
 
-          <!-- CUADROS DE DATOS OBTENIDOS -->
+          <!-- CUADROS DE DATOS -->
           <div id="sifen_datos_cuadros" style="display:grid;grid-template-columns:1fr 2fr 1fr 1fr;gap:10px;margin-bottom:12px">
             <div style="background:var(--bg);border-radius:9px;padding:12px;border:1px solid var(--border)">
               <div style="font-size:10px;text-transform:uppercase;color:var(--text-light);font-weight:700;margin-bottom:5px">RUC / DV</div>
@@ -1552,51 +1547,69 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
         btnCons.disabled = false; btnCons.textContent = '🔎 Consultar DNIT';
 
         // Detectar Captcha
-        var esCaptcha = (data.rs === 'REQUIERE CAPTCHA' || data.rs === 'ERROR CAPTCHA' || (data.rs && data.rs.toUpperCase().includes('CAPTCHA')) || data.estado === 'CAPTCHA' || data.captcha_base64 || data.captcha_url);
+        var rsString = (data.rs || "").toUpperCase();
+        var esCaptcha = (rsString.includes('CAPTCHA') || data.estado === 'CAPTCHA');
 
-        // MODO CAPTCHA (Si pide y no lo hemos resuelto aún)
-        if (esCaptcha && !data.ok) { 
+        // Limpiar RUC de la API (evitar ceros a la izquierda)
+        var rucLimpioApi = (data.ruc || "").replace(/^0+/, '');
+        var rucFinal   = (rucLimpioApi.length > 3) ? rucLimpioApi : (dec.rucEmisor ? dec.rucEmisor : '—');
+        var dvFinal    = dec.dvRuc ? dec.dvRuc : '';
+        
+        // MODO CAPTCHA
+        if (esCaptcha) { 
              document.getElementById('sifen_resultado').style.display = 'block';
-             document.getElementById('sifen_captcha_solver_box').style.display = 'block';
              document.getElementById('sifen_datos_cuadros').style.display = 'none';
-             document.getElementById('sifen_desglose_box').style.display = 'none';
+             document.getElementById('sifen_accion_box').style.display = 'none';
              
-             // Mostrar la imagen (base64 o url directa)
-             var imgSrc = "";
-             if (data.captcha_base64) imgSrc = 'data:image/jpeg;base64,' + data.captcha_base64;
-             else if (data.captcha_url) imgSrc = data.captcha_url;
-             else imgSrc = ''; // Fallback vacio
-             
-             if(imgSrc) {
+             // Si el servidor manda la imagen
+             if (data.captcha_base64 || data.captcha_url) {
+                 document.getElementById('sifen_captcha_solver_box').style.display = 'block';
+                 document.getElementById('sifen_captcha_box').style.display = 'none';
+                 
+                 var imgSrc = data.captcha_base64 ? 'data:image/jpeg;base64,' + data.captcha_base64 : data.captcha_url;
                  document.getElementById('captcha_img_src').src = imgSrc;
-                 document.getElementById('captcha_img_src').style.display = 'inline-block';
-             } else {
-                 document.getElementById('captcha_img_src').style.display = 'none';
-                 alert("⚠️ El servidor de la SET pide CAPTCHA pero la API no mandó la imagen. Por favor pida al desarrollador backend que incluya 'captcha_base64' en la respuesta.");
+                 document.getElementById('captcha_session_id').value = data.session_id || 'sesion_de_prueba';
+                 document.getElementById('captcha_txt_input').value = '';
+             } 
+             // Fallback manual si el servidor NO mandó la imagen
+             else {
+                 document.getElementById('sifen_captcha_solver_box').style.display = 'none';
+                 document.getElementById('sifen_captcha_box').style.display = 'block';
+                 document.getElementById('sifen_accion_box').style.display = 'block'; // Para guardar lo manual
              }
              
-             document.getElementById('captcha_session_id').value = data.session_id || 'sesion_de_prueba';
-             document.getElementById('captcha_txt_input').value = '';
-             
-             document.getElementById('sifen_accion_box').style.display = 'none';
-             document.getElementById('sifen_lbl_estado').textContent = '⚠️ CAPTCHA REQUERIDO POR DNIT';
-             document.getElementById('sifen_badge_estado').textContent = 'BLOQUEADO';
+             document.getElementById('sifen_lbl_estado').textContent = 'La SET bloqueó el monto. Resuelva el CAPTCHA o ingrese el monto.';
+             document.getElementById('sifen_badge_estado').textContent = '⚠️ CAPTCHA';
              document.getElementById('sifen_badge_estado').style.background = '#fef3c7';
              document.getElementById('sifen_badge_estado').style.color = '#92400e';
-             return; // DETENEMOS LA EJECUCIÓN ACÁ
-        } else {
-             // MODO NORMAL O CAPTCHA RESUELTO
-             document.getElementById('sifen_captcha_solver_box').style.display = 'none';
-             document.getElementById('sifen_datos_cuadros').style.display = 'grid';
-             document.getElementById('sifen_desglose_box').style.display = 'block';
-             document.getElementById('sifen_accion_box').style.display = 'block';
-        }
+             
+             // Mostramos la parte del desglose y le pasamos los datos parciales
+             if(dec) {
+                 document.getElementById('sifen_desglose_box').style.display = 'block';
+                 document.getElementById('sifen_cdc_desglose').innerHTML = [
+                    '<b>Tipo:</b> ' + dec.tipoDocNom, '<b>RUC:</b> ' + rucFinal + '-' + dvFinal,
+                    '<b>N° doc:</b> ' + dec.nroCompleto, '<b>Fecha:</b> ' + dec.fechaDisplay
+                 ].join(' &nbsp;·&nbsp; ');
+             }
+             
+             // Llenamos variables temporales para que si lo hace manual no explote
+             window._ultimoCDCData = {
+                cdc: cdc, esCaptcha: true, ruc: rucFinal, rucConDV: rucFinal + (dvFinal && !rucFinal.includes('-') ? '-'+dvFinal : ''), rs: "",
+                fecha: dec.fechaISO || "", fechaDisplay: dec.fechaDisplay || "", total: 0, iva10: 0, iva5: 0, exento: 0, estado: 'CAPTCHA', condicion: dec.tipoTransCod ? dec.tipoTransCod : '1', dec: dec
+             };
+             
+             return; 
+        } 
+        
+        // MODO NORMAL (o Captcha resuelto con exito)
+        document.getElementById('sifen_captcha_solver_box').style.display = 'none';
+        document.getElementById('sifen_captcha_box').style.display = 'none';
+        document.getElementById('sifen_datos_cuadros').style.display = 'grid';
+        document.getElementById('sifen_desglose_box').style.display = 'block';
+        document.getElementById('sifen_accion_box').style.display = 'block';
 
         var totalServer = data.total || 0;
         var estadoServer = data.estado || 'AP'; 
-
-        var rucFinal   = (data.ruc && data.ruc.length > 3) ? data.ruc : (dec.rucEmisor ? dec.rucEmisor : '—');
-        var dvFinal    = dec.dvRuc ? dec.dvRuc : '';
         var rsFinal    = (!data.rs || data.rs === '') ? (dec.rucEmisor ? '(sin datos)' : '—') : data.rs;
 
         var fechaDisplay = '', fechaISO = '';
@@ -1617,8 +1630,7 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
             'AP': {txt:'✅ APROBADO', bg:'#d1fae5', col:'#065f46'},
             'CA': {txt:'❌ CANCELADO', bg:'#fee2e2', col:'#991b1b'},
             'IN': {txt:'⛔ INHABILITADO', bg:'#fee2e2', col:'#991b1b'},
-            'PE': {txt:'⏳ PENDIENTE', bg:'#dbeafe', col:'#1e40af'},
-            '':   {txt:'⚠️ SIN ESTADO', bg:'#fef3c7', col:'#92400e'}
+            'PE': {txt:'⏳ PENDIENTE', bg:'#dbeafe', col:'#1e40af'}
         };
         var bd = badges[estadoServer] || {txt: estadoServer || '?', bg:'#e5e7eb', col:'#374151'};
         var badge = document.getElementById('sifen_badge_estado');
@@ -1661,6 +1673,7 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
             total: totalServer, estado: estadoServer || 'AP', dataCompleta: window._ultimoCDCData
         });
         if(window._renderHistorialCDC) window._renderHistorialCDC();
+        if(window._analizarConIA) window._analizarConIA(window._ultimoCDCData);
 
     } catch(e) {
         document.getElementById('sifen_loading').style.display = 'none';
@@ -1687,13 +1700,29 @@ window.enviarCDCAlWizard = function() {
     document.getElementById('wiz_tipo').value        = 'factura';
     document.getElementById('wiz_fecha').value       = d.fecha || new Date().toISOString().split('T')[0];
     document.getElementById('wiz_ruc').value         = d.ruc || '';
-    document.getElementById('wiz_tercero').value     = (!d.rs || d.rs.includes('CAPTCHA') || d.rs.includes('sin registro')) ? '' : d.rs;
+    
+    // Fallback if RS was captcha or empty
+    var cleanRS = d.rs;
+    if(!cleanRS || cleanRS.includes('CAPTCHA')) cleanRS = document.getElementById('captcha_rs') ? document.getElementById('captcha_rs').value : '';
+    document.getElementById('wiz_tercero').value     = cleanRS;
+    
     document.getElementById('wiz_rol_tercero').value = oper === 'compra' ? 'proveedor' : 'cliente';
     document.getElementById('wiz_timbrado').value    = d.cdc;
     document.getElementById('wiz_nro').value         = nroDisplay;
 
     var pagoEl = document.getElementById('wiz_pago_tipo');
     if (pagoEl) pagoEl.value = (d.condicion === '2') ? 'credito' : 'caja';
+
+    // Manejo de Monto Manual si fue por CAPTCHA Fallback (Caja Amarilla)
+    var isManualCaptcha = d.esCaptcha;
+    if (isManualCaptcha) {
+        var totalManual = parseFloat(document.getElementById('captcha_total').value) || 0;
+        var tasaManual = document.getElementById('captcha_tasa').value;
+        d.total = totalManual;
+        if(tasaManual === '10') d.iva10 = Math.round(totalManual/11);
+        if(tasaManual === '5') d.iva5 = Math.round(totalManual/21);
+        if(tasaManual === '0') d.exento = totalManual;
+    }
 
     if (d.total > 0) {
         document.getElementById('wiz_monto').value = d.total;
@@ -1709,10 +1738,42 @@ window.enviarCDCAlWizard = function() {
     }
 
     var tipoNom = d.dec && d.dec.tipoDocNom ? d.dec.tipoDocNom : 'Factura Electrónica';
-    document.getElementById('wiz_glosa').value = tipoNom + ' N° ' + nroDisplay + ' · ' + (d.rs && !d.rs.includes('CAPTCHA') && !d.rs.includes('sin registro') ? d.rs : 'RUC ' + d.ruc) + ' · ' + (d.fechaDisplay || d.fecha);
+    document.getElementById('wiz_glosa').value = tipoNom + ' N° ' + nroDisplay + ' · ' + (cleanRS ? cleanRS : 'RUC ' + d.ruc) + ' · ' + (d.fechaDisplay || d.fecha);
 
     window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard');
 };
+
+async function _analizarConIA(d) {
+    if (!d) return;
+    var panel = document.getElementById('sifen_ia_panel'); var texto = document.getElementById('sifen_ia_texto');
+    if (!panel || !texto) return;
+    
+    var apiKey = localStorage.getItem('gemini_api_key');
+    if(!apiKey) {
+        panel.style.display = 'none';
+        return;
+    }
+    
+    panel.style.display = 'block'; texto.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-style:italic">🤖 Gemini analizando...</span>';
+    try {
+        var prompt = 'Sos experto contable Paraguay. Analiza este comprobante SIFEN en 3 líneas:\n' + '• Tipo: ' + (d.dec && d.dec.tipoDocNom ? d.dec.tipoDocNom : 'Factura') + '\n' + '• RUC: ' + d.rucConDV + ' — ' + d.rs + '\n' + '• N°: ' + (d.dec && d.dec.nroCompleto ? d.dec.nroCompleto : '—') + ' · Fecha: ' + d.fechaDisplay + '\n' + '• Estado DNIT: ' + d.estado + '\n' + '• Total: ₲ ' + d.total.toLocaleString() + ' · IVA10: ₲ ' + d.iva10.toLocaleString() + '\n' + '• Condición: ' + (d.condicion === '2' ? 'Crédito' : 'Contado') + '\n\n' + 'Indicá: registro contable sugerido y deducibilidad IVA/IRE.';
+        
+        var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST', headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ contents:[{parts:[{text: prompt}]}] })
+        });
+        
+        if (res.status === 400) throw new Error('API Key de Gemini inválida o mal escrita.');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        
+        var ai = await res.json();
+        var reply = ai.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+        texto.innerHTML = reply;
+    } catch(e) {
+        texto.style.color = 'rgba(255,255,255,0.4)'; texto.style.fontStyle = 'italic';
+        texto.textContent = 'Análisis IA no disponible (' + e.message + ')';
+    }
+}
 
 function _renderHistorialCDC() {
     var card = document.getElementById('sifen_historial_card');
