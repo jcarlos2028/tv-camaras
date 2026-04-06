@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v4.2 — Sistema Contable Cloud Edition</title>
+<title>ContaPY v4.3 — Sistema Contable Cloud Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
   // Cargar tema guardado antes de renderizar la página para evitar parpadeos
@@ -137,6 +137,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .fin-total-row.pasivo{border-color:var(--accent);background:rgba(230,57,70,0.05);color:var(--accent)}
 .fin-total-row.patrimonio{border-color:var(--success);background:rgba(16,185,129,0.05);color:var(--success)}
 .fin-total-row.resultado-final{border-color:var(--warning);background:rgba(245,158,11,0.1);color:var(--warning);font-size:14px}
+
+/* CHAT GEMINI LOCAL */
+.chat-container { display: flex; flex-direction: column; height: 60vh; background: var(--bg); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
+.chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+.chat-msg { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 13.5px; line-height: 1.5; color:var(--text); }
+.chat-msg.gemini { background: var(--card); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+.chat-msg.user { background: var(--accent2); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.chat-input-area { display: flex; gap: 10px; padding: 15px; background: var(--card); border-top: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -154,7 +162,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div style="text-align:center;margin-bottom:28px">
       <div style="width:56px;height:56px;background:var(--accent);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px">☁️</div>
       <h1 style="font-size:24px;font-weight:800;letter-spacing:-1px">ContaPY</h1>
-      <p style="font-size:12px;color:var(--text-light);margin-top:3px">Autenticación Segura Nube v4.2</p>
+      <p style="font-size:12px;color:var(--text-light);margin-top:3px">Autenticación Segura Nube v4.3</p>
     </div>
     <div class="form-group"><label>Usuario / Correo</label><input type="text" id="lu" placeholder="ejemplo@correo.com" style="background:#f9fafb;color:#000"></div>
     <div class="form-group" style="margin-top:10px"><label>Contraseña</label><input type="password" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" style="background:#f9fafb;color:#000"></div>
@@ -165,7 +173,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v4.2 Cloud + AI</div></div></div>
+    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v4.3 Cloud + AI</div></div></div>
   </div>
   <div class="sidebar-section" style="padding-top:5px;padding-bottom:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px">
     <div style="color:var(--success);font-size:11px;font-weight:700" id="sb_user_name">Cargando...</div>
@@ -190,9 +198,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Herramientas & Ajustes</div>
-    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#a78bfa;font-weight:600"><span class="icon">🤖</span><span>Soporte IA (Gemini)</span></div>
+    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#a78bfa;font-weight:600"><span class="icon">🤖</span><span>Soporte IA (Asistente)</span></div>
     <div class="nav-item" onclick="showPage('plan_cuentas',this)" style="color:#f59e0b;font-weight:600"><span>📋</span><span>Plan de Cuentas Global</span></div>
-    <div class="nav-item" onclick="showPage('ajustes',this)"><span>⚙️</span><span>Ajustes y Temas</span></div>
+    <div class="nav-item" onclick="showPage('ajustes',this)"><span>⚙️</span><span>Ajustes del Sistema</span></div>
   </div>
   <div class="sidebar-section" id="menu_admin" style="display:none;margin-top:10px">
     <div class="sidebar-label">Administración</div>
@@ -216,7 +224,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   <div class="content">
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
-      <div class="page-header"><div><h2>Estudio Contable ContaPY 👋</h2><p>Sincronización Activa con Firebase — Versión 4.2</p></div></div>
+      <div class="page-header"><div><h2>Estudio Contable ContaPY 👋</h2><p>Sincronización Activa con Firebase — Versión 4.3</p></div></div>
       <div class="stats-grid">
         <div class="stat-card blue"><div class="stat-label">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
         <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control de honorarios</div></div>
@@ -232,7 +240,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
     <!-- AJUSTES Y TEMAS -->
     <div class="page" id="page-ajustes">
-      <div class="page-header"><div><h2>⚙️ Ajustes del Sistema</h2><p>Apariencia, Actualizaciones y Preferencias</p></div></div>
+      <div class="page-header"><div><h2>⚙️ Ajustes del Sistema</h2><p>Apariencia y Actualizaciones</p></div></div>
       <div class="grid-2">
         <div class="card">
           <div class="card-title">🎨 Temas y Colores (Skins)</div>
@@ -247,7 +255,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
         <div class="card">
           <div class="card-title">🔄 Actualizaciones del Sistema</div>
-          <p style="font-size:12px;color:var(--text-light);margin-bottom:10px">Versión actual: <b>v4.2 Cloud</b></p>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:10px">Versión actual: <b>v4.3 Cloud</b></p>
           <div id="update_status" style="margin-bottom:15px;font-size:13px;color:var(--success);font-weight:600;display:none">✅ Posee la última versión instalada.</div>
           <button class="btn btn-primary" onclick="buscarActualizaciones()" id="btn_update">Buscar Actualizaciones en la Nube</button>
         </div>
@@ -257,14 +265,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- MÓDULO GEMINI IA -->
     <div class="page" id="page-gemini">
       <div class="page-header">
-        <div><h2>🤖 Soporte Asistente Inteligente</h2><p>Desarrollado con la tecnología de Gemini (Google API)</p></div>
-        <button class="btn btn-outline" style="border-color:#a78bfa;color:#6d28d9" onclick="configurarGemini()">⚙️ Configurar API Key</button>
+        <div><h2>🤖 Soporte Asistente Inteligente</h2><p>Responde consultas rápidas sin necesidad de API Key. (Opcional: Conectar Gemini real)</p></div>
+        <button class="btn btn-outline" style="border-color:#a78bfa;color:#6d28d9" onclick="configurarGemini()">⚙️ Conectar API Key (Opcional)</button>
       </div>
       <div class="grid-2">
           <div class="card" style="padding:0; overflow:hidden; display:flex; flex-direction:column; height:65vh">
               <div class="chat-messages" id="chat_box">
                   <div class="chat-msg gemini">
-                      <strong>🤖 Gemini IA:</strong><br><br>¡Hola! Soy tu asistente contable en ContaPY. Si ya configuraste tu API Key, puedo responder dudas sobre la <strong>Ley N° 6380/2019</strong>. ¿En qué te ayudo hoy?
+                      <strong>🤖 Asistente Local:</strong><br><br>¡Hola! Soy tu asistente en ContaPY. Conozco las leyes 6380/19 de Paraguay.<br>No necesitas API Key para preguntas básicas. Pregúntame sobre IRP, IRE o IVA.
                   </div>
               </div>
               <div class="chat-input-area">
@@ -288,7 +296,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- PLAN DE CUENTAS COMPLETO RG 49/14 -->
     <div class="page" id="page-plan_cuentas">
       <div class="page-header">
-        <div><h2>📋 Plan de Cuentas — Resolución General 49/14</h2><p>Plan oficial DNIT · Gestión global de cuentas del sistema</p></div>
+        <div><h2>📋 Plan de Cuentas Global</h2><p>Base DNIT (Res. 49/14) y cuentas personalizadas</p></div>
         <button class="btn btn-primary" onclick="openModalNuevaCuenta()">➕ Nueva Cuenta Personalizada</button>
       </div>
       <div class="card">
@@ -303,9 +311,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <option value="5">5 - Costos y Gastos</option>
           </select>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap" style="max-height:500px;overflow-y:auto">
           <table>
-            <thead><tr><th>Código</th><th>Nombre de la Cuenta</th><th>Clase</th><th>Naturaleza</th><th>Tipo</th><th>Acciones</th></tr></thead>
+            <thead style="position:sticky;top:0;background:var(--card)"><tr><th>Código</th><th>Nombre de la Cuenta</th><th>Clase</th><th>Naturaleza</th><th>Tipo</th><th>Acciones</th></tr></thead>
             <tbody id="tabla-plan-cuentas"></tbody>
           </table>
         </div>
@@ -316,8 +324,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div class="page" id="page-clientes">
       <div class="page-header">
         <div><h2>Directorio de Clientes</h2><p>Registro de contribuyentes y asignación de cartera</p></div>
-        <div style="display:flex;gap:8px;">
-          <input type="text" placeholder="🔍 Buscar por RUC o Nombre..." style="width:250px" id="search-cliente" onkeyup="renderClientes()">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" placeholder="🔍 Buscar por RUC o Nombre..." style="width:250px;padding:8px 12px;border:1px solid var(--border);border-radius:7px;background:var(--card);color:var(--text)" id="search-cliente" onkeyup="renderClientes()">
           <button class="btn btn-secondary" onclick="forzarSincronizacion()" id="btn_sync">🔄 Sincronizar Nube</button>
           <button class="btn btn-primary" onclick="openModalCliente()">+ Nuevo Cliente</button>
         </div>
@@ -376,8 +384,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
           <button class="btn btn-outline" style="background:rgba(16,185,129,0.1); border-color:var(--success); color:var(--success)" onclick="irAConsultaCDC()">🔍 Consultar CDC SIFEN</button>
           <button class="btn btn-outline" onclick="openModalImportProfile()">📥 Importar CSV</button>
           <button class="btn btn-primary" onclick="openWizardFromProfile()">➕ Cargar Comprobante</button>
-          <button class="btn btn-secondary" onclick="openAsientoManual()">➕ Asiento Libre</button>
-          <!-- NUEVO BOTÓN: Plan de Cuentas en Cliente -->
+          <button class="btn btn-secondary" onclick="openAsientoManual()">➕ Asiento Libre / Inicial</button>
           <button class="btn btn-outline" style="border-color:#f59e0b;color:#f59e0b" onclick="openModalNuevaCuenta()">➕ Cuenta Personalizada</button>
         </div>
       </div>
@@ -520,7 +527,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <div style="font-size:12px;color:var(--text-light)" id="sifen_lbl_estado">—</div>
           </div>
           
-          <!-- NUEVO: RESOLVER CAPTCHA DESDE EL SISTEMA -->
+          <!-- CAJA RESOLVER CAPTCHA -->
           <div id="sifen_captcha_solver_box" style="display:none;background:rgba(33,150,243,0.1);border:1px solid var(--accent2);border-radius:9px;padding:16px;margin-bottom:12px;text-align:center;">
             <div style="font-weight:700;color:var(--accent2);margin-bottom:8px;font-size:14px">🛡️ Verificación de Seguridad DNIT (CAPTCHA)</div>
             <p style="font-size:12px;color:var(--text);margin-bottom:12px">El servidor de la SET requiere que resuelvas este CAPTCHA para descargar los montos.</p>
@@ -528,7 +535,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <img id="captcha_img_src" src="" alt="Cargando CAPTCHA..." style="border:1px solid var(--border);border-radius:6px;margin-bottom:12px;max-width:250px;height:auto;display:inline-block;background:white;padding:5px;">
             
             <div style="display:flex;gap:10px;justify-content:center;align-items:center;">
-                <input type="text" id="captcha_txt_input" placeholder="Escribe el código..." style="width:200px;text-align:center;font-family:'DM Mono';font-weight:700;font-size:16px;text-transform:uppercase;" onkeydown="if(event.key==='Enter')enviarCaptchaApi()">
+                <input type="text" id="captcha_txt_input" placeholder="Escribe el código..." style="width:200px;text-align:center;font-family:'DM Mono';font-weight:700;font-size:16px;text-transform:uppercase;color:var(--text);background:var(--bg)" onkeydown="if(event.key==='Enter')enviarCaptchaApi()">
                 <button class="btn btn-primary" onclick="enviarCaptchaApi()" style="padding:10px 20px">Validar e Importar</button>
             </div>
             <input type="hidden" id="captcha_session_id">
@@ -722,7 +729,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div class="modal-body-scroll">
         <div class="form-grid col2"><div class="form-group"><label>Fecha del Asiento</label><input type="date" id="am_fecha"></div><div class="form-group"><label>Glosa General</label><input type="text" id="am_glosa" placeholder="Concepto del asiento"></div></div>
         <table style="width:100%;margin-top:15px"><thead><tr><th>Cuenta Contable (Despliegue)</th><th style="width:120px">Debe ₲</th><th style="width:120px">Haber ₲</th><th style="width:40px"></th></tr></thead><tbody id="am_lineas"></tbody></table>
-        <button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="addAMLine()">+ Añadir Cuenta al Asiento</button>
+        <div style="display:flex; gap:10px">
+            <button class="btn btn-outline btn-sm" style="margin-top:10px" onclick="addAMLine()">+ Añadir Fila</button>
+            <button class="btn btn-outline btn-sm" style="margin-top:10px; border-color:var(--accent2); color:var(--accent2)" onclick="crearBancoDesdeAsiento()">🏦 + Crear Banco (Cta Cte / Ahorro)</button>
+        </div>
         <div style="display:flex;justify-content:flex-end;gap:20px;margin-top:15px;font-weight:700;font-size:14px;background:var(--bg);padding:10px;border-radius:7px;border:1px solid var(--border)"><div>Tot Debe: <span id="am_tot_deb" style="color:var(--accent2);font-family:'DM Mono'">0</span></div><div>Tot Haber: <span id="am_tot_hab" style="color:var(--success);font-family:'DM Mono'">0</span></div><div id="am_diff" style="color:var(--danger)">Diferencia: 0</div></div>
         <div class="modal-actions"><button class="btn btn-primary" onclick="guardarAsientoManual()">💾 Guardar Asiento en Diario</button></div>
     </div>
@@ -741,7 +751,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
           <button class="btn btn-outline" onclick="exportToCSV('tbl_honorarios', 'Reporte_Honorarios')">📥 Exportar a Excel</button>
         </div>
         <div class="table-wrap" style="max-height:350px;overflow-y:auto;border:1px solid var(--border);border-radius:8px">
-            <table id="tbl_honorarios" style="width:100%"><thead style="position:sticky;top:0;background:var(--bg)"><tr><th>Cliente</th><th>Estado Cli.</th><th>Mes</th><th>Pago</th><th>Acción</th></tr></thead>
+            <table id="tbl_honorarios" style="width:100%"><thead style="position:sticky;top:0;background:var(--card)"><tr><th>Cliente</th><th>Estado Cli.</th><th>Mes</th><th>Pago</th><th>Acción</th></tr></thead>
             <tbody id="tabla-honorarios"></tbody></table>
         </div>
     </div>
@@ -759,7 +769,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
           <div class="form-group"><label>RUC</label><input type="text" id="cli_ruc"></div><div class="form-group"><label>Razón Social / Nombre</label><input type="text" id="cli_nom"></div>
           <div class="form-group"><label>Línea / Teléfono</label><input type="text" id="cli_tel"></div><div class="form-group"><label>Correo Electrónico</label><input type="email" id="cli_correo"></div>
           <div class="form-group"><label>Tipo Persona</label><select id="cli_tipo"><option value="fisica">Física</option><option value="juridica">Jurídica</option></select></div>
-          <div class="form-group"><label>Estado</label><select id="cli_estado" style="border-color:var(--accent2);background:rgba(33,150,243,0.1);font-weight:600"><option value="activo">🟢 Activo</option><option value="inactivo">🔴 Inactivo</option></select></div>
+          <div class="form-group"><label>Estado</label><select id="cli_estado" style="border-color:var(--accent2);background:rgba(33,150,243,0.1);font-weight:600;color:var(--text)"><option value="activo">🟢 Activo</option><option value="inactivo">🔴 Inactivo</option></select></div>
         </div>
         <div class="form-section-title" style="margin-top:20px;font-size:13px;border-bottom:none">📌 Impuestos que le afectan</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--bg);padding:15px;border-radius:8px;margin-bottom:15px;border:1px solid var(--border)">
@@ -884,7 +894,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <div class="form-group" style="margin-bottom:15px"><label>Método de Pago / Condición</label>
                 <select id="wiz_pago_tipo" onchange="toggleBanco()"><option value="caja">Efectivo / Caja M.N.</option><option value="banco">Transferencia / Cheque</option><option value="credito" id="opt_credito">A Crédito (Comercial)</option></select>
             </div>
-            <div class="form-group" id="blk_banco" style="display:none;margin-bottom:15px"><label>Banco</label><select id="wiz_banco_lista"><option>Banco Itaú</option><option>Banco Continental</option><option>BNF</option></select></div>
+            <div class="form-group" id="blk_banco" style="display:none;margin-bottom:15px"><label>Banco Destino/Origen</label><select id="wiz_banco_lista"></select></div>
             <div class="modal-actions"><button class="btn btn-outline" onclick="wizNext(1)">⬅️ Atrás</button><button class="btn btn-primary" onclick="wizNext(3)">Siguiente ➡️</button></div>
         </div>
 
@@ -919,6 +929,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <script>
 window.dbUsuarios =[]; window.dbClientes =[]; window.totalDocs = 0; window.currentUser = null; 
 window.editandoUsuIdx = -1; window.editandoCliIdx = -1; window.wizContext = null;
+window.PLAN_CUENTAS_CUSTOM = [];
 
 // TEMA Y SKINS
 function setTheme(themeName) {
@@ -928,21 +939,16 @@ function setTheme(themeName) {
 // BUSCAR ACTUALIZACIONES
 function buscarActualizaciones() {
     var btn = document.getElementById('btn_update');
-    btn.innerHTML = '⏳ Comprobando...';
-    btn.disabled = true;
+    btn.innerHTML = '⏳ Comprobando...'; btn.disabled = true;
     setTimeout(function() {
-        btn.innerHTML = 'Buscar Actualizaciones en la Nube';
-        btn.disabled = false;
+        btn.innerHTML = 'Buscar Actualizaciones en la Nube'; btn.disabled = false;
         document.getElementById('update_status').style.display = 'block';
     }, 1500);
 }
 // FORZAR SINCRONIZACIÓN MANUAL
 function forzarSincronizacion() {
-    var btn = document.getElementById('btn_sync');
-    if(!btn) return;
-    var original = btn.innerHTML;
-    btn.innerHTML = '⏳ Sincronizando...';
-    btn.disabled = true;
+    var btn = document.getElementById('btn_sync'); if(!btn) return;
+    var original = btn.innerHTML; btn.innerHTML = '⏳ Sincronizando...'; btn.disabled = true;
     if(window.loadDataFromFirebase) {
         window.loadDataFromFirebase().then(function() {
             window.saveData().then(function() {
@@ -967,10 +973,10 @@ function puedeVerCliente(cliId) {
     return window.currentUser.clientesAsignados && window.currentUser.clientesAsignados.includes(cliId);
 }
 
-// ===== IA GEMINI =====
+// ===== IA GEMINI (AHORA CON ASISTENTE LOCAL SIN API KEY) =====
 window.configurarGemini = function() {
-    var key = prompt("⚙️ Configuración Gemini IA\n\nIngresa tu API Key de Google AI Studio:");
-    if(key) { localStorage.setItem('gemini_api_key', key.trim()); alert("✅ API Key guardada en tu navegador."); }
+    var key = prompt("⚙️ Conectar Gemini Real\n\nIngresa tu API Key de Google AI Studio si quieres respuestas completas (Opcional):");
+    if(key) { localStorage.setItem('gemini_api_key', key.trim()); alert("✅ API Key guardada. Ahora usarás Gemini directamente."); }
 };
 
 window.enviarMensajeIA = async function() {
@@ -982,25 +988,35 @@ window.enviarMensajeIA = async function() {
     
     var apiKey = localStorage.getItem('gemini_api_key');
     if(!apiKey) {
+        // ASISTENTE LOCAL PREDEFINIDO (SIN INTERNET/API)
         setTimeout(() => { 
-            box.innerHTML += `<div class="chat-msg gemini">🤖 <strong>Gemini:</strong> Para darte respuestas reales, necesito que ingreses tu API Key gratuita de Google. Haz clic en el botón "⚙️ Configurar API Key" arriba.</div>`; 
+            var r = "Interesante consulta. Recuerda que bajo la Ley 6380/19 los gastos deben estar vinculados directamente a la actividad gravada.";
+            var tl = txt.toLowerCase();
+            if(tl.includes("irp")) r = "En el **IRP**, las deducciones personales están limitadas. Los gastos de esparcimiento no son deducibles. Las inversiones se pueden deducir según el tipo.";
+            if(tl.includes("ire simple")) r = "En el **IRE Simple**, la tasa es del 10% sobre la base imponible menor entre: a) Renta Real (Ingresos - Egresos) y b) Renta Presunta (30% de Ingresos Brutos).";
+            if(tl.includes("ande") || tl.includes("luz") || tl.includes("agua")) r = "Las facturas de servicios públicos (ANDE, ESSAP) son deducibles en un 100% para el IRE, siempre que estén a nombre del contribuyente o se demuestre el uso en el local comercial (contrato de alquiler).";
+            if(tl.includes("auto") || tl.includes("vehiculo")) r = "En el IRE, la adquisición de vehículos particulares tiene reglas estrictas de depreciación. En IRP, se puede deducir la compra cada 3 años.";
+            
+            box.innerHTML += `<div class="chat-msg gemini">🤖 <strong>Asistente Local:</strong><br>${r}</div>`; 
             box.scrollTop = box.scrollHeight; 
         }, 800);
         return;
     }
+    
+    // SI HAY API KEY, LLAMA A GOOGLE GEMINI REAL
     try {
         var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ contents:[{parts:[{text: "Eres un experto contable de Paraguay (Ley 6380/19 y NIIF). Responde de forma breve y precisa a la siguiente consulta: " + txt}]}] })
         });
-        if(res.status === 400) throw new Error("HTTP 400 - Tu API Key de Gemini es inválida o está mal escrita.");
+        if(res.status === 400) throw new Error("Tu API Key de Gemini es inválida. Ingresa una nueva en 'Configurar API Key'.");
         if(!res.ok) throw new Error("Error de conexión. HTTP " + res.status);
         var data = await res.json(); 
         var reply = data.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
         box.innerHTML += `<div class="chat-msg gemini">🤖 <strong>Gemini:</strong><br>${reply}</div>`; 
         box.scrollTop = box.scrollHeight;
     } catch(e) { 
-        box.innerHTML += `<div class="chat-msg gemini" style="color:var(--danger)">❌ Error al conectar con Gemini. Detalle: ${e.message}</div>`; 
+        box.innerHTML += `<div class="chat-msg gemini" style="color:var(--danger)">❌ Error: ${e.message}</div>`; 
         box.scrollTop = box.scrollHeight; 
     }
 };
@@ -1126,7 +1142,7 @@ window.verCliente = function(idx) {
 };
 
 window.eliminarComprobante = function(cliIdx, libro, docIdx, refAsiento) {
-    if(!confirm('¿Estás seguro de eliminar este comprobante? También se eliminará su asiento contable del libro diario.\nEsta acción no se puede deshacer.')) return;
+    if(!confirm('¿Estás seguro de eliminar este comprobante?\n\nAl hacerlo, también se buscará y ELIMINARÁ el asiento correspondiente en el Libro Diario para que el Balance no se descuadre.\n\nEsta acción no se puede deshacer.')) return;
     var cli = window.dbClientes[cliIdx];
     cli.libros[libro].splice(docIdx, 1);
     if(refAsiento) {
@@ -1135,7 +1151,7 @@ window.eliminarComprobante = function(cliIdx, libro, docIdx, refAsiento) {
     window.saveData();
     window.renderLibros();
     if(window.renderFinancieros) window.renderFinancieros();
-    alert('🗑️ Comprobante y asiento eliminados.');
+    alert('🗑️ Comprobante y Asiento eliminados correctamente.');
 };
 
 window.switchClientTab = function(tabId, el) { 
@@ -1155,7 +1171,7 @@ window.renderLibros = function() {
       if(ivaT10>0) ivaDisp += `10%: ${ivaT10.toLocaleString()}<br>`;
       if(ivaT5>0) ivaDisp += `5%: ${ivaT5.toLocaleString()}`;
       if(ivaDisp==="") ivaDisp = "Exenta";
-      return `<tr><td>${r.fecha}</td><td><span style="font-size:10px;text-transform:uppercase">${r.condicion||'-'}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'S/RUC'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.timbrado||'-'}<br>${r.nro}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString()}</td><td class="monto" style="color:var(--accent)">${ivaDisp}</td><td>${tBadgesStr(r.impuestos_aplicados)}</td><td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm" onclick="editarComprobante(${window.currentCli}, '${lib}', ${i})">✏️</button><button class="btn btn-outline btn-sm btn-danger" onclick="eliminarComprobante(${window.currentCli}, '${lib}', ${i}, '${r.ref_asiento}')">🗑️</button></div></td></tr>`;
+      return `<tr><td>${r.fecha}</td><td><span style="font-size:10px;text-transform:uppercase">${r.condicion||'-'}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'S/RUC'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.timbrado||'-'}<br>${r.nro}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString()}</td><td class="monto" style="color:var(--accent)">${ivaDisp}</td><td>${tBadgesStr(r.impuestos_aplicados)}</td><td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm" onclick="editarComprobante(${window.currentCli}, '${lib}', ${i})">✏️</button><button class="btn btn-outline btn-sm btn-danger" title="Eliminar Comprobante y Asiento" onclick="eliminarComprobante(${window.currentCli}, '${lib}', ${i}, '${r.ref_asiento}')">🗑️</button></div></td></tr>`;
   };
   
   document.getElementById('lista_lib_compras').innerHTML = c.libros.compras.map((r,i)=>dr(r,'compras',i)).join('');
@@ -1165,8 +1181,8 @@ window.renderLibros = function() {
   
   var lDiario = document.getElementById('lista_lib_diario'); lDiario.innerHTML='';
   c.libros.diario.forEach((a, i) => {
-    var btnEdit = a.asiento.startsWith('M-') ? `<button class="btn btn-outline btn-sm" onclick="editarAsientoManual(${window.currentCli}, '${a.asiento}')">✏️ Editar</button> <button class="btn btn-outline btn-sm btn-danger" onclick="eliminarComprobante(${window.currentCli}, 'diario', ${i}, '${a.asiento}')">🗑️</button>` : '';
-    lDiario.innerHTML += `<div class="libro-row" style="background:var(--bg);border-bottom:none"><div><strong>${a.fecha}</strong></div><div style="font-family:'DM Mono'">${a.asiento}</div><div style="font-weight:600;color:var(--accent2)">Glosa: ${a.glosa}</div><div></div><div></div><div>${btnEdit}</div></div>`;
+    var btnEdit = a.asiento.startsWith('M-') ? `<button class="btn btn-outline btn-sm" onclick="editarAsientoManual(${window.currentCli}, '${a.asiento}')">✏️</button> <button class="btn btn-outline btn-sm btn-danger" title="Eliminar Asiento Manual" onclick="eliminarComprobante(${window.currentCli}, 'diario', ${i}, '${a.asiento}')">🗑️</button>` : '';
+    lDiario.innerHTML += `<div class="libro-row" style="background:var(--bg);border-bottom:none;border-radius:4px;margin-top:4px"><div><strong>${a.fecha}</strong></div><div style="font-family:'DM Mono'">${a.asiento}</div><div style="font-weight:600;color:var(--accent2)">Glosa: ${a.glosa}</div><div></div><div></div><div>${btnEdit}</div></div>`;
     a.lineas.forEach(l => { lDiario.innerHTML += `<div class="libro-row"><div></div><div></div><div style="padding-left:20px">${l.cuenta}</div><div class="monto debe">${l.debe>0?l.debe.toLocaleString():''}</div><div class="monto haber">${l.haber>0?l.haber.toLocaleString():''}</div><div></div></div>`; });
   });
 };
@@ -1192,6 +1208,7 @@ window.renderMayorYBalance = function() {
       var k=d.ruc+'_'+(d.rol||'cliente'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'cliente', fact:0, cp:0}; 
       terceros[k].cp += d.bruto; 
   });
+  
   var hEst = "";
   Object.keys(terceros).sort().forEach(k => {
       var o = terceros[k], saldo = o.fact - o.cp;
@@ -1232,6 +1249,33 @@ window.addAMLine = function() {
     tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" placeholder="Escriba cuenta..." style="width:100%"></td><td><input type="number" class="am-deb" value="0" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="0" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`;
     document.getElementById('am_lineas').appendChild(tr);
 };
+
+// BOTÓN CREAR BANCO DESDE ASIENTO MANUAL
+window.crearBancoDesdeAsiento = function() {
+    var nombre = prompt("Creación de Banco\nEscriba el nombre y tipo (Ej: Itaú - Cta. Cte.):");
+    if(!nombre || !nombre.trim()) return;
+    
+    var plan = getPlanCompleto();
+    var bancos = plan.filter(c => c.cod.startsWith("1.01.01.04."));
+    var nextId = "01";
+    if(bancos.length > 0) {
+        var last = bancos[bancos.length-1].cod.split('.').pop();
+        nextId = String(parseInt(last) + 1).padStart(2, '0');
+    }
+    var nuevoCod = "1.01.01.04." + nextId;
+    var nuevaCta = { cod: nuevoCod, nombre: nombre.trim().toUpperCase(), tipo: "activo_corriente", custom: true };
+    
+    window.PLAN_CUENTAS_CUSTOM.push(nuevaCta);
+    window.saveData();
+    window.initPlanCuentas();
+    
+    var tr = document.createElement('tr'); 
+    tr.innerHTML = `<td><input type="text" class="am-cta" list="planCuentasRes4814" value="${nuevoCod} ${nuevaCta.nombre}" style="width:100%"></td><td><input type="number" class="am-deb" value="0" oninput="calcAM()" style="width:100%"></td><td><input type="number" class="am-hab" value="0" oninput="calcAM()" style="width:100%"></td><td><button class="btn btn-outline btn-sm" onclick="this.closest('tr').remove();calcAM()">✕</button></td>`;
+    document.getElementById('am_lineas').appendChild(tr);
+    
+    alert("✅ Banco registrado en el Plan de Cuentas y añadido al asiento.");
+};
+
 window.calcAM = function() {
     var d = 0, h = 0; document.querySelectorAll('#am_lineas tr').forEach(tr => { d += parseFloat(tr.querySelector('.am-deb').value)||0; h += parseFloat(tr.querySelector('.am-hab').value)||0; });
     document.getElementById('am_tot_deb').textContent = "₲ " + d.toLocaleString(); document.getElementById('am_tot_hab').textContent = "₲ " + h.toLocaleString();
@@ -1271,13 +1315,24 @@ window.updateWizTaxes = function() {
     document.getElementById('wiz_tax_boxes').innerHTML = html;
 };
 
+// Cargar lista de bancos en Wizard dinamicamente desde Plan de Cuentas
+window.cargarBancosWizard = function() {
+    var sel = document.getElementById('wiz_banco_lista'); if(!sel) return;
+    sel.innerHTML = '';
+    var plan = getPlanCompleto();
+    var bancos = plan.filter(c => c.cod === "1.01.01.04" || c.cod.startsWith("1.01.01.04."));
+    bancos.forEach(b => {
+        sel.innerHTML += `<option value="${b.cod} ${b.nombre}">${b.nombre}</option>`;
+    });
+};
+
 window.openWizardFromProfile = function() { 
     window.wizContext=null; document.getElementById('wiz-title').textContent="🧾 Asistente de Carga"; document.getElementById('fg_wiz_cliente').style.display='none'; 
     document.getElementById('wiz_cliente').value=window.currentCli; document.getElementById('wiz_fecha').value=new Date().toISOString().split('T')[0]; 
     document.getElementById('wiz_monto').value="0"; document.getElementById('wiz_m10').value="0"; document.getElementById('wiz_m5').value="0"; document.getElementById('wiz_mex').value="0"; 
     document.getElementById('wiz_monto_recibo').value="0"; document.getElementById('wiz_iva_tasa').value="10";
     document.getElementById('wiz_glosa').value=""; document.getElementById('wiz_nro').value=""; document.getElementById('wiz_ruc').value=""; document.getElementById('wiz_tercero').value=""; document.getElementById('wiz_cuenta_sel').value=""; 
-    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard'); 
+    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.cargarBancosWizard(); window.wizNext(1); window.openModal('modal-wizard'); 
 };
 window.openWizard = function() { 
     window.wizContext=null; document.getElementById('wiz-title').textContent="🧾 Asistente de Carga"; document.getElementById('fg_wiz_cliente').style.display='flex'; 
@@ -1285,14 +1340,14 @@ window.openWizard = function() {
     document.getElementById('wiz_monto').value="0"; document.getElementById('wiz_m10').value="0"; document.getElementById('wiz_m5').value="0"; document.getElementById('wiz_mex').value="0"; 
     document.getElementById('wiz_monto_recibo').value="0"; document.getElementById('wiz_iva_tasa').value="10";
     document.getElementById('wiz_glosa').value=""; document.getElementById('wiz_nro').value=""; document.getElementById('wiz_ruc').value=""; document.getElementById('wiz_tercero').value=""; document.getElementById('wiz_cuenta_sel').value=""; 
-    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard'); 
+    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.cargarBancosWizard(); window.wizNext(1); window.openModal('modal-wizard'); 
 };
 
 window.editarComprobante = function(cliIdx, libro, docIdx) {
   window.wizContext = {cliIdx: cliIdx, libro: libro, docIdx: docIdx}; var r = window.dbClientes[cliIdx].libros[libro][docIdx];
   document.getElementById('wiz-title').textContent = "✏️ Edición de Comprobante"; document.getElementById('fg_wiz_cliente').style.display = 'none'; document.getElementById('wiz_cliente').value = cliIdx; document.getElementById('wiz_operacion').value = (libro==='compras' || libro==='recibos' || r.tipo==='ret. sufrida') ? 'compra' : 'venta'; document.getElementById('wiz_tipo').value = r.tipo.toLowerCase(); document.getElementById('wiz_fecha').value = r.fecha; 
   document.getElementById('wiz_ruc').value = r.ruc || ""; document.getElementById('wiz_tercero').value = r.tercero || ""; document.getElementById('wiz_rol_tercero').value = r.rol || 'proveedor';
-  window.updateWizTaxes(); window.toggleWizardTipo();
+  window.updateWizTaxes(); window.toggleWizardTipo(); window.cargarBancosWizard();
   
   if(r.impuestos_aplicados) { document.querySelectorAll('.wiz-tax-chk').forEach(chk => { chk.checked = r.impuestos_aplicados.includes(chk.value); }); }
 
@@ -1367,7 +1422,7 @@ window.guardarAsientoWizard = function() {
 
   var appliedTaxes = Array.from(document.querySelectorAll('.wiz-tax-chk:checked')).map(cb => cb.value); obj.impuestos_aplicados = appliedTaxes;
 
-  var ctaCajaBanco = (mtd === 'banco') ? '1.01.02.01 BANCOS' : '1.01.01.01 CAJA';
+  var ctaCajaBanco = (mtd === 'banco') ? document.getElementById('wiz_banco_lista').value : '1.01.01.02 CAJA';
   var ctaComercial = '';
   if(obj.rol === 'cliente') ctaComercial = '1.01.03.01 DEUDORES POR VENTAS'; else if(obj.rol === 'proveedor') ctaComercial = '2.01.01.01 PROVEEDORES LOCALES'; else if(obj.rol === 'acreedor') ctaComercial = '2.01.01.04 OTROS ACREEDORES'; else if(obj.rol === 'deudor') ctaComercial = '1.01.03.02 DEUDORES POR PRÉSTAMOS';
 
@@ -1383,20 +1438,20 @@ window.guardarAsientoWizard = function() {
   obj.timbrado = tipo==='retencion'? (document.getElementById('ret_timbrado').value||"S/T") : (document.getElementById('wiz_timbrado').value||"S/T");
   obj.bruto = tot; obj.grav10 = neto10; obj.grav5 = neto5; obj.exe = mex; obj.iva10 = i10; obj.iva5 = i5; obj.iva = i10 + i5; obj.neto = neto10 + neto5 + mex; obj.tasa_iva = t;
 
-  var selCta = document.getElementById('wiz_cuenta_sel').value.trim() || (oper==='compra'?'5.03.06 Otros Gastos':'4.01.01 Ventas de Mercaderías');
+  var selCta = document.getElementById('wiz_cuenta_sel').value.trim() || (oper==='compra'?'5.03.06 OTROS GASTOS DE VENTAS':'4.01.01.01 VENTAS DE MERCADERÍAS GRAVADAS POR EL IVA');
 
   if(tipo === 'retencion') {
       var rtN = Math.round((parseFloat(document.getElementById('ret_bruto').value)||0)*((parseFloat(document.getElementById('ret_tasa').value)||0)/100));
       obj.nro=document.getElementById('ret_nro').value||"S/N"; obj.bruto=rtN; obj.neto=rtN; obj.iva=0; obj.tasa_ret=document.getElementById('ret_tasa').value; obj.ruc=document.getElementById('ret_ruc').value; obj.tercero=document.getElementById('ret_tercero').value;
-      lin.push({cuenta: oper==='compra'?'2.01.03.01.03 RETENCIONES A PAGAR':'1.01.03.05.02 RETENCIONES DE IVA', debe: oper==='venta'?rtN:0, haber: oper==='compra'?rtN:0}); lin.push({cuenta: ctaCajaBanco, debe: oper==='compra'?rtN:0, haber: oper==='venta'?rtN:0});
+      lin.push({cuenta: oper==='compra'?'2.01.03.01.03 RETENCIONES DE IMPUESTOS A INGRESAR':'1.01.03.05.02 RETENCIONES DE IVA', debe: oper==='venta'?rtN:0, haber: oper==='compra'?rtN:0}); lin.push({cuenta: ctaCajaBanco, debe: oper==='compra'?rtN:0, haber: oper==='venta'?rtN:0});
   } else if (tipo === 'factura') {
       var ctaDestino = (mtd === 'credito') ? ctaComercial : ctaCajaBanco;
       if(oper==='compra') { 
           if(neto10 > 0) lin.push({cuenta: selCta, debe: neto10, haber: 0}); 
           if(neto5 > 0) lin.push({cuenta: selCta, debe: neto5, haber: 0}); 
           if(mex > 0) lin.push({cuenta: selCta, debe: mex, haber: 0}); 
-          if(i10>0) lin.push({cuenta: '1.01.03.05.01 IVA - CRÉDITO FISCAL', debe: i10, haber: 0}); 
-          if(i5>0) lin.push({cuenta: '1.01.03.05.01 IVA - CRÉDITO FISCAL', debe: i5, haber: 0}); 
+          if(i10>0) lin.push({cuenta: '1.01.03.05.03 IVA – CRÉDITO FISCAL', debe: i10, haber: 0}); 
+          if(i5>0) lin.push({cuenta: '1.01.03.05.03 IVA – CRÉDITO FISCAL', debe: i5, haber: 0}); 
           lin.push({cuenta: ctaDestino, debe: 0, haber: tot}); 
       } else { 
           lin.push({cuenta: ctaDestino, debe: tot, haber: 0}); 
@@ -1416,8 +1471,8 @@ window.guardarAsientoWizard = function() {
           if(neto10 > 0) lin.push({cuenta: selCta, debe: 0, haber: neto10}); 
           if(neto5 > 0) lin.push({cuenta: selCta, debe: 0, haber: neto5}); 
           if(mex > 0) lin.push({cuenta: selCta, debe: 0, haber: mex}); 
-          if(i10>0) lin.push({cuenta: '1.01.03.05.01 IVA - CRÉDITO FISCAL', debe: 0, haber: i10}); 
-          if(i5>0) lin.push({cuenta: '1.01.03.05.01 IVA - CRÉDITO FISCAL', debe: 0, haber: i5}); 
+          if(i10>0) lin.push({cuenta: '1.01.03.05.03 IVA – CRÉDITO FISCAL', debe: 0, haber: i10}); 
+          if(i5>0) lin.push({cuenta: '1.01.03.05.03 IVA – CRÉDITO FISCAL', debe: 0, haber: i5}); 
       } else { 
           if(neto10 > 0) lin.push({cuenta: selCta, debe: neto10, haber: 0}); 
           if(neto5 > 0) lin.push({cuenta: selCta, debe: neto5, haber: 0}); 
@@ -1591,7 +1646,6 @@ window.consultarCDCReal = async function(captchaValor = null, captchaSession = n
         if (!window._historialCDC) window._historialCDC = [];
         window._historialCDC.unshift({ cdcCorto: cdc.substring(0,10)+'...', ruc: rucFinal + (dvFinal && !rucFinal.includes('-')?'-'+dvFinal:''), rs: rsFinal.substring(0,32), fecha: fechaDisplay || '—', total: totalServer, estado: estadoServer || 'AP', dataCompleta: window._ultimoCDCData });
         if(window._renderHistorialCDC) window._renderHistorialCDC();
-        if(window._analizarConIA) window._analizarConIA(window._ultimoCDCData);
 
     } catch(e) {
         document.getElementById('sifen_loading').style.display = 'none'; btnCons.disabled = false; btnCons.textContent = '🔎 Consultar DNIT';
@@ -1630,43 +1684,8 @@ window.enviarCDCAlWizard = function() {
     var tipoNom = d.dec && d.dec.tipoDocNom ? d.dec.tipoDocNom : 'Factura Electrónica';
     document.getElementById('wiz_glosa').value = tipoNom + ' N° ' + nroDisplay + ' · ' + (cleanRS ? cleanRS : 'RUC ' + d.ruc) + ' · ' + (d.fechaDisplay || d.fecha);
 
-    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard');
+    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.cargarBancosWizard(); window.wizNext(1); window.openModal('modal-wizard');
 };
-
-async function _analizarConIA(d) {
-    if (!d) return; var panel = document.getElementById('sifen_ia_panel'); var texto = document.getElementById('sifen_ia_texto'); if (!panel || !texto) return;
-    var apiKey = localStorage.getItem('gemini_api_key'); if(!apiKey) { panel.style.display = 'none'; return; }
-    
-    panel.style.display = 'block'; texto.innerHTML = '<span style="color:rgba(255,255,255,0.5);font-style:italic">🤖 Gemini analizando...</span>';
-    try {
-        var prompt = 'Sos experto contable Paraguay. Analiza este comprobante SIFEN en 3 líneas:\n' + '• Tipo: ' + (d.dec && d.dec.tipoDocNom ? d.dec.tipoDocNom : 'Factura') + '\n' + '• RUC: ' + d.rucConDV + ' — ' + d.rs + '\n' + '• N°: ' + (d.dec && d.dec.nroCompleto ? d.dec.nroCompleto : '—') + ' · Fecha: ' + d.fechaDisplay + '\n' + '• Estado DNIT: ' + d.estado + '\n' + '• Total: ₲ ' + d.total.toLocaleString() + ' · IVA10: ₲ ' + d.iva10.toLocaleString() + '\n' + '• Condición: ' + (d.condicion === '2' ? 'Crédito' : 'Contado') + '\n\n' + 'Indicá: registro contable sugerido y deducibilidad IVA/IRE.';
-        var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ contents:[{parts:[{text: prompt}]}] }) });
-        if (res.status === 400) throw new Error('API Key de Gemini inválida o mal escrita.');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        var ai = await res.json(); var reply = ai.candidates[0].content.parts[0].text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'); texto.innerHTML = reply;
-    } catch(e) { texto.style.color = 'rgba(255,255,255,0.4)'; texto.style.fontStyle = 'italic'; texto.textContent = 'Análisis IA no disponible (' + e.message + ')'; }
-}
-
-function _renderHistorialCDC() {
-    var card = document.getElementById('sifen_historial_card');
-    if (!window._historialCDC || !window._historialCDC.length) { card.style.display = 'none'; return; }
-    card.style.display = 'block'; var em = {'AP':'ok','CA':'err','PE':'info','IN':'err'};
-    document.getElementById('lista_historial_cdc').innerHTML = window._historialCDC.map(function(h,i) {
-        var est = h.estado || 'AP';
-        return `<tr><td style="font-family:'DM Mono';font-size:11px;color:var(--text-light)">${h.cdcCorto}</td><td style="font-family:'DM Mono'">${h.ruc}</td><td style="font-size:12px">${h.rs}</td><td>${h.fecha}</td><td class="monto" style="font-weight:700">₲ ${h.total.toLocaleString()}</td><td><span class="badge-status ${em[est] || 'info'}">${est}</span></td><td><button class="btn btn-outline btn-sm" onclick="recargarDesdeHistorial(${i})">↺ Usar</button></td></tr>`;
-    }).join('');
-}
-
-window.recargarDesdeHistorial = function(i) {
-    var d = window._historialCDC[i]; if (!d) return; window._ultimoCDCData = d.dataCompleta;
-    document.getElementById('sifen_ruc').textContent = d.ruc; document.getElementById('sifen_rs').textContent = d.rs;
-    document.getElementById('sifen_fecha').textContent = d.fecha; document.getElementById('sifen_total').textContent = '₲ ' + d.total.toLocaleString();
-    document.getElementById('sifen_resultado').style.display = 'block';
-    if (d.dataCompleta && d.dataCompleta.dec && d.dataCompleta.dec.nroCompleto) { document.getElementById('sifen_cdc_desglose').innerHTML = '<b>N° doc:</b> ' + d.dataCompleta.dec.nroCompleto + ' · <b>Fecha:</b> ' + d.fecha; }
-};
-
-window.abrirMiniaturaDNIT = function() { window.open('https://ekuatia.set.gov.py/consultas/','VentanaDNIT','width=1000,height=700,top=50,left=100,toolbar=no,menubar=no,scrollbars=yes,resizable=yes'); };
-window.irAConsultaCDC = function() { window.showPage('comprobantes'); };
 
 // ===== IMPORTACIÓN EXCEL / IA =====
 window.openModalImportMain = function() { document.getElementById('imp_box_cli').style.display='flex'; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; window.openModal('modal-import'); };
@@ -1987,54 +2006,109 @@ window.TIPO_A_CLASE = {
   "otros_no_op": "5", "impuesto_renta": "5"
 };
 
-window.agregarNuevaCuenta = function(tipo) {
-  var codigo = prompt("Ingrese el código de la nueva cuenta (ej: 1.01.01.05):");
+// PLAN DE CUENTAS VISUALIZADOR
+window.renderPlanCuentas = function() {
+    var s = (document.getElementById('search_plan').value||'').toLowerCase();
+    var cls = document.getElementById('filter_clase').value;
+    var plan = getPlanCompleto();
+    var tbody = document.getElementById('tabla-plan-cuentas');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    
+    var clsNames = {'1':'Activo', '2':'Pasivo', '3':'Patrimonio Neto', '4':'Ingresos', '5':'Costos/Gastos'};
+    plan.forEach(function(c) {
+        var cl = c.cod.charAt(0);
+        if(cls && cl !== cls) return;
+        if(s && !c.cod.toLowerCase().includes(s) && !c.nombre.toLowerCase().includes(s)) return;
+        var isCustom = c.custom ? true : false;
+        var nat = (cl==='1'||cl==='5') ? 'Deudora' : 'Acreedora';
+        tbody.innerHTML += `<tr>
+            <td style="font-family:'DM Mono';font-size:11px">${c.cod}</td>
+            <td style="font-weight:600">${c.nombre}</td>
+            <td><span class="badge-status info">${clsNames[cl]||cl}</span></td>
+            <td><span class="badge-status ${nat==='Deudora'?'ok':'pend'}">${nat}</span></td>
+            <td><span class="badge-status inactive">Imputable</span> ${isCustom?'<span class="badge-status ai" style="margin-left:4px">CUSTOM</span>':''}</td>
+            <td>${isCustom?`<button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger)" onclick="eliminarCuentaCustom('${c.cod}')">🗑️</button>`:'—'}</td>
+        </tr>`;
+    });
+};
+
+function getPlanCompleto() {
+    var arr = [];
+    Object.keys(window.PLAN_RES4914).forEach(k => {
+        arr.push({ cod: k, nombre: window.PLAN_RES4914[k].nombre, custom: false });
+    });
+    window.PLAN_CUENTAS_CUSTOM.forEach(c => {
+        arr.push({ cod: c.cod, nombre: c.nombre, custom: true });
+    });
+    return arr.sort((a,b) => a.cod.localeCompare(b.cod));
+}
+
+window.eliminarCuentaCustom = function(cod) {
+    if(!confirm("¿Eliminar esta cuenta personalizada del sistema global?")) return;
+    window.PLAN_CUENTAS_CUSTOM = window.PLAN_CUENTAS_CUSTOM.filter(c => c.cod !== cod);
+    window.saveData(); window.renderPlanCuentas(); window.initPlanCuentas();
+};
+
+window.agregarNuevaCuenta = function() {
+  var codigo = prompt("Ingrese el código de la nueva cuenta (ej: 1.01.01.05):\nRespete la jerarquía para que impacte bien en los Balances.");
   if (!codigo || !codigo.trim()) return; codigo = codigo.trim();
-  if (window.PLAN_RES4914[codigo]) return alert("⚠️ Esa cuenta ya existe: " + window.PLAN_RES4914[codigo].nombre);
+  if (window.PLAN_RES4914[codigo] || window.PLAN_CUENTAS_CUSTOM.find(c=>c.cod===codigo)) return alert("⚠️ Esa cuenta ya existe.");
   var nombre = prompt("Nombre de la cuenta:"); if (!nombre || !nombre.trim()) return;
   
-  window.PLAN_RES4914[codigo] = { nombre: nombre.trim().toUpperCase(), tipo: tipo };
+  var cl = codigo.charAt(0);
+  var tipo = 'activo_corriente';
+  if(cl==='2') tipo = 'pasivo_corriente';
+  if(cl==='3') tipo = 'patrimonio';
+  if(cl==='4') tipo = 'ingreso';
+  if(cl==='5') tipo = 'gasto_admin';
+
+  var nueva = { cod: codigo, nombre: nombre.trim().toUpperCase(), tipo: tipo };
+  window.PLAN_CUENTAS_CUSTOM.push(nueva);
+  window.saveData();
   
-  var dl = document.getElementById('planCuentasRes4814');
-  if (dl) { var opt = document.createElement('option'); opt.value = codigo + " " + nombre.trim().toUpperCase(); dl.appendChild(opt); }
-  
-  if (window.currentCli !== undefined) {
-    var cli = window.dbClientes[window.currentCli];
-    if (!cli.cuentasPersonalizadas) cli.cuentasPersonalizadas = {};
-    cli.cuentasPersonalizadas[codigo] = { nombre: nombre.trim().toUpperCase(), tipo: tipo };
-    window.saveData();
+  window.initPlanCuentas();
+  window.renderPlanCuentas();
+  alert("✅ Cuenta " + codigo + " agregada globalmente. Se aplicará en libros y balances.");
+  if(document.getElementById('page-cliente-detalle').classList.contains('active')) {
+      window.renderFinancieros();
   }
-  alert("✅ Cuenta " + codigo + " agregada. Se aplicará en los libros y estados financieros.");
-  window.renderFinancieros();
+};
+
+// Panel lateral
+window.renderPlanCuentasPanel = function(ctx) {
+  var elId = ctx==='bal'?'bal_search_cta':'er_search_cta';
+  var panelId = ctx==='bal'?'bal_plan_panel':'er_plan_panel';
+  var s = (document.getElementById(elId).value||'').toLowerCase();
+  var plan = getPlanCompleto();
+  var clases = ctx==='bal' ? ['1','2','3'] : ['4','5'];
+  
+  var panel = document.getElementById(panelId); panel.innerHTML='';
+  plan.filter(c => clases.includes(c.cod.charAt(0)) && (!s || c.cod.toLowerCase().includes(s) || c.nombre.toLowerCase().includes(s))).forEach(c => {
+    panel.innerHTML += `<div class="plan-cuentas-item" onclick="alert('La cuenta ${c.cod} ya está enlazada al Balance por su clase.')"><span class="pci-code">${c.cod}</span><span>${c.nombre}</span></div>`;
+  });
 };
 
 window.renderFinancieros = function() {
   if (window.currentCli === undefined) return;
   var cli = window.dbClientes[window.currentCli];
   
-  if (cli.cuentasPersonalizadas) {
-    Object.keys(cli.cuentasPersonalizadas).forEach(function(cod) {
-      if (!window.PLAN_RES4914[cod]) window.PLAN_RES4914[cod] = cli.cuentasPersonalizadas[cod];
-    });
-  }
+  var planTemporal = Object.assign({}, window.PLAN_RES4914);
+  window.PLAN_CUENTAS_CUSTOM.forEach(c => { planTemporal[c.cod] = { nombre: c.nombre, tipo: c.tipo }; });
 
   var saldos = {};
   cli.libros.diario.forEach(function(asiento) {
     asiento.lineas.forEach(function(linea) {
       var ctaRaw = (linea.cuenta || "").trim();
       var cod = null;
-      Object.keys(window.PLAN_RES4914).forEach(function(k) {
-        if (ctaRaw.startsWith(k) || ctaRaw.toUpperCase().indexOf(window.PLAN_RES4914[k].nombre.substring(0, 10)) >= 0) {
+      Object.keys(planTemporal).forEach(function(k) {
+        if (ctaRaw.startsWith(k) || ctaRaw.toUpperCase().indexOf(planTemporal[k].nombre.substring(0, 10)) >= 0) {
           if (!cod || k.length > cod.length) cod = k;
         }
       });
       if (!cod) {
         var firstChar = ctaRaw.charAt(0);
-        if (firstChar === '1') cod = '__activo__';
-        else if (firstChar === '2') cod = '__pasivo__';
-        else if (firstChar === '3') cod = '__patrimonio__';
-        else if (firstChar === '4') cod = '__ingreso__';
-        else if (firstChar === '5') cod = '__costo__';
+        if (firstChar === '1') cod = '__activo__'; else if (firstChar === '2') cod = '__pasivo__'; else if (firstChar === '3') cod = '__patrimonio__'; else if (firstChar === '4') cod = '__ingreso__'; else if (firstChar === '5') cod = '__costo__';
       }
       if (!saldos[cod]) saldos[cod] = { debe: 0, haber: 0, cuenta: ctaRaw };
       saldos[cod].debe += (linea.debe || 0);
@@ -2044,7 +2118,7 @@ window.renderFinancieros = function() {
 
   var valorCuenta = function(cod) {
     var s = saldos[cod]; if (!s) return 0;
-    var info = window.PLAN_RES4914[cod]; var tipo = info ? info.tipo : '';
+    var info = planTemporal[cod]; var tipo = info ? info.tipo : '';
     var clase = window.TIPO_A_CLASE[tipo] || '1';
     if (clase === '1' || clase === '5') return s.debe - s.haber;
     return s.haber - s.debe;
@@ -2055,14 +2129,14 @@ window.renderFinancieros = function() {
 
   var grupos = { activo_corriente: [], activo_no_corriente: [], pasivo_corriente: [], pasivo_no_corriente: [], patrimonio: [] };
 
-  Object.keys(window.PLAN_RES4914).sort().forEach(function(cod) {
-    var info = window.PLAN_RES4914[cod]; var val = valorCuenta(cod);
+  Object.keys(planTemporal).sort().forEach(function(cod) {
+    var info = planTemporal[cod]; var val = valorCuenta(cod);
     if (grupos[info.tipo] !== undefined) grupos[info.tipo].push({ cod: cod, nombre: info.nombre, val: val, negativo: info.negativo });
   });
 
   var edrGrupos = { ingreso: [], otros_ingresos: [], costo: [], gasto_venta: [], gasto_admin: [], gasto_financiero: [], prevision: [], depreciacion: [], otros_no_op: [], impuesto_renta: [] };
-  Object.keys(window.PLAN_RES4914).sort().forEach(function(cod) {
-    var info = window.PLAN_RES4914[cod]; var val = valorCuenta(cod);
+  Object.keys(planTemporal).sort().forEach(function(cod) {
+    var info = planTemporal[cod]; var val = valorCuenta(cod);
     if (edrGrupos[info.tipo] !== undefined) edrGrupos[info.tipo].push({ cod: cod, nombre: info.nombre, val: val, negativo: info.negativo });
   });
 
@@ -2141,10 +2215,9 @@ window.renderFinancieros = function() {
   var colorFinal = ganNeta >= 0 ? 'var(--success)' : 'var(--accent)';
   edrHTML += '<div style="background:' + (ganNeta >= 0 ? 'var(--success)' : 'var(--danger)') + ';padding:16px 20px;border-radius:10px;margin:14px 0;display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800;font-size:16px;color:white">20 — GANANCIA / PÉRDIDA NETA DEL EJERCICIO</span><span style="font-family:\'DM Mono\';font-weight:800;font-size:20px;color:white">' + fmt(ganNeta) + '</span></div>';
 
-  var renderGrupoBalance = function(items, titulo, total, colorTitulo, tipoAdd) {
+  var renderGrupoBalance = function(items, titulo, total, colorTitulo) {
     var html = '<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid ' + colorTitulo + ';padding-bottom:5px;margin-bottom:8px">';
-    html += '<span style="font-weight:800;font-size:12px;text-transform:uppercase;color:' + colorTitulo + '">' + titulo + '</span>';
-    html += '<button class="btn btn-outline btn-sm" style="font-size:10px;padding:2px 8px;border-color:' + colorTitulo + ';color:' + colorTitulo + '" onclick="agregarNuevaCuenta(\'' + tipoAdd + '\')">+ Nueva cuenta</button></div>';
+    html += '<span style="font-weight:800;font-size:12px;text-transform:uppercase;color:' + colorTitulo + '">' + titulo + '</span></div>';
     
     var hayValores = false;
     items.forEach(function(item) {
@@ -2165,12 +2238,12 @@ window.renderFinancieros = function() {
   };
 
   var balActHTML = '';
-  balActHTML += renderGrupoBalance(grupos.activo_corriente, '1.01 — Activo Corriente', totActCte, 'var(--accent2)', 'activo_corriente');
-  balActHTML += renderGrupoBalance(grupos.activo_no_corriente, '1.02 — Activo No Corriente', totActNoCte, 'var(--accent2)', 'activo_no_corriente');
+  balActHTML += renderGrupoBalance(grupos.activo_corriente, '1.01 — Activo Corriente', totActCte, 'var(--accent2)');
+  balActHTML += renderGrupoBalance(grupos.activo_no_corriente, '1.02 — Activo No Corriente', totActNoCte, 'var(--accent2)');
 
   var balPasHTML = '';
-  balPasHTML += renderGrupoBalance(grupos.pasivo_corriente, '2.01 — Pasivo Corriente', totPasCte, 'var(--accent)', 'pasivo_corriente');
-  balPasHTML += renderGrupoBalance(grupos.pasivo_no_corriente, '2.02 — Pasivo No Corriente', totPasNoCte, 'var(--accent)', 'pasivo_no_corriente');
+  balPasHTML += renderGrupoBalance(grupos.pasivo_corriente, '2.01 — Pasivo Corriente', totPasCte, 'var(--accent)');
+  balPasHTML += renderGrupoBalance(grupos.pasivo_no_corriente, '2.02 — Pasivo No Corriente', totPasNoCte, 'var(--accent)');
 
   var patrimonioConRdo = grupos.patrimonio.slice();
   if (ganNeta !== 0) {
@@ -2178,7 +2251,7 @@ window.renderFinancieros = function() {
     if (rdoIdx >= 0) patrimonioConRdo[rdoIdx] = { cod: '3.03.02', nombre: 'RESULTADO DEL EJERCICIO', val: ganNeta, negativo: false };
     else patrimonioConRdo.push({ cod: '3.03.02', nombre: 'RESULTADO DEL EJERCICIO', val: ganNeta, negativo: false });
   }
-  balPasHTML += renderGrupoBalance(patrimonioConRdo, '3 — Patrimonio Neto', totPatrimonio, 'var(--success)', 'patrimonio');
+  balPasHTML += renderGrupoBalance(patrimonioConRdo, '3 — Patrimonio Neto', totPatrimonio, 'var(--success)');
 
   var tabBalance = document.getElementById('ctab_balance');
   if (tabBalance) {
@@ -2203,7 +2276,7 @@ window.renderFinancieros = function() {
 
   var tabEdr = document.getElementById('ctab_estado_resultados');
   if (tabEdr) {
-    tabEdr.innerHTML = '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-weight:800;font-size:16px;color:var(--text)">Estado de Resultados — Res. 49/14</div><div style="display:flex;gap:8px"><button class="btn btn-outline btn-sm" onclick="agregarNuevaCuenta(\'ingreso\')">+ Ingreso</button><button class="btn btn-outline btn-sm" onclick="agregarNuevaCuenta(\'gasto_admin\')">+ Gasto</button><button class="btn btn-outline btn-sm" onclick="agregarNuevaCuenta(\'costo\')">+ Costo</button></div></div>' + edrHTML + '</div>';
+    tabEdr.innerHTML = '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-weight:800;font-size:16px;color:var(--text)">Estado de Resultados — Res. 49/14</div></div>' + edrHTML + '</div>';
   }
 };
 
@@ -2211,7 +2284,7 @@ window.initTabsBalance = function() {
   if (document.getElementById('ctab_estado_resultados')) return;
 };
 
-console.log("✅ Sistema Total Listo.");
+console.log("✅ Sistema Total Listo V4.3");
 </script>
 </body>
 </html>
