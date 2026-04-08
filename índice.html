@@ -120,10 +120,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .chat-input-area { display: flex; gap: 10px; padding: 15px; background: white; border-top: 1px solid var(--border); }
 .chat-input-area input { flex: 1; }
 
-/* SKINS / TEMAS - ContaPY */
-[data-theme="emerald"] { --accent:#059669; --accent2:#0284c7; --sidebar:#064e3b; --sidebar-hover:#065f46; }
+/* SKINS / TEMAS - ContaPY */[data-theme="emerald"] { --accent:#059669; --accent2:#0284c7; --sidebar:#064e3b; --sidebar-hover:#065f46; }
 [data-theme="purple"]  { --accent:#7c3aed; --accent2:#db2777; --sidebar:#2e1065; --sidebar-hover:#4c1d95; }
-[data-theme="ocean"]   { --accent:#0891b2; --accent2:#0d9488; --sidebar:#164e63; --sidebar-hover:#155e75; }[data-theme="dark"]    { --bg:#111827; --sidebar:#000000; --sidebar-hover:#1f2937; --accent:#f59e0b; --accent2:#10b981; --white:#1f2937; --card:#1f2937; --text:#f9fafb; --text-light:#9ca3af; --border:#374151; }
+[data-theme="ocean"]   { --accent:#0891b2; --accent2:#0d9488; --sidebar:#164e63; --sidebar-hover:#155e75; }
+[data-theme="dark"]    { --bg:#111827; --sidebar:#000000; --sidebar-hover:#1f2937; --accent:#f59e0b; --accent2:#10b981; --white:#1f2937; --card:#1f2937; --text:#f9fafb; --text-light:#9ca3af; --border:#374151; }
 </style>
 <script>try{var _t=localStorage.getItem('contapy_theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
 </head>
@@ -289,20 +289,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
-    <!-- MÓDULO COTIZACIONES (IFRAME RECORTADO PERFECTAMENTE) -->
+    <!-- MÓDULO COTIZACIONES (IFRAME CORTADO PERFECTO PARA VER SOLO LA TABLA 1 COLUMNA) -->
     <div class="page" id="page-cotizaciones">
       <div class="page-header">
-        <div><h2>💱 Cotizaciones en Tiempo Real</h2><p>Fuente de datos: Bonanza Cambios (Vista Integrada)</p></div>
+        <div><h2>💱 Cotizaciones en Tiempo Real</h2><p>Fuente de datos: Bonanza Cambios</p></div>
         <div style="display:flex;gap:10px">
           <button class="btn btn-outline" onclick="document.getElementById('iframe_cotiz').src = document.getElementById('iframe_cotiz').src">🔄 Actualizar Tablero</button>
           <button class="btn btn-primary" onclick="window.open('https://www.bonanzacambios.com.py/', '_blank')">🌐 Abrir web original</button>
         </div>
       </div>
-      <!-- Vista enmarcada y centrada (Fuerza tamaño de escritorio para no desarmar la tabla) -->
-      <div class="card" style="padding:0; overflow:hidden; height:450px; position:relative; border-radius:10px; background:#f8f9fa;">
-         <div style="position:absolute; top:-380px; left:50%; margin-left:-600px; width:1200px; height:1200px; pointer-events:none;">
-             <iframe id="iframe_cotiz" src="https://www.bonanzacambios.com.py/" style="width:100%; height:100%; border:none;" scrolling="no"></iframe>
-         </div>
+      <!-- Panel centrado que recorta solo la tabla en modo móvil de Bonanza -->
+      <div style="display:flex; justify-content:center; align-items:center; padding:20px; background:var(--card); border-radius:10px; border:1px solid var(--border); box-shadow:var(--shadow);">
+          <div style="width:360px; height:360px; overflow:hidden; position:relative; border-radius:8px; border:1px solid var(--border); background:#fff; box-shadow:var(--shadow-lg);">
+             <iframe id="iframe_cotiz" src="https://www.bonanzacambios.com.py/" style="width:360px; height:800px; border:none; position:absolute; top:-195px; left:0; pointer-events:none;" scrolling="no"></iframe>
+          </div>
       </div>
     </div>
 
@@ -383,6 +383,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div class="tab" style="background:#dbeafe;color:#1e40af" onclick="switchClientTab('mayor', this)">Libro Mayor</div>
         <div class="tab" style="background:#ede9fe;color:#5b21b6" onclick="switchClientTab('balance', this)">Balance General</div>
         <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)">Estado de Cuentas</div>
+        <div class="tab" style="background:#f3f4f6;border:1px solid var(--border)" onclick="switchClientTab('cuentas', this)">⚙️ Plan Cuentas</div>
       </div>
       
       <div id="ctab_compras" class="ctab-content" style="display:block;">
@@ -447,6 +448,26 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
            </table></div>
         </div>
       </div>
+
+      <!-- NUEVA PESTAÑA: PLAN DE CUENTAS PERSONALIZADO -->
+      <div id="ctab_cuentas" class="ctab-content" style="display:none;">
+        <div class="card">
+            <div class="card-title"><span>📋 Plan de Cuentas (Individual)</span></div>
+            <div class="notif">💡 Podés agregar cuentas personalizadas para este cliente. Asegurate de que el código inicie con 1 (Activo), 2 (Pasivo), 3 (Patrimonio), 4 (Ingreso) o 5 (Egreso) para que se clasifique automáticamente en su Balance.</div>
+            <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; background:var(--bg); padding:15px; border-radius:8px;">
+               <input type="text" id="nueva_cta_codigo" placeholder="Código (Ej: 5.1.2.05)" style="width:140px;">
+               <input type="text" id="nueva_cta_nombre" placeholder="Nombre de la cuenta (Ej: Gastos de Publicidad)" style="flex:1; min-width:200px;">
+               <button class="btn btn-primary" onclick="agregarCuenta()">➕ Agregar Cuenta</button>
+            </div>
+            <div class="table-wrap" style="max-height:400px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;">
+              <table id="tbl_plan_cuentas" style="width:100%;">
+                 <thead style="position:sticky; top:0; background:var(--bg);"><tr><th>Código y Nombre de Cuenta</th><th>Naturaleza / Rubro</th><th style="width:80px">Acción</th></tr></thead>
+                 <tbody id="lista_plan_cuentas"></tbody>
+              </table>
+            </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- COMPROBANTES / SIFEN -->
@@ -614,7 +635,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
         <div class="wiz-step active" id="ws-1">
             <div class="form-grid col2" style="margin-bottom:14px">
-                <div class="form-group" id="fg_wiz_cliente"><label>Cliente Destino</label><select id="wiz_cliente" onchange="updateWizTaxes(); toggleWizardTipo();"></select></div>
+                <div class="form-group" id="fg_wiz_cliente"><label>Cliente Destino</label><select id="wiz_cliente" onchange="updateWizTaxes(); updateWizCuentas(); toggleWizardTipo();"></select></div>
                 <div class="form-group"><label>Operación Principal</label><select id="wiz_operacion" onchange="toggleWizardTipo()"><option value="compra">Egreso / Compra / Pago</option><option value="venta">Ingreso / Venta / Cobro</option></select></div>
             </div>
             <div class="form-grid col2" style="margin-bottom:14px;background:var(--bg);padding:10px;border-radius:8px">
@@ -744,21 +765,65 @@ function puedeVerCliente(cliId) {
     return window.currentUser.clientesAsignados && window.currentUser.clientesAsignados.includes(cliId);
 }
 
+window.DEFAULT_PLAN_CUENTAS =[
+    "1.1.1.01 Caja", "1.1.1.02 Recaudaciones a Depositar", "1.1.1.03 Banco Cta. Cte.", 
+    "1.1.2.01 Clientes Locales", "1.1.2.02 Deudores Varios", "1.1.3.01 Mercaderías", 
+    "1.1.5.01 IVA Crédito 10%", "1.1.5.02 IVA Crédito 5%", "1.1.5.03 IVA Crédito Exento", "1.1.5.04 Ret. a Favor", 
+    "1.2.1.01 Propiedades, Planta y Equipo", "1.2.1.02 Depreciación Acumulada", 
+    "2.1.1.01 Proveedores Locales", "2.1.2.01 Acreedores Varios", "2.1.3.01 Sueldos a Pagar", 
+    "2.1.4.01 IVA Débito 10%", "2.1.4.02 IVA Débito 5%", "2.1.4.06 Ret. a Pagar", 
+    "3.1.1.01 Capital Social", "3.1.2.01 Resultados Acumulados", "3.1.3.01 Resultado del Ejercicio", 
+    "4.1.1.01 Ventas 10%", "4.1.1.02 Ventas 5%", "4.1.1.03 Ventas Exentas", 
+    "5.1.1.01 Compras 10%", "5.1.1.02 Compras 5%", "5.1.1.03 Compras Exentas", "5.1.2.01 Gastos Administrativos",
+    "5.1.2.02 Combustibles y Lubricantes", "5.1.2.03 Papelería y Útiles", "5.1.2.04 Honorarios Profesionales"
+];
+
 window.initPlanCuentas = function() {
-    var dl = document.getElementById('planCuentasRes4814'); dl.innerHTML='';
-    var ctas =[
-        "1.1.1.01 Caja", "1.1.1.02 Recaudaciones a Depositar", "1.1.1.03 Banco Cta. Cte.", 
-        "1.1.2.01 Clientes Locales", "1.1.2.02 Deudores Varios", "1.1.3.01 Mercaderías", 
-        "1.1.5.01 IVA Crédito 10%", "1.1.5.02 IVA Crédito 5%", "1.1.5.03 IVA Crédito Exento", "1.1.5.04 Ret. a Favor", 
-        "1.2.1.01 Propiedades, Planta y Equipo", "1.2.1.02 Depreciación Acumulada", 
-        "2.1.1.01 Proveedores Locales", "2.1.2.01 Acreedores Varios", "2.1.3.01 Sueldos a Pagar", 
-        "2.1.4.01 IVA Débito 10%", "2.1.4.02 IVA Débito 5%", "2.1.4.06 Ret. a Pagar", 
-        "3.1.1.01 Capital Social", "3.1.2.01 Resultados Acumulados", "3.1.3.01 Resultado del Ejercicio", 
-        "4.1.1.01 Ventas 10%", "4.1.1.02 Ventas 5%", "4.1.1.03 Ventas Exentas", 
-        "5.1.1.01 Compras 10%", "5.1.1.02 Compras 5%", "5.1.1.03 Compras Exentas", "5.1.2.01 Gastos Administrativos",
-        "5.1.2.02 Combustibles y Lubricantes", "5.1.2.03 Papelería y Útiles", "5.1.2.04 Honorarios Profesionales"
-    ];
-    ctas.forEach(c => { var opt = document.createElement('option'); opt.value = c; dl.appendChild(opt); });
+    window.renderPlanCuentas(window.DEFAULT_PLAN_CUENTAS);
+};
+
+window.renderPlanCuentas = function(arr) {
+    var dl = document.getElementById('planCuentasRes4814'); 
+    dl.innerHTML='';
+    var tbody = document.getElementById('lista_plan_cuentas');
+    if(tbody) tbody.innerHTML = '';
+    
+    arr.forEach(c => { 
+        var opt = document.createElement('option'); opt.value = c; dl.appendChild(opt); 
+        if(tbody) {
+            var nat = ""; var clase = c.charAt(0);
+            if(clase==='1') nat="Activo (Deudora)"; else if(clase==='2') nat="Pasivo (Acreedora)"; else if(clase==='3') nat="Patrimonio (Acreedora)"; else if(clase==='4') nat="Ingreso (Acreedora)"; else if(clase==='5') nat="Egreso (Deudora)";
+            tbody.innerHTML += `<tr><td style="font-family:'DM Mono'; font-weight:600">${c}</td><td><span class="badge-status ok">${nat}</span></td><td><button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger)" onclick="eliminarCuenta('${c}')">🗑️</button></td></tr>`;
+        }
+    });
+};
+
+window.agregarCuenta = function() {
+    var cod = document.getElementById('nueva_cta_codigo').value.trim();
+    var nom = document.getElementById('nueva_cta_nombre').value.trim();
+    if(!cod || !nom) return alert("❌ Ingrese el código y el nombre de la cuenta.");
+    var validInit =['1','2','3','4','5'];
+    if(!validInit.includes(cod.charAt(0))) return alert("❌ El código debe iniciar con 1 (Activo), 2 (Pasivo), 3 (Patrimonio), 4 (Ingreso) o 5 (Egreso).");
+    
+    var cta = cod + " " + nom;
+    var cli = window.dbClientes[window.currentCli];
+    if(cli.planCuentas.includes(cta)) return alert("❌ Esta cuenta ya existe en el plan.");
+    
+    cli.planCuentas.push(cta);
+    cli.planCuentas.sort(); 
+    window.saveData();
+    window.renderPlanCuentas(cli.planCuentas);
+    document.getElementById('nueva_cta_codigo').value = '';
+    document.getElementById('nueva_cta_nombre').value = '';
+    alert("✅ Cuenta agregada correctamente al plan.");
+};
+
+window.eliminarCuenta = function(cta) {
+    if(!confirm("⚠️ ¿Estás seguro de eliminar la cuenta: " + cta + "?\nSi ya tiene movimientos registrados en el Diario, podría causar errores en el balance.")) return;
+    var cli = window.dbClientes[window.currentCli];
+    cli.planCuentas = cli.planCuentas.filter(c => c !== cta);
+    window.saveData();
+    window.renderPlanCuentas(cli.planCuentas);
 };
 
 window.showPage = function(name, el) { 
@@ -873,6 +938,7 @@ window.guardarCliente = function() {
   } else { 
       o.id = window.dbClientes.length; 
       o.honorarios={}; 
+      o.planCuentas =[...window.DEFAULT_PLAN_CUENTAS];
       o.libros={compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}; 
       window.dbClientes.push(o); 
       if(window.currentUser && window.currentUser.rol !== 'Administrador') {
@@ -899,6 +965,8 @@ window.verCliente = function(idx) {
     window.currentCli = idx; var c = window.dbClientes[idx]; 
     document.getElementById('cdet_nombre').textContent = c.nom; 
     document.getElementById('cdet_ruc').innerHTML = `RUC: ${c.ruc} &nbsp;|&nbsp; Tel: ${c.tel||'-'} &nbsp;|&nbsp; Correo: ${c.correo||'-'}`; 
+    if(!c.planCuentas) c.planCuentas = [...window.DEFAULT_PLAN_CUENTAS];
+    window.renderPlanCuentas(c.planCuentas);
     window.renderLibros(); window.showPage('cliente-detalle'); document.querySelectorAll('#page-cliente-detalle .tab')[0].click(); 
 };
 window.switchClientTab = function(tabId, el) { 
@@ -1023,7 +1091,7 @@ window.guardarAsientoManual = function() {
         alert(`✅ Asiento Manual ${window.editandoAsientoRef} actualizado.`);
     } else {
         var nA = "M-"+Math.floor(1000+Math.random()*9000); 
-        if(!window.dbClientes[window.currentCli].libros.diario) window.dbClientes[window.currentCli].libros.diario =[];
+        if(!window.dbClientes[window.currentCli].libros.diario) window.dbClientes[window.currentCli].libros.diario = [];
         window.dbClientes[window.currentCli].libros.diario.push({fecha: document.getElementById('am_fecha').value, asiento: nA, glosa: document.getElementById('am_glosa').value, lineas: lin});
         alert(`✅ Asiento Manual ${nA} guardado.`); 
     }
@@ -1048,13 +1116,20 @@ window.updateWizTaxes = function() {
     document.getElementById('wiz_tax_boxes').innerHTML = html;
 };
 
+window.updateWizCuentas = function() {
+    var cIdx = document.getElementById('wiz_cliente').value; if(cIdx === "") return;
+    var cli = window.dbClientes[cIdx];
+    if(!cli.planCuentas) cli.planCuentas =[...window.DEFAULT_PLAN_CUENTAS];
+    window.renderPlanCuentas(cli.planCuentas);
+};
+
 window.openWizardFromProfile = function() { 
     window.wizContext=null; document.getElementById('wiz-title').textContent="🧾 Asistente de Carga"; document.getElementById('fg_wiz_cliente').style.display='none'; 
     document.getElementById('wiz_cliente').value=window.currentCli; document.getElementById('wiz_fecha').value=new Date().toISOString().split('T')[0]; 
     document.getElementById('wiz_monto').value="0"; document.getElementById('wiz_m10').value="0"; document.getElementById('wiz_m5').value="0"; document.getElementById('wiz_mex').value="0"; 
     document.getElementById('wiz_monto_recibo').value="0"; document.getElementById('wiz_iva_tasa').value="10";
     document.getElementById('wiz_glosa').value=""; document.getElementById('wiz_nro').value=""; document.getElementById('wiz_ruc').value=""; document.getElementById('wiz_tercero').value=""; document.getElementById('wiz_cuenta_sel').value=""; 
-    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard'); 
+    window.updateWizTaxes(); window.updateWizCuentas(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard'); 
 };
 window.openWizard = function() { 
     window.wizContext=null; document.getElementById('wiz-title').textContent="🧾 Asistente de Carga"; document.getElementById('fg_wiz_cliente').style.display='flex'; 
@@ -1062,14 +1137,14 @@ window.openWizard = function() {
     document.getElementById('wiz_monto').value="0"; document.getElementById('wiz_m10').value="0"; document.getElementById('wiz_m5').value="0"; document.getElementById('wiz_mex').value="0"; 
     document.getElementById('wiz_monto_recibo').value="0"; document.getElementById('wiz_iva_tasa').value="10";
     document.getElementById('wiz_glosa').value=""; document.getElementById('wiz_nro').value=""; document.getElementById('wiz_ruc').value=""; document.getElementById('wiz_tercero').value=""; document.getElementById('wiz_cuenta_sel').value=""; 
-    window.updateWizTaxes(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard'); 
+    window.updateWizTaxes(); window.updateWizCuentas(); window.toggleTasas(); window.toggleWizardTipo(); window.calcWizIva(); window.wizNext(1); window.openModal('modal-wizard'); 
 };
 
 window.editarComprobante = function(cliIdx, libro, docIdx) {
   window.wizContext = {cliIdx: cliIdx, libro: libro, docIdx: docIdx}; var r = window.dbClientes[cliIdx].libros[libro][docIdx];
   document.getElementById('wiz-title').textContent = "✏️ Edición de Comprobante"; document.getElementById('fg_wiz_cliente').style.display = 'none'; document.getElementById('wiz_cliente').value = cliIdx; document.getElementById('wiz_operacion').value = (libro==='compras' || libro==='recibos' || r.tipo==='ret. sufrida') ? 'compra' : 'venta'; document.getElementById('wiz_tipo').value = r.tipo.toLowerCase(); document.getElementById('wiz_fecha').value = r.fecha; 
   document.getElementById('wiz_ruc').value = r.ruc || ""; document.getElementById('wiz_tercero').value = r.tercero || ""; document.getElementById('wiz_rol_tercero').value = r.rol || 'proveedor';
-  window.updateWizTaxes(); window.toggleWizardTipo();
+  window.updateWizTaxes(); window.updateWizCuentas(); window.toggleWizardTipo();
   
   if(r.impuestos_aplicados) { document.querySelectorAll('.wiz-tax-chk').forEach(chk => { chk.checked = r.impuestos_aplicados.includes(chk.value); }); }
 
@@ -1266,7 +1341,7 @@ window.guardarAsientoWizard = function() {
       document.getElementById('dash_doc_count').textContent = window.totalDocs; 
   }
   if (!cli.libros[tgtLib]) cli.libros[tgtLib] =[];
-  if (!cli.libros.diario) cli.libros.diario = [];
+  if (!cli.libros.diario) cli.libros.diario =[];
   cli.libros[tgtLib].push(obj); 
   cli.libros.diario.push({fecha: fch, asiento: nAsi, glosa: glosa, lineas: lin});
   window.saveData(); alert(`✅ Asiento ${nAsi} guardado en NUBE correctamente.`); window.closeModal('modal-wizard'); if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
@@ -1402,7 +1477,7 @@ window.toggleWin = function(btn, action) {
     document.addEventListener('mousemove',function(e){ 
         if(!drag||!el||el.classList.contains('maximized'))return; 
         var nY = st+e.clientY-sy;
-        if(nY < 0) nY = 0; // Fixes moving above screen
+        if(nY < 0) nY = 0; 
         el.style.left=(sl+e.clientX-sx)+'px'; 
         el.style.top=nY+'px'; 
     });
@@ -1508,53 +1583,6 @@ window.deleteAsientoManual = function(cliIdx, asientoId) {
     window.saveData();
     window.renderLibros();
     if(window.renderMayorYBalance) window.renderMayorYBalance();
-};
-
-// ── Cotizaciones API Nativa
-window.cargarCotizaciones = async function() {
-    var grid = document.getElementById('cotiz_grid');
-    if(!grid) return;
-    grid.innerHTML = '<div style="grid-column:span 2; padding:20px; text-align:center; color:var(--text-light)">Cargando cotizaciones desde la API nacional...</div>';
-    
-    try {
-        var res = await fetch('https://dolar.melizeche.com/api/1.0/');
-        if(!res.ok) throw new Error('Error al conectar con DolarPy');
-        var data = await res.json();
-        
-        var casas = ['maxicambios', 'cambioschaco', 'bonanza', 'vision'];
-        var targetCasa = null;
-        for(var c of casas) { if(data[c]) { targetCasa = data[c]; break; } }
-        if(!targetCasa) targetCasa = data[Object.keys(data)[0]];
-
-        if(targetCasa) {
-            var html = '';
-            var monedas = {
-                'dolar': {nom: 'Dólar (USD)', icon: '🇺🇸'},
-                'real': {nom: 'Real (BRL)', icon: '🇧🇷'},
-                'peso_argentino': {nom: 'Peso Arg. (ARS)', icon: '🇦🇷'},
-                'euro': {nom: 'Euro (EUR)', icon: '🇪🇺'}
-            };
-            
-            for(var k in monedas) {
-                if(targetCasa[k]) {
-                    html += `<div class="card" style="text-align:center; display:flex; flex-direction:column; justify-content:center;">
-                        <div style="font-size:32px">${monedas[k].icon}</div>
-                        <h3 style="margin:10px 0; color:var(--text); font-size:15px;">${monedas[k].nom}</h3>
-                        <div style="display:flex; justify-content:space-around; margin-top:15px; border-top:1px solid var(--border); padding-top:15px;">
-                            <div><div style="font-size:11px; color:var(--text-light); text-transform:uppercase; margin-bottom:5px;">Compra</div><div style="font-size:18px; font-weight:700; color:var(--success); font-family:'DM Mono'">₲ ${targetCasa[k].compra.toLocaleString()}</div></div>
-                            <div><div style="font-size:11px; color:var(--text-light); text-transform:uppercase; margin-bottom:5px;">Venta</div><div style="font-size:18px; font-weight:700; color:var(--danger); font-family:'DM Mono'">₲ ${targetCasa[k].venta.toLocaleString()}</div></div>
-                        </div>
-                    </div>`;
-                }
-            }
-            grid.innerHTML = html || '<div style="grid-column:span 2;text-align:center;">No se encontraron datos.</div>';
-        }
-    } catch(e) {
-        grid.innerHTML = `<div class="card" style="grid-column:span 2; text-align:center;">
-            <p style="color:var(--warning); margin-bottom:10px;">⚠️ No se pudieron cargar las cotizaciones automáticamente.</p>
-            <a href="https://dolar.melizeche.com/" target="_blank" class="btn btn-primary" style="display:inline-flex; margin-top:10px;">Ver Cotizaciones en DolarPy</a>
-        </div>`;
-    }
 };
 
 // ── IA Contable Libre (Pollinations AI)
