@@ -120,10 +120,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .chat-input-area { display: flex; gap: 10px; padding: 15px; background: white; border-top: 1px solid var(--border); }
 .chat-input-area input { flex: 1; }
 
-/* SKINS / TEMAS - ContaPY */[data-theme="emerald"] { --accent:#059669; --accent2:#0284c7; --sidebar:#064e3b; --sidebar-hover:#065f46; }
+/* SKINS / TEMAS - ContaPY */
+[data-theme="emerald"] { --accent:#059669; --accent2:#0284c7; --sidebar:#064e3b; --sidebar-hover:#065f46; }
 [data-theme="purple"]  { --accent:#7c3aed; --accent2:#db2777; --sidebar:#2e1065; --sidebar-hover:#4c1d95; }
-[data-theme="ocean"]   { --accent:#0891b2; --accent2:#0d9488; --sidebar:#164e63; --sidebar-hover:#155e75; }
-[data-theme="dark"]    { --bg:#111827; --sidebar:#000000; --sidebar-hover:#1f2937; --accent:#f59e0b; --accent2:#10b981; --white:#1f2937; --card:#1f2937; --text:#f9fafb; --text-light:#9ca3af; --border:#374151; }
+[data-theme="ocean"]   { --accent:#0891b2; --accent2:#0d9488; --sidebar:#164e63; --sidebar-hover:#155e75; }[data-theme="dark"]    { --bg:#111827; --sidebar:#000000; --sidebar-hover:#1f2937; --accent:#f59e0b; --accent2:#10b981; --white:#1f2937; --card:#1f2937; --text:#f9fafb; --text-light:#9ca3af; --border:#374151; }
 </style>
 <script>try{var _t=localStorage.getItem('contapy_theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
 </head>
@@ -264,7 +264,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.25)">Modelo Libre</div>
           </div>
           <div id="chat_box" class="chat-messages" style="flex:1;overflow-y:auto;background:var(--bg)">
-            <div class="chat-msg gemini"><strong>🤖 IA Contable:</strong><br><br>¡Hola! Soy tu asistente en ContaPY. Podés consultarme sobre:<br><br>📊 <b>IVA</b> · 💼 <b>IRE General/Simple/ReSiMo</b> · 👤 <b>IRP</b><br>🧾 <b>SIFEN/e-Kuatia</b> · 📋 <b>Plan Cuentas RG 49/14</b><br><br>¿En qué te ayudo? (No necesitás configurar ninguna clave, este servicio es 100% libre).</div>
+            <div class="chat-msg gemini"><strong>🤖 IA Contable:</strong><br><br>¡Hola! Soy tu asistente en ContaPY. Podés consultarme sobre:<br><br>📊 <b>IVA</b> · 💼 <b>IRE General/Simple/ReSiMo</b> · 👤 <b>IRP</b><br>🧾 <b>SIFEN/e-Kuatia</b> · 📋 <b>Plan Cuentas RG 49/14</b><br><br>¿En qué te ayudo? (Este servicio es 100% libre).</div>
           </div>
           <div class="chat-input-area">
             <input type="text" id="chat_input" placeholder="Consultá sobre IVA, IRE, asientos..." onkeydown="if(event.key==='Enter')enviarMensajeIA()">
@@ -289,14 +289,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
-    <!-- MÓDULO COTIZACIONES NATIVO -->
+    <!-- MÓDULO COTIZACIONES (IFRAME RECORTADO PERFECTAMENTE) -->
     <div class="page" id="page-cotizaciones">
       <div class="page-header">
-        <div><h2>💱 Cotizaciones en Tiempo Real</h2><p>Fuente de datos: Cambios Chaco / MaxiCambios / Bonanza (API PY)</p></div>
-        <button class="btn btn-outline" onclick="window.cargarCotizaciones()">🔄 Actualizar Manualmente</button>
+        <div><h2>💱 Cotizaciones en Tiempo Real</h2><p>Fuente de datos: Bonanza Cambios (Vista Integrada)</p></div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline" onclick="document.getElementById('iframe_cotiz').src = document.getElementById('iframe_cotiz').src">🔄 Actualizar Tablero</button>
+          <button class="btn btn-primary" onclick="window.open('https://www.bonanzacambios.com.py/', '_blank')">🌐 Abrir web original</button>
+        </div>
       </div>
-      <div class="grid-2" id="cotiz_grid" style="grid-template-columns: repeat(2, 1fr);">
-         <div style="padding:20px;text-align:center;color:var(--text-light)">Cargando cotizaciones desde la API nacional...</div>
+      <!-- Vista enmarcada y centrada (Fuerza tamaño de escritorio para no desarmar la tabla) -->
+      <div class="card" style="padding:0; overflow:hidden; height:450px; position:relative; border-radius:10px; background:#f8f9fa;">
+         <div style="position:absolute; top:-380px; left:50%; margin-left:-600px; width:1200px; height:1200px; pointer-events:none;">
+             <iframe id="iframe_cotiz" src="https://www.bonanzacambios.com.py/" style="width:100%; height:100%; border:none;" scrolling="no"></iframe>
+         </div>
       </div>
     </div>
 
@@ -761,7 +767,6 @@ window.showPage = function(name, el) {
     document.getElementById('page-'+name).classList.add('active'); 
     if(el) el.classList.add('active');
     if(name === 'dashboard' || name==='clientes') window.renderClientes(); 
-    if(name === 'cotizaciones') window.cargarCotizaciones();
     if(['iva','ire_general','ire_simple','irp'].includes(name)) window.actualizarSelectsClientes(); 
     if(name === 'usuarios') window.renderUsuarios();
 };
@@ -1018,7 +1023,7 @@ window.guardarAsientoManual = function() {
         alert(`✅ Asiento Manual ${window.editandoAsientoRef} actualizado.`);
     } else {
         var nA = "M-"+Math.floor(1000+Math.random()*9000); 
-        if(!window.dbClientes[window.currentCli].libros.diario) window.dbClientes[window.currentCli].libros.diario = [];
+        if(!window.dbClientes[window.currentCli].libros.diario) window.dbClientes[window.currentCli].libros.diario =[];
         window.dbClientes[window.currentCli].libros.diario.push({fecha: document.getElementById('am_fecha').value, asiento: nA, glosa: document.getElementById('am_glosa').value, lineas: lin});
         alert(`✅ Asiento Manual ${nA} guardado.`); 
     }
@@ -1261,7 +1266,7 @@ window.guardarAsientoWizard = function() {
       document.getElementById('dash_doc_count').textContent = window.totalDocs; 
   }
   if (!cli.libros[tgtLib]) cli.libros[tgtLib] =[];
-  if (!cli.libros.diario) cli.libros.diario =[];
+  if (!cli.libros.diario) cli.libros.diario = [];
   cli.libros[tgtLib].push(obj); 
   cli.libros.diario.push({fecha: fch, asiento: nAsi, glosa: glosa, lineas: lin});
   window.saveData(); alert(`✅ Asiento ${nAsi} guardado en NUBE correctamente.`); window.closeModal('modal-wizard'); if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
@@ -1318,7 +1323,7 @@ window.procesarImportacion = function() {
             var cVenta = p.tasa===10 ? '4.1.1.01 Ventas 10%' : (p.tasa===5 ? '4.1.1.02 Ventas 5%' : '4.1.1.03 Ventas Exentas');
             var cIva = p.tasa===10 ? '2.1.4.01 IVA Débito 10%' : (p.tasa===5 ? '2.1.4.02 IVA Débito 5%' : '');
             var lin =[{cuenta:'1.1.1.01 Caja', debe:p.monto, haber:0}, {cuenta:cVenta, debe:0, haber:p.monto-iva}]; if(iva>0) lin.push({cuenta:cIva, debe:0, haber:iva});
-            if(!cli.libros.ventas) cli.libros.ventas = [];
+            if(!cli.libros.ventas) cli.libros.ventas =[];
             if(!cli.libros.diario) cli.libros.diario =[];
             cli.libros.ventas.push(obj); cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación Excel", lineas: lin}); window.totalDocs++;
         });
@@ -1509,7 +1514,7 @@ window.deleteAsientoManual = function(cliIdx, asientoId) {
 window.cargarCotizaciones = async function() {
     var grid = document.getElementById('cotiz_grid');
     if(!grid) return;
-    grid.innerHTML = '<div style="grid-column:span 2; padding:20px; text-align:center; color:var(--text-light)">Cargando cotizaciones desde DolarPy...</div>';
+    grid.innerHTML = '<div style="grid-column:span 2; padding:20px; text-align:center; color:var(--text-light)">Cargando cotizaciones desde la API nacional...</div>';
     
     try {
         var res = await fetch('https://dolar.melizeche.com/api/1.0/');
