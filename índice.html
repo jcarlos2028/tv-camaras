@@ -120,19 +120,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .chat-input-area { display: flex; gap: 10px; padding: 15px; background: white; border-top: 1px solid var(--border); }
 .chat-input-area input { flex: 1; }
 
-/* SKINS / TEMAS */
+/* SKINS / TEMAS - ContaPY */
 [data-theme="emerald"] { --accent:#059669; --accent2:#0284c7; --sidebar:#064e3b; --sidebar-hover:#065f46; }
 [data-theme="purple"]  { --accent:#7c3aed; --accent2:#db2777; --sidebar:#2e1065; --sidebar-hover:#4c1d95; }
 [data-theme="ocean"]   { --accent:#0891b2; --accent2:#0d9488; --sidebar:#164e63; --sidebar-hover:#155e75; }
 [data-theme="dark"]    { --bg:#111827; --sidebar:#000000; --sidebar-hover:#1f2937; --accent:#f59e0b; --accent2:#10b981; --white:#1f2937; --card:#1f2937; --text:#f9fafb; --text-light:#9ca3af; --border:#374151; }
 </style>
-<script>
-  // Aplicar tema guardado ANTES de renderizar (evita parpadeo)
-  try {
-    var t = localStorage.getItem('contapy_theme');
-    if (t) document.documentElement.setAttribute('data-theme', t);
-  } catch(e) {}
-</script>
+<script>try{var _t=localStorage.getItem('contapy_theme');if(_t)document.documentElement.setAttribute('data-theme',_t);}catch(e){}</script>
 </head>
 <body>
 
@@ -207,6 +201,34 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   <div class="topbar">
     <div class="topbar-title" id="topbar-title" data-i18n="top_title">Dashboard Principal</div>
     
+    <!-- AJUSTES DEL SISTEMA -->
+    <div class="page" id="page-ajustes">
+      <div class="page-header"><div><h2>⚙️ Ajustes del Sistema</h2><p>Temas, sincronización y actualizaciones</p></div></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🎨 Temas y Colores</div>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:14px">Seleccioná tu paleta. Se guarda en el navegador.</p>
+          <div id="theme_applied_msg" style="display:none;font-size:12px;font-weight:700;padding:8px 12px;background:rgba(16,185,129,0.1);border-radius:7px;border:1px solid var(--success);margin-bottom:12px;color:var(--success)"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-outline" onclick="setTheme('default')" style="border-left:4px solid #e63946">🔴 Default</button>
+            <button class="btn btn-outline" onclick="setTheme('emerald')" style="border-left:4px solid #059669">🟢 Esmeralda</button>
+            <button class="btn btn-outline" onclick="setTheme('purple')" style="border-left:4px solid #7c3aed">🟣 Púrpura</button>
+            <button class="btn btn-outline" onclick="setTheme('ocean')" style="border-left:4px solid #0891b2">🌊 Océano</button>
+            <button class="btn btn-outline" onclick="setTheme('dark')" style="border-left:4px solid #f59e0b;background:#1f2937;color:white;border-top-color:#374151;border-right-color:#374151;border-bottom-color:#374151">🌙 Oscuro</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🔄 Sincronización y Actualizaciones</div>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:10px">Versión actual: <b>ContaPY v4.0 Cloud</b></p>
+          <div id="update_status" style="display:none;font-size:13px;font-weight:600;padding:10px;border-radius:8px;border:1px solid var(--success);margin-bottom:12px"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" id="btn_update" onclick="buscarActualizaciones()">🔍 Buscar Actualizaciones</button>
+            <button class="btn btn-secondary" id="btn_sync" onclick="forzarSincronizacion('btn_sync')">🔄 Sincronizar Firebase</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- SELECTOR DE IDIOMAS -->
     <select id="lang_sel" onchange="changeLang(this.value)" style="border:1px solid var(--border);border-radius:7px;padding:4px 8px;background:var(--bg);font-weight:600;outline:none;cursor:pointer">
         <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
@@ -235,43 +257,38 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- MÓDULO CLAUDE IA -->
     <div class="page" id="page-gemini">
       <div class="page-header">
-        <div><h2>🤖 Soporte Claude IA</h2><p>Asistente contable especializado — Ley 6380/2019 · RG 49/14 · SIFEN</p></div>
-        <button class="btn btn-outline btn-sm" onclick="window.claudeHistory=[];document.getElementById('chat_box').innerHTML=window._claudeWelcome||'';">🗑️ Limpiar</button>
+        <div><h2>🤖 Soporte Claude IA</h2><p>Asistente contable — Ley 6380/2019 · RG 49/14 · SIFEN</p></div>
+        <button class="btn btn-outline btn-sm" onclick="window.claudeHistory=[];if(window._claudeWelcome)document.getElementById('chat_box').innerHTML=window._claudeWelcome;">🗑️ Limpiar</button>
       </div>
       <div class="grid-2">
         <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;height:65vh">
           <div style="background:linear-gradient(135deg,#0f1923,#1a2535);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
-            <div style="width:32px;height:32px;background:linear-gradient(135deg,#cc7a00,#ff9500);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px">🤖</div>
-            <div><div style="color:white;font-weight:700;font-size:13px">Claude — ContaPY IA</div><div style="color:rgba(255,255,255,0.5);font-size:10px">IVA · IRE · IRP · INR · NIIF · RG 49/14</div></div>
-            <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.3)">Powered by Anthropic</div>
+            <div style="width:30px;height:30px;background:linear-gradient(135deg,#cc7a00,#ff9500);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px">🤖</div>
+            <div><div style="color:white;font-weight:700;font-size:13px">Claude — ContaPY</div><div style="color:rgba(255,255,255,0.45);font-size:10px">IVA · IRE · IRP · NIIF · RG 49/14</div></div>
+            <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.25)">Anthropic</div>
           </div>
-          <div id="chat_box" style="flex:1;overflow-y:auto;padding:16px;background:var(--bg);display:flex;flex-direction:column;gap:10px">
-            <div style="background:var(--card);border:1px solid var(--border);align-self:flex-start;max-width:88%;padding:12px 16px;border-radius:12px;border-bottom-left-radius:4px;font-size:13px;line-height:1.6">
-              <strong>🤖 Claude:</strong><br><br>¡Hola! Soy Claude, tu asistente en <strong>ContaPY</strong>. Podés consultarme sobre:<br><br>
-              📊 <b>IVA</b> (Form. 120) · 💼 <b>IRE General/Simple</b> (Form. 500) · 👤 <b>IRP</b> (Form. 515)<br>
-              🧾 <b>SIFEN / e-Kuatia</b> · 📋 <b>Plan de Cuentas RG 49/14</b> · ✍️ <b>Asientos NIIF</b><br><br>
-              ¿En qué te ayudo hoy?
-            </div>
+          <div id="chat_box" class="chat-messages" style="flex:1;overflow-y:auto;background:var(--bg)">
+            <div class="chat-msg gemini"><strong>🤖 Claude:</strong><br><br>¡Hola! Soy Claude, tu asistente en ContaPY. Podés consultarme sobre:<br><br>📊 <b>IVA</b> · 💼 <b>IRE General/Simple/ReSiMo</b> · 👤 <b>IRP</b> · 🌍 <b>INR</b><br>🧾 <b>SIFEN/e-Kuatia</b> · 📋 <b>Plan Cuentas RG 49/14</b> · ✍️ <b>Asientos NIIF</b><br><br>¿En qué te ayudo?</div>
           </div>
-          <div style="display:flex;gap:8px;padding:12px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0">
-            <input type="text" id="chat_input" placeholder="Escribí tu consulta contable..." onkeydown="if(event.key==='Enter')enviarMensajeIA()" style="flex:1">
-            <button class="btn btn-primary" onclick="enviarMensajeIA()" style="background:#f59e0b;color:white;border-radius:20px;padding:8px 18px">➤</button>
+          <div class="chat-input-area">
+            <input type="text" id="chat_input" placeholder="Consultá sobre IVA, IRE, asientos..." onkeydown="if(event.key==='Enter')enviarMensajeIA()">
+            <button class="btn btn-primary" onclick="enviarMensajeIA()" style="background:#f59e0b;color:white">➤ Enviar</button>
           </div>
         </div>
         <div>
           <div class="card">
             <div class="card-title">💡 Preguntas frecuentes</div>
-            <div style="display:flex;flex-direction:column;gap:7px" id="faq_claude">
-              <div onclick="preguntarClaude('¿Cómo calculo el IVA a pagar del mes?')" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Cómo calculo el IVA a pagar del mes?</div>
-              <div onclick="preguntarClaude('¿Cuál es la diferencia entre IRE General e IRE Simple?')" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Diferencia entre IRE General e IRE Simple?</div>
-              <div onclick="preguntarClaude('¿Factura de ANDE es deducible al 100% en el IRE?')" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Factura de ANDE es deducible al 100%?</div>
-              <div onclick="preguntarClaude('¿Cuándo vence el IVA según el dígito de mi RUC?')" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Cuándo vence el IVA según mi RUC?</div>
-              <div onclick="preguntarClaude('¿Cuáles son los límites del IRE Simple y ReSiMo?')" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Límites del IRE Simple y ReSiMo?</div>
-              <div onclick="preguntarClaude('¿Cómo registro un asiento de compra con IVA en la RG 49/14?')" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Cómo registro una compra con IVA (RG 49/14)?</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Cómo calculo el IVA a pagar del mes?</div>
+              <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Diferencia entre IRE General e IRE Simple?</div>
+              <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Factura de ANDE es deducible al 100%?</div>
+              <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Cuándo vence el IVA según el dígito de mi RUC?</div>
+              <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Límites del IRE Simple y ReSiMo?</div>
+              <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Cómo registro compra con IVA 10% en RG 49/14?</div>
             </div>
           </div>
-          <div class="card" style="margin-top:0;text-align:center">
-            <div style="font-size:11px;color:var(--text-light)">🔒 Claude Sonnet 4 — Anthropic</div>
+          <div class="card" style="margin-top:0;text-align:center;padding:12px">
+            <span style="font-size:11px;color:var(--text-light)">🔒 Claude Sonnet 4 — Anthropic</span>
           </div>
         </div>
       </div>
@@ -341,6 +358,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
           <button class="btn btn-outline" onclick="openModalImportProfile()">📥 Importar Excel / IA</button>
           <button class="btn btn-primary" onclick="openWizardFromProfile()">➕ Cargar Comprobante</button>
           <button class="btn btn-secondary" onclick="openAsientoManual()">➕ Asiento Manual Libre</button>
+          <button class="btn btn-outline" id="btn_sync_perfil" onclick="forzarSincronizacion('btn_sync_perfil')" style="border-color:var(--accent2);color:var(--accent2)">🔄 Sincronizar Nube</button>
         </div>
       </div>
 
@@ -419,38 +437,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
-    <!-- AJUSTES DEL SISTEMA -->
-    <div class="page" id="page-ajustes">
-      <div class="page-header">
-        <div><h2>⚙️ Ajustes del Sistema</h2><p>Apariencia, temas y actualizaciones</p></div>
-      </div>
-
-      <!-- TEMAS -->
-      <div class="card" style="margin-bottom:14px">
-        <div class="card-title">🎨 Temas y Colores (Skins)</div>
-        <p style="font-size:12px;color:var(--text-light);margin-bottom:14px">Seleccioná tu paleta de colores. Se guarda en el navegador.</p>
-        <div id="theme_applied_msg" style="display:none;font-size:12px;color:var(--success);font-weight:700;margin-bottom:10px;padding:8px 12px;background:rgba(16,185,129,0.1);border-radius:7px;border:1px solid var(--success)"></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-outline" onclick="setTheme('default')" style="border-left:4px solid #e63946;min-width:140px">🔴 Default (Rojo)</button>
-          <button class="btn btn-outline" onclick="setTheme('emerald')" style="border-left:4px solid #059669;min-width:140px">🟢 Esmeralda</button>
-          <button class="btn btn-outline" onclick="setTheme('purple')" style="border-left:4px solid #7c3aed;min-width:140px">🟣 Púrpura</button>
-          <button class="btn btn-outline" onclick="setTheme('ocean')" style="border-left:4px solid #0891b2;min-width:140px">🌊 Océano</button>
-          <button class="btn btn-outline" onclick="setTheme('dark')" style="border-left:4px solid #f59e0b;min-width:140px;background:#1f2937;color:white;border-top-color:#374151;border-right-color:#374151;border-bottom-color:#374151">🌙 Modo Oscuro</button>
-        </div>
-      </div>
-
-      <!-- SINCRONIZACIÓN Y ACTUALIZACIONES -->
-      <div class="card">
-        <div class="card-title">🔄 Sincronización y Actualizaciones</div>
-        <p style="font-size:12px;color:var(--text-light);margin-bottom:12px">Versión actual: <b id="ver_actual_label">v4.0 Cloud</b></p>
-        <div id="update_status" style="display:none;font-size:13px;font-weight:600;padding:10px 14px;background:rgba(16,185,129,0.1);border-radius:8px;border:1px solid var(--success);margin-bottom:12px;color:var(--success)"></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-primary" id="btn_update" onclick="buscarActualizaciones()">🔍 Buscar Actualizaciones en la Nube</button>
-          <button class="btn btn-secondary" id="btn_sync" onclick="forzarSincronizacion()">🔄 Sincronizar con Firebase</button>
-        </div>
-      </div>
-    </div>
-
     <!-- COMPROBANTES / SIFEN -->
     <div class="page" id="page-comprobantes">
       <div class="page-header"><div data-i18n="sifen_h2"><h2>Centro de Carga y SIFEN</h2><p>Búsqueda e-Kuatia e Importación IA</p></div>
@@ -463,7 +449,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <input type="text" id="sifen_cdc" placeholder="Ej: 01800123456001001000012320260321123456789012" maxlength="44" style="flex:1;font-family:'DM Mono';letter-spacing:1px">
             <button class="btn btn-secondary" onclick="consultarSIFEN()">Consultar a DNIT</button>
         </div>
+      
+      <!-- HISTORIAL CDC -->
+      <div class="card" id="sifen_historial_card" style="display:none;margin-top:14px">
+        <div class="card-title">🕐 Historial de Consultas CDC (sesión)</div>
+        <div class="table-wrap"><table id="tbl_historial_cdc">
+          <thead><tr><th>CDC</th><th>RUC</th><th>Razón Social</th><th>Fecha</th><th style="text-align:right">Total ₲</th><th>Estado</th><th>Acción</th></tr></thead>
+          <tbody id="lista_historial_cdc"></tbody>
+        </table></div>
       </div>
+</div>
     </div>
 
     <!-- ESTADOS IMPUESTOS -->
@@ -543,7 +538,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
 <!-- MODAL: ASIENTO MANUAL LIBRE -->
 <div class="modal-overlay" id="modal-asiento-manual">
-  <div class="modal drag-modal">
+  <div class="modal drag-modal" style="width:min(700px,96vw);max-height:90vh">
     <div class="modal-drag-header"><span class="m-title">✍️ Asiento Manual Libre / Ajuste</span>
         <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-asiento-manual')">✕</div></div>
     </div>
@@ -603,7 +598,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
 <!-- WIZARD: CARGA COMPROBANTES (MULTITASA TILDABLE) -->
 <div class="modal-overlay" id="modal-wizard">
-  <div class="modal drag-modal" style="width:680px">
+  <div class="modal drag-modal" style="width:min(680px,96vw);max-height:92vh">
     <div class="modal-drag-header"><span class="m-title" id="wiz-title">🧾 Asistente de Carga Contable</span>
         <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-wizard')">✕</div></div>
     </div>
@@ -928,17 +923,19 @@ window.renderLibros = function() {
       if(ivaT5>0) ivaDisp += `5%: ${ivaT5.toLocaleString()}`;
       if(ivaDisp==="") ivaDisp = "Exenta";
       
-      return `<tr><td>${r.fecha}</td><td><span style="font-size:10px;text-transform:uppercase">${r.condicion||'-'}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'S/RUC'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.timbrado||'-'}<br>${r.nro}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString()}</td><td class="monto" style="color:var(--accent)">${ivaDisp}</td><td>${tBadgesStr(r.impuestos_aplicados)}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${window.currentCli}, '${lib}', ${i})">✏️ Editar</button></td></tr>`;
+      return `<tr><td>${r.fecha}</td><td><span style="font-size:10px;text-transform:uppercase">${r.condicion||'-'}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'S/RUC'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.timbrado||'-'}<br>${r.nro}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString()}</td><td class="monto" style="color:var(--accent)">${ivaDisp}</td><td>${tBadgesStr(r.impuestos_aplicados)}</td><td><div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm" onclick="editarComprobante(${window.currentCli}, '${lib}', ${i})">✏️</button><button class="btn btn-sm" style="background:var(--danger);color:white;border-radius:7px;padding:5px 8px;cursor:pointer;border:none;font-family:'DM Sans'" onclick="deleteComprobante(${window.currentCli}, '${lib}', ${i})">🗑️</button></div></td></tr>`;
   };
   
   document.getElementById('lista_lib_compras').innerHTML = c.libros.compras.map((r,i)=>dr(r,'compras',i)).join('');
   document.getElementById('lista_lib_ventas').innerHTML = c.libros.ventas.map((r,i)=>dr(r,'ventas',i)).join('');
-  document.getElementById('lista_lib_recibos').innerHTML = c.libros.recibos.map((r,i)=>`<tr><td>${r.fecha}</td><td><span class="badge-status info">${r.operacion.toUpperCase()}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'-'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.nro}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString()}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${window.currentCli}, 'recibos', ${i})">✏️ Editar</button></td></tr>`).join('');
-  document.getElementById('lista_lib_retenciones').innerHTML = c.libros.retenciones.map((r,i)=>`<tr><td>${r.fecha}</td><td><span class="badge-status err">${r.operacion.toUpperCase()}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'-'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.timbrado||'-'}<br>${r.nro}</td><td class="monto" style="font-weight:600;color:var(--danger)">₲ ${r.bruto.toLocaleString()}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${window.currentCli}, 'retenciones', ${i})">✏️ Editar</button></td></tr>`).join('');
+  document.getElementById('lista_lib_recibos').innerHTML = c.libros.recibos.map((r,i)=>`<tr><td>${r.fecha}</td><td><span class="badge-status info">${r.operacion.toUpperCase()}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'-'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.nro}</td><td class="monto" style="font-weight:600">₲ ${r.bruto.toLocaleString()}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${window.currentCli}, 'recibos', ${i})">✏️</button><button class="btn btn-sm" style="background:var(--danger);color:white;border-radius:7px;padding:5px 8px;cursor:pointer;border:none" onclick="deleteComprobante(${window.currentCli}, 'recibos', ${i})">🗑️</button></div></td></tr>`).join('');
+  document.getElementById('lista_lib_retenciones').innerHTML = c.libros.retenciones.map((r,i)=>`<tr><td>${r.fecha}</td><td><span class="badge-status err">${r.operacion.toUpperCase()}</span></td><td><strong style="font-family:'DM Mono'">${r.ruc||'-'}</strong><br><span style="font-size:11px">${r.tercero}</span></td><td><span class="badge-status ok">${r.rol?r.rol.toUpperCase():'-'}</span></td><td style="font-family:'DM Mono'">${r.timbrado||'-'}<br>${r.nro}</td><td class="monto" style="font-weight:600;color:var(--danger)">₲ ${r.bruto.toLocaleString()}</td><td><button class="btn btn-outline btn-sm" onclick="editarComprobante(${window.currentCli}, 'retenciones', ${i})">✏️</button><button class="btn btn-sm" style="background:var(--danger);color:white;border-radius:7px;padding:5px 8px;cursor:pointer;border:none" onclick="deleteComprobante(${window.currentCli}, 'retenciones', ${i})">🗑️</button></div></td></tr>`).join('');
   
   var lDiario = document.getElementById('lista_lib_diario'); lDiario.innerHTML='';
   c.libros.diario.forEach((a, i) => {
-    var btnEdit = a.asiento.startsWith('M-') ? `<button class="btn btn-outline btn-sm" onclick="editarAsientoManual(${window.currentCli}, '${a.asiento}')">✏️ Editar</button>` : '';
+    var btnEdit = a.asiento.startsWith('M-') ? 
+        `<div style="display:flex;gap:4px"><button class="btn btn-outline btn-sm" onclick="editarAsientoManual(${window.currentCli}, '${a.asiento}')">✏️</button><button class="btn btn-sm" style="background:var(--danger);color:white;border-radius:7px;padding:5px 8px;cursor:pointer;border:none" onclick="deleteAsientoManual(${window.currentCli}, '${a.asiento}')">🗑️</button></div>` : 
+        `<button class="btn btn-sm" style="background:var(--danger);color:white;border-radius:7px;padding:5px 8px;cursor:pointer;border:none" onclick="deleteAsientoManual(${window.currentCli}, '${a.asiento}')">🗑️</button>`;
     lDiario.innerHTML += `<div class="libro-row" style="background:#f8f9fa;border-bottom:none"><div><strong>${a.fecha}</strong></div><div style="font-family:'DM Mono'">${a.asiento}</div><div style="font-weight:600;color:var(--accent2)">Glosa: ${a.glosa}</div><div></div><div></div><div>${btnEdit}</div></div>`;
     a.lineas.forEach(l => { lDiario.innerHTML += `<div class="libro-row"><div></div><div></div><div style="padding-left:20px">${l.cuenta}</div><div class="monto debe">${l.debe>0?l.debe.toLocaleString():''}</div><div class="monto haber">${l.haber>0?l.haber.toLocaleString():''}</div><div></div></div>`; });
   });
@@ -1361,287 +1358,245 @@ window.onload = function() {
     var l = localStorage.getItem('contapy_lang') || 'es'; document.getElementById('lang_sel').value = l; window.changeLang(l); 
 };
 
+
 // ================================================================
-//  FUNCIONES FALTANTES — ContaPY v4.0
+//  FIXES COMPLETOS — ContaPY
+//  1. toggleWin — controles ventana modales
+//  2. setTheme — cambio de skin con persistencia
+//  3. buscarActualizaciones — verifica versión en Netlify
+//  4. forzarSincronizacion — guarda en Firebase
+//  5. exportBackup / importBackup / exportToCSV
+//  6. deleteComprobante — eliminar asiento de libros
+//  7. enviarMensajeIA — Claude IA (reemplaza Gemini)
+//  8. abrirWhatsApp — soporte
+//  9. Drag de modales
 // ================================================================
 
-// ── toggleWin: controles de ventana modales (_  □  ✕)
+// ── 1. toggleWin
 window.toggleWin = function(btn, action) {
     var modal = btn.closest('.modal');
     if (!modal) return;
-    if (action === '_') {
-        modal.classList.toggle('minimized');
-        modal.classList.remove('maximized');
-    } else if (action === '□') {
-        modal.classList.toggle('maximized');
-        modal.classList.remove('minimized');
-    }
+    if (action === '_') { modal.classList.toggle('minimized'); modal.classList.remove('maximized'); }
+    else if (action === '□') { modal.classList.toggle('maximized'); modal.classList.remove('minimized'); }
 };
 
-// Drag de modales
+// ── Drag de modales
 (function() {
-    var isDrag = false, dragEl = null, sx, sy, sl, st;
-    document.addEventListener('mousedown', function(e) {
-        var hdr = e.target.closest('.modal-drag-header');
-        if (!hdr || e.target.closest('.win-controls')) return;
-        dragEl = hdr.closest('.modal');
-        if (!dragEl || dragEl.classList.contains('maximized')) return;
-        isDrag = true;
-        sx = e.clientX; sy = e.clientY;
-        var r = dragEl.getBoundingClientRect(); sl = r.left; st = r.top;
-        dragEl.style.cssText += ';margin:0;position:fixed;left:'+sl+'px;top:'+st+'px;transform:none';
+    var drag=false, el=null, sx,sy,sl,st;
+    document.addEventListener('mousedown', function(e){
+        var h=e.target.closest('.modal-drag-header');
+        if(!h||e.target.closest('.win-controls')) return;
+        el=h.closest('.modal');
+        if(!el||el.classList.contains('maximized')) return;
+        drag=true; sx=e.clientX; sy=e.clientY;
+        var r=el.getBoundingClientRect(); sl=r.left; st=r.top;
+        el.style.cssText+=';margin:0;position:fixed;transform:none;left:'+sl+'px;top:'+st+'px';
         e.preventDefault();
     });
-    document.addEventListener('mousemove', function(e) {
-        if (!isDrag || !dragEl || dragEl.classList.contains('maximized')) return;
-        dragEl.style.left = (sl + e.clientX - sx) + 'px';
-        dragEl.style.top  = (st + e.clientY - sy) + 'px';
-    });
-    document.addEventListener('mouseup', function() { isDrag = false; dragEl = null; });
+    document.addEventListener('mousemove',function(e){ if(!drag||!el||el.classList.contains('maximized'))return; el.style.left=(sl+e.clientX-sx)+'px'; el.style.top=(st+e.clientY-sy)+'px'; });
+    document.addEventListener('mouseup',function(){ drag=false; el=null; });
 })();
 
-// ── setTheme: aplicar y guardar tema/skin
-window.setTheme = function(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    try { localStorage.setItem('contapy_theme', theme); } catch(e) {}
+// ── 2. setTheme
+window.setTheme = function(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    try { localStorage.setItem('contapy_theme', t); } catch(e){}
+    var nombres = {default:'Default (Rojo)', emerald:'Esmeralda', purple:'Púrpura', ocean:'Océano', dark:'Modo Oscuro'};
     var msg = document.getElementById('theme_applied_msg');
-    if (msg) {
-        var nombres = {default:'Default (Rojo)', emerald:'Esmeralda', purple:'Púrpura', ocean:'Océano', dark:'Modo Oscuro'};
-        msg.textContent = '✅ Tema "' + (nombres[theme] || theme) + '" aplicado correctamente';
-        msg.style.display = 'block';
-        clearTimeout(window._themeTimer);
-        window._themeTimer = setTimeout(function() { msg.style.display = 'none'; }, 3000);
-    }
+    if(msg){ msg.textContent='✅ Tema "'+( nombres[t]||t)+'" aplicado'; msg.style.display='block'; clearTimeout(window._thTmr); window._thTmr=setTimeout(function(){msg.style.display='none';},3000); }
 };
 
-// ── forzarSincronizacion: sincronizar datos con Firebase
-window.forzarSincronizacion = async function() {
-    var btn = document.getElementById('btn_sync');
-    var orig = btn ? btn.textContent : '';
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Sincronizando...'; btn.style.background = ''; }
-    try {
-        if (window.saveData) await window.saveData();
-        if (btn) { btn.textContent = '✅ ¡Sincronizado!'; btn.style.background = 'var(--success)'; }
-    } catch(e) {
-        if (btn) { btn.textContent = '❌ Error: ' + e.message; btn.style.background = 'var(--danger)'; }
-    }
-    setTimeout(function() {
-        if (btn) { btn.disabled = false; btn.textContent = orig || '🔄 Sincronizar con Firebase'; btn.style.background = ''; }
-    }, 3500);
-};
-
-// ── buscarActualizaciones: fetch al propio Netlify y compara versión
+// ── 3. buscarActualizaciones
 window.buscarActualizaciones = async function() {
-    var btn = document.getElementById('btn_update');
-    var msg = document.getElementById('update_status');
-    if (btn) { btn.disabled = true; btn.textContent = '🔍 Verificando...'; }
+    var btn=document.getElementById('btn_update'), msg=document.getElementById('update_status');
+    if(btn){btn.disabled=true; btn.textContent='🔍 Verificando...';}
     try {
-        var url = window.location.href.split('?')[0] + '?_v=' + Date.now();
-        var res = await fetch(url, { cache: 'no-store', headers: { 'Cache-Control': 'no-cache' } });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        var res = await fetch(window.location.href.split('?')[0]+'?_v='+Date.now(), {cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+        if(!res.ok) throw new Error('HTTP '+res.status);
         var txt = await res.text();
-        // Extraer versión del título
-        var mRem = txt.match(/ContaPY\s+(v[\d.]+)/i);
-        var mLoc = (document.title + document.querySelector('.logo-sub')?.textContent || '').match(/v[\d.]+/i);
-        var vRem = mRem ? mRem[1] : null;
-        var vLoc = mLoc ? mLoc[0] : 'v4.0';
-        if (vRem && vRem !== vLoc) {
-            if (confirm('🔄 Nueva versión disponible: ' + vRem + '\n(Tu versión: ' + vLoc + ')\n\n¿Actualizar ahora? Se recargará la página.')) {
-                window.location.reload(true);
-            }
+        var mR=txt.match(/ContaPY\s+(v[\d.]+)/i), mL=document.title.match(/v[\d.]+/i);
+        var vR=mR?mR[1]:null, vL=mL?mL[0]:'actual';
+        if(vR && vR!==vL){
+            if(confirm('🔄 Nueva versión disponible: '+vR+'\n¿Actualizar ahora?')) window.location.reload(true);
         } else {
-            if (msg) { msg.style.display = 'block'; msg.textContent = '✅ Tenés la última versión instalada (' + vLoc + ')'; }
-            if (btn) { btn.textContent = '✅ Al día'; btn.style.color = 'var(--success)'; btn.style.borderColor = 'var(--success)'; }
-            setTimeout(function() {
-                if (msg) msg.style.display = 'none';
-                if (btn) { btn.textContent = '🔍 Buscar Actualizaciones en la Nube'; btn.style.color = ''; btn.style.borderColor = ''; }
-            }, 5000);
+            if(msg){msg.style.display='block'; msg.textContent='✅ Tenés la última versión ('+vL+')'; msg.style.color='var(--success)';}
+            if(btn){btn.textContent='✅ Al día'; btn.style.color='var(--success)'; btn.style.borderColor='var(--success)';}
+            setTimeout(function(){if(msg)msg.style.display='none'; if(btn){btn.textContent='🔍 Buscar Actualizaciones';btn.style.color='';btn.style.borderColor='';}},4000);
         }
-    } catch(e) {
-        if (msg) { msg.style.display = 'block'; msg.textContent = '⚠️ No se pudo verificar: ' + e.message; msg.style.color = 'var(--warning)'; }
-        if (btn) btn.textContent = '🔍 Buscar Actualizaciones en la Nube';
+    } catch(e){
+        if(msg){msg.style.display='block'; msg.textContent='⚠️ No se pudo verificar: '+e.message; msg.style.color='var(--warning)';}
+        if(btn) btn.textContent='🔍 Buscar Actualizaciones';
     }
-    if (btn) btn.disabled = false;
+    if(btn) btn.disabled=false;
 };
 
-// ── exportBackup: descargar JSON completo
+// ── 4. forzarSincronizacion
+window.forzarSincronizacion = async function(btnId) {
+    var id = btnId || 'btn_sync_global';
+    var btn = document.getElementById(id) || document.getElementById('btn_sync');
+    var orig = btn ? btn.textContent : '';
+    if(btn){btn.disabled=true; btn.textContent='⏳ Sincronizando...'; btn.style.background='';}
+    try {
+        if(window.saveData) await window.saveData();
+        if(btn){btn.textContent='✅ Sincronizado'; btn.style.background='var(--success)';}
+    } catch(e){
+        if(btn){btn.textContent='❌ Error'; btn.style.background='var(--danger)';}
+        console.error(e);
+    }
+    setTimeout(function(){if(btn){btn.disabled=false; btn.textContent=orig||'🔄 Sincronizar'; btn.style.background='';}},3000);
+};
+
+// ── 5a. exportBackup
 window.exportBackup = function() {
-    var data = {
-        version: 'v4.0',
-        exportDate: new Date().toISOString(),
-        clientes: window.dbClientes || [],
-        usuarios: window.dbUsuarios || [],
-        totalDocs: window.totalDocs || 0
-    };
-    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'ContaPY_Backup_' + new Date().toISOString().split('T')[0] + '.json';
-    a.click();
+    var d={version:'v4.0',date:new Date().toISOString(),clientes:window.dbClientes||[],usuarios:window.dbUsuarios||[],totalDocs:window.totalDocs||0};
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
+    a.download='ContaPY_Backup_'+new Date().toISOString().split('T')[0]+'.json'; a.click();
 };
 
-// ── importBackup: restaurar desde JSON a Firebase
-window.importBackup = function(event) {
-    var file = event.target.files[0]; if (!file) return;
-    if (!confirm('⚠️ Esto SOBRESCRIBIRÁ todos los datos en la nube. ¿Continuar?')) return;
-    var reader = new FileReader();
-    reader.onload = async function(e) {
-        try {
-            var data = JSON.parse(e.target.result);
-            if (data.clientes && data.usuarios) {
-                window.dbClientes = data.clientes;
-                window.dbUsuarios = data.usuarios;
-                window.totalDocs  = data.totalDocs || 0;
-                if (window.saveData) await window.saveData();
-                if (window.renderClientes) window.renderClientes();
-                if (window.actualizarSelectsClientes) window.actualizarSelectsClientes();
-                alert('✅ Backup restaurado y guardado en Firebase.');
-            } else { alert('❌ Archivo inválido.'); }
-        } catch(err) { alert('❌ Error: ' + err.message); }
-        event.target.value = '';
-    };
-    reader.readAsText(file);
+// ── 5b. importBackup
+window.importBackup = function(ev) {
+    var f=ev.target.files[0]; if(!f) return;
+    if(!confirm('⚠️ Esto SOBRESCRIBIRÁ todos los datos en Firebase. ¿Continuar?')) return;
+    var r=new FileReader(); r.onload=async function(e){
+        try{
+            var d=JSON.parse(e.target.result);
+            if(d.clientes&&d.usuarios){window.dbClientes=d.clientes;window.dbUsuarios=d.usuarios;window.totalDocs=d.totalDocs||0;if(window.saveData)await window.saveData();if(window.renderClientes)window.renderClientes();alert('✅ Backup restaurado en Firebase.');}
+            else alert('❌ Archivo inválido.');
+        }catch(err){alert('❌ Error: '+err.message);}
+        ev.target.value='';
+    }; r.readAsText(f);
 };
 
-// ── exportToCSV: exportar tabla a CSV con BOM para Excel
+// ── 5c. exportToCSV
 window.exportToCSV = function(tableId, filename) {
-    var t = document.getElementById(tableId); if (!t) return alert('Tabla no encontrada.');
-    var rows = t.querySelectorAll('tr'), csv = [];
-    rows.forEach(function(row) {
-        var cells = row.querySelectorAll('th,td'), line = [];
-        cells.forEach(function(cell) {
-            // Omitir columnas de acción
-            var txt = cell.innerText.trim();
-            if (txt === 'Acción' || txt === 'Accion' || cell.querySelector('button')) {
-                if (!cell.querySelector('button')) line.push('"'+txt.replace(/"/g,'""')+'"');
-            } else {
-                line.push('"'+txt.replace(/"/g,'""')+'"');
-            }
+    var t=document.getElementById(tableId); if(!t){alert('Tabla no encontrada: '+tableId);return;}
+    var rows=t.querySelectorAll('tr'), csv=[];
+    rows.forEach(function(row){
+        var cells=row.querySelectorAll('th,td'), line=[];
+        cells.forEach(function(c){
+            var txt=c.innerText.trim().replace(/"/g,'""');
+            if(txt!=='Acción'&&txt!=='Accion'&&!txt.match(/^[✏️🗑️➕📥]+$/)) line.push('"'+txt+'"');
         });
-        csv.push(line.join(';'));
+        if(line.length>0) csv.push(line.join(';'));
     });
-    var blob = new Blob(['\uFEFF' + csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
-    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename + '.csv'; a.click();
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv.join('\n')],{type:'text/csv;charset=utf-8;'}));
+    a.download=filename+'.csv'; a.click();
 };
 
-// ── WhatsApp soporte
-window.abrirWhatsApp = function() {
-    var msg = encodeURIComponent('Hola, necesito soporte con ContaPY 👋');
-    window.open('https://wa.me/595986528000?text=' + msg, '_blank');
+// ── 6. deleteComprobante — eliminar de libros y diario
+window.deleteComprobante = function(cliIdx, libro, docIdx) {
+    if(!confirm('🗑️ ¿Eliminar este comprobante y su asiento contable?\nEsta acción no se puede deshacer.')) return;
+    var cli = window.dbClientes[cliIdx];
+    // Obtener ref_asiento antes de eliminar
+    var refAsi = cli.libros[libro][docIdx] ? cli.libros[libro][docIdx].ref_asiento : null;
+    // Eliminar del libro
+    cli.libros[libro].splice(docIdx, 1);
+    // Eliminar del diario si existe el asiento
+    if(refAsi) cli.libros.diario = cli.libros.diario.filter(function(d){return d.asiento !== refAsi;});
+    window.totalDocs = Math.max(0, (window.totalDocs||1) - 1);
+    window.saveData();
+    window.renderLibros();
+    if(window.renderMayorYBalance) window.renderMayorYBalance();
 };
 
-// ── Claude IA: historial y envío
+// ── 7. Claude IA — reemplaza Gemini
 window.claudeHistory = [];
 
-window.preguntarClaude = function(txt) {
-    var inp = document.getElementById('chat_input');
-    if (inp) { inp.value = txt; window.enviarMensajeIA(); }
-};
-
-// Alias para compatibilidad
 window.configurarGemini = function() {
-    alert('El asistente IA es ahora Claude (Anthropic). No requiere API Key — ya está integrado.');
+    alert('El asistente ahora usa Claude IA de Anthropic — no requiere API Key, está integrado directamente.');
 };
 
 window.enviarMensajeIA = async function() {
-    var inp = document.getElementById('chat_input');
-    var box = document.getElementById('chat_box');
-    var txt = inp ? inp.value.trim() : '';
-    if (!txt || !box) return;
+    var inp=document.getElementById('chat_input'), box=document.getElementById('chat_box');
+    var txt=inp?inp.value.trim():'';
+    if(!txt||!box) return;
+    if(!window._claudeWelcome && box.innerHTML) window._claudeWelcome = box.innerHTML;
 
-    // Guardar welcome message la primera vez
-    if (!window._claudeWelcome) window._claudeWelcome = box.innerHTML;
+    var uDiv=document.createElement('div');
+    uDiv.className='chat-msg user'; uDiv.textContent=txt;
+    box.appendChild(uDiv); if(inp) inp.value=''; box.scrollTop=box.scrollHeight;
 
-    // Burbuja usuario
-    var uDiv = document.createElement('div');
-    uDiv.style.cssText = 'background:var(--accent2);color:white;align-self:flex-end;margin-left:auto;max-width:85%;padding:10px 14px;border-radius:12px;border-bottom-right-radius:4px;font-size:13px;line-height:1.5';
-    uDiv.textContent = txt;
-    box.appendChild(uDiv);
-    if (inp) inp.value = '';
-    box.scrollTop = box.scrollHeight;
+    var msgId='cm-'+Date.now();
+    var rDiv=document.createElement('div');
+    rDiv.id=msgId; rDiv.className='chat-msg gemini';
+    rDiv.innerHTML='<em style="color:var(--text-light)">🤖 Claude está escribiendo...</em>';
+    box.appendChild(rDiv); box.scrollTop=box.scrollHeight;
 
-    // Burbuja "escribiendo..."
-    var msgId = 'cm-' + Date.now();
-    var rDiv = document.createElement('div');
-    rDiv.id = msgId;
-    rDiv.style.cssText = 'background:var(--card);border:1px solid var(--border);align-self:flex-start;max-width:88%;padding:10px 14px;border-radius:12px;border-bottom-left-radius:4px;font-size:13px;color:var(--text-light);font-style:italic';
-    rDiv.textContent = '🤖 Claude está escribiendo...';
-    box.appendChild(rDiv);
-    box.scrollTop = box.scrollHeight;
-
-    window.claudeHistory.push({ role: 'user', content: txt });
+    window.claudeHistory.push({role:'user',content:txt});
 
     try {
-        var res = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'anthropic-dangerous-direct-browser-access': 'true'
-            },
-            body: JSON.stringify({
-                model: 'claude-sonnet-4-20250514',
-                max_tokens: 900,
-                system: 'Sos Claude, asistente contable de ContaPY desarrollado por @Jcarlos2028. Ayudás con Ley 6380/2019 (IVA 10%/5%, IRE General/Simple/ReSiMo, IRP, INR), Plan de Cuentas RG 49/14, asientos NIIF, SIFEN/e-Kuatia, Formularios SET 120/500/515/525, Marangatú y Tesakã. Respondé en español, breve y preciso. Citá artículos de ley cuando sea útil.',
-                messages: window.claudeHistory
+        var res=await fetch('https://api.anthropic.com/v1/messages',{
+            method:'POST',
+            headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+            body:JSON.stringify({
+                model:'claude-sonnet-4-20250514', max_tokens:900,
+                system:'Sos Claude, asistente contable de ContaPY desarrollado por @Jcarlos2028. Ayudás con Ley 6380/2019 (IVA 10%/5%, IRE General/Simple/ReSiMo, IRP, INR), Plan RG 49/14, NIIF, SIFEN/e-Kuatia, Formularios SET 120/500/515/525, Marangatú y Tesakã. Respondé en español, breve y preciso.',
+                messages:window.claudeHistory
             })
         });
-        if (!res.ok) throw new Error('Error HTTP ' + res.status);
-        var data = await res.json();
-        var reply = (data.content && data.content[0]) ? data.content[0].text : 'Sin respuesta.';
-        reply = reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-        var el = document.getElementById(msgId);
-        if (el) { el.innerHTML = '<strong>🤖 Claude:</strong><br>' + reply; el.style.fontStyle='normal'; el.style.color='var(--text)'; }
-        window.claudeHistory.push({ role: 'assistant', content: (data.content&&data.content[0])?data.content[0].text:'' });
-        if (window.claudeHistory.length > 20) window.claudeHistory = window.claudeHistory.slice(-20);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        var d=await res.json();
+        var reply=(d.content&&d.content[0])?d.content[0].text:'Sin respuesta.';
+        reply=reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+        var el=document.getElementById(msgId);
+        if(el){el.innerHTML='<strong>🤖 Claude:</strong><br>'+reply; el.style.fontStyle='normal';}
+        window.claudeHistory.push({role:'assistant',content:(d.content&&d.content[0])?d.content[0].text:''});
+        if(window.claudeHistory.length>20) window.claudeHistory=window.claudeHistory.slice(-20);
     } catch(e) {
-        var el = document.getElementById(msgId);
-        if (el) { el.innerHTML = '❌ Error: ' + e.message + '<br><small>Verificá tu conexión a internet.</small>'; el.style.color='var(--danger)'; el.style.fontStyle='normal'; }
+        var el=document.getElementById(msgId);
+        if(el) el.innerHTML='<span style="color:var(--danger)">❌ Error: '+e.message+'</span>';
     }
-    box.scrollTop = box.scrollHeight;
+    box.scrollTop=box.scrollHeight;
 };
 
-// ── Spinner CSS
-(function() {
-    if (document.getElementById('cpy-extra-css')) return;
-    var s = document.createElement('style');
-    s.id = 'cpy-extra-css';
-    s.textContent = '@keyframes sifen-spin{to{transform:rotate(360deg)}} .modal.minimized{height:46px!important;overflow:hidden!important;border-radius:10px 10px 0 0} .modal.maximized{width:100vw!important;max-width:100vw!important;height:100vh!important;border-radius:0;transform:translate(0,0)!important;top:0!important;left:0!important;position:fixed!important}';
+// ── 8. WhatsApp
+window.abrirWhatsApp = function() {
+    window.open('https://wa.me/595986528000?text='+encodeURIComponent('Hola, necesito soporte con ContaPY 👋'),'_blank');
+};
+
+// ── 9. CSS extra (minimized/maximized/spinner) inyectado una vez
+(function(){
+    if(document.getElementById('cpy-css-extra')) return;
+    var s=document.createElement('style'); s.id='cpy-css-extra';
+    s.textContent='@keyframes sifen-spin{to{transform:rotate(360deg)}}'+
+        '.modal.minimized{height:46px!important;overflow:hidden!important;border-radius:10px 10px 0 0}'+
+        '.modal.maximized{width:100vw!important;max-width:100vw!important;height:100vh!important;max-height:100vh!important;border-radius:0!important;transform:none!important;top:0!important;left:0!important;position:fixed!important}';
     document.head.appendChild(s);
 })();
 
+window.deleteAsientoManual = function(cliIdx, asientoId) {
+    if(!confirm('🗑️ ¿Eliminar este asiento manual?\nEsta acción no se puede deshacer.')) return;
+    var cli = window.dbClientes[cliIdx];
+    cli.libros.diario = cli.libros.diario.filter(function(a){return a.asiento !== asientoId;});
+    window.saveData();
+    window.renderLibros();
+    if(window.renderMayorYBalance) window.renderMayorYBalance();
+};
 
-// ── SIFEN / CDC — Consulta directa al servidor DNIT
+// ── SIFEN / CDC — Consulta directa DNIT
 window._historialCDC = [];
 window._ultimoCDCData = null;
 
 window.decodificarCDC = function(cdc) {
-    if (!cdc || cdc.length !== 44) return null;
+    if(!cdc||cdc.length!==44) return null;
     try {
         var v=cdc[0],tDE=cdc[1],ruc=cdc.substring(2,10),dv=cdc[10],
             est=cdc.substring(11,14),pto=cdc.substring(14,17),nro=cdc.substring(17,24),
             tx=cdc[24],fecha=cdc.substring(25,33),seg=cdc.substring(33,44);
-        var tipos={'1':'Factura Electrónica','2':'Fact. Exenta','4':'Autofactura',
-                   '5':'Nota de Crédito','6':'Nota de Débito','7':'Nota de Remisión','8':'Retención'};
+        var tipos={'1':'Factura Electrónica','2':'Fact. Exenta','4':'Autofactura','5':'Nota de Crédito','6':'Nota de Débito','7':'Nota de Remisión','8':'Retención'};
         var tiposTx={'1':'Contado','2':'Crédito','3':'Gratuito','4':'Anticipo'};
         var y=fecha.substring(0,4),m=fecha.substring(4,6),d=fecha.substring(6,8);
-        var añoN=parseInt(y),fv=añoN>=2020&&añoN<=2099;
-        var rL=ruc.replace(/^0+/,'')||ruc, nL=nro.replace(/^0+/,'')||nro;
-        return { version:v,tipoDE:tDE,tipoDocNom:tipos[tDE]||('Tipo '+tDE),
-            rucEmisor:rL,rucConDV:rL+'-'+dv,dvRuc:dv,establecim:est,punto:pto,
-            nroDoc:nL,nroDocRaw:nro,nroCompleto:est+'-'+pto+'-'+nro,
-            tipoTrans:tiposTx[tx]||tx,tipoTransCod:tx,
-            fechaISO:fv?(y+'-'+m+'-'+d):'',fechaDisplay:fv?(d+'/'+m+'/'+y):'—',
-            fechaValida:fv,seguridad:seg };
-    } catch(e) { return null; }
+        var aN=parseInt(y),fv=aN>=2020&&aN<=2099;
+        var rL=ruc.replace(/^0+/,'')||ruc,nL=nro.replace(/^0+/,'')||nro;
+        return {version:v,tipoDE:tDE,tipoDocNom:tipos[tDE]||('Tipo '+tDE),rucEmisor:rL,rucConDV:rL+'-'+dv,dvRuc:dv,establecim:est,punto:pto,nroDoc:nL,nroDocRaw:nro,nroCompleto:est+'-'+pto+'-'+nro,tipoTrans:tiposTx[tx]||tx,tipoTransCod:tx,fechaISO:fv?(y+'-'+m+'-'+d):'',fechaDisplay:fv?(d+'/'+m+'/'+y):'—',fechaValida:fv,seguridad:seg};
+    } catch(e){return null;}
 };
 
 window.onCDCInput = function(input) {
     var v=input.value.replace(/\D/g,''); input.value=v; var n=v.length;
     var c=document.getElementById('cdc_dig_count'),i=document.getElementById('cdc_status_icon');
-    if(c) c.textContent=n;
-    if(i){if(n===44)i.innerHTML='<span style="color:var(--success);font-weight:700">✅ Listo</span>';
-          else if(n>0)i.innerHTML='<span style="color:var(--warning)">⚠️ Faltan '+(44-n)+'</span>';
-          else i.textContent='';}
+    if(c)c.textContent=n;
+    if(i){if(n===44)i.innerHTML='<span style="color:var(--success);font-weight:700">✅ Listo</span>';else if(n>0)i.innerHTML='<span style="color:var(--warning)">⚠️ Faltan '+(44-n)+'</span>';else i.textContent='';}
     ['sifen_resultado','sifen_error','sifen_loading'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
 };
 
@@ -1656,20 +1611,18 @@ window.enviarCaptchaApi = function() {
     var txt=(document.getElementById('captcha_txt_input')||{value:''}).value.trim();
     var sess=(document.getElementById('captcha_session_id')||{value:''}).value;
     if(!txt) return alert('❌ Ingrese el código de la imagen.');
-    window.consultarCDCReal(txt, sess);
+    window.consultarCDCReal(txt,sess);
 };
 
 window.consultarCDCReal = async function(captchaValor, captchaSession) {
     var cdc=(document.getElementById('sifen_cdc')||{value:''}).value.trim().replace(/\D/g,'');
     if(cdc.length!==44) return alert('❌ El CDC debe tener 44 dígitos. Tiene: '+cdc.length);
-    
     var loadEl=document.getElementById('sifen_loading'),resEl=document.getElementById('sifen_resultado'),errEl=document.getElementById('sifen_error');
     var btn=document.getElementById('btn_consultar_cdc');
     if(loadEl){loadEl.style.display='block';var lt=document.getElementById('sifen_loading_txt');if(lt)lt.textContent=captchaValor?'Validando CAPTCHA...':'Consultando DNIT...';}
     if(resEl)resEl.style.display='none'; if(errEl)errEl.style.display='none';
     if(btn){btn.disabled=true;btn.textContent='⏳ Consultando...';}
-    
-    var dec=window.decodificarCDC(cdc);
+    var dec=window.decodificarCDC(cdc)||{};
     try {
         var url='https://consultarcdc-5ebcw3zata-uc.a.run.app/?cdc='+cdc;
         if(captchaValor) url+='&captcha_txt='+encodeURIComponent(captchaValor);
@@ -1677,61 +1630,52 @@ window.consultarCDCReal = async function(captchaValor, captchaSession) {
         var res=await fetch(url); if(!res.ok) throw new Error('HTTP '+res.status);
         var data=await res.json();
         if(loadEl)loadEl.style.display='none'; if(btn){btn.disabled=false;btn.textContent='🔎 Consultar DNIT';}
-        
         var esCap=(data.rs==='REQUIERE CAPTCHA'||data.rs==='ERROR CAPTCHA'||(data.rs&&data.rs.toUpperCase().includes('CAPTCHA'))||data.estado==='CAPTCHA');
-        
-        // IDs de los elementos
         var csbEl=document.getElementById('sifen_captcha_solver_box'),cbEl=document.getElementById('sifen_captcha_box');
         var dcEl=document.getElementById('sifen_datos_cuadros'),dbEl=document.getElementById('sifen_desglose_box'),acEl=document.getElementById('sifen_accion_box');
-        
         if(esCap&&!captchaValor){
             if(resEl)resEl.style.display='block'; if(dcEl)dcEl.style.display='none';
             var captData=(data.captcha_base64||data.captcha_url);
             if(captData&&csbEl){csbEl.style.display='block';if(cbEl)cbEl.style.display='none';var img=document.getElementById('captcha_img_src');if(img)img.src=data.captcha_base64?'data:image/jpeg;base64,'+data.captcha_base64:data.captcha_url;var cSess=document.getElementById('captcha_session_id');if(cSess)cSess.value=data.session_id||'';var cTxt=document.getElementById('captcha_txt_input');if(cTxt)cTxt.value='';}
             else{if(csbEl)csbEl.style.display='none';if(cbEl)cbEl.style.display='block';if(acEl)acEl.style.display='block';}
             if(dbEl)dbEl.style.display='block';
-            var bEl=document.getElementById('sifen_badge_estado'); if(bEl){bEl.textContent='BLOQUEADO';Object.assign(bEl.style,{background:'#fef3c7',color:'#92400e',border:'1.5px solid #92400e',padding:'5px 16px',borderRadius:'20px',fontWeight:'700',fontSize:'12px'});}
-            var lEl=document.getElementById('sifen_lbl_estado'); if(lEl)lEl.textContent='⚠️ CAPTCHA — Ingrese el monto manualmente';
-            if(dec){var dEl=document.getElementById('sifen_cdc_desglose');if(dEl)dEl.innerHTML=['<b>Tipo:</b> '+dec.tipoDocNom,'<b>RUC:</b> '+dec.rucConDV,'<b>N°:</b> '+dec.nroCompleto,'<b>Fecha:</b> '+dec.fechaDisplay].join(' &nbsp;·&nbsp; ');}
+            var bEl=document.getElementById('sifen_badge_estado');if(bEl){bEl.textContent='BLOQUEADO';Object.assign(bEl.style,{background:'#fef3c7',color:'#92400e',border:'1.5px solid #92400e',padding:'5px 16px',borderRadius:'20px',fontWeight:'700',fontSize:'12px'});}
+            var lEl=document.getElementById('sifen_lbl_estado');if(lEl)lEl.textContent='⚠️ CAPTCHA REQUERIDO — ingrese el monto manualmente';
+            if(dec.rucConDV){var dEl=document.getElementById('sifen_cdc_desglose');if(dEl)dEl.innerHTML=['<b>Tipo:</b> '+dec.tipoDocNom,'<b>RUC:</b> '+dec.rucConDV,'<b>N°:</b> '+dec.nroCompleto,'<b>Fecha:</b> '+dec.fechaDisplay].join(' &nbsp;·&nbsp; ');}
             return;
         }
         if(csbEl)csbEl.style.display='none'; if(cbEl)cbEl.style.display='none';
         if(dcEl)dcEl.style.display='grid'; if(dbEl)dbEl.style.display='block'; if(acEl)acEl.style.display='block';
-        
-        var rucL=(data.ruc||'').replace(/^0+/,'')||(dec?dec.rucEmisor:'—');
-        var dvF=dec?dec.dvRuc:'';
-        var rsF=(!data.rs||data.rs===''||data.rs.includes('CAPTCHA')|data.rs.includes('NO ENCONTRADA'))?'(sin datos en directorio)':data.rs;
+        var rucL=(data.ruc||'').replace(/^0+/,'')||(dec.rucEmisor||'—');
+        var dvF=dec.dvRuc||'';
+        var rsF=(!data.rs||data.rs===''||data.rs.includes('CAPTCHA')||data.rs.includes('NO ENCONTRADA'))?'(sin datos en directorio)':data.rs;
         var fDisp='',fISO='';
-        if(data.fecha&&data.fecha.trim()){var fp=data.fecha.trim();
-            if(fp.includes('/')){var pts=fp.split('/');if(pts.length===3&&pts[2].length===4){fDisp=fp;fISO=pts[2]+'-'+pts[1].padStart(2,'0')+'-'+pts[0].padStart(2,'0');}}
-            else if(fp.includes('-')){fISO=fp;var ps=fp.split('-');fDisp=(ps[2]||'')+'/'+(ps[1]||'')+'/'+(ps[0]||'');}}
-        if(!fDisp&&dec&&dec.fechaValida){fDisp=dec.fechaDisplay;fISO=dec.fechaISO;}
+        if(data.fecha&&data.fecha.trim()){var fp=data.fecha.trim();if(fp.includes('/')){var pts=fp.split('/');if(pts.length===3&&pts[2].length===4){fDisp=fp;fISO=pts[2]+'-'+pts[1].padStart(2,'0')+'-'+pts[0].padStart(2,'0');}}else if(fp.includes('-')){fISO=fp;var ps=fp.split('-');fDisp=(ps[2]||'')+'/'+(ps[1]||'')+'/'+(ps[0]||'');}}
+        if(!fDisp&&dec.fechaValida){fDisp=dec.fechaDisplay;fISO=dec.fechaISO;}
         var estadoS=data.estado||'AP';
         var bdMap={'AP':{txt:'✅ APROBADO',bg:'#d1fae5',col:'#065f46'},'CA':{txt:'❌ CANCELADO',bg:'#fee2e2',col:'#991b1b'},'IN':{txt:'⛔ INHABILITADO',bg:'#fee2e2',col:'#991b1b'},'PE':{txt:'⏳ PENDIENTE',bg:'#dbeafe',col:'#1e40af'}};
         var bd=bdMap[estadoS]||{txt:estadoS||'?',bg:'#e5e7eb',col:'#374151'};
-        var bEl=document.getElementById('sifen_badge_estado');
-        if(bEl)Object.assign(bEl.style,{background:bd.bg,color:bd.col,border:'1.5px solid '+bd.col,padding:'5px 16px',borderRadius:'20px',fontWeight:'700',fontSize:'12px'});
-        if(bEl)bEl.textContent=bd.txt;
-        var lEl=document.getElementById('sifen_lbl_estado'); if(lEl)lEl.textContent=(captchaValor?'✅ CAPTCHA resuelto · ':'')+'CDC verificado en DNIT';
-        var rEl=document.getElementById('sifen_ruc'); if(rEl)rEl.textContent=rucL+(dvF&&!rucL.includes('-')?'-'+dvF:'');
-        var rsEl=document.getElementById('sifen_rs'); if(rsEl)rsEl.textContent=rsF;
-        var feEl=document.getElementById('sifen_fecha'); if(feEl)feEl.textContent=fDisp||'—';
-        var totEl=document.getElementById('sifen_total'); if(totEl)totEl.textContent='₲ '+(data.total||0).toLocaleString();
-        if(dec){var dEl=document.getElementById('sifen_cdc_desglose');if(dEl)dEl.innerHTML=['<b>Tipo:</b> '+dec.tipoDocNom,'<b>RUC:</b> '+dec.rucConDV,'<b>N°:</b> '+dec.nroCompleto,'<b>Condición:</b> '+dec.tipoTrans,'<b>Fecha:</b> '+dec.fechaDisplay].join(' &nbsp;·&nbsp; ');}
-        window._ultimoCDCData={cdc:cdc,esCaptcha:esCap,ruc:rucL,rucConDV:rucL+(dvF&&!rucL.includes('-')?'-'+dvF:''),rs:rsF,fecha:fISO,fechaDisplay:fDisp,total:data.total||0,iva10:data.iva10||0,iva5:data.iva5||0,exento:data.exento||0,estado:estadoS,condicion:dec?dec.tipoTransCod:'1',dec:dec};
+        var bEl=document.getElementById('sifen_badge_estado');if(bEl){Object.assign(bEl.style,{background:bd.bg,color:bd.col,border:'1.5px solid '+bd.col,padding:'5px 16px',borderRadius:'20px',fontWeight:'700',fontSize:'12px'});bEl.textContent=bd.txt;}
+        var lEl=document.getElementById('sifen_lbl_estado');if(lEl)lEl.textContent=(captchaValor?'✅ CAPTCHA resuelto · ':'')+'CDC verificado en DNIT';
+        var rEl=document.getElementById('sifen_ruc');if(rEl)rEl.textContent=rucL+(dvF&&!rucL.includes('-')?'-'+dvF:'');
+        var rsEl=document.getElementById('sifen_rs');if(rsEl)rsEl.textContent=rsF;
+        var feEl=document.getElementById('sifen_fecha');if(feEl)feEl.textContent=fDisp||'—';
+        var totEl=document.getElementById('sifen_total');if(totEl)totEl.textContent='₲ '+(data.total||0).toLocaleString();
+        if(dec.rucConDV){var dEl=document.getElementById('sifen_cdc_desglose');if(dEl)dEl.innerHTML=['<b>Versión:</b> '+dec.version,'<b>Tipo:</b> '+dec.tipoDocNom,'<b>RUC:</b> '+dec.rucConDV,'<b>N°:</b> '+dec.nroCompleto,'<b>Condición:</b> '+dec.tipoTrans,'<b>Fecha:</b> '+dec.fechaDisplay].join(' &nbsp;·&nbsp; ');}
+        window._ultimoCDCData={cdc:cdc,esCaptcha:esCap,ruc:rucL,rucConDV:rucL+(dvF&&!rucL.includes('-')?'-'+dvF:''),rs:rsF,fecha:fISO,fechaDisplay:fDisp,total:data.total||0,iva10:data.iva10||0,iva5:data.iva5||0,exento:data.exento||0,estado:estadoS,condicion:dec.tipoTransCod||'1',dec:dec};
         var sel=document.getElementById('sifen_cli_destino');
         if(sel){sel.innerHTML='<option value="">— Seleccione cliente —</option>';(window.dbClientes||[]).forEach(function(c,i){if(c.estado!=='inactivo')sel.innerHTML+='<option value="'+i+'">'+c.nom+' ('+c.ruc+')</option>';});var rB=rucL.replace(/\D/g,'');(window.dbClientes||[]).forEach(function(c,i){if(rB.length>4&&(c.ruc||'').replace(/\D/g,'').includes(rB))sel.value=i;});}
         if(resEl)resEl.style.display='block';
-        window._historialCDC.unshift({cdcCorto:cdc.substring(0,10)+'...',ruc:rucL+(dvF&&!rucL.includes('-')?'-'+dvF:''),rs:rsF.substring(0,32),fecha:fDisp||'—',total:data.total||0,estado:estadoS,dataCompleta:window._ultimoCDCData});
+        window._historialCDC.unshift({cdcCorto:cdc.substring(0,10)+'...',ruc:rucL+(dvF&&!rucL.includes('-')?'-'+dvF:''),rs:rsF.substring(0,30),fecha:fDisp||'—',total:data.total||0,estado:estadoS,dataCompleta:window._ultimoCDCData});
         var hCard=document.getElementById('sifen_historial_card'),hBody=document.getElementById('lista_historial_cdc');
-        if(hCard&&hBody){hCard.style.display='block';var em={'AP':'ok','CA':'err','PE':'info','IN':'err'};hBody.innerHTML=window._historialCDC.map(function(h,i){return'<tr><td style="font-family:\'DM Mono\';font-size:11px;color:var(--text-light)">'+h.cdcCorto+'</td><td>'+h.ruc+'</td><td style="font-size:12px">'+h.rs+'</td><td>'+h.fecha+'</td><td class="monto">₲ '+h.total.toLocaleString()+'</td><td><span class="badge-status '+(em[h.estado||'AP']||'info')+'">'+h.estado+'</span></td><td><button class="btn btn-outline btn-sm" onclick="window.recargarDesdeHistorial('+i+')">↺</button></td></tr>';}).join('');}
-    } catch(e) {
+        if(hCard&&hBody){hCard.style.display='block';var em={'AP':'ok','CA':'err','PE':'info','IN':'err'};hBody.innerHTML=window._historialCDC.map(function(h,i){return'<tr><td style="font-family:\'DM Mono\';font-size:11px;color:var(--text-light)">'+h.cdcCorto+'</td><td>'+h.ruc+'</td><td style="font-size:12px">'+h.rs+'</td><td>'+h.fecha+'</td><td class="monto">₲ '+h.total.toLocaleString()+'</td><td><span class="badge-status '+(em[h.estado||'AP']||'info')+'">'+h.estado+'</span></td><td><button class="btn btn-outline btn-sm" onclick="window._usarHistorialCDC('+i+')">↺ Usar</button></td></tr>';}).join('');}
+    } catch(e){
         if(loadEl)loadEl.style.display='none'; if(btn){btn.disabled=false;btn.textContent='🔎 Consultar DNIT';}
         if(errEl){errEl.style.display='block';var et=document.getElementById('sifen_error_titulo');if(et)et.textContent='Error de conexión';var em=document.getElementById('sifen_error_msg');if(em)em.textContent=e.message;}
     }
 };
 
-window.recargarDesdeHistorial = function(i) {
+window._usarHistorialCDC = function(i) {
     var d=window._historialCDC[i]; if(!d) return;
     window._ultimoCDCData=d.dataCompleta;
     var r=document.getElementById('sifen_ruc');if(r)r.textContent=d.ruc;
@@ -1746,33 +1690,33 @@ window.enviarCDCAlWizard = function() {
     var oper=(document.getElementById('sifen_operacion_tipo')||{value:'compra'}).value;
     if(cliIdx==='') return alert('❌ Seleccione el cliente.');
     var d=window._ultimoCDCData; if(!d) return alert('❌ Realice primero la consulta.');
-    if(d.esCaptcha){var tm=parseFloat((document.getElementById('captcha_total')||{value:'0'}).value)||0;var ta=(document.getElementById('captcha_tasa')||{value:'10'}).value;if(tm>0){d.total=tm;if(ta==='10')d.iva10=Math.round(tm/11);if(ta==='5')d.iva5=Math.round(tm/21);if(ta==='0')d.exento=tm;}else return alert('❌ Ingrese el monto total.');}
-    var nro=d.dec?d.dec.nroCompleto:'';
-    if(window.openWizard)window.openWizard();
+    if(d.esCaptcha){var tm=parseFloat((document.getElementById('captcha_total')||{value:'0'}).value)||0;if(tm<=0)return alert('❌ Ingrese el monto total.');var ta=(document.getElementById('captcha_tasa')||{value:'10'}).value;d.total=tm;if(ta==='10')d.iva10=Math.round(tm/11);else if(ta==='5')d.iva5=Math.round(tm/21);else if(ta==='0')d.exento=tm;}
+    var nro=d.dec&&d.dec.nroCompleto?d.dec.nroCompleto:'';
+    if(window.openWizardFromProfile){window.currentCli=parseInt(cliIdx);window.openWizardFromProfile();}
+    else if(window.openWizard) window.openWizard();
     setTimeout(function(){
-        var t=document.getElementById('wiz-title');if(t)t.textContent='🧾 CDC: '+nro;
-        var fc=document.getElementById('fg_wiz_cliente');if(fc)fc.style.display='none';
-        var wc=document.getElementById('wiz_cliente');if(wc)wc.value=cliIdx;
-        var wo=document.getElementById('wiz_operacion');if(wo)wo.value=oper;
-        var wt=document.getElementById('wiz_tipo');if(wt)wt.value='factura';
-        var wf=document.getElementById('wiz_fecha');if(wf)wf.value=d.fecha||new Date().toISOString().split('T')[0];
-        var wr=document.getElementById('wiz_ruc');if(wr)wr.value=d.ruc||'';
-        var cleanRS=d.rs&&!d.rs.includes('sin datos')?d.rs:'';var capRS=(document.getElementById('captcha_rs')||{value:''}).value;
-        var wn=document.getElementById('wiz_tercero');if(wn)wn.value=capRS||cleanRS;
-        var wrl=document.getElementById('wiz_rol_tercero');if(wrl)wrl.value=oper==='compra'?'proveedor':'cliente';
-        var wtm=document.getElementById('wiz_timbrado');if(wtm)wtm.value=d.cdc;
-        var wnr=document.getElementById('wiz_nro');if(wnr)wnr.value=nro;
-        if(d.total>0){var wm=document.getElementById('wiz_monto');if(wm)wm.value=d.total;var wi=document.getElementById('wiz_iva_tasa');if(wi)wi.value=d.iva10>0?'10':d.iva5>0?'5':d.exento>0?'0':'10';if(window.toggleTasas)window.toggleTasas();}
-        var wg=document.getElementById('wiz_glosa');if(wg)wg.value='Fact. Electrónica N° '+nro+' · '+(capRS||cleanRS||'RUC '+d.ruc)+' · '+(d.fechaDisplay||d.fecha);
+        var sel=document.getElementById('wiz_cliente');if(sel)sel.value=cliIdx;
+        document.getElementById('wiz_operacion').value=oper;
+        document.getElementById('wiz_tipo').value='factura';
+        document.getElementById('wiz_fecha').value=d.fecha||new Date().toISOString().split('T')[0];
+        document.getElementById('wiz_ruc').value=d.ruc||'';
+        var cleanRS=d.rs&&!d.rs.includes('sin datos')?d.rs:'';
+        var capRS=(document.getElementById('captcha_rs')||{value:''}).value;
+        document.getElementById('wiz_tercero').value=capRS||cleanRS;
+        document.getElementById('wiz_rol_tercero').value=oper==='compra'?'proveedor':'cliente';
+        var wt=document.getElementById('wiz_timbrado');if(wt)wt.value=d.cdc;
+        document.getElementById('wiz_nro').value=nro;
+        if(d.total>0){document.getElementById('wiz_monto').value=d.total;document.getElementById('wiz_iva_tasa').value=d.iva10>0?'10':d.iva5>0?'5':d.exento>0?'0':'10';if(window.toggleTasas)window.toggleTasas();}
+        var glosa='Fact. Electrónica N° '+nro+' · '+(capRS||cleanRS||'RUC '+d.ruc)+' · '+(d.fechaDisplay||d.fecha);
+        document.getElementById('wiz_glosa').value=glosa;
+        if(window.updateWizTaxes)window.updateWizTaxes();
         if(window.calcWizIva)window.calcWizIva();
-        if(window.wizNext)window.wizNext(1);
-    }, 100);
+    },150);
 };
 
-window.abrirMiniaturaDNIT = function() { window.open('https://ekuatia.set.gov.py/consultas/','_blank'); };
+window.abrirMiniaturaDNIT = function(){window.open('https://ekuatia.set.gov.py/consultas/','_blank');};
 window.consultarSIFEN = window.consultarCDCReal;
-window.irAConsultaCDC = function() { if(window.showPage)window.showPage('comprobantes'); };
-
+window.irAConsultaCDC = function(){if(window.showPage)window.showPage('comprobantes');};
 </script>
 
 <!-- ==============================================
