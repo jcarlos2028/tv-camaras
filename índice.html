@@ -200,7 +200,32 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <div class="main">
   <div class="topbar">
     <div class="topbar-title" id="topbar-title" data-i18n="top_title">Dashboard Principal</div>
+
+    <!-- SELECTOR DE IDIOMAS -->
+    <select id="lang_sel" onchange="changeLang(this.value)" style="border:1px solid var(--border);border-radius:7px;padding:4px 8px;background:var(--bg);font-weight:600;outline:none;cursor:pointer">
+        <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
+    </select>
     
+    <div class="btn-icon" id="btn-logout" title="Cerrar Sesión">🚪</div>
+  </div>
+
+  <div class="content">
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header"><div><h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2><p data-i18n="dash_p">Sincronización Activa con Firebase</p></div></div>
+      <div class="stats-grid">
+        <div class="stat-card blue"><div class="stat-label" data-i18n="dash_s1">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
+        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label" data-i18n="dash_s2">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title" data-i18n="dash_t1">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social / Nombre</th><th data-i18n="tbl_contact">Contacto</th><th data-i18n="tbl_taxes">Impuestos Activos</th></tr></thead>
+          <tbody id="dash-clientes-list"></tbody>
+        </table></div>
+      </div>
+    </div>
+
     <!-- AJUSTES DEL SISTEMA -->
     <div class="page" id="page-ajustes">
       <div class="page-header"><div><h2>⚙️ Ajustes del Sistema</h2><p>Temas, sincronización y actualizaciones</p></div></div>
@@ -226,31 +251,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
             <button class="btn btn-secondary" id="btn_sync" onclick="forzarSincronizacion('btn_sync')">🔄 Sincronizar Firebase</button>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- SELECTOR DE IDIOMAS -->
-    <select id="lang_sel" onchange="changeLang(this.value)" style="border:1px solid var(--border);border-radius:7px;padding:4px 8px;background:var(--bg);font-weight:600;outline:none;cursor:pointer">
-        <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
-    </select>
-    
-    <div class="btn-icon" id="btn-logout" title="Cerrar Sesión">🚪</div>
-  </div>
-
-  <div class="content">
-    <!-- DASHBOARD -->
-    <div class="page active" id="page-dashboard">
-      <div class="page-header"><div><h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2><p data-i18n="dash_p">Sincronización Activa con Firebase</p></div></div>
-      <div class="stats-grid">
-        <div class="stat-card blue"><div class="stat-label" data-i18n="dash_s1">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
-        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label" data-i18n="dash_s2">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
-      </div>
-      <div class="card">
-        <div class="card-title" data-i18n="dash_t1">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
-        <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social / Nombre</th><th data-i18n="tbl_contact">Contacto</th><th data-i18n="tbl_taxes">Impuestos Activos</th></tr></thead>
-          <tbody id="dash-clientes-list"></tbody>
-        </table></div>
       </div>
     </div>
 
@@ -704,7 +704,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     </div>
     <div class="modal-body-scroll">
         <div class="form-group" style="margin-bottom:15px" id="imp_box_cli"><label>Cliente Destino</label><select id="imp_cli_sel" class="cli-select"></select></div>
-        <div class="form-group"><label>Pegar filas de Excel (Columnas: Fecha | Tipo | Timbrado | Nro | RUC | Razón Social | Monto Total | Tasa IVA)</label>
+        
+        <div style="display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
+            <input type="file" id="file_import_csv" accept=".csv, .txt" style="display:none" onchange="leerArchivoImportacion(event)">
+            <button class="btn btn-secondary" onclick="document.getElementById('file_import_csv').click()">📂 Buscar Archivo (CSV/TXT)</button>
+            <span style="font-size:11px; color:var(--text-light); align-self:center;">O podés copiar y pegar las filas abajo:</span>
+        </div>
+
+        <div class="form-group"><label>Datos del archivo (Columnas: Fecha | Tipo | Timbrado | Nro | RUC | Razón Social | Monto Total | Tasa IVA)</label>
             <textarea id="imp_data" style="height:150px;font-family:'DM Mono'"></textarea></div>
         <div id="imp_errores" style="margin-top:10px;font-size:12px;display:none;flex-direction:column;gap:5px"></div>
         <div class="modal-actions"><button class="btn btn-primary" onclick="procesarImportacion()">⚙️ Analizar y Guardar en Nube</button></div>
@@ -808,11 +815,19 @@ window.renderClientes = function() {
 
     if(c.estado === 'activo') actCount++;
     var tb = (c.taxes || []).map(t => `<span class="badge-status ok">${t}</span>`).join(' '), est = c.estado==='activo'?'<span class="badge-status ok">Activo</span>':'<span class="badge-status inactive">Inactivo</span>';
-    if(tbody && (!s || c.ruc.toLowerCase().includes(s) || c.nom.toLowerCase().includes(s))) tbody.innerHTML += `<tr><td style="font-family:'DM Mono'">${c.ruc}</td><td style="font-weight:700">${c.nom}</td><td>${c.tel||'S/T'}<br><span style="font-size:10px">${c.correo||'S/C'}</span></td><td>${est} <br> ${tb}</td><td><button class="btn btn-outline btn-sm" onclick="verCliente(${i})">📚 Perfil</button> <button class="btn btn-outline btn-sm" onclick="openModalCliente(${i})">✏️ Editar</button></td></tr>`;
+    if(tbody && (!s || c.ruc.toLowerCase().includes(s) || c.nom.toLowerCase().includes(s))) tbody.innerHTML += `<tr><td style="font-family:'DM Mono'">${c.ruc}</td><td style="font-weight:700">${c.nom}</td><td>${c.tel||'S/T'}<br><span style="font-size:10px">${c.correo||'S/C'}</span></td><td>${est} <br> ${tb}</td><td><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="verCliente(${i})">📚 Perfil</button> <button class="btn btn-outline btn-sm" onclick="openModalCliente(${i})">✏️ Editar</button> <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger)" onclick="eliminarCliente(${i})">🗑️ Eliminar</button></div></td></tr>`;
     if(dtbody && c.estado==='activo' && (!s || c.ruc.toLowerCase().includes(s) || c.nom.toLowerCase().includes(s))) dtbody.innerHTML += `<tr onclick="verCliente(${i})" style="cursor:pointer"><td style="font-family:'DM Mono'">${c.ruc}</td><td style="font-weight:700;color:var(--accent2)">${c.nom}</td><td>${c.tel||'-'}</td><td>${tb}</td></tr>`;
     if(wizSel && c.estado==='activo') wizSel.innerHTML += `<option value="${i}">${c.nom}</option>`;
   });
   if(document.getElementById('dash_cli_count')) document.getElementById('dash_cli_count').textContent = actCount;
+};
+
+window.eliminarCliente = function(idx) {
+    if(confirm("⚠️ ¿Estás seguro de que deseás ELIMINAR este cliente y TODA su contabilidad?\n\nEsta acción es totalmente irreversible y borrará todos sus asientos de la base de datos de la NUBE.")) {
+        window.dbClientes.splice(idx, 1);
+        window.saveData();
+        window.renderClientes();
+    }
 };
 
 window.openModalCliente = function(idx = -1) {
@@ -1259,15 +1274,28 @@ window.consultarSIFEN = function() {
 };
 
 // ===== IMPORTACIÓN EXCEL / IA =====
-window.openModalImportMain = function() { document.getElementById('imp_box_cli').style.display='flex'; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; window.openModal('modal-import'); };
-window.openModalImportProfile = function() { document.getElementById('imp_box_cli').style.display='none'; document.getElementById('imp_cli_sel').value=window.currentCli; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; window.openModal('modal-import'); };
+window.openModalImportMain = function() { document.getElementById('imp_box_cli').style.display='flex'; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; document.getElementById('file_import_csv').value=''; window.openModal('modal-import'); };
+window.openModalImportProfile = function() { document.getElementById('imp_box_cli').style.display='none'; document.getElementById('imp_cli_sel').value=window.currentCli; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; document.getElementById('file_import_csv').value=''; window.openModal('modal-import'); };
+
+window.leerArchivoImportacion = function(event) {
+    var f = event.target.files[0];
+    if(!f) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('imp_data').value = e.target.result;
+    };
+    reader.readAsText(f);
+};
 
 window.procesarImportacion = function() {
-    var txt = document.getElementById('imp_data').value, errBox = document.getElementById('imp_errores'); errBox.innerHTML = ''; errBox.style.display = 'none'; if(!txt) return alert("Pegue los datos para procesar.");
+    var txt = document.getElementById('imp_data').value, errBox = document.getElementById('imp_errores'); errBox.innerHTML = ''; errBox.style.display = 'none'; if(!txt) return alert("Pegue o seleccione los datos para procesar.");
     var filas = txt.trim().split('\n'), errorRows = [], parseados =[], cli = window.dbClientes[document.getElementById('imp_cli_sel').value];
 
     filas.forEach((f, idx) => {
-        var col = f.split('\t'); if(col.length<2) col = f.split(',');
+        // Ignorar filas de encabezado comunes
+        if(f.toLowerCase().includes('fecha') && f.toLowerCase().includes('monto')) return;
+        
+        var col = f.split('\t'); if(col.length<2) col = f.split(','); if(col.length<2) col = f.split(';');
         if(col.length < 8) { errorRows.push(f + "\t[Faltan Columnas]"); return; }
         var fecha = col[0].trim(), tipo = col[1].trim().toLowerCase(), timb = col[2].trim(), nro = col[3].trim(), ruc = col[4].trim(), terc = col[5].trim(), monto = parseFloat(col[6].replace(/,/g,'').trim()), tasa = parseInt(col[7].trim()), rErr =[];
         if(isNaN(monto) || monto <= 0) rErr.push("Monto inválido"); if(!['factura','recibo'].includes(tipo)) rErr.push("Tipo doc no soportado");
