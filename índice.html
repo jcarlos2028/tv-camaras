@@ -86,7 +86,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 /* WINDOWS DRAG STYLES & MODAL SIZES */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;overflow:hidden}
 .modal-overlay.open{display:flex}
-.modal{background:var(--white);border-radius:14px;width:90%;max-width:600px;box-shadow:var(--shadow-lg);position:absolute;display:flex;flex-direction:column;transition:transform 0.1s, width 0.3s, height 0.3s;max-height:85vh;}
+.modal{background:var(--white);border-radius:14px;width:90%;max-width:600px;box-shadow:var(--shadow-lg);position:relative;display:flex;flex-direction:column;transition:transform 0.1s, width 0.3s, height 0.3s;max-height:85vh;margin:auto;}
 .modal.maximized{width:100vw !important; max-width:100vw !important; height:100vh !important; border-radius:0; transform:translate(0,0) !important; top:0 !important; left:0 !important}
 .modal.minimized{height:46px !important; overflow:hidden !important; border-radius:10px 10px 0 0; top:auto !important; bottom:0 !important; transform:translate(0,0) !important}
 .modal-drag-header{background:var(--bg);padding:10px 15px;cursor:move;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;user-select:none;border-bottom:1px solid var(--border)}
@@ -161,37 +161,38 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div style="color:rgba(255,255,255,0.4);font-size:10px" id="sb_user_rol">Rol</div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_main">Principal</div>
-    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span><span data-i18n="nav_dash">Dashboard</span></div>
-    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span><span data-i18n="nav_clients">Clientes (Cartera)</span></div>
+    <div class="sidebar-label">Principal</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">🏠</span><span>Dashboard</span></div>
+    <div class="nav-item" onclick="showPage('clientes',this)"><span class="icon">🏢</span><span>Clientes (Cartera)</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_billing">Facturación / Tesorería</div>
-    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span data-i18n="nav_sifen">Carga Inteligente / SIFEN</span></div>
-    <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="openWizard()"><span class="icon">➕</span><span data-i18n="nav_new">Nuevo Asiento / Fact.</span></div>
+    <div class="sidebar-label">Facturación / Tesorería</div>
+    <div class="nav-item" onclick="showPage('comprobantes',this)"><span class="icon">📥</span><span>Carga Inteligente / SIFEN</span></div>
+    <div class="nav-item" style="color:var(--accent2);font-weight:600" onclick="openWizard()"><span class="icon">➕</span><span>Nuevo Asiento / Fact.</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_taxes">Estados Financieros</div>
-    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span><span data-i18n="nav_iva">Estado IVA (120)</span></div>
-    <div class="nav-item" onclick="showPage('ire_general',this)"><span class="icon">💼</span><span data-i18n="nav_ire">Estado IRE General</span></div>
-    <div class="nav-item" onclick="showPage('ire_simple',this)"><span class="icon">📄</span><span data-i18n="nav_ires">Estado IRE Simple</span></div>
-    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span><span data-i18n="nav_irp">Estado IRP (515)</span></div>
+    <div class="sidebar-label">Estados Financieros</div>
+    <div class="nav-item" onclick="showPage('iva',this)"><span class="icon">📊</span><span>Estado IVA (120)</span></div>
+    <div class="nav-item" onclick="showPage('ire_general',this)"><span class="icon">💼</span><span>Estado IRE General</span></div>
+    <div class="nav-item" onclick="showPage('ire_simple',this)"><span class="icon">📄</span><span>Estado IRE Simple</span></div>
+    <div class="nav-item" onclick="showPage('irp',this)"><span class="icon">👤</span><span>Estado IRP (515)</span></div>
   </div>
   <div class="sidebar-section">
-    <div class="sidebar-label" data-i18n="menu_tools">Herramientas</div>
+    <div class="sidebar-label">Herramientas</div>
     <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b;font-weight:600"><span class="icon">🤖</span><span>Soporte Claude IA</span></div>
+    <div class="nav-item" onclick="showPage('cotizaciones',this)" style="color:#10b981;font-weight:600"><span class="icon">💱</span><span>Cotizaciones (Cambios)</span></div>
     <div class="nav-item" onclick="showPage('ajustes',this)"><span class="icon">⚙️</span><span>Ajustes del Sistema</span></div>
     <div class="nav-item" onclick="abrirWhatsApp()" style="color:#25d366;font-weight:600"><span class="icon">💬</span><span>Soporte WhatsApp</span></div>
   </div>
   <div class="sidebar-section" id="menu_admin" style="display:none;margin-top:10px">
-    <div class="sidebar-label" data-i18n="menu_admin">Administración</div>
-    <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span data-i18n="nav_users">Perfil Admin / Usuarios</span></div>
-    <div class="nav-item" onclick="showPage('backup',this)"><span class="icon">💾</span><span data-i18n="nav_backup">Respaldo (Manual)</span></div>
+    <div class="sidebar-label">Administración</div>
+    <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span>Perfil Admin / Usuarios</span></div>
+    <div class="nav-item" onclick="showPage('backup',this)"><span class="icon">💾</span><span>Respaldo (Manual)</span></div>
   </div>
   
   <div style="margin-top:auto">
     <div class="sidebar-section" style="padding-bottom:0">
-      <div class="nav-item" id="btn-logout-sidebar" style="color:var(--danger); font-weight:600"><span class="icon">🚪</span> <span data-i18n="nav_logout">Cerrar Sesión</span></div>
+      <div class="nav-item" id="btn-logout-sidebar" style="color:var(--danger); font-weight:600"><span class="icon">🚪</span> <span>Cerrar Sesión</span></div>
     </div>
     <div class="copyright-footer">&copy; Derechos reservados 2026<br>de @jcarlos2028</div>
   </div>
@@ -199,28 +200,22 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="topbar-title" data-i18n="top_title">Dashboard Principal</div>
-
-    <!-- SELECTOR DE IDIOMAS -->
-    <select id="lang_sel" onchange="changeLang(this.value)" style="border:1px solid var(--border);border-radius:7px;padding:4px 8px;background:var(--bg);font-weight:600;outline:none;cursor:pointer">
-        <option value="es">🇪🇸 ES</option><option value="en">🇺🇸 EN</option><option value="pt">🇧🇷 PT</option>
-    </select>
-    
+    <div class="topbar-title" id="topbar-title">Dashboard Principal</div>
     <div class="btn-icon" id="btn-logout" title="Cerrar Sesión">🚪</div>
   </div>
 
   <div class="content">
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
-      <div class="page-header"><div><h2 data-i18n="dash_h2">Estudio Contable ContaPY 👋</h2><p data-i18n="dash_p">Sincronización Activa con Firebase</p></div></div>
+      <div class="page-header"><div><h2>Estudio Contable ContaPY 👋</h2><p>Sincronización Activa con Firebase</p></div></div>
       <div class="stats-grid">
-        <div class="stat-card blue"><div class="stat-label" data-i18n="dash_s1">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
-        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label" data-i18n="dash_s2">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
+        <div class="stat-card blue"><div class="stat-label">Asientos Generados</div><div class="stat-value" id="dash_doc_count">0</div><div class="stat-sub">Libros procesados</div></div>
+        <div class="stat-card green clickable" onclick="openModalHonorarios()"><div class="stat-label">Clientes Asignados</div><div class="stat-value" id="dash_cli_count">0</div><div class="stat-sub">👆 Tocar para control</div></div>
       </div>
       <div class="card">
-        <div class="card-title" data-i18n="dash_t1">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
+        <div class="card-title">🏢 Acceso Rápido a Clientes (Tu Cartera)</div>
         <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social / Nombre</th><th data-i18n="tbl_contact">Contacto</th><th data-i18n="tbl_taxes">Impuestos Activos</th></tr></thead>
+          <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Contacto</th><th>Impuestos Activos</th></tr></thead>
           <tbody id="dash-clientes-list"></tbody>
         </table></div>
       </div>
@@ -297,10 +292,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
+    <!-- MÓDULO COTIZACIONES -->
+    <div class="page" id="page-cotizaciones">
+      <div class="page-header">
+        <div><h2>💱 Cotizaciones en Tiempo Real</h2><p>Fuente de datos: Bonanza Cambios</p></div>
+        <button class="btn btn-outline" onclick="window.open('https://www.bonanzacambios.com.py/', '_blank')">🌐 Abrir web original</button>
+      </div>
+      <div class="card" style="padding:0; overflow:hidden; height:68vh; position:relative; border-radius:10px;">
+         <iframe src="https://www.bonanzacambios.com.py/" style="width:100%; height:1200px; border:none; position:absolute; top:-360px; left:0;"></iframe>
+      </div>
+    </div>
+
     <!-- CLIENTES DIRECTORIO -->
     <div class="page" id="page-clientes">
       <div class="page-header">
-        <div><h2 data-i18n="cli_h2">Directorio de Clientes</h2><p data-i18n="cli_p">Registro de contribuyentes (Activos e Inactivos)</p></div>
+        <div><h2>Directorio de Clientes</h2><p>Registro de contribuyentes (Activos e Inactivos)</p></div>
         <div style="display:flex;gap:8px;">
           <input type="text" placeholder="🔍 Buscar por RUC o Nombre..." style="width:250px" id="search-cliente" onkeyup="renderClientes()">
           <button class="btn btn-primary" onclick="openModalCliente()">+ Nuevo Cliente</button>
@@ -308,7 +314,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
       <div class="card">
         <div class="table-wrap"><table>
-          <thead><tr><th>RUC</th><th data-i18n="tbl_name">Razón Social / Nombre</th><th data-i18n="tbl_contact">Línea / Correo</th><th data-i18n="tbl_status">Estado / Impuestos</th><th data-i18n="tbl_actions">Acciones</th></tr></thead>
+          <thead><tr><th>RUC</th><th>Razón Social / Nombre</th><th>Línea / Correo</th><th>Estado / Impuestos</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-clientes-list"></tbody>
         </table></div>
       </div>
@@ -317,13 +323,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- USUARIOS / PERFIL ADMIN -->
     <div class="page" id="page-usuarios">
       <div class="page-header">
-        <div><h2 data-i18n="usr_h2">Gestión de Usuarios y Accesos</h2><p data-i18n="usr_p">Administración de roles y carteras de clientes</p></div>
+        <div><h2>Gestión de Usuarios y Accesos</h2><p>Administración de roles y carteras de clientes</p></div>
         <button class="btn btn-primary" onclick="openModalUsuario()">+ Asignar Accesos / Nuevo Perfil</button>
       </div>
       <div class="card">
         <p style="font-size:12px; margin-bottom:15px; color:var(--text-light)">⚠️ <b>Nota de Nube:</b> Al crear un usuario aquí, asegúrese de haberlo registrado también en Firebase Authentication.</p>
         <div class="table-wrap"><table>
-          <thead><tr><th data-i18n="tbl_usr">Usuario / Correo</th><th data-i18n="tbl_rol">Rol del Sistema</th><th data-i18n="tbl_perms">Permisos / Cartera</th><th data-i18n="tbl_actions">Acciones</th></tr></thead>
+          <thead><tr><th>Usuario / Correo</th><th>Rol del Sistema</th><th>Permisos / Cartera</th><th>Acciones</th></tr></thead>
           <tbody id="tabla-usuarios-list"></tbody>
         </table></div>
       </div>
@@ -332,16 +338,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- RESPALDO Y BACKUP -->
     <div class="page" id="page-backup">
       <div class="page-header">
-        <div><h2 data-i18n="bak_h2">Respaldo y Seguridad (Backup Local)</h2><p data-i18n="bak_p">Tus datos están seguros en Firebase, pero puedes guardar una copia local.</p></div>
+        <div><h2>Respaldo y Seguridad (Backup Local)</h2><p>Tus datos están seguros en Firebase, pero puedes guardar una copia local.</p></div>
       </div>
       <div class="grid-2">
           <div class="card">
-              <div class="card-title" style="color:var(--accent2)" data-i18n="bak_exp">📥 Exportar Datos (Crear Backup)</div>
+              <div class="card-title" style="color:var(--accent2)">📥 Exportar Datos (Crear Backup)</div>
               <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Descarga una copia completa de toda tu contabilidad y usuarios en JSON.</p>
               <button class="btn btn-secondary" onclick="exportBackup()">📥 Descargar Copia</button>
           </div>
           <div class="card">
-              <div class="card-title" style="color:var(--success)" data-i18n="bak_imp">📤 Importar Datos (Restaurar)</div>
+              <div class="card-title" style="color:var(--success)">📤 Importar Datos (Restaurar)</div>
               <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Sobrescribe los datos en la NUBE subiendo un archivo JSON previo.</p>
               <input type="file" id="file_backup" accept=".json" style="display:none" onchange="importBackup(event)">
               <button class="btn btn-success" onclick="document.getElementById('file_backup').click()">📤 Restaurar en NUBE</button>
@@ -352,7 +358,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- PANEL CLIENTE DETALLE -->
     <div class="page" id="page-cliente-detalle">
       <div class="page-header" style="position:relative;background:var(--card);padding:20px;border-radius:10px;box-shadow:var(--shadow);border:1px solid var(--border)">
-        <div class="close-btn" onclick="showPage('dashboard')" title="Cerrar" style="position:absolute;top:10px;right:10px">✕</div>
+        <div class="close-btn" onclick="showPage('dashboard')" title="Cerrar" style="position:absolute;top:10px;right:10px;cursor:pointer;font-weight:bold;color:var(--text-light)">✕</div>
         <div><h2 id="cdet_nombre" style="color:var(--accent2);margin-bottom:4px">Nombre del Cliente</h2>
           <p id="cdet_ruc" style="font-weight:600;color:var(--text);font-size:13px">RUC: --- | Contacto: ---</p>
         </div>
@@ -366,14 +372,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
 
       <div class="tabs" style="margin-bottom:20px;">
-        <div class="tab active" onclick="switchClientTab('compras', this)" data-i18n="tab_comp">Compras</div>
-        <div class="tab" onclick="switchClientTab('ventas', this)" data-i18n="tab_vent">Ventas</div>
-        <div class="tab" onclick="switchClientTab('recibos', this)" data-i18n="tab_teso">Tesorería</div>
-        <div class="tab" onclick="switchClientTab('retenciones', this)" data-i18n="tab_ret">Retenciones</div>
-        <div class="tab" onclick="switchClientTab('diario', this)" data-i18n="tab_diar">Libro Diario</div>
-        <div class="tab" style="background:#dbeafe;color:#1e40af" onclick="switchClientTab('mayor', this)" data-i18n="tab_may">Libro Mayor</div>
-        <div class="tab" style="background:#ede9fe;color:#5b21b6" onclick="switchClientTab('balance', this)" data-i18n="tab_bal">Balance General</div>
-        <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)" data-i18n="tab_est">Estado de Cuentas</div>
+        <div class="tab active" onclick="switchClientTab('compras', this)">Compras</div>
+        <div class="tab" onclick="switchClientTab('ventas', this)">Ventas</div>
+        <div class="tab" onclick="switchClientTab('recibos', this)">Tesorería</div>
+        <div class="tab" onclick="switchClientTab('retenciones', this)">Retenciones</div>
+        <div class="tab" onclick="switchClientTab('diario', this)">Libro Diario</div>
+        <div class="tab" style="background:#dbeafe;color:#1e40af" onclick="switchClientTab('mayor', this)">Libro Mayor</div>
+        <div class="tab" style="background:#ede9fe;color:#5b21b6" onclick="switchClientTab('balance', this)">Balance General</div>
+        <div class="tab" style="background:#fef3c7;color:#92400e" onclick="switchClientTab('estado_cuentas', this)">Estado de Cuentas</div>
       </div>
       
       <div id="ctab_compras" class="ctab-content" style="display:block;">
@@ -442,7 +448,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
     <!-- COMPROBANTES / SIFEN -->
     <div class="page" id="page-comprobantes">
-      <div class="page-header"><div data-i18n="sifen_h2"><h2>Centro de Carga y SIFEN</h2><p>Búsqueda e-Kuatia e Importación IA</p></div>
+      <div class="page-header"><div><h2>Centro de Carga y SIFEN</h2><p>Búsqueda e-Kuatia e Importación IA</p></div>
         <div style="display:flex;gap:10px"><button class="btn btn-outline" onclick="openModalImportMain()">📥 Importar Excel / IA</button><button class="btn btn-primary" onclick="openWizard()">➕ Carga Manual</button></div>
       </div>
       <div class="card" style="border-left:4px solid var(--accent2)">
@@ -532,7 +538,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
 <!-- MODAL: ASIENTO MANUAL LIBRE -->
 <div class="modal-overlay" id="modal-asiento-manual">
-  <div class="modal drag-modal" style="width:min(640px,96vw);max-height:85vh">
+  <div class="modal drag-modal" style="width:min(640px,96vw);">
     <div class="modal-drag-header"><span class="m-title">✍️ Asiento Manual Libre / Ajuste</span>
         <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-asiento-manual')">✕</div></div>
     </div>
@@ -592,11 +598,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 
 <!-- WIZARD: CARGA COMPROBANTES (MULTITASA TILDABLE) -->
 <div class="modal-overlay" id="modal-wizard">
-  <div class="modal drag-modal" style="width:min(640px,96vw);max-height:85vh">
+  <div class="modal drag-modal" style="width:min(640px,96vw);">
     <div class="modal-drag-header"><span class="m-title" id="wiz-title">🧾 Asistente de Carga Contable</span>
         <div class="win-controls"><div class="win-btn" onclick="toggleWin(this, '_')">_</div><div class="win-btn" onclick="toggleWin(this, '□')">□</div><div class="win-btn close" onclick="closeModal('modal-wizard')">✕</div></div>
     </div>
-    <div class="modal-body-scroll" style="overflow:visible">
+    <div class="modal-body-scroll">
         <div class="wiz-header">
             <div class="wiz-bullet active" id="wb-1">1</div> <span style="font-size:13px;font-weight:600;color:var(--text)">Datos y Montos</span><div style="flex:1;border-bottom:2px dashed var(--border);margin:15px 10px"></div>
             <div class="wiz-bullet" id="wb-2">2</div> <span style="font-size:13px;font-weight:600;color:var(--text-light)" id="wt-2">Cobro/Pago</span><div style="flex:1;border-bottom:2px dashed var(--border);margin:15px 10px"></div>
@@ -1292,7 +1298,6 @@ window.procesarImportacion = function() {
     var filas = txt.trim().split('\n'), errorRows = [], parseados =[], cli = window.dbClientes[document.getElementById('imp_cli_sel').value];
 
     filas.forEach((f, idx) => {
-        // Ignorar filas de encabezado comunes
         if(f.toLowerCase().includes('fecha') && f.toLowerCase().includes('monto')) return;
         
         var col = f.split('\t'); if(col.length<2) col = f.split(','); if(col.length<2) col = f.split(';');
@@ -1366,7 +1371,6 @@ window.calcularImpuestos = function(tipo) {
 
 window.onload = function() {
     window.initPlanCuentas(); 
-    var l = localStorage.getItem('contapy_lang') || 'es'; document.getElementById('lang_sel').value = l; window.changeLang(l); 
 };
 
 // ================================================================
@@ -1392,7 +1396,13 @@ window.toggleWin = function(btn, action) {
         el.style.cssText+=';margin:0;position:fixed;transform:none;left:'+sl+'px;top:'+st+'px';
         e.preventDefault();
     });
-    document.addEventListener('mousemove',function(e){ if(!drag||!el||el.classList.contains('maximized'))return; el.style.left=(sl+e.clientX-sx)+'px'; el.style.top=(st+e.clientY-sy)+'px'; });
+    document.addEventListener('mousemove',function(e){ 
+        if(!drag||!el||el.classList.contains('maximized'))return; 
+        var nY = st+e.clientY-sy;
+        if(nY < 0) nY = 0; // Fixes moving above screen
+        el.style.left=(sl+e.clientX-sx)+'px'; 
+        el.style.top=nY+'px'; 
+    });
     document.addEventListener('mouseup',function(){ drag=false; el=null; });
 })();
 
