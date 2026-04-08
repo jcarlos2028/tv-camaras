@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ContaPY v4.0 — Sistema Contable Cloud Edition</title>
+<title>ContaPY v1.1 — Sistema Contable Cloud Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -44,7 +44,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);dis
 .stat-label{font-size:11px;color:var(--text-light);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
 .stat-value{font-size:22px;font-weight:700;color:var(--text);margin:6px 0 3px;letter-spacing:-1px}
 .stat-sub{font-size:11px;color:var(--text-light)}
-.grid-2{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
 thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:600;color:var(--text-light);text-transform:uppercase;border-bottom:2px solid var(--border);white-space:nowrap}
@@ -120,8 +120,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 .chat-input-area { display: flex; gap: 10px; padding: 15px; background: white; border-top: 1px solid var(--border); }
 .chat-input-area input { flex: 1; }
 
-/* SKINS / TEMAS - ContaPY */
-[data-theme="emerald"] { --accent:#059669; --accent2:#0284c7; --sidebar:#064e3b; --sidebar-hover:#065f46; }
+/* SKINS / TEMAS - ContaPY */[data-theme="emerald"] { --accent:#059669; --accent2:#0284c7; --sidebar:#064e3b; --sidebar-hover:#065f46; }
 [data-theme="purple"]  { --accent:#7c3aed; --accent2:#db2777; --sidebar:#2e1065; --sidebar-hover:#4c1d95; }
 [data-theme="ocean"]   { --accent:#0891b2; --accent2:#0d9488; --sidebar:#164e63; --sidebar-hover:#155e75; }
 [data-theme="dark"]    { --bg:#111827; --sidebar:#000000; --sidebar-hover:#1f2937; --accent:#f59e0b; --accent2:#10b981; --white:#1f2937; --card:#1f2937; --text:#f9fafb; --text-light:#9ca3af; --border:#374151; }
@@ -154,7 +153,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
 <!-- SIDEBAR -->
 <div class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v4.0 Cloud + AI</div></div></div>
+    <div class="logo-mark"><div class="logo-icon">🧾</div><div><div class="logo-text">ContaPY</div><div class="logo-sub">v1.1 Cloud + AI</div></div></div>
   </div>
   <div class="sidebar-section" style="padding-top:5px;padding-bottom:10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px">
     <div style="color:var(--success);font-size:11px;font-weight:700" id="sb_user_name">Cargando...</div>
@@ -179,7 +178,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
   <div class="sidebar-section">
     <div class="sidebar-label">Herramientas</div>
-    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b;font-weight:600"><span class="icon">🤖</span><span>Soporte Claude IA</span></div>
+    <div class="nav-item" onclick="showPage('gemini',this)" style="color:#f59e0b;font-weight:600"><span class="icon">🤖</span><span>Soporte IA Contable</span></div>
     <div class="nav-item" onclick="showPage('cotizaciones',this)" style="color:#10b981;font-weight:600"><span class="icon">💱</span><span>Cotizaciones (Cambios)</span></div>
     <div class="nav-item" onclick="showPage('ajustes',this)"><span class="icon">⚙️</span><span>Ajustes del Sistema</span></div>
     <div class="nav-item" onclick="abrirWhatsApp()" style="color:#25d366;font-weight:600"><span class="icon">💬</span><span>Soporte WhatsApp</span></div>
@@ -224,7 +223,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <!-- AJUSTES DEL SISTEMA -->
     <div class="page" id="page-ajustes">
       <div class="page-header"><div><h2>⚙️ Ajustes del Sistema</h2><p>Temas, sincronización y actualizaciones</p></div></div>
-      <div class="grid-2">
+      <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
         <div class="card">
           <div class="card-title">🎨 Temas y Colores</div>
           <p style="font-size:12px;color:var(--text-light);margin-bottom:14px">Seleccioná tu paleta. Se guarda en el navegador.</p>
@@ -239,7 +238,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
         <div class="card">
           <div class="card-title">🔄 Sincronización y Actualizaciones</div>
-          <p style="font-size:12px;color:var(--text-light);margin-bottom:10px">Versión actual: <b>ContaPY v4.0 Cloud</b></p>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:10px">Versión actual: <b>ContaPY v1.1 Cloud</b></p>
           <div id="update_status" style="display:none;font-size:13px;font-weight:600;padding:10px;border-radius:8px;border:1px solid var(--success);margin-bottom:12px"></div>
           <div style="display:flex;gap:10px;flex-wrap:wrap">
             <button class="btn btn-primary" id="btn_update" onclick="buscarActualizaciones()">🔍 Buscar Actualizaciones</button>
@@ -249,24 +248,23 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
-    <!-- MÓDULO CLAUDE IA -->
+    <!-- MÓDULO CLAUDE IA (AHORA LIBRE / SIN KEY) -->
     <div class="page" id="page-gemini">
       <div class="page-header">
-        <div><h2>🤖 Soporte Claude IA</h2><p>Asistente contable — Ley 6380/2019 · RG 49/14 · SIFEN</p></div>
+        <div><h2>🤖 Soporte IA Contable</h2><p>Asistente virtual entrenado con Ley 6380/2019 · NIIF · SIFEN</p></div>
         <div style="display:flex;gap:10px">
-            <button class="btn btn-outline btn-sm" onclick="configurarGemini()">⚙️ Configurar API Key</button>
-            <button class="btn btn-outline btn-sm" onclick="window.claudeHistory=[];if(window._claudeWelcome)document.getElementById('chat_box').innerHTML=window._claudeWelcome;">🗑️ Limpiar</button>
+            <button class="btn btn-outline btn-sm" onclick="window.claudeHistory=[];if(window._claudeWelcome)document.getElementById('chat_box').innerHTML=window._claudeWelcome;">🗑️ Limpiar Historial</button>
         </div>
       </div>
-      <div class="grid-2">
+      <div class="grid-2" style="grid-template-columns: 2fr 1fr;">
         <div class="card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;height:65vh">
           <div style="background:linear-gradient(135deg,#0f1923,#1a2535);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
             <div style="width:30px;height:30px;background:linear-gradient(135deg,#cc7a00,#ff9500);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px">🤖</div>
-            <div><div style="color:white;font-weight:700;font-size:13px">Claude — ContaPY</div><div style="color:rgba(255,255,255,0.45);font-size:10px">IVA · IRE · IRP · NIIF · RG 49/14</div></div>
-            <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.25)">Anthropic</div>
+            <div><div style="color:white;font-weight:700;font-size:13px">IA — ContaPY</div><div style="color:rgba(255,255,255,0.45);font-size:10px">IVA · IRE · IRP · NIIF · Consultas Generales</div></div>
+            <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.25)">Modelo Libre</div>
           </div>
           <div id="chat_box" class="chat-messages" style="flex:1;overflow-y:auto;background:var(--bg)">
-            <div class="chat-msg gemini"><strong>🤖 Claude:</strong><br><br>¡Hola! Soy Claude, tu asistente en ContaPY. Podés consultarme sobre:<br><br>📊 <b>IVA</b> · 💼 <b>IRE General/Simple/ReSiMo</b> · 👤 <b>IRP</b> · 🌍 <b>INR</b><br>🧾 <b>SIFEN/e-Kuatia</b> · 📋 <b>Plan Cuentas RG 49/14</b> · ✍️ <b>Asientos NIIF</b><br><br>¿En qué te ayudo? (Recordá configurar tu API Key de Anthropic arriba)</div>
+            <div class="chat-msg gemini"><strong>🤖 IA Contable:</strong><br><br>¡Hola! Soy tu asistente en ContaPY. Podés consultarme sobre:<br><br>📊 <b>IVA</b> · 💼 <b>IRE General/Simple/ReSiMo</b> · 👤 <b>IRP</b><br>🧾 <b>SIFEN/e-Kuatia</b> · 📋 <b>Plan Cuentas RG 49/14</b><br><br>¿En qué te ayudo? (No necesitás configurar ninguna clave, este servicio es 100% libre).</div>
           </div>
           <div class="chat-input-area">
             <input type="text" id="chat_input" placeholder="Consultá sobre IVA, IRE, asientos..." onkeydown="if(event.key==='Enter')enviarMensajeIA()">
@@ -282,24 +280,23 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
               <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Factura de ANDE es deducible al 100%?</div>
               <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Cuándo vence el IVA según el dígito de mi RUC?</div>
               <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Límites del IRE Simple y ReSiMo?</div>
-              <div onclick="document.getElementById('chat_input').value=this.textContent;enviarMensajeIA()" style="cursor:pointer;padding:8px 12px;background:var(--bg);border-radius:7px;font-size:12px;border:1px solid var(--border)">¿Cómo registro compra con IVA 10% en RG 49/14?</div>
             </div>
           </div>
           <div class="card" style="margin-top:0;text-align:center;padding:12px">
-            <span style="font-size:11px;color:var(--text-light)">🔒 Claude Sonnet 3.5 — Anthropic</span>
+            <span style="font-size:11px;color:var(--text-light)">Red Libre Pollinations AI</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- MÓDULO COTIZACIONES -->
+    <!-- MÓDULO COTIZACIONES NATIVO -->
     <div class="page" id="page-cotizaciones">
       <div class="page-header">
-        <div><h2>💱 Cotizaciones en Tiempo Real</h2><p>Fuente de datos: Bonanza Cambios</p></div>
-        <button class="btn btn-outline" onclick="window.open('https://www.bonanzacambios.com.py/', '_blank')">🌐 Abrir web original</button>
+        <div><h2>💱 Cotizaciones en Tiempo Real</h2><p>Fuente de datos: Cambios Chaco / MaxiCambios / Bonanza (API PY)</p></div>
+        <button class="btn btn-outline" onclick="window.cargarCotizaciones()">🔄 Actualizar Manualmente</button>
       </div>
-      <div class="card" style="padding:0; overflow:hidden; height:68vh; position:relative; border-radius:10px;">
-         <iframe src="https://www.bonanzacambios.com.py/" style="width:100%; height:1200px; border:none; position:absolute; top:-360px; left:0;"></iframe>
+      <div class="grid-2" id="cotiz_grid" style="grid-template-columns: repeat(2, 1fr);">
+         <div style="padding:20px;text-align:center;color:var(--text-light)">Cargando cotizaciones desde la API nacional...</div>
       </div>
     </div>
 
@@ -340,7 +337,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       <div class="page-header">
         <div><h2>Respaldo y Seguridad (Backup Local)</h2><p>Tus datos están seguros en Firebase, pero puedes guardar una copia local.</p></div>
       </div>
-      <div class="grid-2">
+      <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
           <div class="card">
               <div class="card-title" style="color:var(--accent2)">📥 Exportar Datos (Crear Backup)</div>
               <p style="font-size:13px;color:var(--text-light);margin-bottom:15px">Descarga una copia completa de toda tu contabilidad y usuarios en JSON.</p>
@@ -423,7 +420,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
 
       <div id="ctab_balance" class="ctab-content" style="display:none;">
-        <div class="grid-2">
+        <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
           <div class="card"><div class="card-title" style="color:var(--accent2)">ACTIVOS</div>
             <div id="bal_activos" style="padding-bottom:10px"></div>
             <div style="font-weight:700;font-size:15px;color:var(--accent2);border-top:2px solid var(--border);padding-top:10px;text-align:right" id="tot_activos">Total Activos: ₲ 0</div>
@@ -484,7 +481,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
     <div class="page" id="page-ire_simple"><div class="page-header"><div><h2>Estado de IRE Simple</h2><p>Ley 6380/2019 - Tributa sobre la base menor.</p></div></div>
       <div class="form-section"><label>Seleccione el Cliente (Contribuyente IRE Simple):</label><select id="ires_cli_sel" class="cli-select" onchange="calcularImpuestos('ire_simple')" style="max-width:400px;margin-top:5px;padding:8px"></select></div>
       <div class="card" id="ires_resultados" style="display:none">
-          <div class="grid-2">
+          <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
               <div style="background:#f8f9fa;padding:15px;border-radius:8px;border:1px solid var(--border)">
                   <h4 style="margin-bottom:10px;color:var(--accent2)">Opción 1: Renta Neta Real</h4>
                   <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px"><span>Ingresos Brutos:</span><span id="ires_ing">₲ 0</span></div>
@@ -764,6 +761,7 @@ window.showPage = function(name, el) {
     document.getElementById('page-'+name).classList.add('active'); 
     if(el) el.classList.add('active');
     if(name === 'dashboard' || name==='clientes') window.renderClientes(); 
+    if(name === 'cotizaciones') window.cargarCotizaciones();
     if(['iva','ire_general','ire_simple','irp'].includes(name)) window.actualizarSelectsClientes(); 
     if(name === 'usuarios') window.renderUsuarios();
 };
@@ -820,7 +818,7 @@ window.renderClientes = function() {
     if(!puedeVerCliente(c.id)) return; 
 
     if(c.estado === 'activo') actCount++;
-    var tb = (c.taxes || []).map(t => `<span class="badge-status ok">${t}</span>`).join(' '), est = c.estado==='activo'?'<span class="badge-status ok">Activo</span>':'<span class="badge-status inactive">Inactivo</span>';
+    var tb = (c.taxes ||[]).map(t => `<span class="badge-status ok">${t}</span>`).join(' '), est = c.estado==='activo'?'<span class="badge-status ok">Activo</span>':'<span class="badge-status inactive">Inactivo</span>';
     if(tbody && (!s || c.ruc.toLowerCase().includes(s) || c.nom.toLowerCase().includes(s))) tbody.innerHTML += `<tr><td style="font-family:'DM Mono'">${c.ruc}</td><td style="font-weight:700">${c.nom}</td><td>${c.tel||'S/T'}<br><span style="font-size:10px">${c.correo||'S/C'}</span></td><td>${est} <br> ${tb}</td><td><div style="display:flex;gap:4px;"><button class="btn btn-outline btn-sm" onclick="verCliente(${i})">📚 Perfil</button> <button class="btn btn-outline btn-sm" onclick="openModalCliente(${i})">✏️ Editar</button> <button class="btn btn-outline btn-sm" style="color:var(--danger); border-color:var(--danger)" onclick="eliminarCliente(${i})">🗑️ Eliminar</button></div></td></tr>`;
     if(dtbody && c.estado==='activo' && (!s || c.ruc.toLowerCase().includes(s) || c.nom.toLowerCase().includes(s))) dtbody.innerHTML += `<tr onclick="verCliente(${i})" style="cursor:pointer"><td style="font-family:'DM Mono'">${c.ruc}</td><td style="font-weight:700;color:var(--accent2)">${c.nom}</td><td>${c.tel||'-'}</td><td>${tb}</td></tr>`;
     if(wizSel && c.estado==='activo') wizSel.innerHTML += `<option value="${i}">${c.nom}</option>`;
@@ -873,7 +871,7 @@ window.guardarCliente = function() {
       o.libros={compras:[], ventas:[], recibos:[], retenciones:[], diario:[]}; 
       window.dbClientes.push(o); 
       if(window.currentUser && window.currentUser.rol !== 'Administrador') {
-          if(!window.currentUser.clientesAsignados) window.currentUser.clientesAsignados = [];
+          if(!window.currentUser.clientesAsignados) window.currentUser.clientesAsignados =[];
           window.currentUser.clientesAsignados.push(o.id);
       }
   }
@@ -1041,7 +1039,7 @@ window.toggleTasas = function() {
 window.updateWizTaxes = function() {
     var cIdx = document.getElementById('wiz_cliente').value; if(cIdx === "") return;
     var cli = window.dbClientes[cIdx], html = "";
-    (cli.taxes || []).forEach(t => { html += `<label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--text)"><input type="checkbox" class="wiz-tax-chk" value="${t}" checked> ${t}</label>`; });
+    (cli.taxes ||[]).forEach(t => { html += `<label style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--text)"><input type="checkbox" class="wiz-tax-chk" value="${t}" checked> ${t}</label>`; });
     document.getElementById('wiz_tax_boxes').innerHTML = html;
 };
 
@@ -1262,8 +1260,8 @@ window.guardarAsientoWizard = function() {
       window.totalDocs++; 
       document.getElementById('dash_doc_count').textContent = window.totalDocs; 
   }
-  if (!cli.libros[tgtLib]) cli.libros[tgtLib] = [];
-  if (!cli.libros.diario) cli.libros.diario = [];
+  if (!cli.libros[tgtLib]) cli.libros[tgtLib] =[];
+  if (!cli.libros.diario) cli.libros.diario =[];
   cli.libros[tgtLib].push(obj); 
   cli.libros.diario.push({fecha: fch, asiento: nAsi, glosa: glosa, lineas: lin});
   window.saveData(); alert(`✅ Asiento ${nAsi} guardado en NUBE correctamente.`); window.closeModal('modal-wizard'); if(document.getElementById('page-cliente-detalle').classList.contains('active')) { window.renderLibros(); window.renderMayorYBalance(); }
@@ -1321,7 +1319,7 @@ window.procesarImportacion = function() {
             var cIva = p.tasa===10 ? '2.1.4.01 IVA Débito 10%' : (p.tasa===5 ? '2.1.4.02 IVA Débito 5%' : '');
             var lin =[{cuenta:'1.1.1.01 Caja', debe:p.monto, haber:0}, {cuenta:cVenta, debe:0, haber:p.monto-iva}]; if(iva>0) lin.push({cuenta:cIva, debe:0, haber:iva});
             if(!cli.libros.ventas) cli.libros.ventas = [];
-            if(!cli.libros.diario) cli.libros.diario = [];
+            if(!cli.libros.diario) cli.libros.diario =[];
             cli.libros.ventas.push(obj); cli.libros.diario.push({fecha: p.fecha, asiento: obj.ref_asiento, glosa: "Importación Excel", lineas: lin}); window.totalDocs++;
         });
         window.saveData(); document.getElementById('dash_doc_count').textContent = window.totalDocs; alert(`✅ Se procesaron e importaron exitosamente ${parseados.length} comprobantes al cliente ${cli.nom}.`);
@@ -1453,7 +1451,7 @@ window.forzarSincronizacion = async function(btnId) {
 };
 
 window.exportBackup = function() {
-    var d={version:'v4.0',date:new Date().toISOString(),clientes:window.dbClientes||[],usuarios:window.dbUsuarios||[],totalDocs:window.totalDocs||0};
+    var d={version:'v1.1',date:new Date().toISOString(),clientes:window.dbClientes||[],usuarios:window.dbUsuarios||[],totalDocs:window.totalDocs||0};
     var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
     a.download='ContaPY_Backup_'+new Date().toISOString().split('T')[0]+'.json'; a.click();
 };
@@ -1507,26 +1505,59 @@ window.deleteAsientoManual = function(cliIdx, asientoId) {
     if(window.renderMayorYBalance) window.renderMayorYBalance();
 };
 
-// ── Claude IA API
-window.claudeHistory = [];
+// ── Cotizaciones API Nativa
+window.cargarCotizaciones = async function() {
+    var grid = document.getElementById('cotiz_grid');
+    if(!grid) return;
+    grid.innerHTML = '<div style="grid-column:span 2; padding:20px; text-align:center; color:var(--text-light)">Cargando cotizaciones desde DolarPy...</div>';
+    
+    try {
+        var res = await fetch('https://dolar.melizeche.com/api/1.0/');
+        if(!res.ok) throw new Error('Error al conectar con DolarPy');
+        var data = await res.json();
+        
+        var casas = ['maxicambios', 'cambioschaco', 'bonanza', 'vision'];
+        var targetCasa = null;
+        for(var c of casas) { if(data[c]) { targetCasa = data[c]; break; } }
+        if(!targetCasa) targetCasa = data[Object.keys(data)[0]];
 
-window.configurarGemini = function() {
-    var key = prompt("⚙️ Configuración Claude IA\n\nIngresá tu API Key de Anthropic:");
-    if(key) { localStorage.setItem('claude_api_key', key.trim()); alert("✅ API Key guardada en tu navegador."); }
+        if(targetCasa) {
+            var html = '';
+            var monedas = {
+                'dolar': {nom: 'Dólar (USD)', icon: '🇺🇸'},
+                'real': {nom: 'Real (BRL)', icon: '🇧🇷'},
+                'peso_argentino': {nom: 'Peso Arg. (ARS)', icon: '🇦🇷'},
+                'euro': {nom: 'Euro (EUR)', icon: '🇪🇺'}
+            };
+            
+            for(var k in monedas) {
+                if(targetCasa[k]) {
+                    html += `<div class="card" style="text-align:center; display:flex; flex-direction:column; justify-content:center;">
+                        <div style="font-size:32px">${monedas[k].icon}</div>
+                        <h3 style="margin:10px 0; color:var(--text); font-size:15px;">${monedas[k].nom}</h3>
+                        <div style="display:flex; justify-content:space-around; margin-top:15px; border-top:1px solid var(--border); padding-top:15px;">
+                            <div><div style="font-size:11px; color:var(--text-light); text-transform:uppercase; margin-bottom:5px;">Compra</div><div style="font-size:18px; font-weight:700; color:var(--success); font-family:'DM Mono'">₲ ${targetCasa[k].compra.toLocaleString()}</div></div>
+                            <div><div style="font-size:11px; color:var(--text-light); text-transform:uppercase; margin-bottom:5px;">Venta</div><div style="font-size:18px; font-weight:700; color:var(--danger); font-family:'DM Mono'">₲ ${targetCasa[k].venta.toLocaleString()}</div></div>
+                        </div>
+                    </div>`;
+                }
+            }
+            grid.innerHTML = html || '<div style="grid-column:span 2;text-align:center;">No se encontraron datos.</div>';
+        }
+    } catch(e) {
+        grid.innerHTML = `<div class="card" style="grid-column:span 2; text-align:center;">
+            <p style="color:var(--warning); margin-bottom:10px;">⚠️ No se pudieron cargar las cotizaciones automáticamente.</p>
+            <a href="https://dolar.melizeche.com/" target="_blank" class="btn btn-primary" style="display:inline-flex; margin-top:10px;">Ver Cotizaciones en DolarPy</a>
+        </div>`;
+    }
 };
 
+// ── IA Contable Libre (Pollinations AI)
 window.enviarMensajeIA = async function() {
     var inp=document.getElementById('chat_input'), box=document.getElementById('chat_box');
     var txt=inp?inp.value.trim():'';
     if(!txt||!box) return;
     if(!window._claudeWelcome && box.innerHTML) window._claudeWelcome = box.innerHTML;
-
-    var apiKey = localStorage.getItem('claude_api_key');
-    if(!apiKey) {
-        box.innerHTML += '<div class="chat-msg gemini" style="color:var(--danger)">⚠️ Falta la API Key de Anthropic. Hacé clic en "⚙️ Configurar API Key" arriba para ingresarla y habilitar el asistente.</div>';
-        box.scrollTop=box.scrollHeight;
-        return;
-    }
 
     var uDiv=document.createElement('div');
     uDiv.className='chat-msg user'; uDiv.textContent=txt;
@@ -1535,40 +1566,23 @@ window.enviarMensajeIA = async function() {
     var msgId='cm-'+Date.now();
     var rDiv=document.createElement('div');
     rDiv.id=msgId; rDiv.className='chat-msg gemini';
-    rDiv.innerHTML='<em style="color:var(--text-light)">🤖 Claude está analizando...</em>';
+    rDiv.innerHTML='<em style="color:var(--text-light)">🤖 La IA está pensando...</em>';
     box.appendChild(rDiv); box.scrollTop=box.scrollHeight;
 
-    window.claudeHistory.push({role:'user',content:txt});
+    var promptBase = "Eres un asistente experto contable y tributario de Paraguay. Responde en español de manera corta, precisa y profesional. Considera la Ley 6380/2019, IVA, IRE e IRP. La consulta del usuario es: ";
+    var promptFinal = promptBase + txt;
 
     try {
-        var res=await fetch('https://api.anthropic.com/v1/messages',{
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'x-api-key': apiKey,
-                'anthropic-version': '2023-06-01',
-                'anthropic-dangerous-direct-browser-access':'true'
-            },
-            body:JSON.stringify({
-                model:'claude-3-5-sonnet-20241022', max_tokens:900,
-                system:'Sos Claude, asistente contable de ContaPY desarrollado por @Jcarlos2028. Ayudás con Ley 6380/2019 (IVA 10%/5%, IRE General/Simple/ReSiMo, IRP, INR), Plan RG 49/14, NIIF, SIFEN/e-Kuatia, Formularios SET. Respondé en español de Paraguay, de manera muy breve y precisa.',
-                messages:window.claudeHistory
-            })
-        });
-        if(!res.ok) {
-            var errTxt = await res.text();
-            throw new Error('HTTP '+res.status + ' - ' + errTxt);
-        }
-        var d=await res.json();
-        var reply=(d.content&&d.content[0])?d.content[0].text:'Sin respuesta.';
+        var res = await fetch('https://text.pollinations.ai/prompt/' + encodeURIComponent(promptFinal));
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        var reply = await res.text();
+
         reply=reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
         var el=document.getElementById(msgId);
-        if(el){el.innerHTML='<strong>🤖 Claude:</strong><br>'+reply; el.style.fontStyle='normal';}
-        window.claudeHistory.push({role:'assistant',content:(d.content&&d.content[0])?d.content[0].text:''});
-        if(window.claudeHistory.length>20) window.claudeHistory=window.claudeHistory.slice(-20);
+        if(el){el.innerHTML='<strong>🤖 IA Contable:</strong><br>'+reply; el.style.fontStyle='normal';}
     } catch(e) {
         var el=document.getElementById(msgId);
-        if(el) el.innerHTML='<span style="color:var(--danger)">❌ Error al conectar con Claude. Verificá que tu API Key sea válida o que tengas internet. Detalle: '+e.message+'</span>';
+        if(el) el.innerHTML='<span style="color:var(--danger)">❌ Error al conectar con la red libre. Verificá tu internet. Detalle: '+e.message+'</span>';
     }
     box.scrollTop=box.scrollHeight;
 };
