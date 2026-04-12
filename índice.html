@@ -248,7 +248,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
-    <!-- MÓDULO CLAUDE IA (AHORA LIBRE / SIN KEY) -->
+    <!-- MÓDULO CLAUDE IA -->
     <div class="page" id="page-gemini">
       <div class="page-header">
         <div><h2>🤖 Soporte IA Contable</h2><p>Asistente virtual entrenado con Ley 6380/2019 · NIIF · SIFEN</p></div>
@@ -289,7 +289,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
       </div>
     </div>
 
-    <!-- MÓDULO COTIZACIONES (IFRAME CORTADO PERFECTO PARA VER SOLO LA TABLA 1 COLUMNA) -->
+    <!-- MÓDULO COTIZACIONES -->
     <div class="page" id="page-cotizaciones">
       <div class="page-header">
         <div><h2>💱 Cotizaciones en Tiempo Real</h2><p>Fuente de datos: Bonanza Cambios</p></div>
@@ -298,7 +298,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
           <button class="btn btn-primary" onclick="window.open('https://www.bonanzacambios.com.py/', '_blank')">🌐 Abrir web original</button>
         </div>
       </div>
-      <!-- Panel centrado que recorta solo la tabla en modo móvil de Bonanza -->
       <div style="display:flex; justify-content:center; align-items:center; padding:20px; background:var(--card); border-radius:10px; border:1px solid var(--border); box-shadow:var(--shadow);">
           <div style="width:360px; height:360px; overflow:hidden; position:relative; border-radius:8px; border:1px solid var(--border); background:#fff; box-shadow:var(--shadow-lg);">
              <iframe id="iframe_cotiz" src="https://www.bonanzacambios.com.py/" style="width:360px; height:800px; border:none; position:absolute; top:-195px; left:0; pointer-events:none;" scrolling="no"></iframe>
@@ -386,14 +385,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         <div class="tab" style="background:#f3f4f6;border:1px solid var(--border)" onclick="switchClientTab('cuentas', this)">⚙️ Plan Cuentas</div>
       </div>
       
+      <!-- ► LIBRO COMPRAS — botón actualizado -->
       <div id="ctab_compras" class="ctab-content" style="display:block;">
-        <div class="card"><div class="card-title"><span>Libro de Compras</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_compras', 'Libro_Compras')">📥 Exportar a Excel</button></div>
+        <div class="card"><div class="card-title"><span>Libro de Compras</span><button class="btn btn-outline btn-sm" onclick="abrirModalExport('compras')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_compras"><thead><tr><th>Fecha</th><th>Condición</th><th>Doc.</th><th>RUC / Proveedor</th><th>Rol</th><th>Timbrado / Nro</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_compras"></tbody></table></div></div>
       </div>
 
+      <!-- ► LIBRO VENTAS — botón actualizado -->
       <div id="ctab_ventas" class="ctab-content" style="display:none;">
-        <div class="card"><div class="card-title"><span>Libro de Ventas</span><button class="btn btn-outline btn-sm" onclick="exportToCSV('tbl_ventas', 'Libro_Ventas')">📥 Exportar a Excel</button></div>
+        <div class="card"><div class="card-title"><span>Libro de Ventas</span><button class="btn btn-outline btn-sm" onclick="abrirModalExport('ventas')">📥 Exportar a Excel</button></div>
            <div class="table-wrap"><table id="tbl_ventas"><thead><tr><th>Fecha</th><th>Condición</th><th>Doc.</th><th>RUC / Cliente</th><th>Rol</th><th>Timbrado / Nro</th><th>Total</th><th>IVA</th><th>Acción</th></tr></thead>
               <tbody id="lista_lib_ventas"></tbody></table></div></div>
       </div>
@@ -449,7 +450,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
         </div>
       </div>
 
-      <!-- NUEVA PESTAÑA: PLAN DE CUENTAS PERSONALIZADO -->
+      <!-- PLAN DE CUENTAS PERSONALIZADO -->
       <div id="ctab_cuentas" class="ctab-content" style="display:none;">
         <div class="card">
             <div class="card-title"><span>📋 Plan de Cuentas (Individual)</span></div>
@@ -620,7 +621,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
 </div>
 
-<!-- WIZARD: CARGA COMPROBANTES (MULTITASA TILDABLE) -->
+<!-- WIZARD: CARGA COMPROBANTES -->
 <div class="modal-overlay" id="modal-wizard">
   <div class="modal drag-modal" style="width:min(640px,96vw);">
     <div class="modal-drag-header"><span class="m-title" id="wiz-title">🧾 Asistente de Carga Contable</span>
@@ -664,7 +665,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
                 <div class="form-group" id="wiz_box_ref" style="display:none;margin-bottom:14px;background:#fff8e1;padding:10px;border-radius:8px;border:1px solid #fde047"><label>📌 Documento a Cancelar / Compensar</label><select id="wiz_ref_doc"></select></div>
                 <div class="form-group" id="wiz_box_cuenta" style="margin-bottom:14px"><label>Clasificación (Cuenta Contable de Gasto/Ingreso)</label><input type="text" id="wiz_cuenta_sel" list="planCuentasRes4814" placeholder="Ej: 5.1.2.04 Honorarios Profesionales... (Si deja vacío usará cta. genérica)"></div>
                 
-                <!-- IVA COMPACTO TILDABLE MULTITASA -->
                 <div class="form-grid col2" style="margin-bottom:12px;background:#fff;padding:10px;border:1px solid var(--border);border-radius:8px" id="wiz_box_compact">
                     <div class="form-group">
                         <label>Monto Total Factura ₲</label>
@@ -681,7 +681,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
                     </div>
                 </div>
                 
-                <!-- CAJAS MULTITASA (Ocultas por defecto) -->
                 <div id="wiz_box_mixta" style="display:none;margin-bottom:12px;background:#f8f9fa;padding:10px;border:1px solid var(--border);border-radius:8px">
                     <label style="color:var(--accent2);margin-bottom:8px;display:block;font-size:11px;font-weight:600">Desglose de Montos (La suma debe cuadrar con el Total)</label>
                     <div class="form-grid col3">
@@ -691,7 +690,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
                     </div>
                 </div>
                 
-                <!-- RECIBO SIMPLE -->
                 <div class="form-group" id="wiz_box_recibo_monto" style="display:none;margin-bottom:12px">
                     <label>Monto Total del Recibo ₲</label><input type="number" id="wiz_monto_recibo" value="0" style="font-family:'DM Mono';font-size:15px;font-weight:700">
                 </div>
@@ -749,9 +747,45 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent2)}
   </div>
 </div>
 
-<!-- ==============================================
-     SISTEMA PRINCIPAL (JS)
-=============================================== -->
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: EXPORTAR CON FILTRO DE FECHAS (NUEVO)
+     ══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-export-fechas">
+  <div class="modal drag-modal" style="width:min(500px,96vw);">
+    <div class="modal-drag-header">
+      <span class="m-title">📥 Exportar Libro — Seleccionar Período</span>
+      <div class="win-controls">
+        <div class="win-btn close" onclick="closeModal('modal-export-fechas')">✕</div>
+      </div>
+    </div>
+    <div class="modal-body-scroll">
+      <div class="notif" style="margin-bottom:16px">
+        📅 Ingresá el rango de fechas para filtrar los comprobantes a exportar.
+      </div>
+      <div class="form-grid col2" style="margin-bottom:18px">
+        <div class="form-group">
+          <label>Fecha Desde</label>
+          <input type="date" id="exp_fecha_desde">
+        </div>
+        <div class="form-group">
+          <label>Fecha Hasta</label>
+          <input type="date" id="exp_fecha_hasta">
+        </div>
+      </div>
+      <div style="background:var(--bg);border-radius:8px;padding:12px;margin-bottom:16px;font-size:12px;color:var(--text-light)">
+        <strong style="color:var(--text)">Formato del archivo (DNIT):</strong><br>
+        Fecha · Tipo Timbrado · Documento · Serie · CDC · Timbrado · Venc. · Razón Social · RUC · DV ·
+        Grav.10% · Grav.5% · IVA 10% · IVA 5% · Exentas · Base Imp. · Redondeo · Total · Mon. · Condición · Cuotas
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal('modal-export-fechas')">Cancelar</button>
+        <button class="btn btn-success" onclick="confirmarExportFecha()">📥 Generar Exportación</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JS PRINCIPAL -->
 <script>
 window.dbUsuarios =[]; window.dbClientes =[]; window.totalDocs = 0; window.currentUser = null; 
 window.editandoUsuIdx = -1; window.editandoCliIdx = -1; window.wizContext = null;
@@ -1022,7 +1056,6 @@ window.renderMayorYBalance = function() {
   document.getElementById('bal_activos').innerHTML = actHtml || "<i>Sin movimientos</i>"; document.getElementById('tot_activos').textContent = "Total Activos: ₲ " + tAct.toLocaleString();
   document.getElementById('bal_pasivos').innerHTML = pasHtml || "<i>Sin movimientos</i>"; document.getElementById('bal_patri').innerHTML = patHtml; document.getElementById('tot_pas_pat').textContent = "Total Pas+Pat: ₲ " + (tPas+tPat).toLocaleString();
 
-  // ESTADO DE CUENTAS 
   var terceros = {};
   (c.libros.compras||[]).forEach(d => { if(d.condicion==='credito'){ var k=d.ruc+'_'+(d.rol||'proveedor'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'proveedor', fact:0, cp:0}; terceros[k].fact += d.bruto; } });
   (c.libros.ventas||[]).forEach(d => { if(d.condicion==='credito'){ var k=d.ruc+'_'+(d.rol||'cliente'); if(!terceros[k]) terceros[k]={ruc:d.ruc, tercero:d.tercero, rol:d.rol||'cliente', fact:0, cp:0}; terceros[k].fact += d.bruto; } });
@@ -1098,7 +1131,7 @@ window.guardarAsientoManual = function() {
     window.saveData(); window.closeModal('modal-asiento-manual'); window.renderLibros(); window.renderMayorYBalance();
 };
 
-// ===== WIZARD (CARGA COMPROBANTES - TILDABLE) =====
+// ===== WIZARD =====
 window.toggleTasas = function() {
     var t = document.getElementById('wiz_iva_tasa').value;
     var isMixta = (t === 'mixta');
@@ -1254,7 +1287,6 @@ window.guardarAsientoWizard = function() {
   var lin =[], obj = {fecha: fch, tipo: tipo, ref_asiento: nAsi, ruc: document.getElementById('wiz_ruc').value || "S/RUC", tercero: document.getElementById('wiz_tercero').value || "Varios", operacion: oper, rol: document.getElementById('wiz_rol_tercero').value};
   var mtd = document.getElementById('wiz_pago_tipo').value, ref = document.getElementById('wiz_ref_doc') ? document.getElementById('wiz_ref_doc').value : ""; if(ref) glosa += ` (Ref: Fact. ${ref})`;
 
-  // Impuestos Deducibles
   var appliedTaxes = Array.from(document.querySelectorAll('.wiz-tax-chk:checked')).map(cb => cb.value);
   obj.impuestos_aplicados = appliedTaxes;
 
@@ -1278,7 +1310,7 @@ window.guardarAsientoWizard = function() {
   var neto10 = g10 - i10;
   var neto5 = g5 - i5;
 
-  if(oper === 'compra' && !appliedTaxes.includes('IVA') && !isRec) { neto10 += i10; i10 = 0; neto5 += i5; i5 = 0; } // Deduccion: IVA es costo
+  if(oper === 'compra' && !appliedTaxes.includes('IVA') && !isRec) { neto10 += i10; i10 = 0; neto5 += i5; i5 = 0; }
 
   obj.nro = document.getElementById('wiz_nro').value || "S/N"; obj.condicion = (mtd === 'credito') ? 'credito' : 'contado';
   obj.timbrado = tipo==='retencion'? (document.getElementById('ret_timbrado').value||"S/T") : (document.getElementById('wiz_timbrado').value||"S/T");
@@ -1357,7 +1389,7 @@ window.consultarSIFEN = function() {
     window.abrirMiniaturaDNIT(cdc);
 };
 
-// ===== IMPORTACIÓN EXCEL / IA =====
+// ===== IMPORTACIÓN =====
 window.openModalImportMain = function() { document.getElementById('imp_box_cli').style.display='flex'; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; document.getElementById('file_import_csv').value=''; window.openModal('modal-import'); };
 window.openModalImportProfile = function() { document.getElementById('imp_box_cli').style.display='none'; document.getElementById('imp_cli_sel').value=window.currentCli; document.getElementById('imp_data').value=''; document.getElementById('imp_errores').style.display='none'; document.getElementById('file_import_csv').value=''; window.openModal('modal-import'); };
 
@@ -1407,7 +1439,7 @@ window.procesarImportacion = function() {
     }
 };
 
-// ===== IMPUESTOS BUSCADORES =====
+// ===== IMPUESTOS =====
 window.actualizarSelectsClientes = function() {
     var opts = window.dbClientes.map((c,i) => { if(puedeVerCliente(c.id) && c.estado==='activo') return `<option value="${i}">${c.nom} (RUC: ${c.ruc})</option>`; return ''; }).join('');
     document.querySelectorAll('.cli-select').forEach(s => { s.innerHTML = opts; });
@@ -1451,10 +1483,7 @@ window.onload = function() {
     window.initPlanCuentas(); 
 };
 
-// ================================================================
-//  FIXES COMPLETOS — ContaPY
-// ================================================================
-
+// ===== FIXES =====
 window.toggleWin = function(btn, action) {
     var modal = btn.closest('.modal');
     if (!modal) return;
@@ -1623,11 +1652,181 @@ window.enviarMensajeIA = async function() {
 window.abrirWhatsApp = function() {
     window.open('https://wa.me/595986528000?text='+encodeURIComponent('Hola, necesito soporte con ContaPY 👋'),'_blank');
 };
+
+// ══════════════════════════════════════════════════════════════════
+//  EXPORTACIÓN CON FILTRO DE FECHAS — FORMATO DNIT (NUEVO)
+// ══════════════════════════════════════════════════════════════════
+
+window._exportTipo = null;
+
+window.abrirModalExport = function(tipo) {
+    window._exportTipo = tipo;
+    var hoy = new Date();
+    var primerDia = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+    var fmt = function(d) { return d.toISOString().split('T')[0]; };
+    document.getElementById('exp_fecha_desde').value = fmt(primerDia);
+    document.getElementById('exp_fecha_hasta').value = fmt(hoy);
+    window.openModal('modal-export-fechas');
+};
+
+window.confirmarExportFecha = function() {
+    var tipo   = window._exportTipo;
+    var desde  = document.getElementById('exp_fecha_desde').value;
+    var hasta  = document.getElementById('exp_fecha_hasta').value;
+    if (!desde || !hasta) { alert('❌ Completá ambas fechas.'); return; }
+    if (desde > hasta)    { alert('❌ La fecha Desde no puede ser mayor a Hasta.'); return; }
+    window.closeModal('modal-export-fechas');
+    window.exportLibroFormato(tipo, desde, hasta);
+};
+
+window.exportLibroFormato = function(tipo, fechaDesde, fechaHasta) {
+    var cli = window.dbClientes[window.currentCli];
+    if (!cli) { alert('❌ No hay cliente activo.'); return; }
+
+    var registros = tipo === 'compras' ? (cli.libros.compras || []) : (cli.libros.ventas || []);
+
+    var parseDate = function(str) {
+        if (!str) return null;
+        if (str.includes('/')) {
+            var p = str.split('/');
+            return new Date(p[2] + '-' + p[1].padStart(2,'0') + '-' + p[0].padStart(2,'0'));
+        }
+        return new Date(str);
+    };
+
+    var dDesde = new Date(fechaDesde);
+    var dHasta = new Date(fechaHasta);
+    dHasta.setHours(23, 59, 59);
+
+    var filtrados = registros.filter(function(r) {
+        var d = parseDate(r.fecha);
+        return d && d >= dDesde && d <= dHasta;
+    });
+
+    if (filtrados.length === 0) {
+        alert('⚠️ No se encontraron comprobantes en el rango seleccionado.');
+        return;
+    }
+
+    var fmtFecha = function(str) {
+        if (!str) return '';
+        if (str.includes('/')) return str;
+        var p = str.split('-');
+        return p[2] + '/' + p[1] + '/' + p[0];
+    };
+
+    var num = function(v) { return (v || 0).toString(); };
+    var actividad = (cli.taxes || []).join('/') || 'IVA';
+    var tituloLib   = tipo === 'compras' ? 'LIBRO COMPRAS' : 'LIBRO VENTAS';
+    var tipoFactura = tipo === 'compras' ? 'FACTURAS DE COMPRA' : 'FACTURAS DE VENTA';
+    var fDesdeStr = fmtFecha(fechaDesde);
+    var fHastaStr = fmtFecha(fechaHasta);
+
+    var rows = [];
+    rows.push([tituloLib]);
+    rows.push(['CONTRIBUYENTE: ' + cli.ruc + ' - ' + cli.nom.toUpperCase()]);
+    rows.push(['PERIODO: ' + fDesdeStr + ' al ' + fHastaStr + ' - TIPO: ' + tipoFactura + ' - ACTIVIDAD: ' + actividad]);
+    rows.push([]);
+
+    // Fila 5: encabezado nivel 1
+    rows.push([
+        'FECHA','TIPO TIMBRADO','DOCUMENTO','SERIE','CDC DOCUMENTO',
+        'TIMB.','VENC.',
+        'PROVEEDOR','','',
+        'VALORES DE COMPRAS','','','','','','','',
+        'MON.','CONDICIÓN','CUOTAS'
+    ]);
+
+    // Fila 6: encabezado nivel 2
+    rows.push([
+        '','','','','','','',
+        'RAZÓN SOCIAL','RUC','DV',
+        'GRAV. 10%','GRAV. 5%','IVA 10%','IVA 5%','EXENTAS',
+        'BASE IMP.','REDONDEO','TOTAL',
+        '','',''
+    ]);
+
+    // Datos
+    filtrados.forEach(function(r) {
+        var grav10  = r.grav10 || 0;
+        var grav5   = r.grav5  || 0;
+        var iva10   = r.iva10  || 0;
+        var iva5    = r.iva5   || 0;
+        var exenta  = r.exe    || 0;
+        var baseImp = grav10 + grav5 + exenta;
+        var total   = r.bruto  || 0;
+        var redondeo = total - (grav10 + iva10 + grav5 + iva5 + exenta);
+        var tipoTimb  = (r.cdc && r.cdc.length === 44) ? 'ELECTRONICO' : 'IMPRESO';
+        var condicion = (r.condicion === 'credito') ? 'CRE' : 'CON';
+
+        rows.push([
+            fmtFecha(r.fecha),
+            tipoTimb,
+            r.nro      || '',
+            '',
+            r.cdc      || '',
+            r.timbrado || '',
+            '',
+            r.tercero  || '',
+            r.ruc      || '',
+            '',
+            num(grav10),
+            num(grav5),
+            num(iva10),
+            num(iva5),
+            num(exenta),
+            num(baseImp),
+            num(redondeo !== 0 ? redondeo : 0),
+            num(total),
+            'G$',
+            condicion,
+            r.cuotas || '1'
+        ]);
+    });
+
+    // Totales
+    var totGrav10 = filtrados.reduce(function(s,r){ return s+(r.grav10||0); }, 0);
+    var totGrav5  = filtrados.reduce(function(s,r){ return s+(r.grav5||0);  }, 0);
+    var totIva10  = filtrados.reduce(function(s,r){ return s+(r.iva10||0);  }, 0);
+    var totIva5   = filtrados.reduce(function(s,r){ return s+(r.iva5||0);   }, 0);
+    var totExenta = filtrados.reduce(function(s,r){ return s+(r.exe||0);    }, 0);
+    var totBase   = totGrav10 + totGrav5 + totExenta;
+    var totTotal  = filtrados.reduce(function(s,r){ return s+(r.bruto||0);  }, 0);
+
+    rows.push([]);
+    rows.push([
+        'TOTALES','','','','','','',
+        filtrados.length + ' registros','','',
+        num(totGrav10),num(totGrav5),num(totIva10),num(totIva5),num(totExenta),
+        num(totBase),'0',num(totTotal),
+        '','',''
+    ]);
+
+    var csv = rows.map(function(row) {
+        return row.map(function(cell) {
+            var s = (cell === undefined || cell === null) ? '' : String(cell);
+            if (s.includes(';') || s.includes('"') || s.includes('\n')) {
+                s = '"' + s.replace(/"/g, '""') + '"';
+            }
+            return s;
+        }).join(';');
+    }).join('\n');
+
+    var nombreArchivo = tituloLib.replace(' ','_') + '_' +
+        fechaDesde.replace(/-/g,'') + '_al_' + fechaHasta.replace(/-/g,'') + '.csv';
+
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' }));
+    a.download = nombreArchivo;
+    a.click();
+
+    setTimeout(function() {
+        alert('✅ ' + filtrados.length + ' comprobantes exportados.\nArchivo: ' + nombreArchivo);
+    }, 300);
+};
 </script>
 
-<!-- ==============================================
-     MÓDULO FIREBASE (CONEXIÓN EN LA NUBE)
-=============================================== -->
+<!-- MÓDULO FIREBASE -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
