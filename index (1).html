@@ -116,9 +116,10 @@
         <button class="channel-btn" onclick="playTV('py','m3u8','https://rds3gen.desdeparaguay.net/venusmedia/venusmedia/.m3u8')">💫 Venus TV</button>
         <button class="channel-btn" onclick="playTV('py','m3u8','https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8')">📺 GO TV</button>
         <button class="channel-btn" onclick="playTV('py','m3u8','https://tigocloudgen.desdeparaguay.net/satelitaltv/satelitaltv/playlist.m3u8')">📺 Visión TV</button>
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/tropicaliatv')">🎶 Tropicalia</button>
+        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/brunomasitv')">🎵 Bruno Masi TV</button>
         <button class="channel-btn" id="btn-canalpro" data-tab="py" data-key="canalpro" data-type="m3u8">📺 Canal Pro</button>
-        <button class="channel-btn" id="btn-poputv" data-tab="py" data-key="poputv" data-type="m3u8">🌐 Popu TV</button>
+        <!-- Popu TV → iframe directo gen.com.py (más estable) -->
+        <button class="channel-btn" onclick="playTV('py','iframe','https://www.gen.com.py/live/')">🌐 Popu TV</button>
         <button class="channel-btn" id="btn-productiva" data-tab="py" data-key="productiva" data-type="m3u8">📰 Productiva</button>
         <button class="channel-btn" id="btn-launion" data-tab="py" data-key="launion" data-type="m3u8">🙏 La Unión</button>
         <button class="channel-btn" id="btn-nandutitv" data-tab="py" data-key="nandutitv" data-type="m3u8">📡 Ñanduti TV</button>
@@ -392,14 +393,30 @@
     </div>
     <div id="no-results" class="no-results">Sin resultados 😕</div>
 
+    <!-- ══ ASUNCIÓN ══ -->
     <div class="city-group" id="grp-asufm">
         <div class="city-header" onclick="toggleGroup('grp-asufm')">📻 Asunción <span class="toggle-icon">▾</span></div>
         <div class="city-cards" id="cards-grp-asufm">
             <div class="radio-card" onclick="playRadio(this,'https://cast1.asurahosting.com/proxy/montecarlonew/stream','Montecarlo','100.9 FM')"><span class="freq">100.9 FM</span><span class="rname">Montecarlo</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-            <div class="radio-card" onclick="playRadio(this,'https://rfs1.farra.com.py:9433/stream','Farra','101.3 FM')"><span class="freq">101.3 FM</span><span class="rname">Farra</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
+            <!-- Farra → URL actualizada vía desdeparaguay -->
+            <div class="radio-card" onclick="playRadio(this,'https://zn1radios.desdeparaguay.net/movfarra/movfarra.stream/playlist.m3u8?k=80db1bc22c35e42f9574f8af3f0d5d215cd6085f37d3de28b04dbef34c4855f0&exp=1776478624','Farra','101.3 FM')"><span class="freq">101.3 FM</span><span class="rname">Farra</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
             <div class="radio-card" onclick="playRadio(this,'https://rds3.desdeparaguay.net/movtropicalia/movtropicalia.stream/playlist.m3u8','Tropicalia','93.9 FM')"><span class="freq">93.9 FM</span><span class="rname">Tropicalia</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
+            <!-- Radios nuevas Asunción -->
+            <div class="radio-card" onclick="playRadio(this,'https://zn1radios.desdeparaguay.net/transanr/transanr/playlist.m3u8?k=461664484e84499ba29b88b7bed1e4ba79a7f10db8c4d0cfe306479a8065d25e&exp=1776478462','Radio ANR','Online')"><span class="freq">Online</span><span class="rname">Radio ANR</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
+            <div class="radio-card" onclick="playRadio(this,'https://zn1radios.desdeparaguay.net/trans920/trans920/playlist.m3u8?k=606951971181e376fec275f75b8db868971fa0085be012444e7bd043ee0cfeda&exp=1776478545','RNP','920 AM')"><span class="freq">920 AM</span><span class="rname">RNP</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
+            <div class="radio-card" onclick="playRadio(this,'https://www.desde-paraguay.com/transcamara/transcamara/playlist.m3u8?k=5fa084c9734193dab24b76c97336bbc4ed7a87fce9d1fd93fca87994f8305fcf&exp=1776478588','Radio Cámara','Online')"><span class="freq">Online</span><span class="rname">Radio Cámara</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
         </div>
     </div>
+
+    <!-- ══ ASUNCIÓN / CENTRAL ══ -->
+    <div class="city-group" id="grp-asuncion-am">
+        <div class="city-header" onclick="toggleGroup('grp-asuncion-am')">📻 Asunción / Central <span class="toggle-icon">▾</span></div>
+        <div class="city-cards" id="cards-grp-asuncion-am">
+            <div class="radio-card" onclick="playRadio(this,'https://www.desde-paraguay.com/movemisoras2/movemisoras2.stream/playlist.m3u8?k=8d6b4cbda0ba464f9e57170bb2265dcd60358a88cd7f8b1710e672042ad38ec2&exp=1773707622','Emisoras Paraguay','106.1 FM')"><span class="freq">106.1 FM</span><span class="rname">Emisoras PY</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
+        </div>
+    </div>
+
+    <!-- ══ CAAGUAZÚ ══ -->
     <div class="city-group" id="grp-caaguazu">
         <div class="city-header" onclick="toggleGroup('grp-caaguazu')">📍 Caaguazú <span class="toggle-icon">▾</span></div>
         <div class="city-cards" id="cards-grp-caaguazu">
@@ -409,6 +426,8 @@
             <div class="radio-card" onclick="playRadio(this,'https://stream.creativamedia.com.py:1936/seven/seven/playlist.m3u8','Seven Radio','Online')"><span class="freq">Online</span><span class="rname">Seven Radio</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
         </div>
     </div>
+
+    <!-- ══ CDE & MINGA GUAZÚ ══ -->
     <div class="city-group" id="grp-cde">
         <div class="city-header" onclick="toggleGroup('grp-cde')">📍 CDE & Minga Guazú <span class="toggle-icon">▾</span></div>
         <div class="city-cards" id="cards-grp-cde">
@@ -420,6 +439,8 @@
             <div class="radio-card" onclick="playRadio(this,'https://copacorpp.desdeparaguay.net/rpaipuku/rpaipuku_py_all/playlist.m3u8','Radio Paí Puku','AM/FM')"><span class="freq">AM/FM</span><span class="rname">Paí Puku</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
         </div>
     </div>
+
+    <!-- ══ SANTA RITA & NARANJAL ══ -->
     <div class="city-group" id="grp-santarita">
         <div class="city-header" onclick="toggleGroup('grp-santarita')">📍 Santa Rita & Naranjal <span class="toggle-icon">▾</span></div>
         <div class="city-cards" id="cards-grp-santarita">
@@ -432,17 +453,13 @@
             <div class="radio-card" onclick="playRadio(this,'https://copacorn.desdeparaguay.net/rnaranjal/rnaranjal_py_all/playlist.m3u8','Radio Naranjal','103.5 FM')"><span class="freq">103.5 FM</span><span class="rname">Radio Naranjal</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
         </div>
     </div>
+
+    <!-- ══ ITAPÚA — NATALIO ══ -->
     <div class="city-group" id="grp-natalio">
         <div class="city-header" onclick="toggleGroup('grp-natalio')">📍 Itapúa — Natalio <span class="toggle-icon">▾</span></div>
         <div class="city-cards" id="cards-grp-natalio">
             <div class="radio-card" onclick="playRadio(this,'https://copacornat.desdeparaguay.net/rnatalio/rnatalio_py_all/playlist.m3u8','Radio Natalio','101.5 FM')"><span class="freq">101.5 FM</span><span class="rname">Radio Natalio</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
             <div class="radio-card" onclick="playRadio(this,'https://copacorli.desdeparaguay.net/rlibertad/rlibertad_py_all/playlist.m3u8','Radio Libertad','94.5 FM')"><span class="freq">94.5 FM</span><span class="rname">Libertad</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
-        </div>
-    </div>
-    <div class="city-group" id="grp-asuncion-am">
-        <div class="city-header" onclick="toggleGroup('grp-asuncion-am')">📻 Asunción / Central <span class="toggle-icon">▾</span></div>
-        <div class="city-cards" id="cards-grp-asuncion-am">
-            <div class="radio-card" onclick="playRadio(this,'https://www.desde-paraguay.com/movemisoras2/movemisoras2.stream/playlist.m3u8?k=8d6b4cbda0ba464f9e57170bb2265dcd60358a88cd7f8b1710e672042ad38ec2&exp=1773707622','Emisoras Paraguay','106.1 FM')"><span class="freq">106.1 FM</span><span class="rname">Emisoras PY</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
         </div>
     </div>
 </div>
@@ -477,7 +494,6 @@ function playFromKey(tab, key) {
     var val = canales[key];
     if (!val || val.length < 5) return;
     if (val.trim().startsWith('<iframe') || val.trim().startsWith('<IFRAME')) {
-        // Extraer src del iframe
         var match = val.match(/src=["']([^"']+)["']/i);
         if (match) {
             playTV(tab, 'iframe', match[1]);
@@ -599,7 +615,7 @@ function playCAM(type, url) {
 }
 
 // ═══════════════════════════════════════════════════
-// RADIOS (CON SISTEMA MEJORADO ANTI-FALLOS ANDROID)
+// RADIOS
 // ═══════════════════════════════════════════════════
 var activeCard = null;
 var radioHls = null;
@@ -610,10 +626,9 @@ function playRadio(card, url, name, freq) {
     card.classList.add('playing');
     
     document.getElementById('rname-big').textContent = name;
-    document.getElementById('rfreq').textContent = 'Cargando... ⏳'; // Feedback de carga
+    document.getElementById('rfreq').textContent = 'Cargando... ⏳';
     var audio = document.getElementById('main-audio');
 
-    // Eventos para detectar si carga o da error
     audio.oncanplay = function() {
         document.getElementById('rfreq').textContent = freq;
     };
