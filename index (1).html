@@ -109,6 +109,8 @@
         <button class="channel-btn" onclick="playTV('py','iframe','https://geo.dailymotion.com/player/x1at3a.html?video=k4nLYiNrBX8W5jDbSlM&autoplay=1')">📺 Trece PY</button>
         <button class="channel-btn" id="btn-mega" data-tab="py" data-key="mega" data-type="m3u8">📺 Mega TV</button>
         <button class="channel-btn" id="btn-rcctv" data-tab="py" data-key="rcctv" data-type="m3u8">📺 RCC TV</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/6.m3u8')">📺 A24</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8')">🇵🇾 Paraguay TV</button>
     </div>
 
     <div class="category-title">🎬 Entretenimiento / Noticias</div>
@@ -118,8 +120,8 @@
         <button class="channel-btn" onclick="playTV('py','m3u8','https://tigocloudgen.desdeparaguay.net/satelitaltv/satelitaltv/playlist.m3u8')">📺 Visión TV</button>
         <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/brunomasitv')">🎵 Bruno Masi TV</button>
         <button class="channel-btn" id="btn-canalpro" data-tab="py" data-key="canalpro" data-type="m3u8">📺 Canal Pro</button>
-        <!-- Popu TV → iframe directo gen.com.py (más estable) -->
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.gen.com.py/live/')">🌐 Popu TV</button>
+        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/poputv')">🌐 Popu TV</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://copacogen.desdeparaguay.net/universotv/universotv_py_alta/playlist.m3u8?admin=nacion')">🌐 Popu TV (Alt)</button>
         <button class="channel-btn" id="btn-productiva" data-tab="py" data-key="productiva" data-type="m3u8">📰 Productiva</button>
         <button class="channel-btn" id="btn-launion" data-tab="py" data-key="launion" data-type="m3u8">🙏 La Unión</button>
         <button class="channel-btn" id="btn-nandutitv" data-tab="py" data-key="nandutitv" data-type="m3u8">📡 Ñanduti TV</button>
@@ -128,6 +130,7 @@
         <button class="channel-btn" id="btn-nandejaranee" data-tab="py" data-key="nandejaranee" data-type="m3u8">🗣️ Ñande Jara Ñe'e</button>
         <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/heitv')">🌿 HEI</button>
         <button class="channel-btn" id="btn-lacosta" data-tab="py" data-key="lacosta" data-type="m3u8">🌊 La Costa TV</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://copacogen.desdeparaguay.net/villaelisatv/villaelisatv/playlist.m3u8?admin=nacion')">🏘️ Villa Elisa TV</button>
     </div>
 </div>
 
@@ -207,7 +210,7 @@
     <div class="category-title">📺 Canales Abiertos BR</div>
     <div class="channels">
         <button class="channel-btn" onclick="playTV('br','m3u8','https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8')">TV Cultura</button>
-        <button class="channel-btn" id="btn-br_sbt" data-tab="br" data-key="br_sbt" data-type="auto">📺 SBT</button>
+        <button class="channel-btn" onclick="playTV('br','m3u8','https://video09.logicahost.com.br/sbtcuiaba/sbtcuiaba/playlist.m3u8')">📺 SBT</button>
         <button class="channel-btn" id="btn-br_record" data-tab="br" data-key="br_record" data-type="auto">📺 Record TV</button>
         <button class="channel-btn" id="btn-br_cnnbrasil" data-tab="br" data-key="br_cnnbrasil" data-type="auto">📺 CNN Brasil</button>
         <button class="channel-btn" id="btn-br_bandnews" data-tab="br" data-key="br_bandnews" data-type="auto">📺 Band News</button>
@@ -523,16 +526,28 @@ cargarCanales(vincularBotones);
 // TABS
 // ═══════════════════════════════════════════════════
 function showTab(name, btn) {
-    Object.keys(hlsInstances).forEach(function(tab) {
+    // ── KILL ALL: mata video + iframe en TODOS los tabs sin excepción ──
+    ['py','eventopy','ar','br','bo','latam'].forEach(function(tab) {
         try {
             var c = document.getElementById(tab + '-player');
-            if (c) { var v = c.querySelector('video'); if (v) { v.pause(); v.src = ''; } var f = c.querySelector('iframe'); if (f) f.src = 'about:blank'; }
-            if (hlsInstances[tab]) { hlsInstances[tab].destroy(); delete hlsInstances[tab]; }
+            if (c) {
+                var v = c.querySelector('video');
+                if (v) { v.pause(); v.removeAttribute('src'); v.load(); }
+                var f = c.querySelector('iframe');
+                if (f) { f.src = 'about:blank'; }
+            }
+            if (hlsInstances[tab]) { try{hlsInstances[tab].destroy();}catch(e){} delete hlsInstances[tab]; }
+            if (dashInstances[tab]) { try{dashInstances[tab].reset();}catch(e){} delete dashInstances[tab]; }
         } catch(e) {}
     });
     var cam = document.getElementById('cam-player');
-    if (cam) { var cv = cam.querySelector('video'); if (cv) { cv.pause(); cv.src=''; } var cf = cam.querySelector('iframe'); if (cf) cf.src='about:blank'; }
-    if (camHls) { camHls.destroy(); camHls = null; }
+    if (cam) {
+        var cv = cam.querySelector('video');
+        if (cv) { cv.pause(); cv.removeAttribute('src'); cv.load(); }
+        var cf = cam.querySelector('iframe');
+        if (cf) cf.src = 'about:blank';
+    }
+    if (camHls) { try{camHls.destroy();}catch(e){} camHls = null; }
 
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
