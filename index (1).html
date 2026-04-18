@@ -286,7 +286,7 @@
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://izidisplay.com/AoVivo/Ponte')">🎥 Atacado Connect</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/V2tjeGMyRXhjRmhQU0dSUFVYcFdlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/V1ZWb1UwMUhUa2xVVkZwTlpWUm5PUT09K1I=/fozpontedaamizadesentidoparaguai.stream/')">🎥 Sentido Paraguay</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/V2tjeGMyRXhjRmhQU0dSUFVYcFdlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/V1ZWb1UwMUhUa2xVVkZwTlpWUm5PUT09K1I=/fozpontedaamizadesentidobrasil.stream/')">🎥 Sentido Brasil</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/dmlkZW8wNC5sb2dpY2Fob3N0LmNvbS5icisx/16:9/YUhSMGNITTZMeTg5K1o=/fozaduanapontedaamizade.stream/')">🎥 Aduana BR-277</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portaldacidade//false/false/dmlkZW8wNC5sb2dpY2Fob3N0LmNvbS5icisx/16:9/YUhSMGNITTZMeTg5K1o=/fozaduanapontedaamizade.stream/')">🎥 Aduana BR-277</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portaldacidade//false/false/V2tjeGMyRXhjRmhQU0dST1lWUldlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/aHR0cHM6Ly8rMQ==/fozsentidopontedaamizade01.stream/')">🎥 BR-277 Sent. Ponte</button>
     </div>
     <div class="category-title">🏙️ Encarnación</div>
@@ -463,7 +463,7 @@
 
 <script>
 // ═══════════════════════════════════════════════════
-// CARGA DE CANALES DESDE GITHUB — fuente única de verdad
+// CARGA DE CANALES DESDE GITHUB
 // ═══════════════════════════════════════════════════
 var CANALES_URL = 'https://raw.githubusercontent.com/jcarlos2028/tv-camaras/main/canales.json';
 var canales = {};
@@ -483,10 +483,6 @@ function cargarCanales(callback) {
     xhr.send();
 }
 
-// ─────────────────────────────────────────────────
-// Detecta si un valor del JSON es iframe o m3u8/url
-// y ejecuta la reproducción correcta
-// ─────────────────────────────────────────────────
 function playFromKey(tab, key) {
     var val = canales[key];
     if (!val || val.length < 5) return;
@@ -520,7 +516,9 @@ cargarCanales(vincularBotones);
 // TABS (LIMPIEZA TOTAL RESTAURADA)
 // ═══════════════════════════════════════════════════
 function showTab(name, btn) {
-    // KILL ALL: mata video + iframe en TODOS los tabs sin excepción['py','eventopy','ar','br','bo','latam','camaras'].forEach(function(tab) {
+    // KILL ALL: mata video + iframe en TODOS los tabs sin excepción
+    var tabsToClean = ['py','eventopy','ar','br','bo','latam','camaras'];
+    tabsToClean.forEach(function(tab) {
         try {
             var c = document.getElementById(tab + '-player');
             if (c) {
