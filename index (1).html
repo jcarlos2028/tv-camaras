@@ -520,7 +520,7 @@ cargarCanales(vincularBotones);
 // TABS (LIMPIEZA TOTAL RESTAURADA)
 // ═══════════════════════════════════════════════════
 function showTab(name, btn) {
-    // ── KILL ALL: mata video + iframe en TODOS los tabs sin excepción ──['py','eventopy','ar','br','bo','latam','camaras'].forEach(function(tab) {
+    // KILL ALL: mata video + iframe en TODOS los tabs sin excepción['py','eventopy','ar','br','bo','latam','camaras'].forEach(function(tab) {
         try {
             var c = document.getElementById(tab + '-player');
             if (c) {
