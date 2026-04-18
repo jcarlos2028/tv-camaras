@@ -156,6 +156,7 @@
         <div class="category-title">📡 Canales Abiertos</div>
         <div class="channels">
             <button class="channel-btn" onclick="playTV('py','m3u8','https://d2qsan2ut81n2k.cloudfront.net/live/2e1f1b6a-9d03-4194-8559-2eabe61a1555/ts:abr.m3u8')">📺 SNT</button>
+            <button class="channel-btn" onclick="playTV('py','m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/9.m3u8')">📺 SNT (Alt)</button>
             <button class="channel-btn" onclick="playTV('py','m3u8','https://d1y0t05eznkmpn.cloudfront.net/index.m3u8')">📺 C9N</button>
             <button class="channel-btn" onclick="playTV('py','m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/120.m3u8')">📺 Paravisión</button>
             <button class="channel-btn" id="btn-telefuturo" data-tab="py" data-key="telefuturo" data-type="m3u8">📺 Telefuturo</button>
@@ -167,6 +168,8 @@
             <button class="channel-btn" onclick="playTV('py','iframe','https://geo.dailymotion.com/player/x1at3a.html?video=k4nLYiNrBX8W5jDbSlM&autoplay=1')">📺 Trece PY</button>
             <button class="channel-btn" id="btn-mega" data-tab="py" data-key="mega" data-type="m3u8">📺 Mega TV</button>
             <button class="channel-btn" id="btn-rcctv" data-tab="py" data-key="rcctv" data-type="m3u8">📺 RCC TV</button>
+            <button class="channel-btn" onclick="playTV('py','m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/6.m3u8')">📺 A24</button>
+            <button class="channel-btn" onclick="playTV('py','m3u8','https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8')">🇵🇾 Paraguay TV</button>
         </div>
 
         <div class="category-title">🎬 Entretenimiento / Noticias</div>
@@ -174,9 +177,11 @@
             <button class="channel-btn" onclick="playTV('py','m3u8','https://rds3gen.desdeparaguay.net/venusmedia/venusmedia/.m3u8')">💫 Venus TV</button>
             <button class="channel-btn" onclick="playTV('py','m3u8','https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8')">📺 GO TV</button>
             <button class="channel-btn" onclick="playTV('py','m3u8','https://tigocloudgen.desdeparaguay.net/satelitaltv/satelitaltv/playlist.m3u8')">📺 Visión TV</button>
-            <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/tropicaliatv')">🎶 Tropicalia</button>
+            <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/brunomasitv')">🎵 Bruno Masi TV</button>
             <button class="channel-btn" id="btn-canalpro" data-tab="py" data-key="canalpro" data-type="m3u8">📺 Canal Pro</button>
-            <button class="channel-btn" id="btn-poputv" data-tab="py" data-key="poputv" data-type="m3u8">🌐 Popu TV</button>
+            <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/poputv')">🌐 Popu TV</button>
+            <button class="channel-btn" onclick="playTV('py','m3u8','https://tigocloudgen.desdeparaguay.net/universotv/universotv_py_baja/playlist.m3u8?k=3946ea64e93181678f05f8bbfc2c56c01e33287759cc167e5321c572b2a87a2a&exp=1776539892')">🌐 Popu TV (Alt)</button>
+            <button class="channel-btn" onclick="playTV('py','m3u8','https://rds3.desdeparaguay.net/tropicaliatv/tropicaliatv/playlist.m3u8')">🎶 Tropicalia</button>
             <button class="channel-btn" id="btn-productiva" data-tab="py" data-key="productiva" data-type="m3u8">📰 Productiva</button>
             <button class="channel-btn" id="btn-launion" data-tab="py" data-key="launion" data-type="m3u8">🙏 La Unión</button>
             <button class="channel-btn" id="btn-nandutitv" data-tab="py" data-key="nandutitv" data-type="m3u8">📡 Ñanduti TV</button>
@@ -185,6 +190,7 @@
             <button class="channel-btn" id="btn-nandejaranee" data-tab="py" data-key="nandejaranee" data-type="m3u8">🗣️ Ñande Jara Ñe'e</button>
             <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/heitv')">🌿 HEI</button>
             <button class="channel-btn" id="btn-lacosta" data-tab="py" data-key="lacosta" data-type="m3u8">🌊 La Costa TV</button>
+            <button class="channel-btn" onclick="playTV('py','m3u8','https://copacogen.desdeparaguay.net/villaelisatv/villaelisatv/playlist.m3u8?admin=nacion')">🏘️ Villa Elisa TV</button>
         </div>
     </div>
 
@@ -591,8 +597,9 @@ cargarCanales(vincularBotones);
 // NAVEGACIÓN Y LIMPIEZA INTELIGENTE
 // ═══════════════════════════════════════════════════
 
+// Esta funcion APAGA unicamente los videos de TV y Cámaras
 function cleanTVAndCams() {
-    var tabsToClean =['py','eventopy','ar','br','bo','cl','latam'];
+    var tabsToClean = ['py','eventopy','ar','br','bo','cl','latam'];
     tabsToClean.forEach(function(tab) {
         try {
             var c = document.getElementById(tab + '-player');
@@ -617,9 +624,10 @@ function cleanTVAndCams() {
     if (camHls) { try{camHls.destroy();}catch(e){} camHls = null; }
 }
 
+// Cambio de menú principal
 function showAppView(viewName) {
     cleanTVAndCams();
-    if (viewName !== 'radios') { stopRadio(); } 
+    if (viewName !== 'radios') { stopRadio(); } // Apagar radio si entramos a tv o camaras
     
     document.querySelectorAll('.app-view').forEach(function(v) { v.classList.remove('active'); });
     document.getElementById('view-' + viewName).classList.add('active');
@@ -643,6 +651,7 @@ function showAppView(viewName) {
     window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
+// Sub-menu de Television
 function showTVTab(name, btn) {
     cleanTVAndCams();
     document.querySelectorAll('#view-tv .tab-panel').forEach(function(p) { p.classList.remove('active'); });
@@ -801,18 +810,24 @@ document.addEventListener('visibilitychange', function() {
     var allowBackground = toggleBg ? toggleBg.checked : false;
     
     if (document.hidden) {
-        cleanTVAndCams(); 
-        if (!allowBackground) { stopRadio(); }
+        cleanTVAndCams(); // Siempre apagar TV y Cámaras para ahorrar datos
+        
+        // Si no está marcado el check de segundo plano, apagar también la radio
+        if (!allowBackground) { 
+            stopRadio(); 
+        }
         document.body.classList.add('paused');
     } else {
         document.body.classList.remove('paused');
     }
 });
 
+// Prevenir problemas al cerrar app por completo
 window.addEventListener('blur', function() {
     var toggleBg = document.getElementById('bg-radio-toggle');
     if (!toggleBg || !toggleBg.checked) { cleanTVAndCams(); stopRadio(); }
 });
+
 </script>
 </body>
 </html>
