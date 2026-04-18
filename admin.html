@@ -39,6 +39,8 @@
         .msg.ok { background: #0d3a1a; color: #2ecc71; border: 1px solid #2ecc71; display: block; }
         .msg.error { background: #3a0d0d; color: #e74c3c; border: 1px solid #e74c3c; display: block; }
         .reload-btn { background: #2a2a3e; color: #4fa6ff; border: 1px solid #4fa6ff; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        
+        /* Claude Chat Styles (Visual Only) */
         .claude-section { background: #1c1c2e; border: 1px solid #2a2a3e; border-radius: 10px; margin-top: 10px; overflow: hidden; }
         .claude-header { background: linear-gradient(135deg, #1a1a2e, #0d0d1a); padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #2a2a3e; }
         .claude-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, #cc7a00, #ff9500); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
@@ -72,138 +74,92 @@
     <div id="lista-entretenimiento"></div>
     <div class="section-title">🏆 Eventos PY</div>
     <div id="lista-eventos"></div>
+    
+    <div class="section-title">🇦🇷 Argentina</div>
+    <div id="lista-ar"></div>
+    <div class="section-title">🇧🇷 Brasil</div>
+    <div id="lista-br"></div>
     <div class="section-title">🇧🇴 Bolivia</div>
     <div id="lista-bolivia"></div>
-    <div class="section-title">🇧🇷 Brasil — Canales Abiertos</div>
-    <div id="lista-brasil-abiertos"></div>
-    <div class="section-title">🇧🇷 Brasil — Entretenimiento & Cable</div>
-    <div id="lista-brasil-cable"></div>
-    <div class="section-title">🇧🇷 Brasil — Deportes & Especiales</div>
-    <div id="lista-brasil-deportes"></div>
+    <div class="section-title">🇨🇱 Chile</div>
+    <div id="lista-cl"></div>
+    <div class="section-title">🌎 LATAM</div>
+    <div id="lista-latam"></div>
+    <div class="section-title">🚦 Cámaras</div>
+    <div id="lista-camaras"></div>
+
     <div class="section-title">📻 Radios</div>
     <div id="lista-radios"></div>
+    
     <div class="section-title">💬 Consultar a Claude</div>
     <div class="claude-section">
         <div class="claude-header">
             <div class="claude-avatar">🤖</div>
             <div>
                 <div style="font-weight:bold;color:#fff;font-size:15px;">Claude — Asistente</div>
-                <div style="font-size:11px;color:#888;">Consultá sobre canales, links, problemas técnicos</div>
+                <div style="font-size:11px;color:#888;">Nota: Requiere servidor backend para funcionar por seguridad CORS.</div>
             </div>
         </div>
         <div class="chat-messages" id="chat-messages">
-            <div class="msg-bubble msg-claude">¡Hola! Soy Claude. Podés consultarme sobre los canales, cómo actualizar links, problemas técnicos o cualquier cosa relacionada con tu app.</div>
+            <div class="msg-bubble msg-claude">¡Hola! Tu chat está desactivado porque no tienes la API configurada en este HTML. ¡Pero el panel de administración de links funciona perfecto!</div>
         </div>
         <div class="chat-input-area">
-            <input type="text" class="chat-input" id="chat-input" placeholder="Escribí tu consulta..." onkeydown="if(event.key==='Enter')enviarMensaje()">
-            <button class="chat-send" id="chat-send" onclick="enviarMensaje()">➤</button>
+            <input type="text" class="chat-input" id="chat-input" placeholder="Chat desactivado..." disabled>
+            <button class="chat-send" id="chat-send" disabled>➤</button>
         </div>
     </div>
 </div>
 
 <script>
-var GITHUB_TOKEN = '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';
+// Pega tu Token de GitHub aquí (¡Nunca lo compartas públicamente!)
+var GITHUB_TOKEN = 'TU_TOKEN_AQUI'; 
 var REPO = 'jcarlos2028/tv-camaras';
 var FILE = 'canales.json';
 var fileSha = '';
 var canalesData = {};
 
+// DICCIONARIO COMPLETO CON ABSOLUTAMENTE TODOS TUS CANALES
 var secciones = {
     'lista-abiertos': {
-        keys: ['telefuturo','npy','mega','latele','abctv720','abctv480','rcctv'],
-        nombres: {'telefuturo':'📺 Telefuturo','npy':'📺 NPY','mega':'📺 Mega TV','latele':'📺 LaTele','abctv720':'📺 ABC TV (720p)','abctv480':'📺 ABC TV (480p)','rcctv':'📺 RCC TV'}
+        keys:['snt', 'snt_alt', 'c9n', 'paravision', 'telefuturo', 'telefuturo_alt', 'latele', 'abctv', 'npy', 'gen', 'trecepy', 'mega', 'rcctv', 'a24', 'paraguaytv'],
+        nombres: {'snt':'📺 SNT', 'snt_alt':'📺 SNT (Alt)', 'c9n':'📺 C9N', 'paravision':'📺 Paravisión', 'telefuturo':'📺 Telefuturo', 'telefuturo_alt':'📺 Telefuturo (Alt)', 'latele':'📺 LaTele', 'abctv':'📺 ABC TV', 'npy':'📺 NPY', 'gen':'📡 GEN', 'trecepy':'📺 Trece PY', 'mega':'📺 Mega TV', 'rcctv':'📺 RCC TV', 'a24':'📺 A24', 'paraguaytv':'🇵🇾 Paraguay TV'}
     },
     'lista-entretenimiento': {
-        keys: ['canalpro','poputv','launion','nandutitv','chaquena','gen','nandejaranee','lacosta','productiva','venus'],
-        nombres: {'canalpro':'📺 Canal Pro','poputv':'🌐 Popu TV','launion':'🙏 La Unión','nandutitv':'📡 Ñanduti TV','chaquena':'🌵 Chaqueña TV','gen':'📡 GEN','nandejaranee':'🗣️ Ñande Jara Ñee','lacosta':'🌊 La Costa TV','productiva':'📰 Productiva','venus':'💫 Venus TV'}
+        keys:['venus', 'gotv', 'visiontv', 'brunomasi', 'canalpro','poputv','poputv_alt','tropicalia','productiva','launion','nandutitv','chaquena','monumentaltv','nandejaranee','heitv','lacosta','villaelisa'],
+        nombres: {'venus':'💫 Venus TV', 'gotv':'📺 GO TV', 'visiontv':'📺 Visión TV', 'brunomasi':'🎵 Bruno Masi TV', 'canalpro':'📺 Canal Pro','poputv':'🌐 Popu TV','poputv_alt':'🌐 Popu TV (Alt)','tropicalia':'🎶 Tropicalia','productiva':'📰 Productiva','launion':'🙏 La Unión','nandutitv':'📡 Ñanduti TV','chaquena':'🌵 Chaqueña TV','monumentaltv':'🏟️ Monumental','nandejaranee':'🗣️ Ñande Jara Ñee','heitv':'🌿 HEI', 'lacosta':'🌊 La Costa TV', 'villaelisa':'🏘️ Villa Elisa TV'}
     },
     'lista-eventos': {
-        keys: ['eventopy1','eventopy2','eventopy3'],
+        keys:['eventopy1','eventopy2','eventopy3'],
         nombres: {'eventopy1':'⚽ Tigo Sports 1','eventopy2':'⚽ Tigo Sports 2','eventopy3':'⚽ Tigo Sports 3'}
     },
+    'lista-ar': {
+        keys:['ar_eltrece', 'ar_nettv', 'ar_telefe', 'ar_chacotv', 'ar_argentinisima', 'ar_canalplus', 'ar_espn', 'ar_espn2', 'ar_espn3', 'ar_espnar', 'ar_espnpremium', 'ar_tycsports', 'ar_tntsports', 'ar_foxsports', 'ar_foxsports2', 'ar_directvsports', 'ar_directvsports2', 'ar_tnt', 'ar_warner', 'ar_tntnovelas', 'ar_space', 'ar_axn', 'ar_sony', 'ar_cinemax', 'ar_multipremier', 'ar_starchannel', 'ar_goldenpremier', 'ar_goldenedge', 'ar_goldenplus', 'ar_natgeo', 'ar_discovery', 'ar_history', 'ar_history2', 'ar_animalplanet', 'ar_amc', 'ar_disney', 'ar_cartoon', 'ar_tooncast', 'ar_fmhotkids'],
+        nombres: {'ar_eltrece':'📺 El Trece', 'ar_nettv':'📺 Net TV', 'ar_telefe':'📺 Telefe', 'ar_chacotv':'📺 Chaco TV', 'ar_argentinisima':'📺 Argentinisima', 'ar_canalplus':'📺 Canal Plus', 'ar_espn':'⚽ ESPN', 'ar_espn2':'⚽ ESPN 2', 'ar_espn3':'⚽ ESPN 3', 'ar_espnar':'⚽ ESPN AR', 'ar_espnpremium':'⚽ ESPN Premium', 'ar_tycsports':'⚽ TyC Sports', 'ar_tntsports':'⚽ TNT Sports', 'ar_foxsports':'⚽ Fox Sports', 'ar_foxsports2':'⚽ Fox Sports 2', 'ar_directvsports':'⚽ DirecTV Sports', 'ar_directvsports2':'⚽ DirecTV Sports 2', 'ar_tnt':'🎬 TNT', 'ar_warner':'🎬 Warner', 'ar_tntnovelas':'🎬 TNT Novelas', 'ar_space':'🎬 Space', 'ar_axn':'🎬 AXN', 'ar_sony':'🎬 Sony', 'ar_cinemax':'🎬 Cinemax', 'ar_multipremier':'🎬 Multipremier', 'ar_starchannel':'🎬 Star Channel', 'ar_goldenpremier':'🎬 Golden Premier', 'ar_goldenedge':'🎬 Golden Edge', 'ar_goldenplus':'🎬 Golden Plus', 'ar_natgeo':'🔬 Nat Geo', 'ar_discovery':'🔬 Discovery', 'ar_history':'📜 History', 'ar_history2':'📜 History 2', 'ar_animalplanet':'🐾 Animal Planet', 'ar_amc':'🎬 AMC', 'ar_disney':'🧸 Disney', 'ar_cartoon':'🧸 Cartoon Net', 'ar_tooncast':'🧸 Tooncast', 'ar_fmhotkids':'🧸 FM Hot Kids'}
+    },
+    'lista-br': {
+        keys:['br_globosp', 'br_globorj', 'br_globomg', 'br_globors', 'br_globoam', 'br_tvcultura', 'br_tvbrasil', 'br_bandsp', 'br_bandnews', 'br_recordrj', 'br_recordmg', 'br_recordnews', 'br_redetv', 'br_sbt', 'br_amazonsat', 'br_tvparaense', 'br_hbo', 'br_hbofamily', 'br_paramount', 'br_tnt', 'br_warner', 'br_sony', 'br_studiouniversal', 'br_star', 'br_viva', 'br_comedy', 'br_adultswim', 'br_telecinepipoca', 'br_telecinepremium', 'br_universal', 'br_cnnbrasil', 'br_discovery', 'br_history', 'br_history2', 'br_animalplanet', 'br_discoveryid', 'br_fishtv', 'br_dazn', 'br_bandsports', 'br_tooncast', 'br_cartoonito', 'br_chaves247', 'br_simpsons247'],
+        nombres: {'br_globosp':'🌐 Globo SP', 'br_globorj':'🌐 Globo RJ', 'br_globomg':'🌐 Globo MG', 'br_globors':'🌐 Globo RS', 'br_globoam':'🌐 Globo AM', 'br_tvcultura':'📺 TV Cultura', 'br_tvbrasil':'📺 TV Brasil', 'br_bandsp':'📺 Band SP', 'br_bandnews':'📰 Band News', 'br_recordrj':'📺 Record RJ', 'br_recordmg':'📺 Record MG', 'br_recordnews':'📰 Record News', 'br_redetv':'📺 RedeTV', 'br_sbt':'📺 SBT', 'br_amazonsat':'📺 Amazon Sat', 'br_tvparaense':'📺 TV Paraense', 'br_hbo':'🎬 HBO', 'br_hbofamily':'🎬 HBO Family', 'br_paramount':'🎬 Paramount', 'br_tnt':'🎬 TNT', 'br_warner':'🎬 Warner', 'br_sony':'🎬 Sony', 'br_studiouniversal':'🎬 Studio Universal', 'br_star':'🎬 Star Channel', 'br_viva':'📺 Viva TV', 'br_comedy':'😂 Comedy Central', 'br_adultswim':'🌙 Adult Swim', 'br_telecinepipoca':'🍿 Telecine Pipoca', 'br_telecinepremium':'🍿 Telecine Premium', 'br_universal':'📺 Universal TV', 'br_cnnbrasil':'📰 CNN Brasil', 'br_discovery':'🔬 Discovery', 'br_history':'📜 History', 'br_history2':'📜 History 2', 'br_animalplanet':'🐾 Animal Planet', 'br_discoveryid':'🔍 Discovery ID', 'br_fishtv':'🐟 Fish TV', 'br_dazn':'⚽ DAZN', 'br_bandsports':'⚽ Band Sports', 'br_tooncast':'🧸 Tooncast', 'br_cartoonito':'🧸 Cartoonito', 'br_chaves247':'📺 El Chavo 24/7', 'br_simpsons247':'📺 Simpsons 24/7'}
+    },
     'lista-bolivia': {
-        keys: ['btv','atb','reduno'],
-        nombres: {'btv':'📺 BTV','atb':'📺 ATB','reduno':'📺 Red Uno'}
+        keys:['btv','btv_web','atb','reduno', 'reduno_web', 'bolivision'],
+        nombres: {'btv':'📺 BTV', 'btv_web':'📺 BTV (Web)', 'atb':'📺 ATB','reduno':'📺 Red Uno', 'reduno_web':'📺 Red Uno (Web)', 'bolivision':'📺 Bolivisión'}
     },
-    'lista-brasil-abiertos': {
-        keys: ['br_sbt','br_cnnbrasil','br_record','br_globosp','br_globorj','br_globomg','br_globors','br_globoam','br_bandnews'],
-        nombres: {
-            'br_sbt':      '📺 SBT',
-            'br_cnnbrasil':'📺 CNN Brasil',
-            'br_record':   '📺 Record TV',
-            'br_globosp':  '📺 Globo SP',
-            'br_globorj':  '📺 Globo RJ',
-            'br_globomg':  '📺 Globo MG',
-            'br_globors':  '📺 Globo RS',
-            'br_globoam':  '📺 Globo AM',
-            'br_bandnews': '📺 Band News'
-        }
+    'lista-cl': {
+        keys:['cl_chilechannel'],
+        nombres: {'cl_chilechannel':'📺 Chile Channel'}
     },
-    'lista-brasil-cable': {
-        keys: ['br_tnt','br_warner','br_universal','br_star','br_sony','br_comedy','br_adultswim','br_telecinepipoca','br_telecinepremium','br_foodnetwork','br_history','br_history2','br_animalplanet','br_discoveryid','br_fishtv','br_cartoonito'],
-        nombres: {
-            'br_tnt':             '🎬 TNT',
-            'br_warner':          '🎬 Warner Bros Channel',
-            'br_universal':       '🎬 Universal TV',
-            'br_star':            '🎬 Star Channel',
-            'br_sony':            '🎬 Sony Channel',
-            'br_comedy':          '😂 Comedy Central',
-            'br_adultswim':       '🌙 Adult Swim',
-            'br_telecinepipoca':  '🍿 Telecine Pipoca',
-            'br_telecinepremium': '🍿 Telecine Premium',
-            'br_foodnetwork':     '🍽️ Food Network',
-            'br_history':         '📜 History',
-            'br_history2':        '📜 History 2',
-            'br_animalplanet':    '🐾 Animal Planet',
-            'br_discoveryid':     '🔍 Discovery ID',
-            'br_fishtv':          '🐟 Fish TV',
-            'br_cartoonito':      '🧸 Cartoonito'
-        }
+    'lista-latam': {
+        keys:['latam_tnt', 'latam_warner', 'latam_tntnovelas', 'latam_tntseries', 'latam_axn', 'latam_sony', 'latam_universal', 'latam_studiouniversal', 'latam_space', 'latam_fx', 'latam_pasiones', 'latam_tlnovelas', 'latam_unicable', 'latam_cinemax', 'latam_cinecanal', 'latam_starchannel', 'latam_multipremier', 'latam_goldenpremier', 'latam_goldenedge', 'latam_goldenplus', 'latam_amc', 'latam_syfy', 'latam_espn', 'latam_espn2', 'latam_espn3', 'latam_espn4', 'latam_espn5', 'latam_espnpremium', 'latam_tntsports', 'latam_foxsports', 'latam_foxsports2', 'latam_foxsports3', 'latam_directvsports', 'latam_directvsports2', 'latam_tycsports', 'latam_tudn', 'latam_nba', 'latam_daznf1', 'latam_natgeo', 'latam_discovery', 'latam_discoveryworld', 'latam_history', 'latam_history2', 'latam_animalplanet', 'latam_disney', 'latam_cartoon', 'latam_tooncast', 'latam_cnn', 'latam_rcn', 'latam_caracol', 'latam_americatv', 'latam_univision'],
+        nombres: {'latam_tnt':'🎬 TNT', 'latam_warner':'🎬 Warner', 'latam_tntnovelas':'🎬 TNT Novelas', 'latam_tntseries':'🎬 TNT Series', 'latam_axn':'🎬 AXN', 'latam_sony':'🎬 Sony', 'latam_universal':'🎬 Universal', 'latam_studiouniversal':'🎬 Studio Universal', 'latam_space':'🎬 Space', 'latam_fx':'🎬 FX', 'latam_pasiones':'🎬 Pasiones', 'latam_tlnovelas':'🎬 TL Novelas', 'latam_unicable':'🎬 Unicable', 'latam_cinemax':'🎬 Cinemax', 'latam_cinecanal':'🎬 Cinecanal', 'latam_starchannel':'🎬 Star Channel', 'latam_multipremier':'🎬 Multipremier', 'latam_goldenpremier':'🎬 Golden Premier', 'latam_goldenedge':'🎬 Golden Edge', 'latam_goldenplus':'🎬 Golden Plus', 'latam_amc':'🎬 AMC', 'latam_syfy':'🎬 SyFy', 'latam_espn':'⚽ ESPN', 'latam_espn2':'⚽ ESPN 2', 'latam_espn3':'⚽ ESPN 3', 'latam_espn4':'⚽ ESPN 4', 'latam_espn5':'⚽ ESPN 5', 'latam_espnpremium':'⚽ ESPN Premium', 'latam_tntsports':'⚽ TNT Sports', 'latam_foxsports':'⚽ Fox Sports', 'latam_foxsports2':'⚽ Fox Sports 2', 'latam_foxsports3':'⚽ Fox Sports 3', 'latam_directvsports':'⚽ DirecTV Sports', 'latam_directvsports2':'⚽ DirecTV Sports 2', 'latam_tycsports':'⚽ TyC Sports', 'latam_tudn':'⚽ TUDN', 'latam_nba':'⚽ NBA', 'latam_daznf1':'⚽ DAZN F1', 'latam_natgeo':'🔬 Nat Geo', 'latam_discovery':'🔬 Discovery', 'latam_discoveryworld':'🔬 Discovery World', 'latam_history':'📜 History', 'latam_history2':'📜 History 2', 'latam_animalplanet':'🐾 Animal Planet', 'latam_disney':'🧸 Disney', 'latam_cartoon':'🧸 Cartoon Network', 'latam_tooncast':'🧸 Tooncast', 'latam_cnn':'📰 CNN', 'latam_rcn':'📰 RCN', 'latam_caracol':'📰 Caracol', 'latam_americatv':'📰 América TV', 'latam_univision':'📰 Univision'}
     },
-    'lista-brasil-deportes': {
-        keys: ['br_bandsports','br_chaves247','br_simpsons247'],
-        nombres: {
-            'br_bandsports':   '⚽ Band Sports',
-            'br_chaves247':    '📺 El Chaves 24/7',
-            'br_simpsons247':  '📺 Os Simpsons 24/7'
-        }
+    'lista-camaras': {
+        keys:['cam_atacado', 'cam_sentidopy', 'cam_sentidobr', 'cam_aduana', 'cam_ponte', 'cam_encarnacion', 'cam_roma', 'cam_costaadeje', 'cam_telaviv', 'cam_cascavel', 'cam_bandeiras', 'cam_ilhabela'],
+        nombres: {'cam_atacado':'🎥 Atacado', 'cam_sentidopy':'🎥 Sentido PY', 'cam_sentidobr':'🎥 Sentido BR', 'cam_aduana':'🎥 Aduana BR-277', 'cam_ponte':'🎥 BR-277 Ponte', 'cam_encarnacion':'🎥 Encarnación', 'cam_roma':'🏛️ Roma Coliseo', 'cam_costaadeje':'🌴 Costa Adeje', 'cam_telaviv':'🇮🇱 Tel Aviv', 'cam_cascavel':'🏙️ Cascavel BR', 'cam_bandeiras':'🚩 Plaza Banderas BR', 'cam_ilhabela':'🏖️ Ilhabela BR'}
     },
     'lista-radios': {
-        keys: ['r_montecarlo','r_farra','r_emisoras','r_itapiru','r_transcontinental','r_altoparana','r_mingaguazu','r_maxima','r_natalio','r_libertad','r_caaguazu','r_horizonte','r_naranjal','r_progresos','r_latina','r_integracion'],
-        nombres: {'r_montecarlo':'📻 Montecarlo','r_farra':'📻 Farra','r_emisoras':'📻 Emisoras PY','r_itapiru':'📻 Radio Itapiru','r_transcontinental':'📻 Transcontinental','r_altoparana':'📻 Alto Paraná','r_mingaguazu':'📻 Minga Guazú','r_maxima':'📻 Máxima FM','r_natalio':'📻 Radio Natalio','r_libertad':'📻 Radio Libertad','r_caaguazu':'📻 Radio Caaguazú','r_horizonte':'📻 Radio Horizonte','r_naranjal':'📻 Radio Naranjal','r_progresos':'📻 Progresos','r_latina':'📻 Radio Latina','r_integracion':'📻 Integración'}
+        keys:['r_montecarlo','r_farra','r_tropicalia','r_anr','r_rnp','r_camara','r_emisoras','r_caaguazu','r_horizonte','r_cnd','r_seven','r_itapiru','r_transcontinental','r_elverbo','r_altoparana','r_mingaguazu','r_paipuku','r_maxima','r_emanuel','r_viva','r_progresos','r_latina','r_integracion','r_naranjal','r_natalio','r_libertad'],
+        nombres: {'r_montecarlo':'📻 Montecarlo','r_farra':'📻 Farra','r_tropicalia':'📻 Tropicalia','r_anr':'📻 Radio ANR','r_rnp':'📻 RNP','r_camara':'📻 Radio Cámara','r_emisoras':'📻 Emisoras PY','r_caaguazu':'📻 Caaguazú','r_horizonte':'📻 Horizonte','r_cnd':'📻 CND','r_seven':'📻 Seven','r_itapiru':'📻 Itapiru','r_transcontinental':'📻 Transcontinental','r_elverbo':'📻 El Verbo','r_altoparana':'📻 Alto Paraná','r_mingaguazu':'📻 Minga Guazú','r_paipuku':'📻 Paí Puku','r_maxima':'📻 Máxima','r_emanuel':'📻 Emanuel','r_viva':'📻 Viva','r_progresos':'📻 Progresos','r_latina':'📻 Latina','r_integracion':'📻 Integración','r_naranjal':'📻 Naranjal','r_natalio':'📻 Natalio','r_libertad':'📻 Libertad'}
     }
-};
-
-// Valores por defecto para los nuevos canales brasileños
-var defaultsBrasil = {
-    'br_sbt':             '<iframe src="https://1embedcanaisonline.xyz/sbtsp/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
-    'br_cnnbrasil':       'https://www3.embedtv.best/cnnbrasil',
-    'br_record':          '<iframe src="https://1embedcanaisonline.xyz/recordmg/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
-    'br_globosp':         '<iframe src="https://1embedcanaisonline.xyz/globosp/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
-    'br_globorj':         '<iframe src="https://1embedcanaisonline.xyz/globorj/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
-    'br_globomg':         '<iframe src="https://1embedcanaisonline.xyz/globomg/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
-    'br_globors':         '<iframe src="https://1embedcanaisonline.xyz/globors/" allow="autoplay; fullscreen; encrypted-media" frameborder="0" width="100%" height="550" loading="lazy"></iframe>',
-    'br_globoam':         'https://www3.embedtv.best/globoam',
-    'br_bandnews':        'https://www3.embedtv.best/bandnews',
-    'br_tnt':             'https://www3.embedtv.best/tnt',
-    'br_warner':          'https://www3.embedtv.best/warnerchannel',
-    'br_universal':       'https://www3.embedtv.best/universaltv',
-    'br_star':            'https://www3.embedtv.best/starchannel',
-    'br_sony':            'https://www3.embedtv.best/sonychannel',
-    'br_comedy':          'https://www3.embedtv.best/comedycentral',
-    'br_adultswim':       'https://www3.embedtv.best/adultswim',
-    'br_telecinepipoca':  'https://www3.embedtv.best/telecinepipoca',
-    'br_telecinepremium': 'https://www3.embedtv.best/telecinepremium',
-    'br_foodnetwork':     'https://www3.embedtv.best/foodnetwork',
-    'br_history':         'https://www3.embedtv.best/history',
-    'br_history2':        'https://www3.embedtv.best/history2',
-    'br_animalplanet':    'https://www3.embedtv.best/animalplanet',
-    'br_discoveryid':     'https://www3.embedtv.best/discoveryid',
-    'br_fishtv':          'https://www3.embedtv.best/fish',
-    'br_cartoonito':      'https://www3.embedtv.best/cartoonito',
-    'br_bandsports':      'https://www3.embedtv.best/bandsports',
-    'br_chaves247':       'https://www3.embedtv.best/24h_chaves',
-    'br_simpsons247':     'https://www3.embedtv.best/24h_simpsons'
 };
 
 function setStatus(t,x){document.getElementById('status-dot').className='dot '+t;document.getElementById('status-text').textContent=x;}
@@ -213,24 +169,13 @@ function cargarCanales() {
     fetch('https://cdn.jsdelivr.net/gh/'+REPO+'@main/'+FILE+'?t='+Date.now())
     .then(function(r){return r.json();})
     .then(function(data){
-        canalesData = data;
-        // Rellenar defaults de Brasil si no existen en el JSON remoto
-        Object.keys(defaultsBrasil).forEach(function(k){
-            if(!canalesData[k]) canalesData[k] = defaultsBrasil[k];
-        });
+        canalesData=data;
         renderCanales();
-        setStatus('ok','Conectado — '+Object.keys(canalesData).length+' canales cargados. Listo para editar.');
+        setStatus('ok','Conectado — Listo para editar todos los canales.');
         fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
             headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
         }).then(function(r){return r.json();}).then(function(d){fileSha=d.sha;}).catch(function(){});
-    }).catch(function(){
-        // Si falla GitHub, usar defaults de Brasil igual
-        Object.keys(defaultsBrasil).forEach(function(k){
-            if(!canalesData[k]) canalesData[k] = defaultsBrasil[k];
-        });
-        renderCanales();
-        setStatus('error','No se pudo cargar desde GitHub — mostrando valores por defecto');
-    });
+    }).catch(function(){setStatus('error','Error al cargar canales');});
 }
 
 function renderCanales() {
@@ -241,13 +186,12 @@ function renderCanales() {
         var sec=secciones[secId];
         sec.keys.forEach(function(key){
             var nombre=sec.nombres[key]||key;
-            var url=canalesData[key]||'(sin link)';
-            var urlDisplay = url.length > 120 ? url.substring(0,120)+'...' : url;
+            var url=canalesData[key]||'(Canal no configurado en GitHub)';
             var d=document.createElement('div');
             d.className='canal-card';
             d.id='card-'+key;
             d.innerHTML='<div class="canal-header"><span class="canal-nombre">'+nombre+'</span><span class="canal-key">'+key+'</span><button class="btn-editar" onclick="editarCanal(\''+key+'\')">✏️ Editar</button></div>'+
-                '<div class="canal-url" id="url-'+key+'">'+urlDisplay+'</div>'+
+                '<div class="canal-url" id="url-'+key+'">'+url+'</div>'+
                 '<div class="edit-area" id="edit-'+key+'"><textarea id="ta-'+key+'">'+url+'</textarea>'+
                 '<div class="edit-buttons"><button class="btn-guardar" id="btn-'+key+'" onclick="guardarCanal(\''+key+'\')">💾 Guardar</button>'+
                 '<button class="btn-cancelar" onclick="cancelarEdicion(\''+key+'\')">✕ Cancelar</button></div>'+
@@ -261,7 +205,6 @@ function editarCanal(key){
     document.querySelectorAll('.canal-card').forEach(function(c){c.classList.remove('editando');c.querySelector('.edit-area').style.display='none';});
     document.getElementById('card-'+key).classList.add('editando');
     document.getElementById('edit-'+key).style.display='block';
-    document.getElementById('ta-'+key).value = canalesData[key]||'';
     document.getElementById('ta-'+key).focus();
     document.getElementById('ta-'+key).select();
 }
@@ -277,31 +220,24 @@ function guardarCanal(key){
     var msg=document.getElementById('msg-'+key);
     var btn=document.getElementById('btn-'+key);
     if(!url)return;
-    btn.disabled=true; btn.textContent='⏳ Obteniendo SHA...'; msg.className='msg';
+    btn.disabled=true; btn.textContent='⏳ Guardando...'; msg.className='msg';
     canalesData[key]=url;
     var enc=btoa(unescape(encodeURIComponent(JSON.stringify(canalesData,null,2))));
     fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
-        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
-    }).then(function(r){return r.json();}).then(function(fileData){
-        fileSha=fileData.sha;
-        btn.textContent='⏳ Guardando...';
-        return fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
-            method:'PUT',
-            headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-            body:JSON.stringify({message:'Actualizar '+key,content:enc,sha:fileSha})
-        });
+        method:'PUT',
+        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+        body:JSON.stringify({message:'Actualizar '+key,content:enc,sha:fileSha})
     }).then(function(r){return r.json();}).then(function(data){
         if(data.content){
             fileSha=data.content.sha;
-            var urlDisplay = url.length > 120 ? url.substring(0,120)+'...' : url;
-            document.getElementById('url-'+key).textContent=urlDisplay;
+            document.getElementById('url-'+key).textContent=url;
             document.getElementById('card-'+key).classList.remove('editando');
             document.getElementById('card-'+key).classList.add('guardado');
             document.getElementById('edit-'+key).style.display='none';
             setTimeout(function(){document.getElementById('card-'+key).classList.remove('guardado');},3000);
             setStatus('ok','✅ Guardado correctamente');
         } else {
-            msg.className='msg error'; msg.textContent='Error: '+(data.message||'Intentá de nuevo');
+            msg.className='msg error'; msg.textContent='Error: Verifica tu Token de GitHub';
         }
         btn.disabled=false; btn.textContent='💾 Guardar';
     }).catch(function(){
@@ -309,31 +245,6 @@ function guardarCanal(key){
         btn.disabled=false; btn.textContent='💾 Guardar';
     });
 }
-
-// CHAT
-var chatHistory=[];var msgC=0;
-function enviarMensaje(){
-    var input=document.getElementById('chat-input');
-    var texto=input.value.trim();
-    if(!texto)return;
-    agregarMsg(texto,'user'); input.value='';
-    document.getElementById('chat-send').disabled=true;
-    var lid=agregarMsg('Escribiendo...','claude loading');
-    chatHistory.push({role:'user',content:texto});
-    fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
-            system:'Sos un asistente técnico de la app TV y Cámaras Paraguay. Ayudás con links de canales, streams m3u8 y problemas técnicos. Respondé conciso en español.',
-            messages:chatHistory})
-    }).then(function(r){return r.json();}).then(function(data){
-        var resp=data.content&&data.content[0]?data.content[0].text:'Sin respuesta.';
-        eliminarMsg(lid); agregarMsg(resp,'claude');
-        chatHistory.push({role:'assistant',content:resp});
-        document.getElementById('chat-send').disabled=false;
-    }).catch(function(){eliminarMsg(lid);agregarMsg('Error de conexión.','claude');document.getElementById('chat-send').disabled=false;});
-}
-function agregarMsg(t,tipo){var id='mc-'+(++msgC);var d=document.createElement('div');d.className='msg-bubble msg-'+tipo;d.id=id;d.textContent=t;var c=document.getElementById('chat-messages');c.appendChild(d);c.scrollTop=c.scrollHeight;return id;}
-function eliminarMsg(id){var e=document.getElementById(id);if(e)e.remove();}
 
 cargarCanales();
 </script>
