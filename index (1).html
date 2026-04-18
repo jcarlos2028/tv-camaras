@@ -6,7 +6,7 @@
     <meta name="referrer" content="no-referrer">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title> </title>
+    <title>TV y Radios PY</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@0.14.17/dist/hls.min.js"></script>
     <script>
     var dashLoaded = false;
@@ -94,31 +94,36 @@
     <div class="player-container" id="py-player">
         <h3 style="color:#555;text-align:center;padding:20px;">Seleccioná un canal abajo 👇</h3>
     </div>
+    
     <div class="category-title">📡 Canales Abiertos</div>
     <div class="channels">
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://d2qsan2ut81n2k.cloudfront.net/live/2e1f1b6a-9d03-4194-8559-2eabe61a1555/ts:abr.m3u8')">📺 SNT</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://d1y0t05eznkmpn.cloudfront.net/index.m3u8')">📺 C9N</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/120.m3u8')">📺 Paravisión</button>
         <button class="channel-btn" id="btn-telefuturo" data-tab="py" data-key="telefuturo" data-type="m3u8">📺 Telefuturo</button>
-        <button class="channel-btn" id="btn-npy" data-tab="py" data-key="npy" data-type="m3u8">📺 NPY</button>
-        <button class="channel-btn" id="btn-mega" data-tab="py" data-key="mega" data-type="m3u8">📺 Mega TV</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/media.m3u8?admin=tvaccion')">📺 Telefuturo (Alt)</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion')">📺 LaTele</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/7.m3u8')">📺 ABC TV</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://copacogen.desdeparaguay.net/npy/npy_py_alta/playlist.m3u8?admin=tvaccion')">📺 NPY</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://copacogen.desdeparaguay.net/gentv/gentv_py_alta/playlist.m3u8?admin=nacion')">📡 GEN</button>
         <button class="channel-btn" onclick="playTV('py','iframe','https://geo.dailymotion.com/player/x1at3a.html?video=k4nLYiNrBX8W5jDbSlM&autoplay=1')">📺 Trece PY</button>
-        <button class="channel-btn" id="btn-latele" data-tab="py" data-key="latele" data-type="m3u8">📺 LaTele</button>
-        <button class="channel-btn" id="btn-abctv720" data-tab="py" data-key="abctv720" data-type="m3u8">📺 ABC TV</button>
-        <button class="channel-btn" id="btn-abctv480" data-tab="py" data-key="abctv480" data-type="m3u8">📺 ABC TV (480p)</button>
+        <button class="channel-btn" id="btn-mega" data-tab="py" data-key="mega" data-type="m3u8">📺 Mega TV</button>
         <button class="channel-btn" id="btn-rcctv" data-tab="py" data-key="rcctv" data-type="m3u8">📺 RCC TV</button>
     </div>
+
     <div class="category-title">🎬 Entretenimiento / Noticias</div>
     <div class="channels">
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://rds3gen.desdeparaguay.net/venusmedia/venusmedia/.m3u8')">💫 Venus TV</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8')">📺 GO TV</button>
+        <button class="channel-btn" onclick="playTV('py','m3u8','https://tigocloudgen.desdeparaguay.net/satelitaltv/satelitaltv/playlist.m3u8')">📺 Visión TV</button>
         <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/tropicaliatv')">🎶 Tropicalia</button>
         <button class="channel-btn" id="btn-canalpro" data-tab="py" data-key="canalpro" data-type="m3u8">📺 Canal Pro</button>
         <button class="channel-btn" id="btn-poputv" data-tab="py" data-key="poputv" data-type="m3u8">🌐 Popu TV</button>
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/poputv')">🌐 Popu TV (alt)</button>
         <button class="channel-btn" id="btn-productiva" data-tab="py" data-key="productiva" data-type="m3u8">📰 Productiva</button>
-        <button class="channel-btn" id="btn-venus" data-tab="py" data-key="venus" data-type="m3u8">💫 Venus TV</button>
         <button class="channel-btn" id="btn-launion" data-tab="py" data-key="launion" data-type="m3u8">🙏 La Unión</button>
         <button class="channel-btn" id="btn-nandutitv" data-tab="py" data-key="nandutitv" data-type="m3u8">📡 Ñanduti TV</button>
         <button class="channel-btn" id="btn-chaquena" data-tab="py" data-key="chaquena" data-type="m3u8">🌵 Chaqueña TV</button>
         <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/monumentaltv')">🏟️ Monumental</button>
-        <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/mitv')">📺 Mi TV</button>
-        <button class="channel-btn" id="btn-gen" data-tab="py" data-key="gen" data-type="m3u8">📡 GEN</button>
         <button class="channel-btn" id="btn-nandejaranee" data-tab="py" data-key="nandejaranee" data-type="m3u8">🗣️ Ñande Jara Ñe'e</button>
         <button class="channel-btn" onclick="playTV('py','iframe','https://www.desdeparaguay.com/heitv')">🌿 HEI</button>
         <button class="channel-btn" id="btn-lacosta" data-tab="py" data-key="lacosta" data-type="m3u8">🌊 La Costa TV</button>
@@ -132,7 +137,7 @@
     </div>
     <div class="category-title">🏆 Eventos Especiales PY</div>
     <div class="channels">
-        <button class="channel-btn" id="btn-eventopy1" data-tab="eventopy" data-key="eventopy1" data-type="m3u8">⚽ Tigo Sports 1</button>
+        <button class="channel-btn" onclick="playTV('eventopy','m3u8','https://live.enhdtv.com:8081/8160/index.m3u8')">⚽ Tigo Sports 1</button>
         <button class="channel-btn" id="btn-eventopy2" data-tab="eventopy" data-key="eventopy2" data-type="m3u8">⚽ Tigo Sports 2</button>
         <button class="channel-btn" id="btn-eventopy3" data-tab="eventopy" data-key="eventopy3" data-type="m3u8">⚽ Tigo Sports 3</button>
     </div>
@@ -477,20 +482,15 @@ function playFromKey(tab, key) {
         if (match) {
             playTV(tab, 'iframe', match[1]);
         } else {
-            // Si no se puede extraer src, mostrar el iframe directamente
             var c = document.getElementById(tab + '-player');
             if (c) { c.innerHTML = val; window.scrollTo({top:0,behavior:'smooth'}); }
         }
     } else {
-        // Es una URL directa — detectar tipo
         var type = val.includes('.m3u8') ? 'm3u8' : (val.includes('.mpd') ? 'mpd' : 'iframe');
         playTV(tab, type, val);
     }
 }
 
-// ─────────────────────────────────────────────────
-// Vincular todos los botones con data-key al JSON
-// ─────────────────────────────────────────────────
 function vincularBotones() {
     document.querySelectorAll('[data-key]').forEach(function(btn) {
         var key = btn.getAttribute('data-key');
@@ -507,7 +507,6 @@ cargarCanales(vincularBotones);
 // TABS
 // ═══════════════════════════════════════════════════
 function showTab(name, btn) {
-    // Limpiar reproductores activos
     Object.keys(hlsInstances).forEach(function(tab) {
         try {
             var c = document.getElementById(tab + '-player');
@@ -600,7 +599,7 @@ function playCAM(type, url) {
 }
 
 // ═══════════════════════════════════════════════════
-// RADIOS
+// RADIOS (CON SISTEMA MEJORADO ANTI-FALLOS ANDROID)
 // ═══════════════════════════════════════════════════
 var activeCard = null;
 var radioHls = null;
@@ -609,9 +608,20 @@ function playRadio(card, url, name, freq) {
     if (activeCard) activeCard.classList.remove('playing');
     activeCard = card;
     card.classList.add('playing');
+    
     document.getElementById('rname-big').textContent = name;
-    document.getElementById('rfreq').textContent = freq;
+    document.getElementById('rfreq').textContent = 'Cargando... ⏳'; // Feedback de carga
     var audio = document.getElementById('main-audio');
+
+    // Eventos para detectar si carga o da error
+    audio.oncanplay = function() {
+        document.getElementById('rfreq').textContent = freq;
+    };
+    audio.onerror = function() {
+        document.getElementById('rfreq').textContent = 'Error al conectar ⚠️';
+        if (activeCard) activeCard.classList.remove('playing');
+    };
+
     if (url.includes('.m3u8')) {
         audio.src = '';
         if (radioHls) { radioHls.destroy(); radioHls = null; }
@@ -619,13 +629,25 @@ function playRadio(card, url, name, freq) {
             radioHls = new Hls();
             radioHls.loadSource(url);
             radioHls.attachMedia(audio);
-            radioHls.on(Hls.Events.MANIFEST_PARSED, function() { audio.play(); });
+            radioHls.on(Hls.Events.MANIFEST_PARSED, function() { 
+                audio.play().catch(function(){}); 
+            });
+            radioHls.on(Hls.Events.ERROR, function(event, data) {
+                if (data.fatal) {
+                    document.getElementById('rfreq').textContent = 'Señal caída ⚠️';
+                    if (activeCard) activeCard.classList.remove('playing');
+                }
+            });
         } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-            audio.src = url; audio.play();
+            audio.src = url; audio.play().catch(function(){});
         }
     } else {
         if (radioHls) { radioHls.destroy(); radioHls = null; }
-        audio.src = url; audio.load(); audio.play().catch(function(){});
+        audio.src = url; 
+        audio.load(); 
+        audio.play().catch(function(){
+            document.getElementById('rfreq').textContent = 'Presiona Play de nuevo';
+        });
     }
 }
 
@@ -665,7 +687,7 @@ function filterRadios() {
 }
 
 // ═══════════════════════════════════════════════════
-// LIMPIEZA DE MEMORIA (Smart TV)
+// LIMPIEZA DE MEMORIA (Smart TV & Android)
 // ═══════════════════════════════════════════════════
 function cleanAll() {
     Object.keys(hlsInstances).forEach(function(tab) {
