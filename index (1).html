@@ -51,6 +51,7 @@
         .channel-btn:hover { background: #0b5394; border-color: #4fa6ff; color: white; }
         .cam-btn { justify-content: center; text-align: center; }
         .cam-btn:hover { background: #7d4e00; border-color: #f0a500; color: white; }
+
         .ch-num { background: rgba(11, 83, 148, 0.5); color: #7ec8ff; padding: 3px 6px; border-radius: 4px; font-family: monospace; font-size: 11px; font-weight: bold; }
 
         .tv-search-wrap { display: flex; gap: 8px; justify-content: center; padding: 15px 20px 5px; max-width: 600px; margin: 0 auto; }
@@ -131,6 +132,7 @@
 </div>
 
 <div id="view-tv" class="app-view">
+    
     <div id="tv-player-area" style="display:none;">
         <div class="player-container fullscreen-mode" id="main-tv-player"></div>
         <div class="tv-zapper">
@@ -347,7 +349,7 @@
         </div>
     </div>
 </div>
-<!-- FIN VISTA TV --><!-- ═════════════════════════════════════════ -->
+<!-- ═════════════════════════════════════════ -->
 <!-- VISTA 3: RADIOS (CON SEGUNDO PLANO)       -->
 <!-- ═════════════════════════════════════════ -->
 <div id="view-radios" class="app-view">
@@ -474,6 +476,20 @@ var camDash = null;
 var radioHls = null;
 var activeCard = null;
 
+// Evitar que ads maliciosos cierren la app con history.back()
+history.pushState(null, null, location.href);
+window.addEventListener('popstate', function(event) {
+    var tvArea = document.getElementById('tv-player-area');
+    if (tvArea && tvArea.style.display === 'block') {
+        // Si un ad hace history.back(), atrapamos el evento y nos quedamos en el canal
+        history.pushState(null, null, location.href);
+        console.log('Bloqueado retroceso forzado por publicidad.');
+    } else if (!document.getElementById('view-home').classList.contains('active')) {
+        showAppView('home');
+        history.pushState(null, null, location.href);
+    }
+});
+
 function cargarCanales(callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', CANALES_URL + '?t=' + Date.now(), true);
@@ -543,7 +559,7 @@ function playTV(type, url) {
     if (currentTVDash) { try{currentTVDash.reset();}catch(e){} currentTVDash = null; }
 
     if (type === 'iframe') {
-        c.innerHTML = '<iframe src="' + url + '" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
+        c.innerHTML = '<iframe src="' + url + '" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
     } else {
         c.innerHTML = '<video id="vid-main" controls autoplay playsinline style="width:100%;height:100%"></video>';
         var v = document.getElementById('vid-main');
@@ -630,7 +646,7 @@ function playCAM(type, url) {
     if (camDash) { try { camDash.reset(); } catch(e) {} camDash = null; }
     
     if (type === 'iframe') {
-        c.innerHTML = '<iframe src="' + url + '" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
+        c.innerHTML = '<iframe src="' + url + '" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
     } else {
         c.innerHTML = '<video id="camv" controls autoplay playsinline style="width:100%;height:100%"></video>';
         var v = document.getElementById('camv');
