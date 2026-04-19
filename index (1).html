@@ -149,7 +149,7 @@
 <!-- ═════════════════════════════════════════ -->
 <div id="view-tv" class="app-view">
     
-    <!-- ÁREA DEL REPRODUCTOR (Oculta por defecto, se estira al ver canal) -->
+    <!-- ÁREA DEL REPRODUCTOR -->
     <div id="tv-player-area" style="display:none;">
         <div class="player-container fullscreen-mode" id="main-tv-player"></div>
         <div class="tv-zapper">
@@ -256,124 +256,119 @@
         <div class="category-title">🇧🇷 Brasil</div>
         <div class="channels">
             <button class="channel-btn" data-tvnum="80" onclick="playTV('iframe','https://w1.embedtv.live/globosp?r=https://embedtv.live/')"><span class="ch-num">080</span> Globo SP</button>
-            <button class="channel-btn" data-tvnum="81" onclick="playTV('iframe','https://2embeddecanais.xyz/globorj/')"><span class="ch-num">081</span> Globo RJ</button>
+            <button class="channel-btn" data-tvnum="81" onclick="playTV('iframe','https://w1.embedtv.live/globorj')"><span class="ch-num">081</span> Globo RJ</button>
             <button class="channel-btn" data-tvnum="82" onclick="playTV('m3u8','https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8')"><span class="ch-num">082</span> TV Cultura</button>
             <button class="channel-btn" data-tvnum="83" onclick="playTV('m3u8','https://tvbrasil-stream.ebc.com.br/index.m3u8')"><span class="ch-num">083</span> TV Brasil</button>
-            <button class="channel-btn" data-tvnum="84" onclick="playTV('iframe','https://2embeddecanais.xyz/bandsp/')"><span class="ch-num">084</span> Band SP</button>
-            <button class="channel-btn" data-tvnum="85" onclick="playTV('iframe','https://w1.embedtv.live/recordrj')"><span class="ch-num">085</span> Record RJ</button>
-            <button class="channel-btn" data-tvnum="86" onclick="playTV('m3u8','https://live.eu-north-1b.cf.dmcdn.net/sec2(eY1Iz2DABad_fNp8gKwEgqpdSEbsD_8DSj20MZdu2mkf8uFLu0l2I5sn1r_w4K5QUM4oZ8c1DE27turN4N3gfgBxM1mhbk3LnkD4o5Y7_xw)/dm/3/x8xps0s/d/live-720.m3u8')"><span class="ch-num">086</span> RedeTV</button>
-            <button class="channel-btn" data-tvnum="87" onclick="playTV('m3u8','https://video09.logicahost.com.br/sbtcuiaba/sbtcuiaba/playlist.m3u8')"><span class="ch-num">087</span> SBT</button>
-            <button class="channel-btn" data-tvnum="88" onclick="playTV('m3u8','https://amazonsat.brasilstream.com.br/hls/amazonsat/index.m3u8')"><span class="ch-num">088</span> Amazon Sat</button>
-            <button class="channel-btn" data-tvnum="89" onclick="playTV('m3u8','https://video09.logicahost.com.br/tvparaense/tvparaense/playlist.m3u8')"><span class="ch-num">089</span> TV Paraense</button>
-            <button class="channel-btn" data-tvnum="90" onclick="playTV('iframe','https://w1.embedtv.live/hbo')"><span class="ch-num">090</span> HBO</button>
-            <button class="channel-btn" data-tvnum="91" onclick="playTV('iframe','https://w1.embedtv.live/hbofamily')"><span class="ch-num">091</span> HBO Family</button>
-            <button class="channel-btn" data-tvnum="92" onclick="playTV('iframe','https://w1.embedtv.live/cinemax')"><span class="ch-num">092</span> Cinemax BR</button>
-            <button class="channel-btn" data-tvnum="93" onclick="playTV('iframe','https://w1.embedtv.live/universaltv')"><span class="ch-num">093</span> Universal TV</button>
-            <button class="channel-btn" data-tvnum="94" onclick="playTV('iframe','https://w1.embedtv.live/tcm')"><span class="ch-num">094</span> TCM</button>
-            <button class="channel-btn" data-tvnum="95" onclick="playTV('iframe','https://w1.embedtv.live/megapix')"><span class="ch-num">095</span> Megapix</button>
-            <button class="channel-btn" data-tvnum="96" onclick="playTV('iframe','https://2embeddecanais.xyz/paramountnetwork/')"><span class="ch-num">096</span> Paramount</button>
-            <button class="channel-btn" data-tvnum="97" data-key="br_tnt"><span class="ch-num">097</span> TNT BR</button>
-            <button class="channel-btn" data-tvnum="98" data-key="br_warner"><span class="ch-num">098</span> Warner Bros BR</button>
-            <button class="channel-btn" data-tvnum="99" data-key="br_telecinepipoca"><span class="ch-num">099</span> Telecine Pipoca</button>
-            <button class="channel-btn" data-tvnum="100" data-key="br_telecinepremium"><span class="ch-num">100</span> Telecine Premium</button>
-            <button class="channel-btn" data-tvnum="101" onclick="playTV('iframe','https://w1.embedtv.live/cnnbrasil')"><span class="ch-num">101</span> CNN Brasil</button>
-            <button class="channel-btn" data-tvnum="102" onclick="playTV('iframe','https://w1.embedtv.live/bandnews')"><span class="ch-num">102</span> Band News</button>
-            <button class="channel-btn" data-tvnum="103" onclick="playTV('iframe','https://2embeddecanais.xyz/recordnews/')"><span class="ch-num">103</span> Record News</button>
-            <button class="channel-btn" data-tvnum="104" onclick="playTV('iframe','https://2embeddecanais.xyz/discoverychannel/')"><span class="ch-num">104</span> Discovery BR</button>
-            <button class="channel-btn" data-tvnum="105" onclick="playTV('iframe','https://w1.embedtv.live/discoveryscience')"><span class="ch-num">105</span> Discovery Science</button>
-            <button class="channel-btn" data-tvnum="106" data-key="br_history"><span class="ch-num">106</span> History BR</button>
-            <button class="channel-btn" data-tvnum="107" data-key="br_animalplanet"><span class="ch-num">107</span> Animal Planet BR</button>
-            <button class="channel-btn" data-tvnum="108" onclick="playTV('iframe','https://2embeddecanais.xyz/dazn/')"><span class="ch-num">108</span> DAZN BR</button>
-            <button class="channel-btn" data-tvnum="109" data-key="br_bandsports"><span class="ch-num">109</span> Band Sports</button>
-            <button class="channel-btn" data-tvnum="110" onclick="playTV('iframe','https://2embeddecanais.xyz/tooncast/')"><span class="ch-num">110</span> Tooncast BR</button>
-            <button class="channel-btn" data-tvnum="111" onclick="playTV('iframe','https://w1.embedtv.live/disneyplus1')"><span class="ch-num">111</span> Disney+ 1</button>
-            <button class="channel-btn" data-tvnum="112" data-key="br_cartoonito"><span class="ch-num">112</span> Cartoonito</button>
-            <button class="channel-btn" data-tvnum="113" onclick="playTV('iframe','https://w1.embedtv.live/24h_odeiachris')"><span class="ch-num">113</span> Todo Mundo Odeia o Chris</button>
-            <button class="channel-btn" data-tvnum="114" onclick="playTV('iframe','https://w1.embedtv.live/24h_simpsons')"><span class="ch-num">114</span> Os Simpsons</button>
-            <button class="channel-btn" data-tvnum="115" onclick="playTV('iframe','https://w1.embedtv.live/24h_dragonball')"><span class="ch-num">115</span> Dragon Ball</button>
-            <button class="channel-btn" data-tvnum="116" onclick="playTV('iframe','https://w1.embedtv.live/24h_chaves?r=https://embedtv.live/')"><span class="ch-num">116</span> Chaves</button>
-        </div>
-
-        <div class="category-title">🇧🇴 Bolivia</div>
-        <div class="channels">
-            <button class="channel-btn" data-tvnum="117" data-key="btv"><span class="ch-num">117</span> BTV</button>
-            <button class="channel-btn" data-tvnum="118" data-key="atb"><span class="ch-num">118</span> ATB</button>
-            <button class="channel-btn" data-tvnum="119" data-key="reduno"><span class="ch-num">119</span> Red Uno</button>
-            <button class="channel-btn" data-tvnum="120" onclick="playTV('m3u8','https://alba-bo-bolivision-bolivision.stream.mediatiquestream.com/index.m3u8')"><span class="ch-num">120</span> Bolivision</button>
+            <button class="channel-btn" data-tvnum="84" onclick="playTV('iframe','https://w1.embedtv.live/bandsp')"><span class="ch-num">084</span> Band SP</button>
+            <button class="channel-btn" data-tvnum="85" onclick="playTV('iframe','https://w1.embedtv.live/bandrj')"><span class="ch-num">085</span> Band RJ</button>
+            <button class="channel-btn" data-tvnum="86" onclick="playTV('iframe','https://2embeddecanais.xyz/recordrj/')"><span class="ch-num">086</span> Record RJ</button>
+            <button class="channel-btn" data-tvnum="87" onclick="playTV('iframe','https://www.redetv.uol.com.br/aovivo')"><span class="ch-num">087</span> RedeTV</button>
+            <button class="channel-btn" data-tvnum="88" onclick="playTV('m3u8','https://live.eu-north-1b.cf.dmcdn.net/sec2(SpU0G9TbcVVAX5TMUQ30sPW1-5Y7ru442O7p_Hhq-Jabe-HaKcC3djsAYOj8olZQR7hyxwdsdPgo9Jdgn9tvoWhCpIlPAFLdBr5sEB8m6F5G9btSplfqgKjVZT6dk_tG)/dm/3/x8xps0s/d/live-720.m3u8')"><span class="ch-num">088</span> RedeTV (Alt)</button>
+            <button class="channel-btn" data-tvnum="89" onclick="playTV('m3u8','https://video09.logicahost.com.br/sbtcuiaba/sbtcuiaba/playlist.m3u8')"><span class="ch-num">089</span> SBT</button>
+            <button class="channel-btn" data-tvnum="90" onclick="playTV('m3u8','https://amazonsat.brasilstream.com.br/hls/amazonsat/index.m3u8')"><span class="ch-num">090</span> Amazon Sat</button>
+            <button class="channel-btn" data-tvnum="91" onclick="playTV('m3u8','https://video09.logicahost.com.br/tvparaense/tvparaense/playlist.m3u8')"><span class="ch-num">091</span> TV Paraense</button>
+            <button class="channel-btn" data-tvnum="92" onclick="playTV('iframe','https://w1.embedtv.live/hbo')"><span class="ch-num">092</span> HBO</button>
+            <button class="channel-btn" data-tvnum="93" onclick="playTV('iframe','https://w1.embedtv.live/hbofamily')"><span class="ch-num">093</span> HBO Family</button>
+            <button class="channel-btn" data-tvnum="94" onclick="playTV('iframe','https://w1.embedtv.live/cinemax')"><span class="ch-num">094</span> Cinemax BR</button>
+            <button class="channel-btn" data-tvnum="95" onclick="playTV('iframe','https://w1.embedtv.live/universaltv')"><span class="ch-num">095</span> Universal TV</button>
+            <button class="channel-btn" data-tvnum="96" onclick="playTV('iframe','https://w1.embedtv.live/tcm')"><span class="ch-num">096</span> TCM</button>
+            <button class="channel-btn" data-tvnum="97" onclick="playTV('iframe','https://w1.embedtv.live/megapix')"><span class="ch-num">097</span> Megapix</button>
+            <button class="channel-btn" data-tvnum="98" onclick="playTV('iframe','https://2embeddecanais.xyz/paramountnetwork/')"><span class="ch-num">098</span> Paramount</button>
+            <button class="channel-btn" data-tvnum="99" data-key="br_tnt"><span class="ch-num">099</span> TNT BR</button>
+            <button class="channel-btn" data-tvnum="100" data-key="br_warner"><span class="ch-num">100</span> Warner Bros BR</button>
+            <button class="channel-btn" data-tvnum="101" data-key="br_telecinepipoca"><span class="ch-num">101</span> Telecine Pipoca</button>
+            <button class="channel-btn" data-tvnum="102" data-key="br_telecinepremium"><span class="ch-num">102</span> Telecine Premium</button>
+            <button class="channel-btn" data-tvnum="103" onclick="playTV('iframe','https://w1.embedtv.live/cnnbrasil')"><span class="ch-num">103</span> CNN Brasil</button>
+            <button class="channel-btn" data-tvnum="104" onclick="playTV('iframe','https://w1.embedtv.live/bandnews')"><span class="ch-num">104</span> Band News</button>
+            <button class="channel-btn" data-tvnum="105" onclick="playTV('iframe','https://2embeddecanais.xyz/recordnews/')"><span class="ch-num">105</span> Record News</button>
+            <button class="channel-btn" data-tvnum="106" onclick="playTV('iframe','https://2embeddecanais.xyz/discoverychannel/')"><span class="ch-num">106</span> Discovery BR</button>
+            <button class="channel-btn" data-tvnum="107" onclick="playTV('iframe','https://w1.embedtv.live/discoveryscience')"><span class="ch-num">107</span> Discovery Science</button>
+            <button class="channel-btn" data-tvnum="108" data-key="br_history"><span class="ch-num">108</span> History BR</button>
+            <button class="channel-btn" data-tvnum="109" data-key="br_animalplanet"><span class="ch-num">109</span> Animal Planet BR</button>
+            <button class="channel-btn" data-tvnum="110" onclick="playTV('iframe','https://2embeddecanais.xyz/dazn/')"><span class="ch-num">110</span> DAZN BR</button>
+            <button class="channel-btn" data-tvnum="111" data-key="br_bandsports"><span class="ch-num">111</span> Band Sports</button>
+            <button class="channel-btn" data-tvnum="112" onclick="playTV('iframe','https://w1.embedtv.live/xsports')"><span class="ch-num">112</span> X Sports</button>
+            <button class="channel-btn" data-tvnum="113" onclick="playTV('iframe','https://2embeddecanais.xyz/tooncast/')"><span class="ch-num">113</span> Tooncast BR</button>
+            <button class="channel-btn" data-tvnum="114" onclick="playTV('iframe','https://w1.embedtv.live/disneyplus1')"><span class="ch-num">114</span> Disney+ 1</button>
+            <button class="channel-btn" data-tvnum="115" data-key="br_cartoonito"><span class="ch-num">115</span> Cartoonito</button>
+            <button class="channel-btn" data-tvnum="116" onclick="playTV('iframe','https://w1.embedtv.live/24h_odeiachris')"><span class="ch-num">116</span> Todo Mundo Odeia o Chris</button>
+            <button class="channel-btn" data-tvnum="117" onclick="playTV('iframe','https://w1.embedtv.live/24h_simpsons')"><span class="ch-num">117</span> Os Simpsons</button>
+            <button class="channel-btn" data-tvnum="118" onclick="playTV('iframe','https://w1.embedtv.live/24h_dragonball')"><span class="ch-num">118</span> Dragon Ball</button>
+            <button class="channel-btn" data-tvnum="119" onclick="playTV('iframe','https://w1.embedtv.live/24h_chaves?r=https://embedtv.live/')"><span class="ch-num">119</span> Chaves</button>
         </div>
 
         <div class="category-title">🇨🇱 Chile</div>
         <div class="channels">
-            <button class="channel-btn" data-tvnum="121" onclick="playTV('m3u8','https://v2.tustreaming.cl/chilechannel/index.m3u8')"><span class="ch-num">121</span> Chile Channel</button>
+            <button class="channel-btn" data-tvnum="120" onclick="playTV('m3u8','https://v2.tustreaming.cl/chilechannel/index.m3u8')"><span class="ch-num">120</span> Chile Channel</button>
         </div>
 
         <div class="category-title">🌎 LATAM (Resto de Países)</div>
         <div class="channels">
-            <button class="channel-btn" data-tvnum="122" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/lasestrellas.html')"><span class="ch-num">122</span> Las Estrellas</button>
-            <button class="channel-btn" data-tvnum="123" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/distritocomedia.html')"><span class="ch-num">123</span> Distrito Comedia</button>
-            <button class="channel-btn" data-tvnum="124" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/latina.html')"><span class="ch-num">124</span> Latina</button>
-            <button class="channel-btn" data-tvnum="125" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/antena3.html')"><span class="ch-num">125</span> Antena 3</button>
-            <button class="channel-btn" data-tvnum="126" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tnt.html')"><span class="ch-num">126</span> TNT LATAM</button>
-            <button class="channel-btn" data-tvnum="127" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/warnerchannel.html')"><span class="ch-num">127</span> Warner Bros</button>
-            <button class="channel-btn" data-tvnum="128" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntnovelas.html')"><span class="ch-num">128</span> TNT Novelas</button>
-            <button class="channel-btn" data-tvnum="129" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntseries.html')"><span class="ch-num">129</span> TNT Series</button>
-            <button class="channel-btn" data-tvnum="130" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/axn.html')"><span class="ch-num">130</span> AXN</button>
-            <button class="channel-btn" data-tvnum="131" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/sony.html')"><span class="ch-num">131</span> Sony</button>
-            <button class="channel-btn" data-tvnum="132" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/universalchannel.html')"><span class="ch-num">132</span> Universal</button>
-            <button class="channel-btn" data-tvnum="133" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/studiouniversal.html')"><span class="ch-num">133</span> Studio Universal</button>
-            <button class="channel-btn" data-tvnum="134" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/space.html')"><span class="ch-num">134</span> Space</button>
-            <button class="channel-btn" data-tvnum="135" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/fx.html')"><span class="ch-num">135</span> FX</button>
-            <button class="channel-btn" data-tvnum="136" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/pasiones.html')"><span class="ch-num">136</span> Pasiones</button>
-            <button class="channel-btn" data-tvnum="137" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tlnovelas.html')"><span class="ch-num">137</span> TL Novelas</button>
-            <button class="channel-btn" data-tvnum="138" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/unicable.html')"><span class="ch-num">138</span> Unicable</button>
-            <button class="channel-btn" data-tvnum="139" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cinemax.html')"><span class="ch-num">139</span> Cinemax</button>
-            <button class="channel-btn" data-tvnum="140" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cinecanal.html')"><span class="ch-num">140</span> Cinecanal</button>
-            <button class="channel-btn" data-tvnum="141" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/starchannel.html')"><span class="ch-num">141</span> Star Channel</button>
-            <button class="channel-btn" data-tvnum="142" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/multipremier.html')"><span class="ch-num">142</span> Multipremier</button>
-            <button class="channel-btn" data-tvnum="143" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenpremier.html')"><span class="ch-num">143</span> Golden Premier</button>
-            <button class="channel-btn" data-tvnum="144" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenedge.html')"><span class="ch-num">144</span> Golden Edge</button>
-            <button class="channel-btn" data-tvnum="145" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenplus.html')"><span class="ch-num">145</span> Golden Plus</button>
-            <button class="channel-btn" data-tvnum="146" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/amc.html')"><span class="ch-num">146</span> AMC LATAM</button>
-            <button class="channel-btn" data-tvnum="147" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/syfy.html')"><span class="ch-num">147</span> SyFy</button>
-            <button class="channel-btn" data-tvnum="148" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn.html')"><span class="ch-num">148</span> ESPN LATAM</button>
-            <button class="channel-btn" data-tvnum="149" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn2.html')"><span class="ch-num">149</span> ESPN 2</button>
-            <button class="channel-btn" data-tvnum="150" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn3.html')"><span class="ch-num">150</span> ESPN 3</button>
-            <button class="channel-btn" data-tvnum="151" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn4.html')"><span class="ch-num">151</span> ESPN 4</button>
-            <button class="channel-btn" data-tvnum="152" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn5.html')"><span class="ch-num">152</span> ESPN 5</button>
-            <button class="channel-btn" data-tvnum="153" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn6.html')"><span class="ch-num">153</span> ESPN 6</button>
-            <button class="channel-btn" data-tvnum="154" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn7.html')"><span class="ch-num">154</span> ESPN 7</button>
-            <button class="channel-btn" data-tvnum="155" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espnpremium.html')"><span class="ch-num">155</span> ESPN Premium LATAM</button>
-            <button class="channel-btn" data-tvnum="156" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntsports.html')"><span class="ch-num">156</span> TNT Sports LATAM</button>
-            <button class="channel-btn" data-tvnum="157" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports.html')"><span class="ch-num">157</span> Fox Sports LATAM</button>
-            <button class="channel-btn" data-tvnum="158" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports2.html')"><span class="ch-num">158</span> Fox Sports 2</button>
-            <button class="channel-btn" data-tvnum="159" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports3.html')"><span class="ch-num">159</span> Fox Sports 3</button>
-            <button class="channel-btn" data-tvnum="160" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsports.html')"><span class="ch-num">160</span> DirecTV Sports LATAM</button>
-            <button class="channel-btn" data-tvnum="161" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsports2.html')"><span class="ch-num">161</span> DirecTV Sports 2</button>
-            <button class="channel-btn" data-tvnum="162" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsportsplus.html')"><span class="ch-num">162</span> DirecTV Sports Plus</button>
-            <button class="channel-btn" data-tvnum="163" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tycsports.html')"><span class="ch-num">163</span> TyC Sports LATAM</button>
-            <button class="channel-btn" data-tvnum="164" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tudn.html')"><span class="ch-num">164</span> TUDN</button>
-            <button class="channel-btn" data-tvnum="165" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/nba.html')"><span class="ch-num">165</span> NBA</button>
-            <button class="channel-btn" data-tvnum="166" onclick="playTV('m3u8','https://jmp2.uk/plu-64df7ab4dfa32400083c517b.m3u8')"><span class="ch-num">166</span> DAZN Combat</button>
-            <button class="channel-btn" data-tvnum="167" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/daznlaliga.html')"><span class="ch-num">167</span> DAZN La Liga</button>
-            <button class="channel-btn" data-tvnum="168" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/daznf1.html')"><span class="ch-num">168</span> DAZN F1</button>
-            <button class="channel-btn" data-tvnum="169" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/skysportsf1.html')"><span class="ch-num">169</span> Sky Sports F1</button>
-            <button class="channel-btn" data-tvnum="170" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/skysportsbundesliga.html')"><span class="ch-num">170</span> Sky Sports Bundesliga</button>
-            <button class="channel-btn" data-tvnum="171" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/movistarligadecampeones.html')"><span class="ch-num">171</span> Movistar L.C.</button>
-            <button class="channel-btn" data-tvnum="172" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/natgeo.html')"><span class="ch-num">172</span> Nat Geo LATAM</button>
-            <button class="channel-btn" data-tvnum="173" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/discoverychannel.html')"><span class="ch-num">173</span> Discovery LATAM</button>
-            <button class="channel-btn" data-tvnum="174" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/discoveryworld.html')"><span class="ch-num">174</span> Discovery World</button>
-            <button class="channel-btn" data-tvnum="175" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/idinvestigation.html')"><span class="ch-num">175</span> ID Discovery</button>
-            <button class="channel-btn" data-tvnum="176" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/history.html')"><span class="ch-num">176</span> History LATAM</button>
-            <button class="channel-btn" data-tvnum="177" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/history2.html')"><span class="ch-num">177</span> History 2 LATAM</button>
-            <button class="channel-btn" data-tvnum="178" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/animalplanet.html')"><span class="ch-num">178</span> Animal Planet LATAM</button>
-            <button class="channel-btn" data-tvnum="179" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/disneychannel.html')"><span class="ch-num">179</span> Disney Channel</button>
-            <button class="channel-btn" data-tvnum="180" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cartoonnetwork.html')"><span class="ch-num">180</span> Cartoon Network</button>
-            <button class="channel-btn" data-tvnum="181" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tooncast.html')"><span class="ch-num">181</span> Tooncast LATAM</button>
-            <button class="channel-btn" data-tvnum="182" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cnn.html')"><span class="ch-num">182</span> CNN</button>
-            <button class="channel-btn" data-tvnum="183" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/rcn.html')"><span class="ch-num">183</span> RCN</button>
-            <button class="channel-btn" data-tvnum="184" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/caracol.html')"><span class="ch-num">184</span> Caracol</button>
-            <button class="channel-btn" data-tvnum="185" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/americatv.html')"><span class="ch-num">185</span> América TV</button>
-            <button class="channel-btn" data-tvnum="186" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/univision.html')"><span class="ch-num">186</span> Univision</button>
+            <button class="channel-btn" data-tvnum="121" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/lasestrellas.html')"><span class="ch-num">121</span> Las Estrellas</button>
+            <button class="channel-btn" data-tvnum="122" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/distritocomedia.html')"><span class="ch-num">122</span> Distrito Comedia</button>
+            <button class="channel-btn" data-tvnum="123" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/latina.html')"><span class="ch-num">123</span> Latina</button>
+            <button class="channel-btn" data-tvnum="124" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/antena3.html')"><span class="ch-num">124</span> Antena 3</button>
+            <button class="channel-btn" data-tvnum="125" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tnt.html')"><span class="ch-num">125</span> TNT LATAM</button>
+            <button class="channel-btn" data-tvnum="126" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/warnerchannel.html')"><span class="ch-num">126</span> Warner Bros</button>
+            <button class="channel-btn" data-tvnum="127" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntnovelas.html')"><span class="ch-num">127</span> TNT Novelas</button>
+            <button class="channel-btn" data-tvnum="128" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntseries.html')"><span class="ch-num">128</span> TNT Series</button>
+            <button class="channel-btn" data-tvnum="129" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/axn.html')"><span class="ch-num">129</span> AXN</button>
+            <button class="channel-btn" data-tvnum="130" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/sony.html')"><span class="ch-num">130</span> Sony</button>
+            <button class="channel-btn" data-tvnum="131" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/universalchannel.html')"><span class="ch-num">131</span> Universal</button>
+            <button class="channel-btn" data-tvnum="132" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/studiouniversal.html')"><span class="ch-num">132</span> Studio Universal</button>
+            <button class="channel-btn" data-tvnum="133" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/space.html')"><span class="ch-num">133</span> Space</button>
+            <button class="channel-btn" data-tvnum="134" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/fx.html')"><span class="ch-num">134</span> FX</button>
+            <button class="channel-btn" data-tvnum="135" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/pasiones.html')"><span class="ch-num">135</span> Pasiones</button>
+            <button class="channel-btn" data-tvnum="136" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tlnovelas.html')"><span class="ch-num">136</span> TL Novelas</button>
+            <button class="channel-btn" data-tvnum="137" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/unicable.html')"><span class="ch-num">137</span> Unicable</button>
+            <button class="channel-btn" data-tvnum="138" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cinemax.html')"><span class="ch-num">138</span> Cinemax</button>
+            <button class="channel-btn" data-tvnum="139" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cinecanal.html')"><span class="ch-num">139</span> Cinecanal</button>
+            <button class="channel-btn" data-tvnum="140" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/starchannel.html')"><span class="ch-num">140</span> Star Channel</button>
+            <button class="channel-btn" data-tvnum="141" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/multipremier.html')"><span class="ch-num">141</span> Multipremier</button>
+            <button class="channel-btn" data-tvnum="142" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenpremier.html')"><span class="ch-num">142</span> Golden Premier</button>
+            <button class="channel-btn" data-tvnum="143" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenedge.html')"><span class="ch-num">143</span> Golden Edge</button>
+            <button class="channel-btn" data-tvnum="144" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenplus.html')"><span class="ch-num">144</span> Golden Plus</button>
+            <button class="channel-btn" data-tvnum="145" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/amc.html')"><span class="ch-num">145</span> AMC LATAM</button>
+            <button class="channel-btn" data-tvnum="146" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/syfy.html')"><span class="ch-num">146</span> SyFy</button>
+            <button class="channel-btn" data-tvnum="147" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn.html')"><span class="ch-num">147</span> ESPN LATAM</button>
+            <button class="channel-btn" data-tvnum="148" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn2.html')"><span class="ch-num">148</span> ESPN 2</button>
+            <button class="channel-btn" data-tvnum="149" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn3.html')"><span class="ch-num">149</span> ESPN 3</button>
+            <button class="channel-btn" data-tvnum="150" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn4.html')"><span class="ch-num">150</span> ESPN 4</button>
+            <button class="channel-btn" data-tvnum="151" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn5.html')"><span class="ch-num">151</span> ESPN 5</button>
+            <button class="channel-btn" data-tvnum="152" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn6.html')"><span class="ch-num">152</span> ESPN 6</button>
+            <button class="channel-btn" data-tvnum="153" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn7.html')"><span class="ch-num">153</span> ESPN 7</button>
+            <button class="channel-btn" data-tvnum="154" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espnpremium.html')"><span class="ch-num">154</span> ESPN Premium LATAM</button>
+            <button class="channel-btn" data-tvnum="155" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntsports.html')"><span class="ch-num">155</span> TNT Sports LATAM</button>
+            <button class="channel-btn" data-tvnum="156" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports.html')"><span class="ch-num">156</span> Fox Sports LATAM</button>
+            <button class="channel-btn" data-tvnum="157" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports2.html')"><span class="ch-num">157</span> Fox Sports 2</button>
+            <button class="channel-btn" data-tvnum="158" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports3.html')"><span class="ch-num">158</span> Fox Sports 3</button>
+            <button class="channel-btn" data-tvnum="159" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsports.html')"><span class="ch-num">159</span> DirecTV Sports LATAM</button>
+            <button class="channel-btn" data-tvnum="160" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsports2.html')"><span class="ch-num">160</span> DirecTV Sports 2</button>
+            <button class="channel-btn" data-tvnum="161" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsportsplus.html')"><span class="ch-num">161</span> DirecTV Sports Plus</button>
+            <button class="channel-btn" data-tvnum="162" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tycsports.html')"><span class="ch-num">162</span> TyC Sports LATAM</button>
+            <button class="channel-btn" data-tvnum="163" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tudn.html')"><span class="ch-num">163</span> TUDN</button>
+            <button class="channel-btn" data-tvnum="164" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/nba.html')"><span class="ch-num">164</span> NBA</button>
+            <button class="channel-btn" data-tvnum="165" onclick="playTV('m3u8','https://jmp2.uk/plu-64df7ab4dfa32400083c517b.m3u8')"><span class="ch-num">165</span> DAZN Combat</button>
+            <button class="channel-btn" data-tvnum="166" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/daznlaliga.html')"><span class="ch-num">166</span> DAZN La Liga</button>
+            <button class="channel-btn" data-tvnum="167" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/daznf1.html')"><span class="ch-num">167</span> DAZN F1</button>
+            <button class="channel-btn" data-tvnum="168" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/skysportsf1.html')"><span class="ch-num">168</span> Sky Sports F1</button>
+            <button class="channel-btn" data-tvnum="169" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/skysportsbundesliga.html')"><span class="ch-num">169</span> Sky Sports Bundesliga</button>
+            <button class="channel-btn" data-tvnum="170" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/movistarligadecampeones.html')"><span class="ch-num">170</span> Movistar L.C.</button>
+            <button class="channel-btn" data-tvnum="171" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/natgeo.html')"><span class="ch-num">171</span> Nat Geo LATAM</button>
+            <button class="channel-btn" data-tvnum="172" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/discoverychannel.html')"><span class="ch-num">172</span> Discovery LATAM</button>
+            <button class="channel-btn" data-tvnum="173" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/discoveryworld.html')"><span class="ch-num">173</span> Discovery World</button>
+            <button class="channel-btn" data-tvnum="174" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/idinvestigation.html')"><span class="ch-num">174</span> ID Discovery</button>
+            <button class="channel-btn" data-tvnum="175" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/history.html')"><span class="ch-num">175</span> History LATAM</button>
+            <button class="channel-btn" data-tvnum="176" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/history2.html')"><span class="ch-num">176</span> History 2 LATAM</button>
+            <button class="channel-btn" data-tvnum="177" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/animalplanet.html')"><span class="ch-num">177</span> Animal Planet LATAM</button>
+            <button class="channel-btn" data-tvnum="178" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/disneychannel.html')"><span class="ch-num">178</span> Disney Channel</button>
+            <button class="channel-btn" data-tvnum="179" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cartoonnetwork.html')"><span class="ch-num">179</span> Cartoon Network</button>
+            <button class="channel-btn" data-tvnum="180" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tooncast.html')"><span class="ch-num">180</span> Tooncast LATAM</button>
+            <button class="channel-btn" data-tvnum="181" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cnn.html')"><span class="ch-num">181</span> CNN</button>
+            <button class="channel-btn" data-tvnum="182" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/rcn.html')"><span class="ch-num">182</span> RCN</button>
+            <button class="channel-btn" data-tvnum="183" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/caracol.html')"><span class="ch-num">183</span> Caracol</button>
+            <button class="channel-btn" data-tvnum="184" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/americatv.html')"><span class="ch-num">184</span> América TV</button>
+            <button class="channel-btn" data-tvnum="185" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/univision.html')"><span class="ch-num">185</span> Univision</button>
         </div>
     </div>
 </div>
@@ -475,7 +470,7 @@
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://izidisplay.com/AoVivo/Ponte')">🎥 Atacado Connect</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/V2tjeGMyRXhjRmhQU0dSUFVYcFdlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/V1ZWb1UwMUhUa2xVVkZwTlpWUm5PUT09K1I=/fozpontedaamizadesentidoparaguai.stream/')">🎥 Sentido Paraguay</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/V2tjeGMyRXhjRmhQU0dSUFVYcFdlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/V1ZWb1UwMUhUa2xVVkZwTlpWUm5PUT09K1I=/fozpontedaamizadesentidobrasil.stream/')">🎥 Sentido Brasil</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/dmlkZW8wNC5sb2dpY2Fob3N0LmNvbS5icisx/16:9/YUhSMGNITTZMeTg5K1o=/fozaduanapontedaamizade.stream/')">🎥 Aduana BR-277</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portaldacidade//false/false/dmlkZW8wNC5sb2dpY2Fob3N0LmNvbS5icisx/16:9/YUhSMGNITTZMeTg5K1o=/fozaduanapontedaamizade.stream/')">🎥 Aduana BR-277</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://playerv.logicahost.com.br/video-ip-camera/portaldacidade//false/false/V2tjeGMyRXhjRmhQU0dST1lWUldlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/aHR0cHM6Ly8rMQ==/fozsentidopontedaamizade01.stream/')">🎥 BR-277 Sent. Ponte</button>
     </div>
     
@@ -584,7 +579,8 @@ function playTV(type, url) {
     if (currentTVDash) { try{currentTVDash.reset();}catch(e){} currentTVDash = null; }
 
     if (type === 'iframe') {
-        c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer"></iframe>';
+        // Se añade el sandbox para evitar el redireccionamiento indeseado en la publicidad de los canales embebidos.
+        c.innerHTML = '<iframe src="' + url + '" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
     } else {
         c.innerHTML = '<video id="vid-main" controls autoplay playsinline style="width:100%;height:100%"></video>';
         var v = document.getElementById('vid-main');
@@ -676,7 +672,7 @@ function playCAM(type, url) {
     if (camDash) { try { camDash.reset(); } catch(e) {} camDash = null; }
     
     if (type === 'iframe') {
-        c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer"></iframe>';
+        c.innerHTML = '<iframe src="' + url + '" sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
     } else {
         c.innerHTML = '<video id="camv" controls autoplay playsinline style="width:100%;height:100%"></video>';
         var v = document.getElementById('camv');
