@@ -1,4 +1,313 @@
-<!-- RADIOS -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="referrer" content="no-referrer">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>TV y Radios PY</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@0.14.17/dist/hls.min.js"></script>
+    <script>
+    var dashLoaded = false;
+    function loadDashIfNeeded(callback) {
+        if (dashLoaded) { callback(); return; }
+        var s = document.createElement('script');
+        s.src = 'https://cdn.dashjs.org/v4.7.4/dash.all.min.js';
+        s.onload = function() { dashLoaded = true; callback(); };
+        s.onerror = function() { callback(); };
+        document.head.appendChild(s);
+    }
+    </script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background-color: #121212; color: white; padding-bottom: 40px; overflow-x: hidden; }
+        
+        .top-bar { display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 1000; padding: 15px; background: linear-gradient(135deg, #0b5394, #1a1a2e); box-shadow: 0 4px 10px rgba(0,0,0,0.6); }
+        .top-bar.hidden { display: none !important; }
+        .top-bar h1 { font-size: 19px; letter-spacing: 1px; margin: 0; color: #4fa6ff; }
+        .back-btn { position: absolute; left: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; transition: 0.2s; font-size: 13px; }
+        .back-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .app-view { display: none; width: 100%; animation: fadeIn 0.3s ease-in-out; }
+        .app-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .home-menu { display: flex; flex-direction: column; gap: 15px; padding: 30px 20px; max-width: 600px; margin: 0 auto; }
+        .menu-card { background: linear-gradient(135deg, #1c1c2e, #2a2a40); border: 2px solid #0b5394; border-radius: 15px; padding: 25px 20px; text-align: center; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(11, 83, 148, 0.6); border-color: #4fa6ff; background: linear-gradient(135deg, #0b5394, #1a1a2e); }
+        .menu-icon { font-size: 45px; }
+        .menu-title { font-size: 20px; font-weight: bold; color: white; letter-spacing: 1px; }
+
+        .player-container { width: 100%; max-width: 1280px; margin: 20px auto; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; }
+        .player-container.fullscreen-mode { margin: 0 auto; max-width: 100%; border-radius: 0; }
+        iframe, video { width: 100%; height: 100%; border: none; }
+        video { cursor: pointer; }
+        
+        .category-title { text-align: center; margin: 22px auto 10px; color: #4fa6ff; font-size: 17px; border-bottom: 1px solid #2a2a2a; padding-bottom: 6px; max-width: 860px; font-weight: bold; }
+        .channels { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 8px 20px; max-width: 860px; margin: 0 auto; }
+        
+        .channel-btn { background: #1e1e1e; color: #ddd; border: 1px solid #333; padding: 11px 14px; font-size: 13px; border-radius: 8px; cursor: pointer; transition: all 0.25s; flex: 1 1 calc(25% - 20px); min-width: 120px; display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 8px; }
+        .channel-btn:hover { background: #0b5394; border-color: #4fa6ff; color: white; }
+        .cam-btn { justify-content: center; text-align: center; }
+        .cam-btn:hover { background: #7d4e00; border-color: #f0a500; color: white; }
+
+        .ch-num { background: rgba(11, 83, 148, 0.5); color: #7ec8ff; padding: 3px 6px; border-radius: 4px; font-family: monospace; font-size: 11px; font-weight: bold; }
+
+        .tv-search-wrap { display: flex; gap: 8px; justify-content: center; padding: 15px 20px 5px; max-width: 600px; margin: 0 auto; }
+        .tv-search-wrap input { flex: 1; padding: 10px 15px; border-radius: 8px; background: #1e1e2e; border: 1px solid #333; color: white; font-size: 15px; font-weight: bold; outline: none; text-align: center; }
+        .tv-search-wrap input:focus { border-color: #4fa6ff; }
+        .tv-search-wrap button { background: #0b5394; color: white; border: 1px solid #4fa6ff; padding: 0 20px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .tv-search-wrap button:hover { background: #4fa6ff; color: #111; }
+
+        .tv-zapper { display: flex; background: #111; padding: 12px 15px; gap: 10px; align-items: center; border-top: 2px solid #0b5394; justify-content: center; flex-wrap: wrap;}
+        .tv-zapper input { width: 100px; padding: 10px; background: #222; border: 1px solid #333; color: white; font-weight: bold; text-align: center; border-radius: 8px; outline: none; }
+        .tv-zapper button.go { background: #0b5394; color: white; border: 1px solid #4fa6ff; padding: 10px 20px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        .tv-zapper button.close { margin-left: auto; background: #c0392b; color: white; border: none; padding: 10px 15px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+
+        #view-radios { padding: 0 0 40px; }
+        .radio-player-bar { position: sticky; top: 52px; z-index: 100; background: #0d0d1a; border-bottom: 2px solid #0b5394; padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .radio-now-info { flex: 1; min-width: 140px; }
+        .radio-now-info .rlabel { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+        .radio-now-info .rname-big { font-size: 16px; font-weight: bold; color: #4fa6ff; }
+        .radio-now-info .rfreq { font-size: 11px; color: #888; }
+        #main-audio { flex: 2; min-width: 180px; max-width: 380px; }
+        .rbtn-stop { background:#c0392b; border:none; color:white; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold; }
+        .rbtn-stop:hover { background:#e74c3c; }
+        
+        .bg-audio-container { background: #1e1e2e; padding: 8px 16px; border-radius: 8px; margin: 15px auto 5px; max-width: 900px; display: flex; align-items: center; gap: 10px; border: 1px solid #333; width: calc(100% - 28px); }
+        .bg-audio-container input { width: 18px; height: 18px; cursor: pointer; }
+        .bg-audio-container label { font-size: 13px; color: #ddd; cursor: pointer; user-select: none; font-weight: bold;}
+
+        .search-bar-wrap { max-width:900px; margin:12px auto 4px; padding:0 14px; }
+        .search-bar-wrap input { width:100%; padding:9px 14px; border-radius:8px; background:#1e1e2e; border:1px solid #333; color:white; font-size:14px; outline:none; }
+        .search-bar-wrap input:focus { border-color:#4fa6ff; }
+        .city-group { max-width:940px; margin:14px auto 0; padding:0 10px; }
+        .city-header { display:flex; align-items:center; gap:8px; padding:8px 14px; background:#1a1a2e; border-left:4px solid #0b5394; border-radius:0 6px 6px 0; font-size:12px; font-weight:bold; color:#7ec8ff; text-transform:uppercase; letter-spacing:.8px; margin-bottom:8px; cursor:pointer; user-select:none; }
+        .city-header:hover { background:#1e2240; }
+        .city-header .toggle-icon { margin-left:auto; color:#555; }
+        .city-cards { display:grid; grid-template-columns:repeat(auto-fill, minmax(130px,1fr)); gap:8px; padding:0 2px 4px; }
+        .city-cards.collapsed { display:none; }
+        .radio-card { background:#1c1c2e; border:1px solid #2a2a3e; border-radius:10px; padding:12px 8px 10px; text-align:center; cursor:pointer; transition:all 0.2s; display:flex; flex-direction:column; align-items:center; gap:4px; }
+        .radio-card:hover { background:#0b2a4a; border-color:#4fa6ff; transform:translateY(-2px); }
+        .radio-card.playing { background:#0b3d6b; border-color:#4fa6ff; box-shadow:0 0 10px rgba(79,166,255,.3); }
+        .radio-card .freq { font-size:10px; color:#888; font-weight:bold; background:#111; padding:2px 6px; border-radius:8px; }
+        .radio-card .rname { font-size:12px; color:#ddd; font-weight:bold; line-height:1.2; }
+        .radio-card.playing .rname { color:#4fa6ff; }
+        .radio-card .play-icon { font-size:18px; opacity:.5; }
+        .radio-card.playing .play-icon { display:none; }
+        .eq-bars { display:none; gap:2px; align-items:flex-end; height:14px; }
+        .radio-card.playing .eq-bars { display:flex; }
+        .eq-bars span { width:3px; background:#4fa6ff; border-radius:2px; animation:eq .7s ease-in-out infinite alternate; }
+        .eq-bars span:nth-child(2){animation-delay:.15s}
+        .eq-bars span:nth-child(3){animation-delay:.3s}
+        .eq-bars span:nth-child(4){animation-delay:.45s}
+        @keyframes eq { from{height:3px} to{height:14px} }
+        .no-results { text-align:center; color:#555; padding:30px; font-size:14px; display:none; }
+        .paused * { animation-play-state: paused !important; }
+    </style>
+</head>
+<body>
+
+<div class="top-bar" id="main-top-bar">
+    <button class="back-btn" id="back-btn" onclick="showAppView('home')">🔙 Volver</button>
+    <h1 id="header-title">Menú Principal</h1>
+</div>
+
+<div id="view-home" class="app-view active">
+    <div class="home-menu">
+        <div class="menu-card" onclick="showAppView('tv')">
+            <div class="menu-icon">📺</div>
+            <div class="menu-title">Televisión en Vivo</div>
+        </div>
+        <div class="menu-card" onclick="showAppView('radios')">
+            <div class="menu-icon">📻</div>
+            <div class="menu-title">Radios Nacionales</div>
+        </div>
+        <div class="menu-card" onclick="showAppView('camaras')">
+            <div class="menu-icon">🚦</div>
+            <div class="menu-title">Cámaras en Vivo</div>
+        </div>
+    </div>
+</div>
+
+<div id="view-tv" class="app-view">
+    
+    <div id="tv-player-area" style="display:none;">
+        <div class="player-container fullscreen-mode" id="main-tv-player"></div>
+        <div class="tv-zapper">
+            <input type="number" id="tv-num-quick" placeholder="Canal" onkeydown="if(event.key==='Enter') playChannelByNumber(this.value)">
+            <button class="go" onclick="playChannelByNumber(document.getElementById('tv-num-quick').value)">Ir</button>
+            <button class="close" onclick="closeTV()">❌ Cerrar y Volver</button>
+        </div>
+    </div>
+
+    <div id="tv-list-area">
+        <div class="tv-search-wrap">
+            <input type="number" id="tv-num-input" placeholder="🔢 Número de canal..." onkeydown="if(event.key==='Enter') playChannelByNumber(this.value)">
+            <button onclick="playChannelByNumber(document.getElementById('tv-num-input').value)">Ver</button>
+        </div>
+
+        <div class="category-title">🇵🇾 Paraguay</div>
+        <div class="channels">
+            <button class="channel-btn" data-tvnum="1" onclick="playTV('m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/120.m3u8')"><span class="ch-num">1</span> Paravisión</button>
+            <button class="channel-btn" data-tvnum="2" data-key="telefuturo"><span class="ch-num">2</span> Telefuturo</button>
+            <button class="channel-btn" data-tvnum="3" onclick="playTV('m3u8','https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/media.m3u8?admin=tvaccion')"><span class="ch-num">3</span> Telefuturo (Alt)</button>
+            <button class="channel-btn" data-tvnum="4" onclick="playTV('m3u8','https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion')"><span class="ch-num">4</span> LaTele</button>
+            <button class="channel-btn" data-tvnum="5" onclick="playTV('m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/7.m3u8')"><span class="ch-num">5</span> ABC TV</button>
+            <button class="channel-btn" data-tvnum="6" onclick="playTV('m3u8','https://copacogen.desdeparaguay.net/npy/npy_py_alta/playlist.m3u8?admin=tvaccion')"><span class="ch-num">6</span> NPY</button>
+            <button class="channel-btn" data-tvnum="7" onclick="playTV('m3u8','https://copacogen.desdeparaguay.net/gentv/gentv_py_alta/playlist.m3u8?admin=nacion')"><span class="ch-num">7</span> GEN</button>
+            <button class="channel-btn" data-tvnum="8" onclick="playTV('iframe','https://geo.dailymotion.com/player/x1at3a.html?video=k4nLYiNrBX8W5jDbSlM&autoplay=1')"><span class="ch-num">8</span> Trece PY</button>
+            <button class="channel-btn" data-tvnum="9" data-key="mega"><span class="ch-num">9</span> Mega TV</button>
+            <button class="channel-btn" data-tvnum="10" data-key="rcctv"><span class="ch-num">10</span> RCC TV</button>
+            <button class="channel-btn" data-tvnum="11" onclick="playTV('m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/6.m3u8')"><span class="ch-num">11</span> A24</button>
+            <button class="channel-btn" data-tvnum="12" onclick="playTV('m3u8','https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8')"><span class="ch-num">12</span> Paraguay TV</button>
+            <button class="channel-btn" data-tvnum="13" onclick="playTV('m3u8','https://rds3gen.desdeparaguay.net/venusmedia/venusmedia/.m3u8')"><span class="ch-num">13</span> Venus TV</button>
+            <button class="channel-btn" data-tvnum="14" onclick="playTV('iframe','https://www.desdeparaguay.com/external/?venusmedia')"><span class="ch-num">14</span> Venus TV (Alt)</button>
+            <button class="channel-btn" data-tvnum="15" onclick="playTV('m3u8','https://rds3.desdeparaguay.net/mitv/mitv/playlist.m3u8')"><span class="ch-num">15</span> MiTV</button>
+            <button class="channel-btn" data-tvnum="16" onclick="playTV('iframe','https://www.desdeparaguay.com/ugatv')"><span class="ch-num">16</span> UGA TV</button>
+            <button class="channel-btn" data-tvnum="17" onclick="playTV('m3u8','https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8')"><span class="ch-num">17</span> GO TV</button>
+            <button class="channel-btn" data-tvnum="18" onclick="playTV('m3u8','https://tigocloudgen.desdeparaguay.net/satelitaltv/satelitaltv/playlist.m3u8')"><span class="ch-num">18</span> Visión TV</button>
+            <button class="channel-btn" data-tvnum="19" onclick="playTV('iframe','https://www.desdeparaguay.com/brunomasitv')"><span class="ch-num">19</span> Bruno Masi TV</button>
+            <button class="channel-btn" data-tvnum="20" data-key="canalpro"><span class="ch-num">20</span> Canal Pro</button>
+            <button class="channel-btn" data-tvnum="21" onclick="playTV('iframe','https://www.desdeparaguay.com/poputv')"><span class="ch-num">21</span> Popu TV</button>
+            <button class="channel-btn" data-tvnum="22" onclick="playTV('m3u8','https://copacogen.desdeparaguay.net/universotv/universotv_py_alta/playlist.m3u8?admin=nacion')"><span class="ch-num">22</span> Popu TV (Alt)</button>
+            <button class="channel-btn" data-tvnum="23" onclick="playTV('m3u8','https://rds3.desdeparaguay.net/tropicaliatv/tropicaliatv/playlist.m3u8')"><span class="ch-num">23</span> Tropicalia</button>
+            <button class="channel-btn" data-tvnum="24" data-key="productiva"><span class="ch-num">24</span> Productiva</button>
+            <button class="channel-btn" data-tvnum="25" data-key="launion"><span class="ch-num">25</span> La Unión</button>
+            <button class="channel-btn" data-tvnum="26" data-key="nandutitv"><span class="ch-num">26</span> Ñanduti TV</button>
+            <button class="channel-btn" data-tvnum="27" data-key="chaquena"><span class="ch-num">27</span> Chaqueña TV</button>
+            <button class="channel-btn" data-tvnum="28" onclick="playTV('iframe','https://www.desdeparaguay.com/monumentaltv')"><span class="ch-num">28</span> Monumental</button>
+            <button class="channel-btn" data-tvnum="29" data-key="nandejaranee"><span class="ch-num">29</span> Ñande Jara Ñe'e</button>
+            <button class="channel-btn" data-tvnum="30" onclick="playTV('iframe','https://www.desdeparaguay.com/heitv')"><span class="ch-num">30</span> HEI</button>
+            <button class="channel-btn" data-tvnum="31" data-key="lacosta"><span class="ch-num">31</span> La Costa TV</button>
+            <button class="channel-btn" data-tvnum="32" onclick="playTV('m3u8','https://copacogen.desdeparaguay.net/villaelisatv/villaelisatv/playlist.m3u8?admin=nacion')"><span class="ch-num">32</span> Villa Elisa TV</button>
+            <button class="channel-btn" data-tvnum="33" onclick="playTV('m3u8','https://live.enhdtv.com:8081/8160/index.m3u8')"><span class="ch-num">33</span> Tigo Sports 1</button>
+            <button class="channel-btn" data-tvnum="34" data-key="eventopy2"><span class="ch-num">34</span> Tigo Sports 2</button>
+            <button class="channel-btn" data-tvnum="35" data-key="eventopy3"><span class="ch-num">35</span> Tigo Sports 3</button>
+        </div>
+
+        <div class="category-title">🇦🇷 Argentina</div>
+        <div class="channels">
+            <button class="channel-btn" data-tvnum="36" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/eltrece.html')"><span class="ch-num">36</span> El Trece</button>
+            <button class="channel-btn" data-tvnum="37" onclick="playTV('m3u8','https://unlimited1-us.dps.live/nettv/nettv.smil/playlist.m3u8')"><span class="ch-num">37</span> Net TV</button>
+            <button class="channel-btn" data-tvnum="38" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/telefe.html')"><span class="ch-num">38</span> Telefe</button>
+            <button class="channel-btn" data-tvnum="39" onclick="playTV('m3u8','https://wowzasrv.chaco.gov.ar/Streamtv/chacotv/playlist.m3u8')"><span class="ch-num">39</span> Chaco TV</button>
+            <button class="channel-btn" data-tvnum="40" onclick="playTV('m3u8','https://stream1.sersat.com/hls/argentinisima.m3u8')"><span class="ch-num">40</span> Argentinisima</button>
+            <button class="channel-btn" data-tvnum="41" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn.html')"><span class="ch-num">41</span> ESPN</button>
+            <button class="channel-btn" data-tvnum="42" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn2.html')"><span class="ch-num">42</span> ESPN 2</button>
+            <button class="channel-btn" data-tvnum="43" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn3.html')"><span class="ch-num">43</span> ESPN 3</button>
+            <button class="channel-btn" data-tvnum="44" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espnar.html')"><span class="ch-num">44</span> ESPN AR</button>
+            <button class="channel-btn" data-tvnum="45" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espnpremiumargentina.html')"><span class="ch-num">45</span> ESPN Premium</button>
+            <button class="channel-btn" data-tvnum="46" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tycsports.html')"><span class="ch-num">46</span> TyC Sports</button>
+            <button class="channel-btn" data-tvnum="47" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntsports.html')"><span class="ch-num">47</span> TNT Sports</button>
+            <button class="channel-btn" data-tvnum="48" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports.html')"><span class="ch-num">48</span> Fox Sports</button>
+            <button class="channel-btn" data-tvnum="49" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports2.html')"><span class="ch-num">49</span> Fox Sports 2</button>
+            <button class="channel-btn" data-tvnum="50" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsports.html')"><span class="ch-num">50</span> DirecTV Sports</button>
+            <button class="channel-btn" data-tvnum="51" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsports2.html')"><span class="ch-num">51</span> DirecTV Sports 2</button>
+            <button class="channel-btn" data-tvnum="52" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tnt.html')"><span class="ch-num">52</span> TNT</button>
+            <button class="channel-btn" data-tvnum="53" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/warnerchannel.html')"><span class="ch-num">53</span> Warner Bros</button>
+            <button class="channel-btn" data-tvnum="54" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntnovelas.html')"><span class="ch-num">54</span> TNT Novelas</button>
+            <button class="channel-btn" data-tvnum="55" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/space.html')"><span class="ch-num">55</span> Space</button>
+            <button class="channel-btn" data-tvnum="56" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/axn.html')"><span class="ch-num">56</span> AXN</button>
+            <button class="channel-btn" data-tvnum="57" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/sony.html')"><span class="ch-num">57</span> Sony</button>
+            <button class="channel-btn" data-tvnum="58" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cinemax.html')"><span class="ch-num">58</span> Cinemax</button>
+            <button class="channel-btn" data-tvnum="59" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/multipremier.html')"><span class="ch-num">59</span> Multipremier</button>
+            <button class="channel-btn" data-tvnum="60" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/starchannel.html')"><span class="ch-num">60</span> Star Channel</button>
+            <button class="channel-btn" data-tvnum="61" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenpremier.html')"><span class="ch-num">61</span> Golden Premier</button>
+            <button class="channel-btn" data-tvnum="62" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenedge.html')"><span class="ch-num">62</span> Golden Edge</button>
+            <button class="channel-btn" data-tvnum="63" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/goldenplus.html')"><span class="ch-num">63</span> Golden Plus</button>
+            <button class="channel-btn" data-tvnum="64" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/natgeo.html')"><span class="ch-num">64</span> Nat Geo</button>
+            <button class="channel-btn" data-tvnum="65" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/discoverychannel.html')"><span class="ch-num">65</span> Discovery</button>
+            <button class="channel-btn" data-tvnum="66" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/history.html')"><span class="ch-num">66</span> History</button>
+            <button class="channel-btn" data-tvnum="67" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/history2.html')"><span class="ch-num">67</span> History 2</button>
+            <button class="channel-btn" data-tvnum="68" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/animalplanet.html')"><span class="ch-num">68</span> Animal Planet</button>
+            <button class="channel-btn" data-tvnum="69" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/amc.html')"><span class="ch-num">69</span> AMC</button>
+            <button class="channel-btn" data-tvnum="70" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/disneychannel.html')"><span class="ch-num">70</span> Disney Channel</button>
+            <button class="channel-btn" data-tvnum="71" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cartoonnetwork.html')"><span class="ch-num">71</span> Cartoon Network</button>
+            <button class="channel-btn" data-tvnum="72" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tooncast.html')"><span class="ch-num">72</span> Tooncast</button>
+            <button class="channel-btn" data-tvnum="73" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/fmhotkids.html')"><span class="ch-num">73</span> FM Hot Kids</button>
+        </div>
+
+        <div class="category-title">🇧🇷 Brasil</div>
+        <div class="channels">
+            <button class="channel-btn" data-tvnum="74" onclick="playTV('iframe','https://w1.embedtv.live/globosp?r=https://embedtv.live/')"><span class="ch-num">74</span> Globo SP</button>
+            <button class="channel-btn" data-tvnum="75" onclick="playTV('iframe','https://w1.embedtv.live/globorj')"><span class="ch-num">75</span> Globo RJ</button>
+            <button class="channel-btn" data-tvnum="76" onclick="playTV('m3u8','https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8')"><span class="ch-num">76</span> TV Cultura</button>
+            <button class="channel-btn" data-tvnum="77" onclick="playTV('m3u8','https://tvbrasil-stream.ebc.com.br/index.m3u8')"><span class="ch-num">77</span> TV Brasil</button>
+            <button class="channel-btn" data-tvnum="78" onclick="playTV('iframe','https://w1.embedtv.live/bandsp')"><span class="ch-num">78</span> Band SP</button>
+            <button class="channel-btn" data-tvnum="79" onclick="playTV('iframe','https://2embeddecanais.xyz/recordrj/')"><span class="ch-num">79</span> Record RJ</button>
+            <button class="channel-btn" data-tvnum="80" onclick="playTV('iframe','https://www.dailymotion.com/embed/video/x8xps0s?autoplay=1')"><span class="ch-num">80</span> RedeTV</button>
+            <button class="channel-btn" data-tvnum="81" onclick="playTV('m3u8','https://video09.logicahost.com.br/sbtcuiaba/sbtcuiaba/playlist.m3u8')"><span class="ch-num">81</span> SBT</button>
+            <button class="channel-btn" data-tvnum="82" onclick="playTV('iframe','https://w1.embedtv.live/hbo')"><span class="ch-num">82</span> HBO</button>
+            <button class="channel-btn" data-tvnum="83" onclick="playTV('iframe','https://w1.embedtv.live/hbofamily')"><span class="ch-num">83</span> HBO Family</button>
+            <button class="channel-btn" data-tvnum="84" onclick="playTV('iframe','https://w1.embedtv.live/cinemax')"><span class="ch-num">84</span> Cinemax BR</button>
+            <button class="channel-btn" data-tvnum="85" onclick="playTV('iframe','https://w1.embedtv.live/universaltv')"><span class="ch-num">85</span> Universal TV</button>
+            <button class="channel-btn" data-tvnum="86" onclick="playTV('iframe','https://w1.embedtv.live/tcm')"><span class="ch-num">86</span> TCM</button>
+            <button class="channel-btn" data-tvnum="87" onclick="playTV('iframe','https://w1.embedtv.live/megapix')"><span class="ch-num">87</span> Megapix</button>
+            <button class="channel-btn" data-tvnum="88" onclick="playTV('iframe','https://2embeddecanais.xyz/paramountnetwork/')"><span class="ch-num">88</span> Paramount</button>
+            <button class="channel-btn" data-tvnum="89" data-key="br_tnt"><span class="ch-num">89</span> TNT BR</button>
+            <button class="channel-btn" data-tvnum="90" data-key="br_telecinepipoca"><span class="ch-num">90</span> Telecine Pipoca</button>
+            <button class="channel-btn" data-tvnum="91" data-key="br_telecinepremium"><span class="ch-num">91</span> Telecine Premium</button>
+            <button class="channel-btn" data-tvnum="92" onclick="playTV('iframe','https://w1.embedtv.live/cnnbrasil')"><span class="ch-num">92</span> CNN Brasil</button>
+            <button class="channel-btn" data-tvnum="93" onclick="playTV('iframe','https://w1.embedtv.live/bandnews')"><span class="ch-num">93</span> Band News</button>
+            <button class="channel-btn" data-tvnum="94" onclick="playTV('iframe','https://2embeddecanais.xyz/recordnews/')"><span class="ch-num">94</span> Record News</button>
+            <button class="channel-btn" data-tvnum="95" onclick="playTV('iframe','https://2embeddecanais.xyz/discoverychannel/')"><span class="ch-num">95</span> Discovery BR</button>
+            <button class="channel-btn" data-tvnum="96" data-key="br_history"><span class="ch-num">96</span> History BR</button>
+            <button class="channel-btn" data-tvnum="97" data-key="br_animalplanet"><span class="ch-num">97</span> Animal Planet BR</button>
+            <button class="channel-btn" data-tvnum="98" onclick="playTV('iframe','https://2embeddecanais.xyz/dazn/')"><span class="ch-num">98</span> DAZN BR</button>
+            <button class="channel-btn" data-tvnum="99" data-key="br_bandsports"><span class="ch-num">99</span> Band Sports</button>
+            <button class="channel-btn" data-tvnum="100" onclick="playTV('iframe','https://2embeddecanais.xyz/tooncast/')"><span class="ch-num">100</span> Tooncast BR</button>
+            <button class="channel-btn" data-tvnum="101" onclick="playTV('iframe','https://w1.embedtv.live/disneyplus1')"><span class="ch-num">101</span> Disney+ 1</button>
+            <button class="channel-btn" data-tvnum="102" onclick="playTV('iframe','https://w1.embedtv.live/24h_simpsons')"><span class="ch-num">102</span> Os Simpsons</button>
+            <button class="channel-btn" data-tvnum="103" onclick="playTV('iframe','https://w1.embedtv.live/24h_dragonball')"><span class="ch-num">103</span> Dragon Ball</button>
+            <button class="channel-btn" data-tvnum="104" onclick="playTV('iframe','https://w1.embedtv.live/24h_chaves?r=https://embedtv.live/')"><span class="ch-num">104</span> Chaves</button>
+        </div>
+
+        <div class="category-title">🌎 LATAM</div>
+        <div class="channels">
+            <button class="channel-btn" data-tvnum="105" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tnt.html')"><span class="ch-num">105</span> TNT LATAM</button>
+            <button class="channel-btn" data-tvnum="106" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/warnerchannel.html')"><span class="ch-num">106</span> Warner Bros</button>
+            <button class="channel-btn" data-tvnum="107" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntseries.html')"><span class="ch-num">107</span> TNT Series</button>
+            <button class="channel-btn" data-tvnum="108" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/axn.html')"><span class="ch-num">108</span> AXN</button>
+            <button class="channel-btn" data-tvnum="109" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/sony.html')"><span class="ch-num">109</span> Sony</button>
+            <button class="channel-btn" data-tvnum="110" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/universalchannel.html')"><span class="ch-num">110</span> Universal</button>
+            <button class="channel-btn" data-tvnum="111" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/studiouniversal.html')"><span class="ch-num">111</span> Studio Universal</button>
+            <button class="channel-btn" data-tvnum="112" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/space.html')"><span class="ch-num">112</span> Space</button>
+            <button class="channel-btn" data-tvnum="113" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/fx.html')"><span class="ch-num">113</span> FX</button>
+            <button class="channel-btn" data-tvnum="114" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/pasiones.html')"><span class="ch-num">114</span> Pasiones</button>
+            <button class="channel-btn" data-tvnum="115" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cinemax.html')"><span class="ch-num">115</span> Cinemax</button>
+            <button class="channel-btn" data-tvnum="116" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/starchannel.html')"><span class="ch-num">116</span> Star Channel</button>
+            <button class="channel-btn" data-tvnum="117" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/amc.html')"><span class="ch-num">117</span> AMC LATAM</button>
+            <button class="channel-btn" data-tvnum="118" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/syfy.html')"><span class="ch-num">118</span> SyFy</button>
+            <button class="channel-btn" data-tvnum="119" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn.html')"><span class="ch-num">119</span> ESPN LATAM</button>
+            <button class="channel-btn" data-tvnum="120" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn2.html')"><span class="ch-num">120</span> ESPN 2</button>
+            <button class="channel-btn" data-tvnum="121" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn3.html')"><span class="ch-num">121</span> ESPN 3</button>
+            <button class="channel-btn" data-tvnum="122" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espn4.html')"><span class="ch-num">122</span> ESPN 4</button>
+            <button class="channel-btn" data-tvnum="123" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/espnpremium.html')"><span class="ch-num">123</span> ESPN Premium</button>
+            <button class="channel-btn" data-tvnum="124" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tntsports.html')"><span class="ch-num">124</span> TNT Sports</button>
+            <button class="channel-btn" data-tvnum="125" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports.html')"><span class="ch-num">125</span> Fox Sports</button>
+            <button class="channel-btn" data-tvnum="126" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports2.html')"><span class="ch-num">126</span> Fox Sports 2</button>
+            <button class="channel-btn" data-tvnum="127" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/foxsports3.html')"><span class="ch-num">127</span> Fox Sports 3</button>
+            <button class="channel-btn" data-tvnum="128" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsports.html')"><span class="ch-num">128</span> DirecTV Sports</button>
+            <button class="channel-btn" data-tvnum="129" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/directvsports2.html')"><span class="ch-num">129</span> DirecTV Sports 2</button>
+            <button class="channel-btn" data-tvnum="130" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/tycsports.html')"><span class="ch-num">130</span> TyC Sports</button>
+            <button class="channel-btn" data-tvnum="131" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/daznf1.html')"><span class="ch-num">131</span> DAZN F1</button>
+            <button class="channel-btn" data-tvnum="132" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/natgeo.html')"><span class="ch-num">132</span> Nat Geo</button>
+            <button class="channel-btn" data-tvnum="133" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/discoverychannel.html')"><span class="ch-num">133</span> Discovery</button>
+            <button class="channel-btn" data-tvnum="134" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/history.html')"><span class="ch-num">134</span> History</button>
+            <button class="channel-btn" data-tvnum="135" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/history2.html')"><span class="ch-num">135</span> History 2</button>
+            <button class="channel-btn" data-tvnum="136" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/animalplanet.html')"><span class="ch-num">136</span> Animal Planet</button>
+            <button class="channel-btn" data-tvnum="137" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/disneychannel.html')"><span class="ch-num">137</span> Disney Channel</button>
+            <button class="channel-btn" data-tvnum="138" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cartoonnetwork.html')"><span class="ch-num">138</span> Cartoon Network</button>
+            <button class="channel-btn" data-tvnum="139" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/cnn.html')"><span class="ch-num">139</span> CNN</button>
+            <button class="channel-btn" data-tvnum="140" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/rcn.html')"><span class="ch-num">140</span> RCN</button>
+            <button class="channel-btn" data-tvnum="141" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/caracol.html')"><span class="ch-num">141</span> Caracol</button>
+            <button class="channel-btn" data-tvnum="142" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/americatv.html')"><span class="ch-num">142</span> América TV</button>
+            <button class="channel-btn" data-tvnum="143" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/univision.html')"><span class="ch-num">143</span> Univision</button>
+        </div>
+    </div>
+</div><!-- RADIOS -->
 <div id="view-radios" class="app-view">
     <div class="radio-player-bar">
         <div class="radio-now-info">
