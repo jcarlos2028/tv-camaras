@@ -132,7 +132,6 @@
 </div>
 
 <div id="view-tv" class="app-view">
-    
     <div id="tv-player-area" style="display:none;">
         <div class="player-container fullscreen-mode" id="main-tv-player"></div>
         <div class="tv-zapper">
@@ -311,9 +310,7 @@
             <button class="channel-btn" data-tvnum="148" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/univision.html')"><span class="ch-num">148</span> Univision</button>
         </div>
     </div>
-</div>
-
-<!-- RADIOS -->
+</div><!-- RADIOS -->
 <div id="view-radios" class="app-view">
     <div class="radio-player-bar">
         <div class="radio-now-info">
@@ -411,6 +408,7 @@
     <div class="channels">
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge04.balticlivecam.com/blc/p_IT_Rome_Colosseum/tracks-v1a1/mono.ts.m3u8?token=baca823a6b62dfd3c0ae9b2a8490ffdc%3A1773695041824')">🏛️ Coliseo — Roma</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge01.balticlivecam.com/blc/p_ES_Costa_Adeje_Tenerife/tracks-v1/mono.ts.m3u8?token=2844bbe12f637b7ed6567d29dbb38420%3A1773695075634')">🌴 Costa Adeje — Canarias</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge01.balticlivecam.com/blc/Israel1/index.m3u8?token=87a0c35879c931af61ce77b2313dd5b9:1773701554507')">🇮🇱 Tel Aviv — Israel</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge04.balticlivecam.com/blc/p_BR_Cascavel_centro/index.m3u8?token=ce04b8dfe9a7978481d8012d22d76940:1773695174148')">🏙️ Centro — Cascavel BR</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge04.balticlivecam.com/blc/p_BR_Guaruja_Praca_das_Bandeiras/index.m3u8?token=67f9965d77ae5776f321fd50adb5a38d:1773695223249')">🚩 Plaza Banderas — BR</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://edge01.balticlivecam.com/blc/p_BR_Ilhabela_Praia_do_Curral/index.m3u8?token=5ce0390fa9f8fe1426d65b1b221c7f42:1773695324323')">🏖️ Praia do Curral — BR</button>
@@ -507,7 +505,6 @@ function playTV(type, url) {
     if (currentTVDash) { try{currentTVDash.reset();}catch(e){} currentTVDash = null; }
 
     if (type === 'iframe') {
-        // SIN sandbox — era lo que causaba el problema de salir del canal
         c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
     } else {
         c.innerHTML = '<video id="vid-main" controls autoplay playsinline style="width:100%;height:100%"></video>';
