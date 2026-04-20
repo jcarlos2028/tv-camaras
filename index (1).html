@@ -23,22 +23,26 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; background-color: #121212; color: white; padding-bottom: 40px; overflow-x: hidden; }
         
+        /* ══ BARRA SUPERIOR (MENÚ) ══ */
         .top-bar { display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 1000; padding: 15px; background: linear-gradient(135deg, #0b5394, #1a1a2e); box-shadow: 0 4px 10px rgba(0,0,0,0.6); }
         .top-bar.hidden { display: none !important; }
         .top-bar h1 { font-size: 19px; letter-spacing: 1px; margin: 0; color: #4fa6ff; }
         .back-btn { position: absolute; left: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; display: none; transition: 0.2s; font-size: 13px; }
         .back-btn:hover { background: rgba(255,255,255,0.2); }
 
+        /* ══ VISTAS DE LA APP ══ */
         .app-view { display: none; width: 100%; animation: fadeIn 0.3s ease-in-out; }
         .app-view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* ══ MENÚ DE INICIO ══ */
         .home-menu { display: flex; flex-direction: column; gap: 15px; padding: 30px 20px; max-width: 600px; margin: 0 auto; }
         .menu-card { background: linear-gradient(135deg, #1c1c2e, #2a2a40); border: 2px solid #0b5394; border-radius: 15px; padding: 25px 20px; text-align: center; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: 0 6px 15px rgba(0,0,0,0.4); }
         .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(11, 83, 148, 0.6); border-color: #4fa6ff; background: linear-gradient(135deg, #0b5394, #1a1a2e); }
         .menu-icon { font-size: 45px; }
         .menu-title { font-size: 20px; font-weight: bold; color: white; letter-spacing: 1px; }
 
+        /* ══ REPRODUCTORES ══ */
         .player-container { width: 100%; max-width: 1280px; margin: 20px auto; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; }
         .player-container.fullscreen-mode { margin: 0 auto; max-width: 100%; border-radius: 0; }
         iframe, video { width: 100%; height: 100%; border: none; }
@@ -54,6 +58,7 @@
 
         .ch-num { background: rgba(11, 83, 148, 0.5); color: #7ec8ff; padding: 3px 6px; border-radius: 4px; font-family: monospace; font-size: 11px; font-weight: bold; }
 
+        /* ══ BÚSQUEDA TV (ESTILO XUPERTV) ══ */
         .tv-search-wrap { display: flex; gap: 8px; justify-content: center; padding: 15px 20px 5px; max-width: 600px; margin: 0 auto; }
         .tv-search-wrap input { flex: 1; padding: 10px 15px; border-radius: 8px; background: #1e1e2e; border: 1px solid #333; color: white; font-size: 15px; font-weight: bold; outline: none; text-align: center; }
         .tv-search-wrap input:focus { border-color: #4fa6ff; }
@@ -65,6 +70,7 @@
         .tv-zapper button.go { background: #0b5394; color: white; border: 1px solid #4fa6ff; padding: 10px 20px; font-weight: bold; border-radius: 8px; cursor: pointer; }
         .tv-zapper button.close { margin-left: auto; background: #c0392b; color: white; border: none; padding: 10px 15px; font-weight: bold; border-radius: 8px; cursor: pointer; }
 
+        /* ══ RADIOS ══ */
         #view-radios { padding: 0 0 40px; }
         .radio-player-bar { position: sticky; top: 52px; z-index: 100; background: #0d0d1a; border-bottom: 2px solid #0b5394; padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .radio-now-info { flex: 1; min-width: 140px; }
@@ -75,6 +81,7 @@
         .rbtn-stop { background:#c0392b; border:none; color:white; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:bold; }
         .rbtn-stop:hover { background:#e74c3c; }
         
+        /* Checkbox Segundo Plano Radios */
         .bg-audio-container { background: #1e1e2e; padding: 8px 16px; border-radius: 8px; margin: 15px auto 5px; max-width: 900px; display: flex; align-items: center; gap: 10px; border: 1px solid #333; width: calc(100% - 28px); }
         .bg-audio-container input { width: 18px; height: 18px; cursor: pointer; }
         .bg-audio-container label { font-size: 13px; color: #ddd; cursor: pointer; user-select: none; font-weight: bold;}
@@ -132,6 +139,7 @@
 </div>
 
 <div id="view-tv" class="app-view">
+    
     <div id="tv-player-area" style="display:none;">
         <div class="player-container fullscreen-mode" id="main-tv-player"></div>
         <div class="tv-zapper">
@@ -166,7 +174,7 @@
             <button class="channel-btn" data-tvnum="15" onclick="playTV('m3u8','http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/6.m3u8')"><span class="ch-num">015</span> A24</button>
             <button class="channel-btn" data-tvnum="16" onclick="playTV('m3u8','https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8')"><span class="ch-num">016</span> Paraguay TV</button>
             <button class="channel-btn" data-tvnum="17" onclick="playTV('m3u8','https://rds3gen.desdeparaguay.net/venusmedia/venusmedia/.m3u8')"><span class="ch-num">017</span> Venus TV</button>
-            <button class="channel-btn" data-tvnum="18" onclick="playTV('iframe','https://www.venus.com.py/envivo')"><span class="ch-num">018</span> Venus TV (Alt)</button>
+            <button class="channel-btn" data-tvnum="18" onclick="playTV('iframe','https://www.desdeparaguay.com/external/?venusmedia')"><span class="ch-num">018</span> Venus TV (Alt)</button>
             <button class="channel-btn" data-tvnum="19" onclick="playTV('m3u8','https://rds3.desdeparaguay.net/mitv/mitv/playlist.m3u8')"><span class="ch-num">019</span> MiTV</button>
             <button class="channel-btn" data-tvnum="20" onclick="playTV('iframe','https://www.desdeparaguay.com/ugatv')"><span class="ch-num">020</span> UGA TV</button>
             <button class="channel-btn" data-tvnum="21" onclick="playTV('m3u8','https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8')"><span class="ch-num">021</span> GO TV</button>
@@ -310,7 +318,8 @@
             <button class="channel-btn" data-tvnum="148" onclick="playTV('iframe','https://embed.saohgdasregions.fun/embed2/univision.html')"><span class="ch-num">148</span> Univision</button>
         </div>
     </div>
-</div><!-- RADIOS -->
+</div>
+<!-- RADIOS -->
 <div id="view-radios" class="app-view">
     <div class="radio-player-bar">
         <div class="radio-now-info">
@@ -344,7 +353,7 @@
     <div class="city-group" id="grp-asuncion-am">
         <div class="city-header" onclick="toggleGroup('grp-asuncion-am')">📻 Asunción / Central <span class="toggle-icon">▾</span></div>
         <div class="city-cards" id="cards-grp-asuncion-am">
-            <div class="radio-card" onclick="playRadio(this,'https://www.desde-paraguay.com/movemisoras2/movemisoras2.stream/playlist.m3u8','Emisoras Paraguay','106.1 FM')"><span class="freq">106.1 FM</span><span class="rname">Emisoras PY</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
+            <div class="radio-card" onclick="playRadio(this,'https://www.desde-paraguay.com/movemisoras2/movemisoras2.stream/playlist.m3u8?k=8d6b4cbda0ba464f9e57170bb2265dcd60358a88cd7f8b1710e672042ad38ec2&exp=1773707622','Emisoras Paraguay','106.1 FM')"><span class="freq">106.1 FM</span><span class="rname">Emisoras PY</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
         </div>
     </div>
     <div class="city-group" id="grp-caaguazu">
@@ -352,6 +361,7 @@
         <div class="city-cards" id="cards-grp-caaguazu">
             <div class="radio-card" onclick="playRadio(this,'https://copacorc.desdeparaguay.net/rcaaguazu/rcaaguazu_py_all/playlist.m3u8','Radio Caaguazú','640 AM')"><span class="freq">640 AM</span><span class="rname">Radio Caaguazú</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
             <div class="radio-card" onclick="playRadio(this,'https://stream.creativamedia.com.py:1936/horizonte/horizonte/playlist.m3u8','Radio Horizonte','106.3 FM')"><span class="freq">106.3 FM</span><span class="rname">Horizonte</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
+            <div class="radio-card" onclick="playRadio(this,'https://stream.creativamedia.com.py:1936/cndtv/cndtv/playlist.m3u8','CND','TV/Online')"><span class="freq">TV/Online</span><span class="rname">CND</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
             <div class="radio-card" onclick="playRadio(this,'https://stream.creativamedia.com.py:1936/seven/seven/playlist.m3u8','Seven Radio','Online')"><span class="freq">Online</span><span class="rname">Seven Radio</span><span class="play-icon">▶</span><div class="eq-bars"><span></span><span></span><span></span><span></span></div></div>
         </div>
     </div>
