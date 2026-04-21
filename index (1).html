@@ -396,8 +396,8 @@
     <div class="channels">
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://mia.rtsp.me/Ox-OyIeILvrILZ_iwrmCcg/1773664486/hls/3NsfyZGe.m3u8')">🎥 Costanera Encarnación</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://rtsp.me/embed/zD4asYhR/')">🎥 San Alberto</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://www.gibarra.com.py/v1_0/cam.m3u8')">🎥 Pte. Franco Noreste</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://www.gibarra.com.py/v2_0/cam.m3u8')">🎥 Pte. Franco SurOeste</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://www.gibarra.com.py/v2_0/cam.m3u8')">🎥 Pte. Franco Noreste</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://www.gibarra.com.py/v1_0/cam.m3u8')">🎥 Pte. Franco SurOeste</button>
     </div>
 
     <div class="category-title">🚦 Puente de la Amistad — Foz do Iguaçu</div>
@@ -413,7 +413,8 @@
     <div class="channels">
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://video04.logicahost.com.br/portovelhomamore/santahelenasantosdumont.stream/playlist.m3u8')">🎥 Santa Elena</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://torresaovivo.com.br/?camera=894ac753-a04e-4299-8d9b-dc7fcb5874e1')">🎥 Aeropuerto Estrada</button>
-        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://mia.rtsp.me/FfNe3b1M1G2ZLj8UhvDtmA/1776694041/hls/N66ER4Dn.m3u8')">🎥 Apir Rampa</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://torresaovivo.com.br/?camera=986e0621-eaf5-4135-a5e3-0e8a6b35f7c1')">🎥 Torres Nova</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://catve.com/unioeste')">🎥 Catve Unioeste</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://tv.itapoaaovivo.com.br/memfs/10260afe-05e7-4ea7-a5ac-0d309d6a33f6_output_0.m3u8?session=o53a8mehxky43wMxw5rys7')">🎥 Itapoa</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://video02.logicahost.com.br/camlitoranea/praiadocristo1.stream/playlist.m3u8')">🎥 Guaratuba</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://video02.logicahost.com.br/wensky5/wensky5/playlist.m3u8')">🎥 Araucaria Xisto</button>
@@ -426,10 +427,13 @@
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://5b33b873179a2.streamlock.net:1443/cameradiscolandia/cameradiscolandia.stream/playlist.m3u8')">🎥 Cascavel Discolandia</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://5b33b873179a2.streamlock.net:1443/cameraavbrasil/avbrasil.stream/playlist.m3u8')">🎥 Cascavel Av Brasil</button>
         <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://5b33b873179a2.streamlock.net:1443/aeroportocascavel/aeroportocascavel.stream/playlist.m3u8')">🎥 Cascavel Aeropuerto</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://5b33b873179a2.streamlock.net:1443/cameralondrina/cameralondrina.stream/playlist.m3u8')">🎥 Londrina 1</button>
+        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://5b33b873179a2.streamlock.net:1443/cameralondrina2/cameralondrina2.stream/playlist.m3u8')">🎥 Londrina 2</button>
     </div>
 
     <div class="category-title">🇦🇷 Cámaras Argentina</div>
     <div class="channels">
+        <button class="channel-btn cam-btn" onclick="playCAM('m3u8','https://stream.castr.com/68b1b2aeaeaff7dfd7fc9b9d/live_38c0d67090ce11f090ea25e316a68570/tracks-v1/index.fmp4.m3u8')">🎥 Cámara Argentina</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://ipcamlive.com/player/player.php?alias=51mpqfrbh4ktrs3n0&autoplay=1')">🎥 Comodoro Rivadavia</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://ipcamlive.com/player/player.php?alias=512unbiefdalxu4sa&autoplay=1')">🎥 C. Rivadavia Cost. 1</button>
         <button class="channel-btn cam-btn" onclick="playCAM('iframe','https://ipcamlive.com/player/player.php?alias=84sag1hbufayd6pvu&autoplay=1')">🎥 C. Rivadavia Cost. 2</button>
@@ -525,7 +529,7 @@ function playTV(type, url) {
     if (currentTVDash) { try{currentTVDash.reset();}catch(e){} currentTVDash = null; }
 
     if (type === 'iframe') {
-        c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
+        c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" style="width:100%;height:100%;border:none;"></iframe>';
     } else {
         c.innerHTML = '<video id="vid-main" controls autoplay playsinline style="width:100%;height:100%"></video>';
         var v = document.getElementById('vid-main');
@@ -605,7 +609,7 @@ function playCAM(type, url) {
     if (camHls) { camHls.destroy(); camHls = null; }
     if (camDash) { try { camDash.reset(); } catch(e) {} camDash = null; }
     if (type === 'iframe') {
-        c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" referrerpolicy="no-referrer" style="width:100%;height:100%;border:none;"></iframe>';
+        c.innerHTML = '<iframe src="' + url + '" allowfullscreen allow="autoplay;encrypted-media;fullscreen" style="width:100%;height:100%;border:none;"></iframe>';
     } else {
         c.innerHTML = '<video id="camv" controls autoplay playsinline style="width:100%;height:100%"></video>';
         var v = document.getElementById('camv');
