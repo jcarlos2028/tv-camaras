@@ -3,246 +3,502 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📺 Admin — TV & Cámaras</title>
+    <title>📺 Admin — TV y Radios PY</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background: #0f0f1a; color: #eee; min-height: 100vh; }
-        .header { background: linear-gradient(135deg, #0b5394, #1a1a2e); padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .header-title { font-size: 20px; font-weight: bold; color: white; }
-        .header-sub { font-size: 12px; color: #7ec8ff; margin-top: 2px; }
-        .status-bar { background: #1a1a2e; padding: 10px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #2a2a3e; font-size: 13px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #0f0f1a; color: #eee; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #0b5394, #1a1a2e); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        .header-title { font-size: 18px; font-weight: bold; color: white; }
+        .header-sub { font-size: 11px; color: #7ec8ff; margin-top: 2px; }
+        .status-bar { background: #1a1a2e; padding: 10px 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #2a2a3e; font-size: 13px; flex-wrap: wrap; gap: 10px; }
         .dot { width: 10px; height: 10px; border-radius: 50%; background: #555; flex-shrink: 0; }
         .dot.ok { background: #2ecc71; box-shadow: 0 0 6px #2ecc71; }
         .dot.error { background: #e74c3c; box-shadow: 0 0 6px #e74c3c; }
         .dot.loading { background: #f39c12; animation: pulse 1s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        .section-title { font-size: 13px; font-weight: bold; color: #4fa6ff; text-transform: uppercase; letter-spacing: 1px; margin: 24px 0 10px; border-bottom: 1px solid #2a2a3e; padding-bottom: 6px; }
-        .canal-card { background: #1c1c2e; border: 1px solid #2a2a3e; border-radius: 10px; padding: 14px; margin-bottom: 10px; transition: border-color 0.2s; }
-        .canal-card:hover { border-color: #4fa6ff; }
-        .canal-card.editando { border-color: #f39c12; background: #1e1e10; }
-        .canal-card.guardado { border-color: #2ecc71; }
-        .canal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .canal-nombre { font-size: 15px; font-weight: bold; color: #fff; flex: 1; }
-        .canal-key { font-size: 10px; color: #555; background: #111; padding: 2px 6px; border-radius: 4px; }
-        .canal-url { font-size: 11px; color: #888; background: #111; padding: 8px 10px; border-radius: 6px; word-break: break-all; }
-        .edit-area { display: none; margin-top: 10px; }
-        .edit-area textarea { width: 100%; padding: 10px; background: #111; border: 1px solid #4fa6ff; border-radius: 6px; color: #fff; font-size: 12px; resize: vertical; min-height: 80px; font-family: monospace; outline: none; }
+        .container { max-width: 860px; margin: 0 auto; padding: 16px; }
+        .section-title { font-size: 12px; font-weight: bold; color: #4fa6ff; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 8px; border-bottom: 1px solid #2a2a3e; padding-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .section-count { background: #1a3a5a; color: #7ec8ff; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: bold; }
+        .canal-card { background: #1c1c2e; border: 1px solid #2a2a3e; border-radius: 8px; padding: 12px; margin-bottom: 8px; transition: border-color 0.2s; }
+        .canal-card:hover { border-color: #3a3a5e; }
+        .canal-card.editando { border-color: #f39c12; background: #1e1a08; }
+        .canal-card.guardado { border-color: #2ecc71; background: #0a1e0a; }
+        .canal-card.no-config { border-color: #3a1a1a; }
+        .canal-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .canal-nombre { font-size: 14px; font-weight: bold; color: #fff; flex: 1; }
+        .canal-key { font-size: 10px; color: #555; background: #111; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        .canal-url { font-size: 11px; color: #777; background: #111; padding: 7px 10px; border-radius: 5px; word-break: break-all; line-height: 1.4; cursor: pointer; transition: color 0.2s; }
+        .canal-url:hover { color: #aaa; }
+        .canal-url.empty { color: #444; font-style: italic; }
+        .edit-area { display: none; margin-top: 8px; }
+        .edit-area textarea { width: 100%; padding: 10px; background: #0d0d1a; border: 1px solid #4fa6ff; border-radius: 6px; color: #fff; font-size: 12px; resize: vertical; min-height: 70px; font-family: monospace; outline: none; line-height: 1.4; }
         .edit-buttons { display: flex; gap: 8px; margin-top: 8px; }
-        .btn-guardar { background: #0b5394; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; flex: 1; }
+        .btn-guardar { background: #0b5394; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; flex: 1; transition: 0.2s; }
         .btn-guardar:hover { background: #1a6ab5; }
         .btn-guardar:disabled { background: #333; cursor: not-allowed; }
-        .btn-cancelar { background: #2a2a3e; color: #aaa; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }
-        .btn-editar { background: #2a2a3e; color: #4fa6ff; border: 1px solid #4fa6ff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-        .btn-editar:hover { background: #0b5394; color: white; }
+        .btn-cancelar { background: #2a2a3e; color: #aaa; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .btn-cancelar:hover { background: #3a3a5e; }
+        .btn-editar { background: transparent; color: #4fa6ff; border: 1px solid #2a4a7a; padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 11px; transition: 0.2s; white-space: nowrap; }
+        .btn-editar:hover { background: #0b5394; color: white; border-color: #4fa6ff; }
         .msg { font-size: 12px; margin-top: 6px; padding: 6px 10px; border-radius: 4px; display: none; }
         .msg.ok { background: #0d3a1a; color: #2ecc71; border: 1px solid #2ecc71; display: block; }
         .msg.error { background: #3a0d0d; color: #e74c3c; border: 1px solid #e74c3c; display: block; }
-        .reload-btn { background: #2a2a3e; color: #4fa6ff; border: 1px solid #4fa6ff; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-        
-        /* Claude Chat Styles (Visual Only) */
-        .claude-section { background: #1c1c2e; border: 1px solid #2a2a3e; border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .claude-header { background: linear-gradient(135deg, #1a1a2e, #0d0d1a); padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #2a2a3e; }
-        .claude-avatar { width: 36px; height: 36px; background: linear-gradient(135deg, #cc7a00, #ff9500); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-        .chat-messages { height: 300px; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; word-break: break-word; }
-        .msg-user { background: #0b5394; color: white; align-self: flex-end; }
-        .msg-claude { background: #2a2a3e; color: #eee; align-self: flex-start; }
-        .msg-claude.loading { color: #888; font-style: italic; }
-        .chat-input-area { padding: 12px; border-top: 1px solid #2a2a3e; display: flex; gap: 8px; }
-        .chat-input { flex: 1; padding: 10px 14px; background: #111; border: 1px solid #333; border-radius: 20px; color: white; font-size: 13px; outline: none; }
-        .chat-send { background: #0b5394; color: white; border: none; padding: 10px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; }
-        .chat-send:disabled { background: #333; cursor: not-allowed; }
+        .reload-btn { background: #1a2a3e; color: #4fa6ff; border: 1px solid #4fa6ff; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; transition: 0.2s; }
+        .reload-btn:hover { background: #0b5394; color: white; }
+        .search-wrap { padding: 12px 0 4px; }
+        .search-wrap input { width: 100%; padding: 10px 14px; background: #1a1a2e; border: 1px solid #2a2a3e; border-radius: 8px; color: white; font-size: 14px; outline: none; }
+        .search-wrap input:focus { border-color: #4fa6ff; }
+        .token-badge { background: #3a1a00; color: #f0a050; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 4px; }
+        .critical-section .canal-card { border-left: 3px solid #f0a050; }
     </style>
 </head>
 <body>
+
 <div class="header">
     <div>
-        <div class="header-title">📺 Panel de Administración</div>
-        <div class="header-sub">TV & Cámaras — github.com/jcarlos2028/tv-camaras</div>
+        <div class="header-title">📺 Admin — TV y Radios PY</div>
+        <div class="header-sub">github.com/jcarlos2028/tv-camaras · canales.json</div>
     </div>
     <button class="reload-btn" onclick="cargarCanales()">🔄 Recargar</button>
+</div>
+
+<div class="token-bar" id="token-bar" style="background:#1a0a00;border-bottom:2px solid #f39c12;padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+    <span style="font-size:12px;color:#f39c12;font-weight:bold;">🔑 Token GitHub:</span>
+    <input type="password" id="token-input" placeholder="Pegá tu token ghp_..." style="flex:1;min-width:200px;padding:7px 12px;background:#111;border:1px solid #f39c12;border-radius:6px;color:white;font-size:12px;font-family:monospace;outline:none;">
+    <button onclick="guardarToken()" style="background:#f39c12;color:#111;border:none;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold;">✅ Guardar</button>
+    <button onclick="borrarToken()" style="background:#3a1a00;color:#f39c12;border:1px solid #f39c12;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:12px;">🗑️ Borrar</button>
+    <span id="token-status" style="font-size:11px;color:#888;"></span>
 </div>
 <div class="status-bar">
     <div class="dot loading" id="status-dot"></div>
     <span id="status-text">Conectando con GitHub...</span>
+    <span style="margin-left:auto;font-size:11px;color:#555;" id="last-update"></span>
 </div>
-<div class="container">
-    <div class="section-title">📡 Canales Abiertos — Paraguay</div>
-    <div id="lista-abiertos"></div>
-    <div class="section-title">🎬 Entretenimiento — Paraguay</div>
-    <div id="lista-entretenimiento"></div>
-    <div class="section-title">🏆 Eventos PY</div>
-    <div id="lista-eventos"></div>
-    
-    <div class="section-title">🇦🇷 Argentina</div>
-    <div id="lista-ar"></div>
-    <div class="section-title">🇧🇷 Brasil</div>
-    <div id="lista-br"></div>
-    <div class="section-title">🇧🇴 Bolivia</div>
-    <div id="lista-bolivia"></div>
-    <div class="section-title">🇨🇱 Chile</div>
-    <div id="lista-cl"></div>
-    <div class="section-title">🌎 LATAM</div>
-    <div id="lista-latam"></div>
-    <div class="section-title">🚦 Cámaras</div>
-    <div id="lista-camaras"></div>
 
-    <div class="section-title">📻 Radios</div>
-    <div id="lista-radios"></div>
-    
-    <div class="section-title">💬 Consultar a Claude</div>
-    <div class="claude-section">
-        <div class="claude-header">
-            <div class="claude-avatar">🤖</div>
-            <div>
-                <div style="font-weight:bold;color:#fff;font-size:15px;">Claude — Asistente</div>
-                <div style="font-size:11px;color:#888;">Nota: Requiere servidor backend para funcionar por seguridad CORS.</div>
-            </div>
-        </div>
-        <div class="chat-messages" id="chat-messages">
-            <div class="msg-bubble msg-claude">¡Hola! Tu chat está desactivado porque no tienes la API configurada en este HTML. ¡Pero el panel de administración de links funciona perfecto!</div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" class="chat-input" id="chat-input" placeholder="Chat desactivado..." disabled>
-            <button class="chat-send" id="chat-send" disabled>➤</button>
-        </div>
+<div class="container">
+    <div class="search-wrap">
+        <input type="text" id="buscador" placeholder="🔍 Buscar canal por nombre o key..." oninput="filtrarCanales()">
     </div>
+
+    <!-- ═══ CRÍTICOS (tokens que cambian) ═══ -->
+    <div class="section-title critical-section">🔴 Críticos — Tokens Dailymotion <span class="token-badge">CAMBIAN CADA 6-8H</span></div>
+    <div id="lista-criticos" class="critical-section"></div>
+
+    <!-- ═══ PARAGUAY ═══ -->
+    <div class="section-title">🇵🇾 Paraguay — Nacionales <span class="section-count" id="cnt-py"></span></div>
+    <div id="lista-py"></div>
+
+    <div class="section-title">🇵🇾 Paraguay — Interior <span class="section-count" id="cnt-interior"></span></div>
+    <div id="lista-interior"></div>
+
+    <!-- ═══ ARGENTINA ═══ -->
+    <div class="section-title">🇦🇷 Argentina <span class="section-count" id="cnt-ar"></span></div>
+    <div id="lista-ar"></div>
+
+    <!-- ═══ BRASIL ═══ -->
+    <div class="section-title">🇧🇷 Brasil <span class="section-count" id="cnt-br"></span></div>
+    <div id="lista-br"></div>
+
+    <!-- ═══ LATAM ═══ -->
+    <div class="section-title">🌎 LATAM <span class="section-count" id="cnt-latam"></span></div>
+    <div id="lista-latam"></div>
+
+    <!-- ═══ OTROS PAÍSES ═══ -->
+    <div class="section-title">🌍 Bolivia · Chile · Otros <span class="section-count" id="cnt-otros"></span></div>
+    <div id="lista-otros"></div>
 </div>
 
 <script>
-// Pega tu Token de GitHub aquí (¡Nunca lo compartas públicamente!)
-var GITHUB_TOKEN = 'TU_TOKEN_AQUI'; 
+var GITHUB_TOKEN = localStorage.getItem('gh_token_tvpy') || '';
 var REPO = 'jcarlos2028/tv-camaras';
 var FILE = 'canales.json';
 var fileSha = '';
 var canalesData = {};
 
-// DICCIONARIO COMPLETO CON ABSOLUTAMENTE TODOS TUS CANALES
+// ═══ DICCIONARIO COMPLETO ═══
 var secciones = {
-    'lista-abiertos': {
-        keys:['snt', 'snt_alt', 'c9n', 'paravision', 'telefuturo', 'telefuturo_alt', 'latele', 'abctv', 'npy', 'gen', 'trecepy', 'mega', 'rcctv', 'a24', 'paraguaytv'],
-        nombres: {'snt':'📺 SNT', 'snt_alt':'📺 SNT (Alt)', 'c9n':'📺 C9N', 'paravision':'📺 Paravisión', 'telefuturo':'📺 Telefuturo', 'telefuturo_alt':'📺 Telefuturo (Alt)', 'latele':'📺 LaTele', 'abctv':'📺 ABC TV', 'npy':'📺 NPY', 'gen':'📡 GEN', 'trecepy':'📺 Trece PY', 'mega':'📺 Mega TV', 'rcctv':'📺 RCC TV', 'a24':'📺 A24', 'paraguaytv':'🇵🇾 Paraguay TV'}
+    'lista-criticos': {
+        keys: ['unicanal', 'abctv', 'trecepy'],
+        nombres: {
+            'unicanal': '📺 Unicanal PY',
+            'abctv': '📺 ABC Color PY',
+            'trecepy': '📺 Trece PY'
+        }
     },
-    'lista-entretenimiento': {
-        keys:['venus', 'gotv', 'visiontv', 'brunomasi', 'canalpro','poputv','poputv_alt','tropicalia','productiva','launion','nandutitv','chaquena','monumentaltv','nandejaranee','heitv','lacosta','villaelisa'],
-        nombres: {'venus':'💫 Venus TV', 'gotv':'📺 GO TV', 'visiontv':'📺 Visión TV', 'brunomasi':'🎵 Bruno Masi TV', 'canalpro':'📺 Canal Pro','poputv':'🌐 Popu TV','poputv_alt':'🌐 Popu TV (Alt)','tropicalia':'🎶 Tropicalia','productiva':'📰 Productiva','launion':'🙏 La Unión','nandutitv':'📡 Ñanduti TV','chaquena':'🌵 Chaqueña TV','monumentaltv':'🏟️ Monumental','nandejaranee':'🗣️ Ñande Jara Ñee','heitv':'🌿 HEI', 'lacosta':'🌊 La Costa TV', 'villaelisa':'🏘️ Villa Elisa TV'}
+    'lista-py': {
+        keys: ['telefuturo', 'telefuturo_alt', 'latele', 'npy', 'gen',
+               'mega', 'rcctv', 'a24', 'paraguaytv', 'venus', 'venus_alt',
+               'mitv', 'ugatv', 'gotv', 'visiontv', 'brunomasi', 'canalpro',
+               'poputv', 'poputv_alt', 'tvmax_starita', 'productiva', 'launion',
+               'nandutitv', 'chaquena', 'monumentaltv', 'nandejaranee', 'heitv',
+               'villaelisa', 'rnptv', 'republicatv', 'fmtriunfo', 'sanroquedigital',
+               'latribu', 'colosaltv', 'snt', 'c9n', 'susesotv'],
+        nombres: {
+            'telefuturo': '📺 Telefuturo', 'telefuturo_alt': '📺 Telefuturo (Alt)',
+            'latele': '📺 LaTele', 'npy': '📺 NPY', 'gen': '📡 GEN TV',
+            'mega': '📺 Mega TV', 'rcctv': '📺 RCC TV', 'a24': '📺 A24',
+            'paraguaytv': '🇵🇾 Paraguay TV', 'venus': '💫 Venus TV',
+            'venus_alt': '💫 Venus TV (Alt)', 'mitv': '📺 MiTV',
+            'ugatv': '📺 UGA TV', 'gotv': '📺 GO TV', 'visiontv': '📺 Visión TV',
+            'brunomasi': '🎵 Bruno Masi TV', 'canalpro': '📺 Canal Pro',
+            'poputv': '🌐 Popu TV', 'poputv_alt': '🌐 Popu TV (Alt)',
+            'tvmax_starita': '📺 TV Max Sta. Rita', 'productiva': '📰 Productiva',
+            'launion': '🙏 La Unión', 'nandutitv': '📡 Ñanduti TV',
+            'chaquena': '🌵 Chaqueña TV', 'monumentaltv': '🏟️ Monumental',
+            'nandejaranee': '🗣️ Ñande Jara Ñee', 'heitv': '🌿 HEI TV',
+            'villaelisa': '🏘️ Villa Elisa TV', 'rnptv': '📺 RNP TV',
+            'republicatv': '📺 República TV', 'fmtriunfo': '🎵 FM Triunfo PY',
+            'sanroquedigital': '📺 San Roque Digital', 'latribu': '📺 La Tribu PY',
+            'colosaltv': '📺 Colosal TV', 'snt': '📺 SNT PY', 'c9n': '📺 C9N PY',
+            'susesotv': '📺 Suseso TV'
+        }
     },
-    'lista-eventos': {
-        keys:['eventopy1','eventopy2','eventopy3'],
-        nombres: {'eventopy1':'⚽ Tigo Sports 1','eventopy2':'⚽ Tigo Sports 2','eventopy3':'⚽ Tigo Sports 3'}
+    'lista-interior': {
+        keys: ['interior_redinteriortv', 'interior_obediratv', 'interior_canal8',
+               'interior_cosmostv', 'interior_regionaltv', 'interior_tvcanindeyu',
+               'interior_telequince', 'interior_oasistv', 'interior_oviedotv',
+               'interior_unitv', 'interior_tvmax', 'interior_elobservador',
+               'interior_eventosonline', 'interior_orbitatv', 'interior_guairatv',
+               'interior_concepciontv', 'interior_cambyretatv', 'interior_pilartv',
+               'interior_delreytv', 'interior_regionaltv_yaguaron'],
+        nombres: {
+            'interior_redinteriortv': '📺 Red Interior TV (Sta. Rita)',
+            'interior_obediratv': '📺 TV Obedira',
+            'interior_canal8': '📺 Canal 8',
+            'interior_cosmostv': '📺 Cosmo TV',
+            'interior_regionaltv': '📺 Regional TV',
+            'interior_tvcanindeyu': '📺 TV Canindeyú',
+            'interior_telequince': '📺 Telequince',
+            'interior_oasistv': '📺 Oasis TV',
+            'interior_oviedotv': '📺 Oviedo TV',
+            'interior_unitv': '📺 UniTV',
+            'interior_tvmax': '📺 TV Max',
+            'interior_elobservador': '📺 El Observador',
+            'interior_eventosonline': '📺 Eventos Online',
+            'interior_orbitatv': '📺 Órbita TV',
+            'interior_guairatv': '📺 Guairá TV',
+            'interior_concepciontv': '📺 Concepción TV',
+            'interior_cambyretatv': '📺 Cambyretá TV',
+            'interior_pilartv': '📺 Pilar TV',
+            'interior_delreytv': '📺 Del Rey TV',
+            'interior_regionaltv_yaguaron': '📺 Regional TV Yaguarón'
+        }
     },
     'lista-ar': {
-        keys:['ar_eltrece', 'ar_nettv', 'ar_telefe', 'ar_chacotv', 'ar_argentinisima', 'ar_canalplus', 'ar_espn', 'ar_espn2', 'ar_espn3', 'ar_espnar', 'ar_espnpremium', 'ar_tycsports', 'ar_tntsports', 'ar_foxsports', 'ar_foxsports2', 'ar_directvsports', 'ar_directvsports2', 'ar_tnt', 'ar_warner', 'ar_tntnovelas', 'ar_space', 'ar_axn', 'ar_sony', 'ar_cinemax', 'ar_multipremier', 'ar_starchannel', 'ar_goldenpremier', 'ar_goldenedge', 'ar_goldenplus', 'ar_natgeo', 'ar_discovery', 'ar_history', 'ar_history2', 'ar_animalplanet', 'ar_amc', 'ar_disney', 'ar_cartoon', 'ar_tooncast', 'ar_fmhotkids'],
-        nombres: {'ar_eltrece':'📺 El Trece', 'ar_nettv':'📺 Net TV', 'ar_telefe':'📺 Telefe', 'ar_chacotv':'📺 Chaco TV', 'ar_argentinisima':'📺 Argentinisima', 'ar_canalplus':'📺 Canal Plus', 'ar_espn':'⚽ ESPN', 'ar_espn2':'⚽ ESPN 2', 'ar_espn3':'⚽ ESPN 3', 'ar_espnar':'⚽ ESPN AR', 'ar_espnpremium':'⚽ ESPN Premium', 'ar_tycsports':'⚽ TyC Sports', 'ar_tntsports':'⚽ TNT Sports', 'ar_foxsports':'⚽ Fox Sports', 'ar_foxsports2':'⚽ Fox Sports 2', 'ar_directvsports':'⚽ DirecTV Sports', 'ar_directvsports2':'⚽ DirecTV Sports 2', 'ar_tnt':'🎬 TNT', 'ar_warner':'🎬 Warner', 'ar_tntnovelas':'🎬 TNT Novelas', 'ar_space':'🎬 Space', 'ar_axn':'🎬 AXN', 'ar_sony':'🎬 Sony', 'ar_cinemax':'🎬 Cinemax', 'ar_multipremier':'🎬 Multipremier', 'ar_starchannel':'🎬 Star Channel', 'ar_goldenpremier':'🎬 Golden Premier', 'ar_goldenedge':'🎬 Golden Edge', 'ar_goldenplus':'🎬 Golden Plus', 'ar_natgeo':'🔬 Nat Geo', 'ar_discovery':'🔬 Discovery', 'ar_history':'📜 History', 'ar_history2':'📜 History 2', 'ar_animalplanet':'🐾 Animal Planet', 'ar_amc':'🎬 AMC', 'ar_disney':'🧸 Disney', 'ar_cartoon':'🧸 Cartoon Net', 'ar_tooncast':'🧸 Tooncast', 'ar_fmhotkids':'🧸 FM Hot Kids'}
+        keys: ['ar_eltrece', 'ar_nettv', 'ar_telefe', 'ar_chacotv', 'ar_argentinisima',
+               'ar_espn', 'ar_espn2', 'ar_espn3', 'ar_espnar', 'ar_espnpremium',
+               'ar_tycsports', 'ar_tntsports', 'ar_foxsports', 'ar_foxsports2',
+               'ar_directvsports', 'ar_directvsports2', 'ar_tnt', 'ar_warner',
+               'ar_tntnovelas', 'ar_space', 'ar_axn', 'ar_sony', 'ar_cinemax',
+               'ar_multipremier', 'ar_starchannel', 'ar_goldenpremier', 'ar_goldenedge',
+               'ar_goldenplus', 'ar_natgeo', 'ar_discovery', 'ar_history', 'ar_history2',
+               'ar_animalplanet', 'ar_amc', 'ar_disney', 'ar_cartoon', 'ar_tooncast',
+               'ar_fmhotkids', 'ar_tnnoticias', 'ar_a24', 'ar_garagetv',
+               'ar_radioiguazutv', 'ar_canal3formosa', 'ar_canal4posadas',
+               'ar_neotv', 'ar_noticias247'],
+        nombres: {
+            'ar_eltrece': '📺 El Trece', 'ar_nettv': '📺 Net TV',
+            'ar_telefe': '📺 Telefe', 'ar_chacotv': '📺 Chaco TV',
+            'ar_argentinisima': '📺 Argentinísima', 'ar_espn': '⚽ ESPN',
+            'ar_espn2': '⚽ ESPN 2', 'ar_espn3': '⚽ ESPN 3',
+            'ar_espnar': '⚽ ESPN AR', 'ar_espnpremium': '⚽ ESPN Premium',
+            'ar_tycsports': '⚽ TyC Sports', 'ar_tntsports': '⚽ TNT Sports',
+            'ar_foxsports': '⚽ Fox Sports', 'ar_foxsports2': '⚽ Fox Sports 2',
+            'ar_directvsports': '⚽ DirecTV Sports', 'ar_directvsports2': '⚽ DirecTV Sports 2',
+            'ar_tnt': '🎬 TNT', 'ar_warner': '🎬 Warner Bros',
+            'ar_tntnovelas': '🎬 TNT Novelas', 'ar_space': '🎬 Space',
+            'ar_axn': '🎬 AXN', 'ar_sony': '🎬 Sony', 'ar_cinemax': '🎬 Cinemax',
+            'ar_multipremier': '🎬 Multipremier', 'ar_starchannel': '🎬 Star Channel',
+            'ar_goldenpremier': '🎬 Golden Premier', 'ar_goldenedge': '🎬 Golden Edge',
+            'ar_goldenplus': '🎬 Golden Plus', 'ar_natgeo': '🔬 Nat Geo',
+            'ar_discovery': '🔬 Discovery', 'ar_history': '📜 History',
+            'ar_history2': '📜 History 2', 'ar_animalplanet': '🐾 Animal Planet',
+            'ar_amc': '🎬 AMC', 'ar_disney': '🧸 Disney Channel',
+            'ar_cartoon': '🧸 Cartoon Network', 'ar_tooncast': '🧸 Tooncast',
+            'ar_fmhotkids': '🧸 FM Hot Kids', 'ar_tnnoticias': '📰 TN Noticias',
+            'ar_a24': '📰 A24 Argentina', 'ar_garagetv': '📺 Garage TV',
+            'ar_radioiguazutv': '📺 Radio Iguazú TV', 'ar_canal3formosa': '📺 Canal 3 Formosa',
+            'ar_canal4posadas': '📺 Canal 4 Posadas', 'ar_neotv': '📺 Neo TV',
+            'ar_noticias247': '📰 Noticias 24/7'
+        }
     },
     'lista-br': {
-        keys:['br_globosp', 'br_globorj', 'br_globomg', 'br_globors', 'br_globoam', 'br_tvcultura', 'br_tvbrasil', 'br_bandsp', 'br_bandnews', 'br_recordrj', 'br_recordmg', 'br_recordnews', 'br_redetv', 'br_sbt', 'br_amazonsat', 'br_tvparaense', 'br_hbo', 'br_hbofamily', 'br_paramount', 'br_tnt', 'br_warner', 'br_sony', 'br_studiouniversal', 'br_star', 'br_viva', 'br_comedy', 'br_adultswim', 'br_telecinepipoca', 'br_telecinepremium', 'br_universal', 'br_cnnbrasil', 'br_discovery', 'br_history', 'br_history2', 'br_animalplanet', 'br_discoveryid', 'br_fishtv', 'br_dazn', 'br_bandsports', 'br_tooncast', 'br_cartoonito', 'br_chaves247', 'br_simpsons247'],
-        nombres: {'br_globosp':'🌐 Globo SP', 'br_globorj':'🌐 Globo RJ', 'br_globomg':'🌐 Globo MG', 'br_globors':'🌐 Globo RS', 'br_globoam':'🌐 Globo AM', 'br_tvcultura':'📺 TV Cultura', 'br_tvbrasil':'📺 TV Brasil', 'br_bandsp':'📺 Band SP', 'br_bandnews':'📰 Band News', 'br_recordrj':'📺 Record RJ', 'br_recordmg':'📺 Record MG', 'br_recordnews':'📰 Record News', 'br_redetv':'📺 RedeTV', 'br_sbt':'📺 SBT', 'br_amazonsat':'📺 Amazon Sat', 'br_tvparaense':'📺 TV Paraense', 'br_hbo':'🎬 HBO', 'br_hbofamily':'🎬 HBO Family', 'br_paramount':'🎬 Paramount', 'br_tnt':'🎬 TNT', 'br_warner':'🎬 Warner', 'br_sony':'🎬 Sony', 'br_studiouniversal':'🎬 Studio Universal', 'br_star':'🎬 Star Channel', 'br_viva':'📺 Viva TV', 'br_comedy':'😂 Comedy Central', 'br_adultswim':'🌙 Adult Swim', 'br_telecinepipoca':'🍿 Telecine Pipoca', 'br_telecinepremium':'🍿 Telecine Premium', 'br_universal':'📺 Universal TV', 'br_cnnbrasil':'📰 CNN Brasil', 'br_discovery':'🔬 Discovery', 'br_history':'📜 History', 'br_history2':'📜 History 2', 'br_animalplanet':'🐾 Animal Planet', 'br_discoveryid':'🔍 Discovery ID', 'br_fishtv':'🐟 Fish TV', 'br_dazn':'⚽ DAZN', 'br_bandsports':'⚽ Band Sports', 'br_tooncast':'🧸 Tooncast', 'br_cartoonito':'🧸 Cartoonito', 'br_chaves247':'📺 El Chavo 24/7', 'br_simpsons247':'📺 Simpsons 24/7'}
-    },
-    'lista-bolivia': {
-        keys:['btv','btv_web','atb','reduno', 'reduno_web', 'bolivision'],
-        nombres: {'btv':'📺 BTV', 'btv_web':'📺 BTV (Web)', 'atb':'📺 ATB','reduno':'📺 Red Uno', 'reduno_web':'📺 Red Uno (Web)', 'bolivision':'📺 Bolivisión'}
-    },
-    'lista-cl': {
-        keys:['cl_chilechannel'],
-        nombres: {'cl_chilechannel':'📺 Chile Channel'}
+        keys: ['br_globosp', 'br_globorj', 'br_tvcultura', 'br_tvbrasil',
+               'br_bandsp', 'br_recordnews', 'br_redetv', 'br_sbt',
+               'br_hbo', 'br_hbofamily', 'br_cinemax', 'br_universaltv',
+               'br_tcm', 'br_megapix', 'br_paramount', 'br_tnt',
+               'br_telecinepipoca', 'br_telecinepremium', 'br_cnnbrasil',
+               'br_bandnews', 'br_recordnews2', 'br_discovery', 'br_history',
+               'br_history2', 'br_animalplanet', 'br_dazn', 'br_bandsports',
+               'br_tooncast', 'br_disneyplus', 'br_simpsons', 'br_dragonball',
+               'br_chaves', 'br_mastertv', 'br_cindietv', 'br_tvers',
+               'br_tvlifeamerica', 'br_tvufop', 'br_nicktoons', 'br_tvseries',
+               'br_awtv', 'br_tvcamara', 'br_tvparanaense', 'br_sbtsinop'],
+        nombres: {
+            'br_globosp': '🌐 Globo SP', 'br_globorj': '🌐 Globo RJ',
+            'br_tvcultura': '📺 TV Cultura', 'br_tvbrasil': '📺 TV Brasil',
+            'br_bandsp': '📺 Band SP', 'br_recordnews': '📰 Record News (YT)',
+            'br_redetv': '📺 RedeTV Paraná', 'br_sbt': '📺 SBT SP',
+            'br_hbo': '🎬 HBO', 'br_hbofamily': '🎬 HBO Family',
+            'br_cinemax': '🎬 Cinemax BR', 'br_universaltv': '📺 Universal TV',
+            'br_tcm': '🎬 TCM', 'br_megapix': '🎬 Megapix',
+            'br_paramount': '🎬 Paramount', 'br_tnt': '🎬 TNT BR',
+            'br_telecinepipoca': '🍿 Telecine Pipoca', 'br_telecinepremium': '🍿 Telecine Premium',
+            'br_cnnbrasil': '📰 CNN Brasil', 'br_bandnews': '📰 Band News',
+            'br_recordnews2': '📰 Record News 2', 'br_discovery': '🔬 Discovery BR',
+            'br_history': '📜 History BR', 'br_history2': '📜 History 2 BR',
+            'br_animalplanet': '🐾 Animal Planet BR', 'br_dazn': '⚽ DAZN BR',
+            'br_bandsports': '⚽ Band Sports', 'br_tooncast': '🧸 Tooncast BR',
+            'br_disneyplus': '🧸 Disney+ 1', 'br_simpsons': '📺 Os Simpsons',
+            'br_dragonball': '📺 Dragon Ball', 'br_chaves': '📺 Chaves BR',
+            'br_mastertv': '📺 Master TV', 'br_cindietv': '📺 Cindie TV',
+            'br_tvers': '📺 TVE RS', 'br_tvlifeamerica': '📺 TV Life América',
+            'br_tvufop': '📺 TV UFOP', 'br_nicktoons': '📺 Nicktoons BR',
+            'br_tvseries': '📺 TV Series', 'br_awtv': '📺 AWTV',
+            'br_tvcamara': '📺 TV Câmara BR', 'br_tvparanaense': '📺 TV Paranaense',
+            'br_sbtsinop': '📺 SBT Sinop'
+        }
     },
     'lista-latam': {
-        keys:['latam_tnt', 'latam_warner', 'latam_tntnovelas', 'latam_tntseries', 'latam_axn', 'latam_sony', 'latam_universal', 'latam_studiouniversal', 'latam_space', 'latam_fx', 'latam_pasiones', 'latam_tlnovelas', 'latam_unicable', 'latam_cinemax', 'latam_cinecanal', 'latam_starchannel', 'latam_multipremier', 'latam_goldenpremier', 'latam_goldenedge', 'latam_goldenplus', 'latam_amc', 'latam_syfy', 'latam_espn', 'latam_espn2', 'latam_espn3', 'latam_espn4', 'latam_espn5', 'latam_espnpremium', 'latam_tntsports', 'latam_foxsports', 'latam_foxsports2', 'latam_foxsports3', 'latam_directvsports', 'latam_directvsports2', 'latam_tycsports', 'latam_tudn', 'latam_nba', 'latam_daznf1', 'latam_natgeo', 'latam_discovery', 'latam_discoveryworld', 'latam_history', 'latam_history2', 'latam_animalplanet', 'latam_disney', 'latam_cartoon', 'latam_tooncast', 'latam_cnn', 'latam_rcn', 'latam_caracol', 'latam_americatv', 'latam_univision'],
-        nombres: {'latam_tnt':'🎬 TNT', 'latam_warner':'🎬 Warner', 'latam_tntnovelas':'🎬 TNT Novelas', 'latam_tntseries':'🎬 TNT Series', 'latam_axn':'🎬 AXN', 'latam_sony':'🎬 Sony', 'latam_universal':'🎬 Universal', 'latam_studiouniversal':'🎬 Studio Universal', 'latam_space':'🎬 Space', 'latam_fx':'🎬 FX', 'latam_pasiones':'🎬 Pasiones', 'latam_tlnovelas':'🎬 TL Novelas', 'latam_unicable':'🎬 Unicable', 'latam_cinemax':'🎬 Cinemax', 'latam_cinecanal':'🎬 Cinecanal', 'latam_starchannel':'🎬 Star Channel', 'latam_multipremier':'🎬 Multipremier', 'latam_goldenpremier':'🎬 Golden Premier', 'latam_goldenedge':'🎬 Golden Edge', 'latam_goldenplus':'🎬 Golden Plus', 'latam_amc':'🎬 AMC', 'latam_syfy':'🎬 SyFy', 'latam_espn':'⚽ ESPN', 'latam_espn2':'⚽ ESPN 2', 'latam_espn3':'⚽ ESPN 3', 'latam_espn4':'⚽ ESPN 4', 'latam_espn5':'⚽ ESPN 5', 'latam_espnpremium':'⚽ ESPN Premium', 'latam_tntsports':'⚽ TNT Sports', 'latam_foxsports':'⚽ Fox Sports', 'latam_foxsports2':'⚽ Fox Sports 2', 'latam_foxsports3':'⚽ Fox Sports 3', 'latam_directvsports':'⚽ DirecTV Sports', 'latam_directvsports2':'⚽ DirecTV Sports 2', 'latam_tycsports':'⚽ TyC Sports', 'latam_tudn':'⚽ TUDN', 'latam_nba':'⚽ NBA', 'latam_daznf1':'⚽ DAZN F1', 'latam_natgeo':'🔬 Nat Geo', 'latam_discovery':'🔬 Discovery', 'latam_discoveryworld':'🔬 Discovery World', 'latam_history':'📜 History', 'latam_history2':'📜 History 2', 'latam_animalplanet':'🐾 Animal Planet', 'latam_disney':'🧸 Disney', 'latam_cartoon':'🧸 Cartoon Network', 'latam_tooncast':'🧸 Tooncast', 'latam_cnn':'📰 CNN', 'latam_rcn':'📰 RCN', 'latam_caracol':'📰 Caracol', 'latam_americatv':'📰 América TV', 'latam_univision':'📰 Univision'}
+        keys: ['latam_tnt', 'latam_warner', 'latam_tntseries', 'latam_axn',
+               'latam_sony', 'latam_universal', 'latam_studiouniversal', 'latam_space',
+               'latam_fx', 'latam_pasiones', 'latam_cinemax', 'latam_starchannel',
+               'latam_amc', 'latam_syfy', 'latam_espn', 'latam_espn2', 'latam_espn3',
+               'latam_espn4', 'latam_espnpremium', 'latam_tntsports', 'latam_foxsports',
+               'latam_foxsports2', 'latam_foxsports3', 'latam_directvsports',
+               'latam_directvsports2', 'latam_tycsports', 'latam_daznf1',
+               'latam_natgeo', 'latam_discovery', 'latam_history', 'latam_history2',
+               'latam_animalplanet', 'latam_disney', 'latam_cartoon', 'latam_cnn',
+               'latam_rcn', 'latam_caracol', 'latam_americatv', 'latam_univision',
+               'latam_simpsonslatino', 'latam_elfinanciero'],
+        nombres: {
+            'latam_tnt': '🎬 TNT LATAM', 'latam_warner': '🎬 Warner LATAM',
+            'latam_tntseries': '🎬 TNT Series', 'latam_axn': '🎬 AXN',
+            'latam_sony': '🎬 Sony', 'latam_universal': '🎬 Universal',
+            'latam_studiouniversal': '🎬 Studio Universal', 'latam_space': '🎬 Space',
+            'latam_fx': '🎬 FX', 'latam_pasiones': '🎬 Pasiones',
+            'latam_cinemax': '🎬 Cinemax', 'latam_starchannel': '🎬 Star Channel',
+            'latam_amc': '🎬 AMC LATAM', 'latam_syfy': '🎬 SyFy',
+            'latam_espn': '⚽ ESPN LATAM', 'latam_espn2': '⚽ ESPN 2',
+            'latam_espn3': '⚽ ESPN 3', 'latam_espn4': '⚽ ESPN 4',
+            'latam_espnpremium': '⚽ ESPN Premium', 'latam_tntsports': '⚽ TNT Sports',
+            'latam_foxsports': '⚽ Fox Sports', 'latam_foxsports2': '⚽ Fox Sports 2',
+            'latam_foxsports3': '⚽ Fox Sports 3', 'latam_directvsports': '⚽ DirecTV Sports',
+            'latam_directvsports2': '⚽ DirecTV Sports 2', 'latam_tycsports': '⚽ TyC Sports',
+            'latam_daznf1': '⚽ DAZN F1', 'latam_natgeo': '🔬 Nat Geo',
+            'latam_discovery': '🔬 Discovery', 'latam_history': '📜 History',
+            'latam_history2': '📜 History 2', 'latam_animalplanet': '🐾 Animal Planet',
+            'latam_disney': '🧸 Disney Channel', 'latam_cartoon': '🧸 Cartoon Network',
+            'latam_cnn': '📰 CNN', 'latam_rcn': '📰 RCN',
+            'latam_caracol': '📰 Caracol', 'latam_americatv': '📰 América TV',
+            'latam_univision': '📰 Univision', 'latam_simpsonslatino': '📺 Simpsons Latino',
+            'latam_elfinanciero': '📰 El Financiero'
+        }
     },
-    'lista-camaras': {
-        keys:['cam_atacado', 'cam_sentidopy', 'cam_sentidobr', 'cam_aduana', 'cam_ponte', 'cam_encarnacion', 'cam_roma', 'cam_costaadeje', 'cam_telaviv', 'cam_cascavel', 'cam_bandeiras', 'cam_ilhabela'],
-        nombres: {'cam_atacado':'🎥 Atacado', 'cam_sentidopy':'🎥 Sentido PY', 'cam_sentidobr':'🎥 Sentido BR', 'cam_aduana':'🎥 Aduana BR-277', 'cam_ponte':'🎥 BR-277 Ponte', 'cam_encarnacion':'🎥 Encarnación', 'cam_roma':'🏛️ Roma Coliseo', 'cam_costaadeje':'🌴 Costa Adeje', 'cam_telaviv':'🇮🇱 Tel Aviv', 'cam_cascavel':'🏙️ Cascavel BR', 'cam_bandeiras':'🚩 Plaza Banderas BR', 'cam_ilhabela':'🏖️ Ilhabela BR'}
-    },
-    'lista-radios': {
-        keys:['r_montecarlo','r_farra','r_tropicalia','r_anr','r_rnp','r_camara','r_emisoras','r_caaguazu','r_horizonte','r_cnd','r_seven','r_itapiru','r_transcontinental','r_elverbo','r_altoparana','r_mingaguazu','r_paipuku','r_maxima','r_emanuel','r_viva','r_progresos','r_latina','r_integracion','r_naranjal','r_natalio','r_libertad'],
-        nombres: {'r_montecarlo':'📻 Montecarlo','r_farra':'📻 Farra','r_tropicalia':'📻 Tropicalia','r_anr':'📻 Radio ANR','r_rnp':'📻 RNP','r_camara':'📻 Radio Cámara','r_emisoras':'📻 Emisoras PY','r_caaguazu':'📻 Caaguazú','r_horizonte':'📻 Horizonte','r_cnd':'📻 CND','r_seven':'📻 Seven','r_itapiru':'📻 Itapiru','r_transcontinental':'📻 Transcontinental','r_elverbo':'📻 El Verbo','r_altoparana':'📻 Alto Paraná','r_mingaguazu':'📻 Minga Guazú','r_paipuku':'📻 Paí Puku','r_maxima':'📻 Máxima','r_emanuel':'📻 Emanuel','r_viva':'📻 Viva','r_progresos':'📻 Progresos','r_latina':'📻 Latina','r_integracion':'📻 Integración','r_naranjal':'📻 Naranjal','r_natalio':'📻 Natalio','r_libertad':'📻 Libertad'}
+    'lista-otros': {
+        keys: ['btv_bolivia', 'bolivision', 'ftv_bolivia', 'lacosta_uy',
+               'prattel_pe', 'canal23_ni', 'italia9',
+               'cl_tevex', 'cl_chilechannel', 'cl_clicktv',
+               'cn_baichengtv', 'jp_cgntv', 'fi_eveo',
+               'de_freesports', 'de_rictv', 'de_grjngo'],
+        nombres: {
+            'btv_bolivia': '📺 BTV Bolivia', 'bolivision': '📺 Bolivisión',
+            'ftv_bolivia': '📺 FTV Bolivia', 'lacosta_uy': '📺 La Costa TV 🇺🇾',
+            'prattel_pe': '📺 Prattel TV 🇵🇪', 'canal23_ni': '📺 Canal 23 🇳🇮',
+            'italia9': '📺 Italia 9 🇮🇹', 'cl_tevex': '📺 TeVex 🇨🇱',
+            'cl_chilechannel': '📺 Chile Channel 🇨🇱', 'cl_clicktv': '📺 Click TV 🇨🇱',
+            'cn_baichengtv': '📺 Baicheng TV 🇨🇳', 'jp_cgntv': '📺 CGNTV Japan 🇯🇵',
+            'fi_eveo': '📺 Eveo 🇫🇮', 'de_freesports': '📺 World of Freesports 🇩🇪',
+            'de_rictv': '📺 RIC TV 🇩🇪', 'de_grjngo': '📺 Grjngo Western 🇩🇪'
+        }
     }
 };
 
-function setStatus(t,x){document.getElementById('status-dot').className='dot '+t;document.getElementById('status-text').textContent=x;}
+function guardarToken() {
+    var t = document.getElementById('token-input').value.trim();
+    if (!t || !t.startsWith('ghp_')) {
+        document.getElementById('token-status').textContent = '❌ Token inválido (debe empezar con ghp_)';
+        document.getElementById('token-status').style.color = '#e74c3c';
+        return;
+    }
+    localStorage.setItem('gh_token_tvpy', t);
+    GITHUB_TOKEN = t;
+    document.getElementById('token-input').value = '';
+    document.getElementById('token-status').textContent = '✅ Token guardado localmente';
+    document.getElementById('token-status').style.color = '#2ecc71';
+    // Mostrar estado del token al arrancar
+(function() {
+    var t = localStorage.getItem('gh_token_tvpy');
+    if (t) {
+        document.getElementById('token-status').textContent = '✅ Token guardado';
+        document.getElementById('token-status').style.color = '#2ecc71';
+    } else {
+        document.getElementById('token-status').textContent = '⚠️ Sin token — ingresalo arriba para poder guardar';
+        document.getElementById('token-status').style.color = '#f39c12';
+    }
+})();
+
+cargarCanales();
+}
+
+function borrarToken() {
+    localStorage.removeItem('gh_token_tvpy');
+    GITHUB_TOKEN = '';
+    document.getElementById('token-input').value = '';
+    document.getElementById('token-status').textContent = '🗑️ Token eliminado';
+    document.getElementById('token-status').style.color = '#f39c12';
+}
+
+function setStatus(t, x) {
+    document.getElementById('status-dot').className = 'dot ' + t;
+    document.getElementById('status-text').textContent = x;
+}
 
 function cargarCanales() {
-    setStatus('loading','Cargando canales desde GitHub...');
-    fetch('https://cdn.jsdelivr.net/gh/'+REPO+'@main/'+FILE+'?t='+Date.now())
-    .then(function(r){return r.json();})
-    .then(function(data){
-        canalesData=data;
-        renderCanales();
-        setStatus('ok','Conectado — Listo para editar todos los canales.');
-        fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
-            headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json'}
-        }).then(function(r){return r.json();}).then(function(d){fileSha=d.sha;}).catch(function(){});
-    }).catch(function(){setStatus('error','Error al cargar canales');});
+    setStatus('loading', 'Cargando canales desde GitHub...');
+    fetch('https://cdn.jsdelivr.net/gh/' + REPO + '@main/' + FILE + '?t=' + Date.now())
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            canalesData = data;
+            renderCanales();
+            var ahora = new Date().toLocaleTimeString();
+            document.getElementById('last-update').textContent = 'Última carga: ' + ahora;
+            setStatus('ok', 'Conectado — ' + Object.keys(data).length + ' canales cargados');
+            // Obtener SHA para poder guardar
+            fetch('https://api.github.com/repos/' + REPO + '/contents/' + FILE, {
+                headers: { 'Authorization': 'token ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
+            }).then(function(r) { return r.json(); })
+              .then(function(d) { fileSha = d.sha; })
+              .catch(function() {});
+        })
+        .catch(function() { setStatus('error', 'Error al cargar canales desde GitHub'); });
 }
 
 function renderCanales() {
-    Object.keys(secciones).forEach(function(secId){
-        var lista=document.getElementById(secId);
-        if(!lista)return;
-        lista.innerHTML='';
-        var sec=secciones[secId];
-        sec.keys.forEach(function(key){
-            var nombre=sec.nombres[key]||key;
-            var url=canalesData[key]||'(Canal no configurado en GitHub)';
-            var d=document.createElement('div');
-            d.className='canal-card';
-            d.id='card-'+key;
-            d.innerHTML='<div class="canal-header"><span class="canal-nombre">'+nombre+'</span><span class="canal-key">'+key+'</span><button class="btn-editar" onclick="editarCanal(\''+key+'\')">✏️ Editar</button></div>'+
-                '<div class="canal-url" id="url-'+key+'">'+url+'</div>'+
-                '<div class="edit-area" id="edit-'+key+'"><textarea id="ta-'+key+'">'+url+'</textarea>'+
-                '<div class="edit-buttons"><button class="btn-guardar" id="btn-'+key+'" onclick="guardarCanal(\''+key+'\')">💾 Guardar</button>'+
-                '<button class="btn-cancelar" onclick="cancelarEdicion(\''+key+'\')">✕ Cancelar</button></div>'+
-                '<div class="msg" id="msg-'+key+'"></div></div>';
-            lista.appendChild(d);
+    Object.keys(secciones).forEach(function(secId) {
+        var lista = document.getElementById(secId);
+        if (!lista) return;
+        lista.innerHTML = '';
+        var sec = secciones[secId];
+        var count = 0;
+        sec.keys.forEach(function(key) {
+            var nombre = sec.nombres[key] || key;
+            var url = canalesData[key] || '';
+            var card = document.createElement('div');
+            card.className = 'canal-card' + (url ? '' : ' no-config');
+            card.id = 'card-' + key;
+            var urlDisplay = url || '(sin configurar)';
+            var urlClass = url ? 'canal-url' : 'canal-url empty';
+            card.innerHTML =
+                '<div class="canal-header">' +
+                    '<span class="canal-nombre">' + nombre + '</span>' +
+                    '<span class="canal-key">' + key + '</span>' +
+                    '<button class="btn-editar" onclick="editarCanal(\'' + key + '\')">✏️ Editar</button>' +
+                '</div>' +
+                '<div class="' + urlClass + '" id="url-' + key + '" onclick="editarCanal(\'' + key + '\')" title="Clic para editar">' + urlDisplay + '</div>' +
+                '<div class="edit-area" id="edit-' + key + '">' +
+                    '<textarea id="ta-' + key + '">' + url + '</textarea>' +
+                    '<div class="edit-buttons">' +
+                        '<button class="btn-guardar" id="btn-' + key + '" onclick="guardarCanal(\'' + key + '\')">💾 Guardar en GitHub</button>' +
+                        '<button class="btn-cancelar" onclick="cancelarEdicion(\'' + key + '\')">✕ Cancelar</button>' +
+                    '</div>' +
+                    '<div class="msg" id="msg-' + key + '"></div>' +
+                '</div>';
+            lista.appendChild(card);
+            count++;
         });
+        // Actualizar contador de sección
+        var cntId = 'cnt-' + secId.replace('lista-', '');
+        var cntEl = document.getElementById(cntId);
+        if (cntEl) cntEl.textContent = count;
     });
 }
 
-function editarCanal(key){
-    document.querySelectorAll('.canal-card').forEach(function(c){c.classList.remove('editando');c.querySelector('.edit-area').style.display='none';});
-    document.getElementById('card-'+key).classList.add('editando');
-    document.getElementById('edit-'+key).style.display='block';
-    document.getElementById('ta-'+key).focus();
-    document.getElementById('ta-'+key).select();
+function editarCanal(key) {
+    document.querySelectorAll('.canal-card').forEach(function(c) {
+        c.classList.remove('editando');
+        c.querySelector('.edit-area').style.display = 'none';
+    });
+    var card = document.getElementById('card-' + key);
+    if (!card) return;
+    card.classList.add('editando');
+    card.querySelector('.edit-area').style.display = 'block';
+    var ta = document.getElementById('ta-' + key);
+    ta.focus();
+    ta.select();
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-function cancelarEdicion(key){
-    document.getElementById('card-'+key).classList.remove('editando');
-    document.getElementById('edit-'+key).style.display='none';
-    document.getElementById('ta-'+key).value=canalesData[key]||'';
+function cancelarEdicion(key) {
+    var card = document.getElementById('card-' + key);
+    if (!card) return;
+    card.classList.remove('editando');
+    card.querySelector('.edit-area').style.display = 'none';
+    document.getElementById('ta-' + key).value = canalesData[key] || '';
 }
 
-function guardarCanal(key){
-    var url=document.getElementById('ta-'+key).value.trim();
-    var msg=document.getElementById('msg-'+key);
-    var btn=document.getElementById('btn-'+key);
-    if(!url)return;
-    btn.disabled=true; btn.textContent='⏳ Guardando...'; msg.className='msg';
-    canalesData[key]=url;
-    var enc=btoa(unescape(encodeURIComponent(JSON.stringify(canalesData,null,2))));
-    fetch('https://api.github.com/repos/'+REPO+'/contents/'+FILE,{
-        method:'PUT',
-        headers:{'Authorization':'token '+GITHUB_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-        body:JSON.stringify({message:'Actualizar '+key,content:enc,sha:fileSha})
-    }).then(function(r){return r.json();}).then(function(data){
-        if(data.content){
-            fileSha=data.content.sha;
-            document.getElementById('url-'+key).textContent=url;
-            document.getElementById('card-'+key).classList.remove('editando');
-            document.getElementById('card-'+key).classList.add('guardado');
-            document.getElementById('edit-'+key).style.display='none';
-            setTimeout(function(){document.getElementById('card-'+key).classList.remove('guardado');},3000);
-            setStatus('ok','✅ Guardado correctamente');
-        } else {
-            msg.className='msg error'; msg.textContent='Error: Verifica tu Token de GitHub';
-        }
-        btn.disabled=false; btn.textContent='💾 Guardar';
-    }).catch(function(){
-        msg.className='msg error'; msg.textContent='Error de conexión';
-        btn.disabled=false; btn.textContent='💾 Guardar';
+function guardarCanal(key) {
+    var url = document.getElementById('ta-' + key).value.trim();
+    var msg = document.getElementById('msg-' + key);
+    var btn = document.getElementById('btn-' + key);
+    if (!url) return;
+    if (!GITHUB_TOKEN || GITHUB_TOKEN === 'TU_TOKEN_AQUI') {
+        msg.className = 'msg error';
+        msg.textContent = '⚠️ Configurá tu Token de GitHub arriba en el código';
+        return;
+    }
+    btn.disabled = true;
+    btn.textContent = '⏳ Guardando...';
+    msg.className = 'msg';
+    canalesData[key] = url;
+    var enc = btoa(unescape(encodeURIComponent(JSON.stringify(canalesData, null, 2))));
+    fetch('https://api.github.com/repos/' + REPO + '/contents/' + FILE, {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'token ' + GITHUB_TOKEN,
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: 'Actualizar ' + key, content: enc, sha: fileSha })
+    }).then(function(r) { return r.json(); })
+      .then(function(data) {
+          if (data.content) {
+              fileSha = data.content.sha;
+              document.getElementById('url-' + key).textContent = url;
+              document.getElementById('url-' + key).className = 'canal-url';
+              var card = document.getElementById('card-' + key);
+              card.classList.remove('editando', 'no-config');
+              card.classList.add('guardado');
+              card.querySelector('.edit-area').style.display = 'none';
+              setTimeout(function() { card.classList.remove('guardado'); }, 3000);
+              setStatus('ok', '✅ ' + key + ' guardado correctamente');
+          } else {
+              msg.className = 'msg error';
+              msg.textContent = '❌ Error: ' + (data.message || 'Verificá tu Token de GitHub');
+          }
+          btn.disabled = false;
+          btn.textContent = '💾 Guardar en GitHub';
+      })
+      .catch(function() {
+          msg.className = 'msg error';
+          msg.textContent = '❌ Error de conexión';
+          btn.disabled = false;
+          btn.textContent = '💾 Guardar en GitHub';
+      });
+}
+
+function filtrarCanales() {
+    var q = document.getElementById('buscador').value.toLowerCase();
+    document.querySelectorAll('.canal-card').forEach(function(card) {
+        var texto = card.textContent.toLowerCase();
+        card.style.display = (!q || texto.includes(q)) ? '' : 'none';
+    });
+    // Mostrar/ocultar secciones vacías
+    document.querySelectorAll('[id^="lista-"]').forEach(function(sec) {
+        var visible = Array.from(sec.querySelectorAll('.canal-card')).some(function(c) {
+            return c.style.display !== 'none';
+        });
+        sec.style.display = visible ? '' : 'none';
     });
 }
 
