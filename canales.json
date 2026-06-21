@@ -190,5 +190,18 @@
   "de_rictv": "https://rictv.iptv-playoutcenter.de/rictv/rictv-web/playlist.m3u8",
   "de_grjngo": "https://amogonetworx-grjngo-3-dk.samsung.wurl.tv/1200.m3u8",
   "canalpro": "https://www.desdeparaguay.com/pro",
-  "rcctv": "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8"
+  "rcctv": "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8",
+  "telefuturo": "https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/media.m3u8?admin=tvaccion",
+  "mega": "https://www.desdeparaguay.com/mega",
+  "productiva": "https://copacoradios.desdeparaguay.net/productivatv/productivatv_baja/playlist.m3u8",
+  "launion": "https://copacogen.desdeparaguay.net/800tv/800tv/playlist.m3u8",
+  "nandutitv": "https://copacogen.desdeparaguay.net/nandutitv/nandutitv_baja/playlist.m3u8",
+  "chaquena": "https://copacogen.desdeparaguay.net/tvchaquena/tvchaquena/playlist.m3u8",
+  "nandejaranee": "https://copacogen.desdeparaguay.net/nandejaraneetv/nandejaraneetv/playlist.m3u8",
+  "br_tnt": "https://w1.embedtv.live/tnt",
+  "br_telecinepipoca": "https://w1.embedtv.live/telecinepipoca",
+  "br_telecinepremium": "https://w1.embedtv.live/telecinepremium",
+  "br_history": "https://w1.embedtv.live/history",
+  "br_animalplanet": "https://w1.embedtv.live/animalplanet",
+  "br_bandsports": "https://w1.embedtv.live/bandsports"
 }
