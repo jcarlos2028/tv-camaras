@@ -190,5 +190,6 @@
   "de_rictv": "https://rictv.iptv-playoutcenter.de/rictv/rictv-web/playlist.m3u8",
   "de_grjngo": "https://amogonetworx-grjngo-3-dk.samsung.wurl.tv/1200.m3u8",
   "telefuturo": "https://copacogen.desdeparaguay.net/telefuturo/telefuturo_py_alta/media.m3u8?admin=tvaccion",
-  "rcctv": "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8"
+  "rcctv": "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8",
+  "productiva": "https://copacoradios.desdeparaguay.net/productivatv/productivatv_baja/playlist.m3u8"
 }
