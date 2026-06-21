@@ -189,5 +189,6 @@
   "de_freesports": "https://rakutenaa-mainstreammediafreesportsintl-rakuten-t7dc0.amagi.tv/playlist/rakutenAA-mainstreammediafreesportsintl-rakuten/playlist.m3u8",
   "de_rictv": "https://rictv.iptv-playoutcenter.de/rictv/rictv-web/playlist.m3u8",
   "de_grjngo": "https://amogonetworx-grjngo-3-dk.samsung.wurl.tv/1200.m3u8",
-  "br_bandsports": "https://www.embedtv.best/bandsports"
+  "br_bandsports": "https://www.embedtv.best/bandsports",
+  "br_animalplanet": "https://www.embedtv.best/animalplanet"
 }
