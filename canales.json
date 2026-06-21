@@ -198,5 +198,6 @@
   "br_telecinepipoca": "https://www.embedtv.best/telecinepipoca",
   "mega": "https://www.desde-paraguay.com/mega.m3u8",
   "rcctv": "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8?admin=nacion",
-  "telefuturo": "https://zn1tf.desdeparaguay.net/telefuturo/telefuturo_py_alta/playlist.m3u8?k=c68b0e8fecbf5b5f4a882e731d8fdc1ef02c29e6270d04097e07448dd4e8881f&exp=1782007911"
+  "telefuturo": "https://zn1tf.desdeparaguay.net/telefuturo/telefuturo_py_alta/playlist.m3u8?k=c68b0e8fecbf5b5f4a882e731d8fdc1ef02c29e6270d04097e07448dd4e8881f&exp=1782007911",
+  "canalpro": "https://www.desdeparaguay.com/pro"
 }
