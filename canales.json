@@ -201,5 +201,6 @@
   "canalpro": "https://www.desdeparaguay.com/pro",
   "productiva": "https://copacoradios.desdeparaguay.net/productivatv/productivatv_baja/playlist.m3u8",
   "launion": "https://copacogen.desdeparaguay.net/800tv/800tv/playlist.m3u8",
-  "nandutitv": "https://copacogen.desdeparaguay.net/nandutitv/nandutitv_baja/playlist.m3u8"
+  "nandutitv": "https://copacogen.desdeparaguay.net/nandutitv/nandutitv_baja/playlist.m3u8",
+  "chaquena": "https://copacogen.desdeparaguay.net/tvchaquena/tvchaquena/playlist.m3u8"
 }
