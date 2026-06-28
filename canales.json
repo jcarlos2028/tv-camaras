@@ -203,5 +203,6 @@
   "fi_eveo": "https://live-fi.tvkaista.net/eveo/live.m3u8?hd=true",
   "de_freesports": "https://rakutenaa-mainstreammediafreesportsintl-rakuten-t7dc0.amagi.tv/playlist/rakutenAA-mainstreammediafreesportsintl-rakuten/playlist.m3u8",
   "de_rictv": "https://rictv.iptv-playoutcenter.de/rictv/rictv-web/playlist.m3u8",
-  "de_grjngo": "https://amogonetworx-grjngo-3-dk.samsung.wurl.tv/1200.m3u8"
+  "de_grjngo": "https://amogonetworx-grjngo-3-dk.samsung.wurl.tv/1200.m3u8",
+  "evento1": "https://caramel-muster-declared.ngrok-free.app/hls/tigosports.m3u8"
 }
