@@ -205,5 +205,6 @@
   "de_rictv": "https://rictv.iptv-playoutcenter.de/rictv/rictv-web/playlist.m3u8",
   "de_grjngo": "https://amogonetworx-grjngo-3-dk.samsung.wurl.tv/1200.m3u8",
   "evento1": "https://8004c990378f308c-186-17-46-30.serverusercontent.com/hls/tigosports.m3u8",
-  "evento3": "https://b5aa1019dde509c5-186-17-46-30.serveousercontent.com/hls/tigosports.m3u8"
+  "evento3": "https://b5aa1019dde509c5-186-17-46-30.serveousercontent.com/hls/tigosports.m3u8",
+  "evento2": "https://stream-xhd.com/live1.php?stream=espn2"
 }
