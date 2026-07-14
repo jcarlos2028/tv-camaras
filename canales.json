@@ -207,7 +207,7 @@
   "evento1": "https://stream-xhd.com/live1.php?stream=cazetv",
   "evento2": "https://stream-xhd.com/live1.php?stream=telemundo",
   "evento3": "https://stream-xhd.com/live1.php?stream=paramount2",
-  "app_version": "3.0",
+  "app_version": "1.1",
   "ar_aunar": "https://5fb24b460df87.streamlock.net/live-cont.ar/mirador/playlist.m3u8",
   "ar_cinear": "https://5fb24b460df87.streamlock.net/live-cont.ar/cinear/playlist.m3u8",
   "ar_tectv": "https://tv.initium.net.ar:3939/live/tectvmainlive.m3u8",
