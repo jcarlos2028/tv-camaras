@@ -26,7 +26,7 @@
   "launion": "https://copacogen.desdeparaguay.net/800tv/800tv/playlist.m3u8",
   "nandutitv": "https://copacogen.desdeparaguay.net/nandutitv/nandutitv_baja/playlist.m3u8",
   "chaquena": "https://copacogen.desdeparaguay.net/tvchaquena/tvchaquena/playlist.m3u8",
-  "monumentaltv": "https://www.desdeparaguay.com/monumentaltv",
+  "monumentaltv": "https://copacogen.desdeparaguay.net/monumentaltv/monumentaltv_alta/playlist.m3u8?admin=tvaccion",
   "nandejaranee": "https://copacogen.desdeparaguay.net/nandejaraneetv/nandejaraneetv/playlist.m3u8",
   "heitv": "https://copacogen.desdeparaguay.net/heitv/heitv_py_alta/playlist.m3u8?admin=nacion",
   "villaelisa": "https://copacogen.desdeparaguay.net/villaelisatv/villaelisatv/playlist.m3u8?admin=nacion",
