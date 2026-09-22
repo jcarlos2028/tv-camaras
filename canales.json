@@ -9,7 +9,7 @@
   "trecepy": "https://geo.dailymotion.com/player/x1at3a.html?video=k1bgQZHbBKPqXOHczd4&autoplay=1&mute=1",
   "mega": "https://www.desde-paraguay.com/mega.m3u8",
   "rcctv": "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8",
-  "a24": "https://g3.mc-hor.transport.edge-access.net/a12/ngrp:a24-100056_all/a24-100056_720p.m3u8",
+  "a24": "http://45.170.130.224:8000/play/a02o/index.m3u8?hls",
   "paraguaytv": "https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8",
   "venus": "https://rds3gen.desdeparaguay.net/venusmedia/venusmedia/.m3u8",
   "venus_alt": "https://www.desdeparaguay.com/external/?venusmedia",
