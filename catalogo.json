@@ -1,5 +1,5 @@
 {
- "version": 14,
+ "version": 15,
  "groups": [
   {
    "id": "py-1",
@@ -2265,6 +2265,14 @@
      "type": "auto",
      "visible": true,
      "live": true
+    },
+    {
+     "id": "nmwtjla6koy",
+     "name": "Amazon Prime Video",
+     "url": "https://streamxhd.sbs/live1.php?stream=amazon1",
+     "type": "auto",
+     "visible": true,
+     "live": true
     }
    ]
   },
@@ -3854,5 +3862,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T17:30:54.509Z"
+ "updated": "2026-11-23T17:31:56.951Z"
 }
