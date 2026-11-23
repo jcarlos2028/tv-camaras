@@ -1,18 +1,11 @@
 {
- "version": 8,
+ "version": 9,
  "groups": [
   {
    "id": "py-1",
    "kind": "tv",
    "title": "Paraguay",
    "items": [
-    {
-     "name": "Unicanal PY",
-     "id": "unicanal",
-     "url": "https://geo.dailymotion.com/player/x1apn6.html?video=k41tDnJts45CTVHcyD4&autoplay=1&mute=1",
-     "type": "auto",
-     "visible": true
-    },
     {
      "name": "Telefuturo",
      "id": "telefuturo",
@@ -25,12 +18,27 @@
      "id": "telefuturo_alt",
      "url": "https://zn1tf.desdeparaguay.net/telefuturo/telefuturo_py_alta/playlist.m3u8?k=8adac7dfcac19533c681aafe28ce1bfc65ba7953d3da3e2f9f1a97aac55763e8&exp=1784217830",
      "type": "auto",
-     "visible": true
+     "visible": false,
+     "note": "link caido"
     },
     {
      "name": "LaTele",
      "id": "latele",
      "url": "https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Mega TV",
+     "id": "mega",
+     "url": "https://www.desde-paraguay.com/mega.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Unicanal PY",
+     "id": "unicanal",
+     "url": "https://geo.dailymotion.com/player/x1apn6.html?video=k41tDnJts45CTVHcyD4&autoplay=1&mute=1",
      "type": "auto",
      "visible": true
     },
@@ -59,13 +67,6 @@
      "name": "Trece PY",
      "id": "trecepy",
      "url": "https://geo.dailymotion.com/player/x1at3a.html?video=k1bgQZHbBKPqXOHczd4&autoplay=1&mute=1",
-     "type": "auto",
-     "visible": true
-    },
-    {
-     "name": "Mega TV",
-     "id": "mega",
-     "url": "https://www.desde-paraguay.com/mega.m3u8",
      "type": "auto",
      "visible": true
     },
@@ -3822,5 +3823,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T16:51:17.796Z"
+ "updated": "2026-11-23T16:52:10.120Z"
 }
