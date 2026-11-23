@@ -1,5 +1,5 @@
 {
- "version": 9,
+ "version": 10,
  "groups": [
   {
    "id": "py-1",
@@ -162,13 +162,6 @@
      "visible": true
     },
     {
-     "name": "TV Max Sta. Rita",
-     "id": "tvmax_starita",
-     "url": "https://tvmaxima.ddns.net/memfs/aa1f9209-0def-4cff-b26d-c4bd0f4aac8a_output_0.m3u8?session=6pZA5NRSvjStTnfUTRe37Q",
-     "type": "auto",
-     "visible": true
-    },
-    {
      "name": "Productiva",
      "id": "productiva",
      "url": "https://copacoradios.desdeparaguay.net/productivatv/productivatv_baja/playlist.m3u8",
@@ -250,14 +243,8 @@
      "id": "latribu",
      "url": "https://live2.eu-north-1a.cf.dmcdn.net/sec2(WoxZI8e2BEx82GTtJ4zANKnVG7PW_JCLDlUguejw-HWA3qmux19H-Ee7L_nBA-a9TH0rqrrrtJEvoW0hgRRgSeekTixXvSBicGO5owUBRCV5eVyREP-lWWlHLFcu3rB5)/cloud/3/x9zkxlu/s/live-720.m3u8",
      "type": "auto",
-     "visible": true
-    },
-    {
-     "name": "TV Cáritas",
-     "type": "m3u8",
-     "url": "https://rds3.desdeparaguay.net/caritastv/caritastv/chunklist_w1085574894.m3u8",
-     "id": "c002",
-     "visible": true
+     "visible": false,
+     "note": "fuera de servicio"
     },
     {
      "name": "SNT PY",
@@ -271,6 +258,20 @@
      "id": "c9n",
      "url": "https://ddycmnicl95kp.cloudfront.net/live/qnxsy62odjyb/master.m3u8",
      "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Parana TV",
+     "type": "m3u8",
+     "url": "https://edge.enhdtv.com/8050/index.m3u8",
+     "id": "c005",
+     "visible": true
+    },
+    {
+     "name": "TV Cáritas",
+     "type": "m3u8",
+     "url": "https://rds3.desdeparaguay.net/caritastv/caritastv/chunklist_w1085574894.m3u8",
+     "id": "c002",
      "visible": true
     },
     {
@@ -292,13 +293,6 @@
      "type": "m3u8",
      "url": "https://tigocloud.desdeparaguay.net/agrtv/agrtv/playlist.m3u8",
      "id": "c004",
-     "visible": true
-    },
-    {
-     "name": "Parana TV",
-     "type": "m3u8",
-     "url": "https://edge.enhdtv.com/8050/index.m3u8",
-     "id": "c005",
      "visible": true
     },
     {
@@ -383,6 +377,13 @@
      "type": "nosandbox",
      "url": "https://www.desdeparaguay.com/aspentv",
      "id": "c017",
+     "visible": true
+    },
+    {
+     "name": "TV Max Sta. Rita",
+     "id": "tvmax_starita",
+     "url": "https://tvmaxima.ddns.net/memfs/aa1f9209-0def-4cff-b26d-c4bd0f4aac8a_output_0.m3u8?session=6pZA5NRSvjStTnfUTRe37Q",
+     "type": "auto",
      "visible": true
     }
    ]
@@ -3823,5 +3824,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T16:52:10.120Z"
+ "updated": "2026-11-23T17:07:32.985Z"
 }
