@@ -1,5 +1,5 @@
 {
- "version": 11,
+ "version": 12,
  "groups": [
   {
    "id": "py-1",
@@ -11,7 +11,8 @@
      "id": "telefuturo",
      "url": "Http://158.172.217.18:8000/play/a0ns/index.m3u8",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "Telefuturo (Alt)",
@@ -26,28 +27,32 @@
      "id": "latele",
      "url": "https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "Mega TV",
      "id": "mega",
      "url": "https://www.desde-paraguay.com/mega.m3u8",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "Unicanal PY",
      "id": "unicanal",
      "url": "https://geo.dailymotion.com/player/x1apn6.html?video=k41tDnJts45CTVHcyD4&autoplay=1&mute=1",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "ABC Color",
      "id": "abctv",
      "url": "https://www.abc.com.py/tv/video/x9skr3m/",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "NPY",
@@ -61,14 +66,16 @@
      "id": "gen",
      "url": "https://www.desdeparaguay.com/gen",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "Trece PY",
      "id": "trecepy",
      "url": "https://geo.dailymotion.com/player/x1at3a.html?video=k1bgQZHbBKPqXOHczd4&autoplay=1&mute=1",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "RCC TV",
@@ -131,7 +138,8 @@
      "id": "visiontv",
      "url": "https://tigocloudgen.desdeparaguay.net/satelitaltv/satelitaltv/playlist.m3u8",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "Bruno Masi TV",
@@ -180,7 +188,8 @@
      "id": "nandutitv",
      "url": "https://copacogen.desdeparaguay.net/nandutitv/nandutitv_baja/playlist.m3u8",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "Chaqueña TV",
@@ -251,21 +260,24 @@
      "id": "snt",
      "url": "https://ddycmnicl95kp.cloudfront.net/live/25646ipbno2g/master.m3u8",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "C9N PY",
      "id": "c9n",
      "url": "https://ddycmnicl95kp.cloudfront.net/live/qnxsy62odjyb/master.m3u8",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "Parana TV",
      "type": "m3u8",
      "url": "https://edge.enhdtv.com/8050/index.m3u8",
      "id": "c005",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "TV Cáritas",
@@ -293,7 +305,8 @@
      "type": "m3u8",
      "url": "https://tigocloud.desdeparaguay.net/agrtv/agrtv/playlist.m3u8",
      "id": "c004",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "Sur TV",
@@ -384,7 +397,8 @@
      "id": "tvmax_starita",
      "url": "https://tvmaxima.ddns.net/memfs/aa1f9209-0def-4cff-b26d-c4bd0f4aac8a_output_0.m3u8?session=6pZA5NRSvjStTnfUTRe37Q",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     }
    ]
   },
@@ -3833,5 +3847,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T17:22:50.038Z"
+ "updated": "2026-11-23T17:24:11.465Z"
 }
