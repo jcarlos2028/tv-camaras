@@ -1,5 +1,5 @@
 {
- "version": 13,
+ "version": 14,
  "groups": [
   {
    "id": "py-1",
@@ -2257,6 +2257,14 @@
      "url": "/tigo-sports/a04k/index.m3u8",
      "id": "c128",
      "visible": true
+    },
+    {
+     "id": "nmwtjk6k34k",
+     "name": "LaLigaHipermotion",
+     "url": "https://streamxhd.sbs/live1.php?stream=laligahypermotion",
+     "type": "auto",
+     "visible": true,
+     "live": true
     }
    ]
   },
@@ -3846,5 +3854,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T17:29:49.786Z"
+ "updated": "2026-11-23T17:30:54.509Z"
 }
