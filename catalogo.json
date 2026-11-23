@@ -1,5 +1,5 @@
 {
- "version": 16,
+ "version": 17,
  "groups": [
   {
    "id": "py-1",
@@ -1896,6 +1896,13 @@
      "live": true
     },
     {
+     "name": "FTV Bolivia",
+     "id": "ftv_bolivia",
+     "url": "https://master.tucableip.com/ftvhd/tracks-v1a1/mono.ts.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
      "name": "La Costa TV",
      "id": "lacosta_uy",
      "url": "https://hostingservicios.info/hls/tv-la-costa.m3u8",
@@ -1927,13 +1934,6 @@
      "name": "Bolivisión",
      "id": "bolivision",
      "url": "https://alba-bo-bolivision-bolivision.stream.mediatiquestream.com/original.m3u8",
-     "type": "auto",
-     "visible": true
-    },
-    {
-     "name": "FTV Bolivia",
-     "id": "ftv_bolivia",
-     "url": "https://master.tucableip.com/ftvhd/tracks-v1a1/mono.ts.m3u8",
      "type": "auto",
      "visible": true
     }
@@ -3863,5 +3863,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T17:50:15.102Z"
+ "updated": "2026-11-23T17:51:50.918Z"
 }
