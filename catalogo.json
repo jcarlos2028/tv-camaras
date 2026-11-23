@@ -1,5 +1,5 @@
 {
- "version": 15,
+ "version": 16,
  "groups": [
   {
    "id": "py-1",
@@ -1888,11 +1888,12 @@
    "title": "🇧🇴 Bolivia & Uruguay",
    "items": [
     {
-     "name": "BTV Bolivia",
+     "name": "Amitel Tv",
      "id": "btv_bolivia",
-     "url": "https://www.dailymotion.com/embed/video/x9ny70y?autoplay=1",
+     "url": "https://stv2.boliviaplay.com.bo/hls/stream.m3u8",
      "type": "auto",
-     "visible": true
+     "visible": true,
+     "live": true
     },
     {
      "name": "La Costa TV",
@@ -3862,5 +3863,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T17:31:56.951Z"
+ "updated": "2026-11-23T17:50:15.102Z"
 }
