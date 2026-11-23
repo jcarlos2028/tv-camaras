@@ -1,5 +1,5 @@
 {
- "version": 17,
+ "version": 18,
  "groups": [
   {
    "id": "py-1",
@@ -2568,7 +2568,7 @@
     {
      "name": "🎥 Costanera Encarnación",
      "type": "m3u8",
-     "url": "https://mia.rtsp.me/Ox-OyIeILvrILZ_iwrmCcg/1773664486/hls/3NsfyZGe.m3u8",
+     "url": "https://mi.rtsp.me/iiCWiWRN-zLv7Fsabdd3qg/1795465132/hls/3NsfyZGe.m3u8?ip=186.17.46.30",
      "id": "c159",
      "visible": true
     },
@@ -2609,8 +2609,8 @@
    "items": [
     {
      "name": "🎥 Atacado Connect",
-     "type": "iframe",
-     "url": "https://izidisplay.com/AoVivo/Ponte",
+     "type": "auto",
+     "url": "https://video02.logicahost.com.br/brimostech/camatg01.stream/main_stream.m3u8",
      "id": "c164",
      "visible": true
     },
@@ -3863,5 +3863,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T17:51:50.918Z"
+ "updated": "2026-11-23T19:27:53.422Z"
 }
