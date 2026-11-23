@@ -1,0 +1,3826 @@
+{
+ "version": 2,
+ "groups": [
+  {
+   "id": "py-1",
+   "kind": "tv",
+   "title": "Paraguay",
+   "items": [
+    {
+     "name": "Unicanal PY",
+     "id": "unicanal",
+     "url": "https://geo.dailymotion.com/player/x1apn6.html?video=k41tDnJts45CTVHcyD4&autoplay=1&mute=1",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Telefuturo",
+     "id": "telefuturo",
+     "url": "Http://158.172.217.18:8000/play/a0ns/index.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Telefuturo (Alt)",
+     "id": "telefuturo_alt",
+     "url": "https://zn1tf.desdeparaguay.net/telefuturo/telefuturo_py_alta/playlist.m3u8?k=8adac7dfcac19533c681aafe28ce1bfc65ba7953d3da3e2f9f1a97aac55763e8&exp=1784217830",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "LaTele",
+     "id": "latele",
+     "url": "https://copacotf.desdeparaguay.net/latele/latele_py_alta/playlist.m3u8?admin=tvaccion",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "ABC Color",
+     "id": "abctv",
+     "url": "https://www.abc.com.py/tv/video/x9skr3m/",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "NPY",
+     "id": "npy",
+     "url": "https://copacogen.desdeparaguay.net/npy/npy_py_alta/playlist.m3u8?admin=tvaccion",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "GEN",
+     "id": "gen",
+     "url": "https://www.desdeparaguay.com/gen",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Trece PY",
+     "id": "trecepy",
+     "url": "https://geo.dailymotion.com/player/x1at3a.html?video=k1bgQZHbBKPqXOHczd4&autoplay=1&mute=1",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Mega TV",
+     "id": "mega",
+     "url": "https://www.desde-paraguay.com/mega.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "RCC TV",
+     "id": "rcctv",
+     "url": "https://copacoradios.desdeparaguay.net/rcctv/rcctv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "A24",
+     "type": "m3u8",
+     "url": "https://orbitatv.netlify.app/.netlify/functions/proxy-manifest?canal=a24nuevo",
+     "id": "c001",
+     "visible": true
+    },
+    {
+     "name": "Paraguay TV",
+     "id": "paraguaytv",
+     "url": "https://stream.paraguaytv.gov.py/memfs/bbe36fed-9b49-4d1d-adaa-4bd6d1b2e386.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Venus TV",
+     "id": "venus",
+     "url": "https://rds3gen.desdeparaguay.net/venusmedia/venusmedia/.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Venus TV (Alt)",
+     "id": "venus_alt",
+     "url": "https://www.desdeparaguay.com/external/?venusmedia",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "MiTV",
+     "id": "mitv",
+     "url": "https://rds3.desdeparaguay.net/mitv/mitv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "UGA TV",
+     "id": "ugatv",
+     "url": "https://www.desdeparaguay.com/ugatv",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "GO TV",
+     "id": "gotv",
+     "url": "https://rds3.desdeparaguay.net/gotv/gotv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Visión TV",
+     "id": "visiontv",
+     "url": "https://tigocloudgen.desdeparaguay.net/satelitaltv/satelitaltv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Bruno Masi TV",
+     "id": "brunomasi",
+     "url": "https://www.desdeparaguay.com/brunomasitv",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal Pro",
+     "id": "canalpro",
+     "url": "https://www.desdeparaguay.com/pro",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Popu TV",
+     "id": "poputv",
+     "url": "https://www.desdeparaguay.com/poputv",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Popu TV (Alt)",
+     "id": "poputv_alt",
+     "url": "https://zn1gen.desdeparaguay.net/universotv/universotv_py_alta/playlist.m3u8?k=452e7310b8c64bdad2144c9b77cdee42a9eca2520f9234df64a2e151c2cab96f&exp=1781655553",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Max Sta. Rita",
+     "id": "tvmax_starita",
+     "url": "https://tvmaxima.ddns.net/memfs/aa1f9209-0def-4cff-b26d-c4bd0f4aac8a_output_0.m3u8?session=6pZA5NRSvjStTnfUTRe37Q",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Productiva",
+     "id": "productiva",
+     "url": "https://copacoradios.desdeparaguay.net/productivatv/productivatv_baja/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "La Unión",
+     "id": "launion",
+     "url": "https://copacogen.desdeparaguay.net/800tv/800tv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Ñanduti TV",
+     "id": "nandutitv",
+     "url": "https://copacogen.desdeparaguay.net/nandutitv/nandutitv_baja/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Chaqueña TV",
+     "id": "chaquena",
+     "url": "https://copacogen.desdeparaguay.net/tvchaquena/tvchaquena/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Monumental",
+     "id": "monumentaltv",
+     "url": "https://copacogen.desdeparaguay.net/monumentaltv/monumentaltv_alta/playlist.m3u8?admin=tvaccion",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Ñande Jara Ñe'e",
+     "id": "nandejaranee",
+     "url": "https://copacogen.desdeparaguay.net/nandejaraneetv/nandejaraneetv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "HEI",
+     "id": "heitv",
+     "url": "https://copacogen.desdeparaguay.net/heitv/heitv_py_alta/playlist.m3u8?admin=nacion",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Villa Elisa TV",
+     "id": "villaelisa",
+     "url": "https://copacogen.desdeparaguay.net/villaelisatv/villaelisatv/playlist.m3u8?admin=nacion",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "RNP TV",
+     "id": "rnptv",
+     "url": "https://stream.paraguaytv.gov.py/memfs/ea8a90e9-10f7-4b00-8e88-42f4a838d74b.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "República TV",
+     "id": "republicatv",
+     "url": "https://rds3.desdeparaguay.net/republicatv/republicatv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "San Roque Digital PY",
+     "id": "sanroquedigital",
+     "url": "https://lbgo.bozztv.com/ssh101/ssh101/sanroquedigital/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "La Tribu PY",
+     "id": "latribu",
+     "url": "https://live2.eu-north-1a.cf.dmcdn.net/sec2(WoxZI8e2BEx82GTtJ4zANKnVG7PW_JCLDlUguejw-HWA3qmux19H-Ee7L_nBA-a9TH0rqrrrtJEvoW0hgRRgSeekTixXvSBicGO5owUBRCV5eVyREP-lWWlHLFcu3rB5)/cloud/3/x9zkxlu/s/live-720.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Cáritas",
+     "type": "m3u8",
+     "url": "https://rds3.desdeparaguay.net/caritastv/caritastv/chunklist_w1085574894.m3u8",
+     "id": "c002",
+     "visible": true
+    },
+    {
+     "name": "SNT PY",
+     "id": "snt",
+     "url": "https://d3epa8orr2qy3m.cloudfront.net/ts:abr.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "C9N PY",
+     "id": "c9n",
+     "url": "https://d174axghh54kh0.cloudfront.net/ts:abr.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Suseso TV PY",
+     "id": "susesotv",
+     "url": "https://edge.enhdtv.com/8060/tracks-v1a1/mono.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV E40",
+     "type": "m3u8",
+     "url": "https://copacotf.desdeparaguay.net/e40tv/e40tv_py_alta/playlist.m3u8?admin=tvaccion",
+     "id": "c003",
+     "visible": true
+    },
+    {
+     "name": "Canal 7 Curuguaty (AGRTV)",
+     "type": "m3u8",
+     "url": "https://tigocloud.desdeparaguay.net/agrtv/agrtv/playlist.m3u8",
+     "id": "c004",
+     "visible": true
+    },
+    {
+     "name": "Parana TV",
+     "type": "m3u8",
+     "url": "https://edge.enhdtv.com/8050/index.m3u8",
+     "id": "c005",
+     "visible": true
+    },
+    {
+     "name": "Sur TV",
+     "type": "m3u8",
+     "url": "http://45.170.130.224:8000/play/a036/index.m3u8?hls",
+     "id": "c006",
+     "visible": true
+    },
+    {
+     "name": "Paravision",
+     "type": "m3u8",
+     "url": "http://45.170.130.224:8000/play/a032/index.m3u8?hls",
+     "id": "c007",
+     "visible": true
+    },
+    {
+     "name": "Educanal",
+     "type": "m3u8",
+     "url": "https://cloudtv.streaming.com.py/educanalpy/educanalpy/chunklist_w838772521.m3u8",
+     "id": "c008",
+     "visible": true
+    },
+    {
+     "name": "TV Cable Liberacion",
+     "type": "m3u8",
+     "url": "https://lbgo.bozztv.com/ssh101/ssh101/pyeventos/chunks.m3u8?lb_backend_hint=7",
+     "id": "c009",
+     "visible": true
+    },
+    {
+     "name": "Cadtv",
+     "type": "m3u8",
+     "url": "https://videoserver.tmcreativos.com:19360/dcsajkpvrh/dcsajkpvrh.m3u8",
+     "id": "c010",
+     "visible": true
+    },
+    {
+     "name": "KOA TV",
+     "type": "m3u8",
+     "url": "https://tv.koaradio.net/q720/index.m3u8",
+     "id": "c011",
+     "visible": true
+    },
+    {
+     "name": "Itapua Noticias",
+     "type": "m3u8",
+     "url": "https://server.conexionradio.online/memfs/37f0b34b-9a1d-4c55-a0d0-bc15d9ae1cd0_output_0.m3u8?session=WgcAxtQGzgeT2CuVUnoP4E",
+     "id": "c012",
+     "visible": true
+    },
+    {
+     "name": "Fiera TV",
+     "type": "m3u8",
+     "url": "https://orbitatv.netlify.app/.netlify/functions/proxy-manifest?canal=fieratv",
+     "id": "c013",
+     "visible": true
+    },
+    {
+     "name": "Wizzi TV (Sta. Rosa del Aguaray)",
+     "type": "m3u8",
+     "url": "https://orbitatv.netlify.app/.netlify/functions/proxy-manifest?canal=wizzitv",
+     "id": "c014",
+     "visible": true
+    },
+    {
+     "name": "4D Mas Noticias TV",
+     "type": "nosandbox",
+     "url": "https://www.desdeparaguay.com/4dmasnoticiastv",
+     "id": "c015",
+     "visible": true
+    },
+    {
+     "name": "Dismar TV",
+     "type": "nosandbox",
+     "url": "https://www.desdeparaguay.com/dismartv",
+     "id": "c016",
+     "visible": true
+    },
+    {
+     "name": "Aspen TV",
+     "type": "nosandbox",
+     "url": "https://www.desdeparaguay.com/aspentv",
+     "id": "c017",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "py-2",
+   "kind": "tv",
+   "title": "🇵🇾 Paraguay Interior",
+   "items": [
+    {
+     "name": "Red Interior TV (Sta. Rita)",
+     "id": "interior_redinteriortv",
+     "url": "https://video.wilohosting.com:19360/redinteriortv/redinteriortv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Santa Rita Visión",
+     "type": "m3u8",
+     "url": "https://video.radiosenpy.net/hls/srvtv/srvtv.m3u8",
+     "live": true,
+     "id": "c018",
+     "visible": true
+    },
+    {
+     "name": "TV Obedira",
+     "id": "interior_obediratv",
+     "url": "https://video.hostingcaaguazu.com:19360/obediratv/obediratv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal 8",
+     "id": "interior_canal8",
+     "url": "https://video.hostingcaaguazu.com:19360/canal8cvs/canal8cvs.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Cosmo TV",
+     "id": "interior_cosmostv",
+     "url": "https://video.hostingcaaguazu.com:19360/cosmostv/cosmostv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Regional TV",
+     "id": "interior_regionaltv",
+     "url": "https://video.hostingcaaguazu.com:19360/regionaltv/regionaltv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Canindeyú",
+     "id": "interior_tvcanindeyu",
+     "url": "https://video.hostingcaaguazu.com:19360/tvcanindeyu/tvcanindeyu.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Telequince",
+     "type": "m3u8",
+     "url": "https://video.hostingcaaguazu.com:19360/telequince/telequince.m3u8",
+     "id": "c019",
+     "visible": true
+    },
+    {
+     "name": "Oasis TV",
+     "id": "interior_oasistv",
+     "url": "https://video.hostingcaaguazu.com:19360/oasistv/oasistv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Oviedo TV",
+     "id": "interior_oviedotv",
+     "url": "https://video.wilohosting.com:19360/oviedotv/oviedotv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Uniradiotv",
+     "id": "interior_unitv",
+     "url": "https://video.hostingcaaguazu.com:19360/uniradiotv/uniradiotv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Max",
+     "id": "interior_tvmax",
+     "url": "https://video.wilohosting.com:19360/tvmax/tvmax.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "El Observador",
+     "id": "interior_elobservador",
+     "url": "https://video.hostingcaaguazu.com:19360/elobservador/elobservador.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Red Digital (San Pedro)",
+     "type": "m3u8",
+     "url": "https://video.hostingcaaguazu.com:19360/reddigitalsanpedro/reddigitalsanpedro.m3u8",
+     "id": "c020",
+     "visible": true
+    },
+    {
+     "name": "Órbita TV",
+     "id": "interior_orbitatv",
+     "url": "https://cloudtv.streaming.com.py/orbitatv/orbitatv/chunklist_w828197276.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Guairá TV",
+     "id": "interior_guairatv",
+     "url": "https://cloudtv.streaming.com.py/guairatv/guairatv/chunklist_w1434474602.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Guairá TV (Alt)",
+     "type": "m3u8",
+     "url": "https://tvdatta.com:3991/live/guairatvlive.m3u8",
+     "id": "c021",
+     "visible": true
+    },
+    {
+     "name": "Concepción TV",
+     "id": "interior_concepciontv",
+     "url": "https://cloudtv.streaming.com.py/concepciontv/concepciontv/chunklist_w1421852306.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Cambyretá TV",
+     "id": "interior_cambyretatv",
+     "url": "https://cloudtv.streaming.com.py/cambyretatv/cambyretatv/chunklist_w1221639287.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Pilar TV",
+     "id": "interior_pilartv",
+     "url": "https://cloudtv.streaming.com.py/pilarrtv/pilarrtv/chunklist_w25168722.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Del Rey TV",
+     "id": "interior_delreytv",
+     "url": "https://video.hostingcaaguazu.com:19360/delreytv/delreytv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Regional TV Yaguarón",
+     "id": "interior_regionaltv_yaguaron",
+     "url": "https://video.hostingcaaguazu.com:19360/regionaltv/regionaltv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Mbocayaty TV",
+     "type": "m3u8",
+     "url": "https://video.wilohosting.com:19360/occidentaltv/occidentaltv.m3u8",
+     "id": "c022",
+     "visible": true
+    },
+    {
+     "name": "RBTV",
+     "type": "m3u8",
+     "url": "https://video.hostingcaaguazu.com:19360/rbtv/rbtv.m3u8",
+     "id": "c023",
+     "visible": true
+    },
+    {
+     "name": "Invasiva TV",
+     "type": "m3u8",
+     "url": "https://video.wilohosting.com:19360/invasivatv/invasivatv.m3u8",
+     "id": "c024",
+     "visible": true
+    },
+    {
+     "name": "San Cristóbal FM TV",
+     "type": "m3u8",
+     "url": "https://video.wilohosting.com:19360/sancristobalfm/sancristobalfm.m3u8",
+     "id": "c025",
+     "visible": true
+    },
+    {
+     "name": "MasTV (Encarnación)",
+     "type": "m3u8",
+     "url": "https://59ce1298bfb98.streamlock.net/mastv/mastv/playlist.m3u8",
+     "id": "c026",
+     "visible": true
+    },
+    {
+     "name": "TV al Aire (Caaguazú)",
+     "type": "m3u8",
+     "url": "https://video.hostingcaaguazu.com:19360/tvairepy/tvairepy.m3u8",
+     "id": "c027",
+     "visible": true
+    },
+    {
+     "name": "Cadena Master TV",
+     "type": "m3u8",
+     "url": "https://video.wilohosting.com:19360/cadenamastertv/cadenamastertv.m3u8",
+     "id": "c028",
+     "visible": true
+    },
+    {
+     "name": "Simplemente Cielo TV",
+     "type": "m3u8",
+     "url": "https://video.wilohosting.com:19360/simplementecielo/simplementecielo.m3u8",
+     "id": "c029",
+     "visible": true
+    },
+    {
+     "name": "Alcance FM Play TV",
+     "type": "m3u8",
+     "url": "https://video.wilohosting.com:19360/alcancefmtv/alcancefmtv.m3u8",
+     "id": "c030",
+     "visible": true
+    },
+    {
+     "name": "Almaya TV",
+     "type": "m3u8",
+     "url": "https://video.hostingcaaguazu.com:19360/almayatv/almayatv.m3u8",
+     "id": "c031",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "ar-1",
+   "kind": "tv",
+   "title": "🇦🇷 Argentina",
+   "items": [
+    {
+     "name": "El Trece",
+     "id": "ar_eltrece",
+     "url": "https://livetrx01.vodgc.net/eltrecetv/index.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "El Trece Alt 🇦🇷",
+     "id": "ar_eltrece_alt",
+     "url": "",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin link en canales.json"
+    },
+    {
+     "name": "Net TV",
+     "id": "ar_nettv",
+     "url": "https://unlimited1-us.dps.live/nettv/nettv.smil/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Telefe",
+     "type": "m3u8",
+     "url": "https://orbitatv.netlify.app/.netlify/functions/proxy-manifest?canal=telefe",
+     "id": "c032",
+     "visible": true
+    },
+    {
+     "name": "Telefe Internacional",
+     "type": "m3u8",
+     "url": "https://orbitatv.netlify.app/.netlify/functions/proxy-manifest?canal=telefeintl",
+     "id": "c033",
+     "visible": true
+    },
+    {
+     "name": "Chaco TV",
+     "id": "ar_chacotv",
+     "url": "https://wowzasrv.chaco.gov.ar/Streamtv/chacotv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Argentinisima",
+     "id": "ar_argentinisima",
+     "url": "https://stream1.sersat.com/hls/argentinisima.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "ESPN",
+     "id": "ar_espn",
+     "url": "https://embed.saohgdasregions.fun/embed2/espn.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "ESPN 2",
+     "id": "ar_espn2",
+     "url": "https://embed.saohgdasregions.fun/embed2/espn2.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "ESPN 3",
+     "id": "ar_espn3",
+     "url": "https://embed.saohgdasregions.fun/embed2/espn3.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "ESPN AR",
+     "id": "ar_espnar",
+     "url": "https://embed.saohgdasregions.fun/embed2/espnar.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "ESPN Premium",
+     "id": "ar_espnpremium",
+     "url": "https://embed.saohgdasregions.fun/embed2/espnpremiumargentina.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TyC Sports",
+     "id": "ar_tycsports",
+     "url": "https://embed.saohgdasregions.fun/embed2/tycsports.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TNT Sports",
+     "id": "ar_tntsports",
+     "url": "https://embed.saohgdasregions.fun/embed2/tntsports.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports",
+     "id": "ar_foxsports",
+     "url": "https://embed.saohgdasregions.fun/embed2/foxsports.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports 2",
+     "id": "ar_foxsports2",
+     "url": "https://embed.saohgdasregions.fun/embed2/foxsports2.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "DirecTV Sports",
+     "id": "ar_directvsports",
+     "url": "https://embed.saohgdasregions.fun/embed2/directvsports.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "DirecTV Sports 2",
+     "id": "ar_directvsports2",
+     "url": "https://embed.saohgdasregions.fun/embed2/directvsports2.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TNT",
+     "id": "ar_tnt",
+     "url": "https://embed.saohgdasregions.fun/embed2/tnt.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Warner Bros",
+     "id": "ar_warner",
+     "url": "https://embed.saohgdasregions.fun/embed2/warnerchannel.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TNT Novelas",
+     "id": "ar_tntnovelas",
+     "url": "https://embed.saohgdasregions.fun/embed2/tntnovelas.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Space",
+     "id": "ar_space",
+     "url": "https://embed.saohgdasregions.fun/embed2/space.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "AXN",
+     "id": "ar_axn",
+     "url": "https://embed.saohgdasregions.fun/embed2/axn.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Sony",
+     "id": "ar_sony",
+     "url": "https://embed.saohgdasregions.fun/embed2/sony.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Cinemax",
+     "id": "ar_cinemax",
+     "url": "https://embed.saohgdasregions.fun/embed2/cinemax.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Multipremier",
+     "id": "ar_multipremier",
+     "url": "https://embed.saohgdasregions.fun/embed2/multipremier.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Star Channel",
+     "id": "ar_starchannel",
+     "url": "https://embed.saohgdasregions.fun/embed2/starchannel.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Golden Premier",
+     "id": "ar_goldenpremier",
+     "url": "https://embed.saohgdasregions.fun/embed2/goldenpremier.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Golden Edge",
+     "id": "ar_goldenedge",
+     "url": "https://embed.saohgdasregions.fun/embed2/goldenedge.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Golden Plus",
+     "id": "ar_goldenplus",
+     "url": "https://embed.saohgdasregions.fun/embed2/goldenplus.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Nat Geo",
+     "id": "ar_natgeo",
+     "url": "https://embed.saohgdasregions.fun/embed2/natgeo.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Discovery",
+     "id": "ar_discovery",
+     "url": "https://embed.saohgdasregions.fun/embed2/discoverychannel.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "History",
+     "id": "ar_history",
+     "url": "https://embed.saohgdasregions.fun/embed2/history.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "History 2",
+     "id": "ar_history2",
+     "url": "https://embed.saohgdasregions.fun/embed2/history2.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Animal Planet",
+     "id": "ar_animalplanet",
+     "url": "https://embed.saohgdasregions.fun/embed2/animalplanet.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "AMC",
+     "id": "ar_amc",
+     "url": "https://embed.saohgdasregions.fun/embed2/amc.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Disney Channel",
+     "id": "ar_disney",
+     "url": "https://embed.saohgdasregions.fun/embed2/disneychannel.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Cartoon Network",
+     "id": "ar_cartoon",
+     "url": "https://embed.saohgdasregions.fun/embed2/cartoonnetwork.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Tooncast",
+     "id": "ar_tooncast",
+     "url": "https://embed.saohgdasregions.fun/embed2/tooncast.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "FM Hot Kids",
+     "id": "ar_fmhotkids",
+     "url": "https://embed.saohgdasregions.fun/embed2/fmhotkids.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TN Noticias",
+     "id": "ar_tnnoticias",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCj6PcyLvpnIRT_2W_mwa9Aw&autoplay=1",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "A24 (Arg)",
+     "id": "ar_a24",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCR9120YBAqMfntqgRTKmkjQ&autoplay=1",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Garage TV 🇦🇷",
+     "id": "ar_garagetv",
+     "url": "https://stream1.sersat.com/hls/garagetv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Radio Iguazú TV 🇦🇷",
+     "id": "ar_radioiguazutv",
+     "url": "https://edge.enhdtv.com/radioiguazutv/tracks-v1a1/mono.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal 3 Formosa 🇦🇷",
+     "id": "ar_canal3formosa",
+     "url": "https://stmvideo6.livecastv.com/agenfor/agenfor/chunklist_w1596158215.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal 4 Posadas 🇦🇷",
+     "id": "ar_canal4posadas",
+     "url": "https://iptv.ixfo.com.ar:30443/live/C4POS/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal Doce Posadas 🇦🇷",
+     "type": "iframe",
+     "url": "https://vmf.edge-apps.net/embed/live.php?streamname=c12_live01-100129&autoplay=true",
+     "id": "c034",
+     "visible": true
+    },
+    {
+     "name": "TV Radio Posadas 🇦🇷",
+     "type": "m3u8",
+     "url": "https://media.radios.ar:19360/8006/8006.m3u8",
+     "id": "c035",
+     "visible": true
+    },
+    {
+     "name": "Neo TV 🇦🇷",
+     "id": "ar_neotv",
+     "url": "https://videostream.shockmedia.com.ar:19360/neotvdigital/neotvdigital.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Noticias 24/7 🇦🇷",
+     "id": "ar_noticias247",
+     "url": "https://panel.host-live.com:19360/cn247tv/360p.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal 11 Misiones 🇦🇷",
+     "type": "m3u8",
+     "url": "https://live.enhdtv.com:8081/canal11iguazu/tracks-v1a1/mono.m3u8",
+     "id": "c036",
+     "visible": true
+    },
+    {
+     "name": "Canal 26 🇦🇷",
+     "type": "m3u8",
+     "url": "https://stream-gtlc.telecentro.net.ar/hls/canal26hls/main.m3u8",
+     "id": "c037",
+     "visible": true
+    },
+    {
+     "name": "Canal E 🇦🇷",
+     "type": "m3u8",
+     "url": "https://unlimited1-saopaulo.dps.live/perfiltv/perfiltv.smil/playlist.m3u8",
+     "id": "c038",
+     "visible": true
+    },
+    {
+     "name": "24/7 Noticias Neuquén 🇦🇷",
+     "type": "m3u8",
+     "url": "https://panel.host-live.com:19360/cn247tv/Source.m3u8",
+     "id": "c039",
+     "visible": true
+    },
+    {
+     "name": "Telemax 🇦🇷",
+     "type": "m3u8",
+     "url": "https://stream-gtlc.telecentro.net.ar/hls/telemaxhls/main.m3u8",
+     "id": "c040",
+     "visible": true
+    },
+    {
+     "name": "Ciudad Magazine 🇦🇷",
+     "type": "m3u8",
+     "url": "https://livetrx01.vodgc.net/live-01-07-ciudad.vodgc.net/tracks-v1a1/mono.m3u8",
+     "id": "c041",
+     "visible": true
+    },
+    {
+     "name": "Amazon Sat 🇦🇷",
+     "type": "m3u8",
+     "url": "https://amazonsat.brasilstream.com.br/hls/amazonsat/index.m3u8",
+     "id": "c042",
+     "visible": true
+    },
+    {
+     "name": "Crónica TV 🇦🇷",
+     "id": "ar_cronicatv",
+     "url": "https://www.youtube.com/c/cronicatv/live",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "C5N 🇦🇷",
+     "id": "ar_c5n",
+     "url": "https://www.youtube.com/c/c5n/live",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "LN+ 🇦🇷",
+     "id": "ar_lnmas",
+     "url": "https://www.youtube.com/c/LaNacionMas/live",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Encuentro 🇦🇷",
+     "id": "ar_encuentro",
+     "url": "https://www.youtube.com/user/encuentro/live",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Pakapaka 🇦🇷",
+     "id": "ar_pakapaka",
+     "url": "https://www.youtube.com/user/CanalPakapaka/live",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Bayres TV 🇦🇷",
+     "id": "ar_bayrestv",
+     "url": "https://streaming02.gbasat.com.ar:19360/bayrestv/bayrestv.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal 6 Posadas 🇦🇷",
+     "id": "ar_canal6posadas",
+     "url": "https://iptv.ixfo.com.ar:30443/live/c6digital/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal 21 TV 🇦🇷",
+     "id": "ar_canal21tv",
+     "url": "https://iptv.ixfo.com.ar:30443/c21tv/hd/c21tv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Encantador de Perros TV 🇦🇷",
+     "id": "ar_encantadorperros",
+     "url": "https://jmp2.uk/plu-60e45687313c5f0007bc8e94.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Aunar 🇦🇷",
+     "id": "ar_aunar",
+     "url": "https://5fb24b460df87.streamlock.net/live-cont.ar/mirador/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Cine.AR 🇦🇷",
+     "id": "ar_cinear",
+     "url": "https://5fb24b460df87.streamlock.net/live-cont.ar/cinear/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Tec TV 🇦🇷",
+     "id": "ar_tectv",
+     "url": "https://tv.initium.net.ar:3939/live/tectvmainlive.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "DeporTV 🇦🇷",
+     "id": "ar_deportv",
+     "url": "https://5fb24b460df87.streamlock.net/live-cont.ar/deportv/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "El Nueve 🇦🇷",
+     "id": "ar_elnueve",
+     "url": "https://octubre-live.cdn.vustreams.com/live/channel09/live.isml/live.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Universidad 🇦🇷",
+     "id": "ar_tvuniversidad",
+     "url": "https://stratus.stream.cespi.unlp.edu.ar/hls/tvunlp.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Pública 🇦🇷",
+     "id": "ar_tvpublica",
+     "url": "https://www.youtube.com/user/TVPublicaArgentina/live",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "América TV 🇦🇷",
+     "id": "ar_america",
+     "url": "https://www.youtube.com/c/americaenvivo/live",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal 9 🇦🇷",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCUT4NmGqjrVpKf2JyiS_bbA&autoplay=1",
+     "id": "c043",
+     "visible": true
+    },
+    {
+     "name": "5TV Corrientes 🇦🇷",
+     "type": "m3u8",
+     "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
+     "id": "c044",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "br-1",
+   "kind": "tv",
+   "title": "🇧🇷 Brasil",
+   "items": [
+    {
+     "name": "FOZ TV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://videostreamingserver.septecloud.com.br/memfs/6154fa08-b4c2-4e8f-aba8-1c5a38399d47_output_0.m3u8?session=9TUFkY64rd5Ku7FyRWMbMB",
+     "id": "c045",
+     "visible": true
+    },
+    {
+     "name": "Globo SP 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cors-proxy.cooks.fyi/http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8",
+     "id": "c046",
+     "visible": true
+    },
+    {
+     "name": "Globo RJ 🇧🇷",
+     "type": "iframe",
+     "url": "https://w1.embedtv.live/globorj",
+     "id": "c047",
+     "visible": true
+    },
+    {
+     "name": "TV Cultura 🇧🇷",
+     "id": "br_tvcultura",
+     "url": "https://player-tvcultura.stream.uol.com.br/live/tvcultura.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Brasil 🇧🇷",
+     "id": "br_tvbrasil",
+     "url": "https://tvbrasil-stream.ebc.com.br/index.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Band SP 🇧🇷",
+     "id": "br_bandsp",
+     "url": "https://cdn.live.br1.jmvstream.com/w/LVW-15748/LVW15748_Yed7yzLuRC/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Record News YT 🇧🇷",
+     "id": "br_recordnews",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCuiLR4p6wQ3xLEm15pEn1Xw&autoplay=1",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "RedeTV PR 🇧🇷",
+     "id": "br_redetv",
+     "url": "https://tv01.zas.media:1936/redetvparana/redetvparana/chunklist_w1128736808.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "SBT SP 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn.live.br1.jmvstream.com/w/LVW-10801/LVW10801_Xvg4R0u57n/chunklist.m3u8",
+     "id": "c048",
+     "visible": true
+    },
+    {
+     "name": "Master TV 🇧🇷",
+     "id": "br_mastertv",
+     "url": "https://lbgo.bozztv.com/ssh101/ssh101/mastertvrede/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Cindie TV 🇧🇷",
+     "id": "br_cindietv",
+     "url": "https://cc-hqw8u5r1nshjc.akamaized.net/scheduler/scheduleMaster/352/variant/22099961.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TVE RS 🇧🇷",
+     "id": "br_tvers",
+     "url": "https://streaming.procergs.com.br:8443/tve/stve/chunklist_w267094954.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Life América 🇧🇷",
+     "id": "br_tvlifeamerica",
+     "url": "https://streaming.cloudecast.com/hls/tvlifeamerica/index.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV UFOP 🇧🇷",
+     "id": "br_tvufop",
+     "url": "https://app.tvufop.com.br/hls/tvufop.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Nicktoons BR 🇧🇷",
+     "id": "br_nicktoons",
+     "url": "https://stmv2.srvif.com/nicktoons/nicktoons/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Series 🇧🇷",
+     "id": "br_tvseries",
+     "url": "https://stmv1.srvif.com/tvserie/tvserie/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "AWTV 🇧🇷",
+     "id": "br_awtv",
+     "url": "https://awtv.nuvemplay.live/hls/stream.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Câmara 🇧🇷",
+     "id": "br_tvcamara",
+     "url": "https://stream3.camara.gov.br/tv1/manifest.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TV Paranaense 🇧🇷",
+     "id": "br_tvparanaense",
+     "url": "https://video09.logicahost.com.br/tvparaense/tvparaense/chunklist_w532657198.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal Gov 🇧🇷",
+     "type": "m3u8",
+     "url": "https://canalgov-stream.ebc.com.br/index.m3u8",
+     "id": "c049",
+     "visible": true
+    },
+    {
+     "name": "CazéTV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8",
+     "id": "c050",
+     "visible": true
+    },
+    {
+     "name": "Kids Mais 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv1.transmissaodigital.com/tvkidmais/tvkidmais/chunklist_w1182051824.m3u8",
+     "id": "c051",
+     "visible": true
+    },
+    {
+     "name": "Alpha Channel 🇧🇷",
+     "type": "m3u8",
+     "url": "https://maystreaming.cloudecast.com/alphachannel/tracks-v1a1/mono.m3u8",
+     "id": "c052",
+     "visible": true
+    },
+    {
+     "name": "Rede UTV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://utvsoultv.acessaradios.com.br/utvsoultv/utvsoultv.stream/chunklist_w169959336.m3u8",
+     "id": "c053",
+     "visible": true
+    },
+    {
+     "name": "RS Sports 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video07-logicahost-com-br.smartbit.co/rssports01/rssports01/playlist.m3u8",
+     "id": "c054",
+     "visible": true
+    },
+    {
+     "name": "Carioca TV Intl 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video03-logicahost-com-br.smartbit.co/cariocainternacional1/cariocainternacional1/playlist.m3u8",
+     "id": "c055",
+     "visible": true
+    },
+    {
+     "name": "ISTV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video10-logicahost-com-br.smartbit.co/redeistv/redeistv/playlist.m3u8",
+     "id": "c056",
+     "visible": true
+    },
+    {
+     "name": "Play TV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-maystreaming-cloudecast-com.smartbit.co/playtv/tracks-v1a1/mono.m3u8",
+     "id": "c057",
+     "visible": true
+    },
+    {
+     "name": "Series Classic 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video10-logicahost-com-br.smartbit.co/serieclassic/serieclassic/playlist.m3u8",
+     "id": "c058",
+     "visible": true
+    },
+    {
+     "name": "TV Estilo 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-stmv8-samcast-com-br.smartbit.co/tvestilo/tvestilo/playlist.m3u8",
+     "id": "c059",
+     "visible": true
+    },
+    {
+     "name": "TV Grande Natal 🇧🇷",
+     "type": "m3u8",
+     "url": "https://tvgrandenatalhdtv.duckdns.org:3334/hls/live.m3u8",
+     "id": "c060",
+     "visible": true
+    },
+    {
+     "name": "Play TV Horse 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video04-logicahost-com-br.smartbit.co/playtvhorse/playtvhorse/chunklist_w569336794.m3u8",
+     "id": "c061",
+     "visible": true
+    },
+    {
+     "name": "Rede QDM 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv1.transmissaodigital.com/redeqdm/redeqdm/chunklist_w384920276.m3u8",
+     "id": "c062",
+     "visible": true
+    },
+    {
+     "name": "TV A Folha 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video01-logicahost-com-br.smartbit.co/tvafolha/tvafolha/playlist.m3u8",
+     "id": "c063",
+     "visible": true
+    },
+    {
+     "name": "Com Brasil 🇧🇷",
+     "type": "m3u8",
+     "url": "https://br5093.streamingdevideo.com.br/abc/abc/playlist.m3u8",
+     "id": "c064",
+     "visible": true
+    },
+    {
+     "name": "TV Sonata 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video04-logicahost-com-br.smartbit.co/isonata/isonata/chunklist_w284164311.m3u8",
+     "id": "c065",
+     "visible": true
+    },
+    {
+     "name": "TV Mon 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video10-logicahost-com-br.smartbit.co/tvmon/tvmon/chunklist_w357946024.m3u8",
+     "id": "c066",
+     "visible": true
+    },
+    {
+     "name": "TV Marataizes 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stream-247788.castr.net/68ad1a7c724a6928f050ebba/live_c67f6fc057df11f182b1a9753cb65ff7/tracks-v1a1/mono.ts.m3u8",
+     "id": "c067",
+     "visible": true
+    },
+    {
+     "name": "Amazon Sat 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-amazonsat-brasilstream-com-br.smartbit.co/hls/amazonsat/index.m3u8",
+     "id": "c068",
+     "visible": true
+    },
+    {
+     "name": "TV Judaica 🇧🇷",
+     "type": "m3u8",
+     "url": "https://br5093.streamingdevideo.com.br/tvjudaica/tvjudaica/chunklist_w843805359.m3u8",
+     "id": "c069",
+     "visible": true
+    },
+    {
+     "name": "Retro Cartoons 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv1.video.brstream.com.br/retrotv/retrotv/chunklist_w2123171764.m3u8",
+     "id": "c070",
+     "visible": true
+    },
+    {
+     "name": "Lucas TV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv1.srvif.com/lucastv/lucastv/playlist.m3u8",
+     "id": "c071",
+     "visible": true
+    },
+    {
+     "name": "Dragon Ball BR 🇧🇷",
+     "id": "br_dragonball",
+     "url": "https://w1.embedtv.live/24h_dragonball",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "My Time 🇧🇷",
+     "id": "br_mytime",
+     "url": "https://appletree-mytime-samsungbrazil.amagi.tv/playlist720p.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Classique TV 🇧🇷",
+     "id": "br_classiquetv",
+     "url": "https://stmv1.srvif.com/classique/classique/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Gospel TV 🇧🇷",
+     "id": "br_gospeltv",
+     "url": "https://stmv1.srvif.com/gospelf/gospelf/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Trianon TV 🇧🇷",
+     "id": "br_trianontv",
+     "url": "https://amogonetworx-grjngo-1-eu.plex.wurl.tv/4300.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TVC Panorama 🇧🇷",
+     "id": "br_tvcpanorama",
+     "url": "https://tv02.zas.media:1936/panorama/panorama/chunklist_w1211386247.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Alpha Channel 🇧🇷",
+     "type": "m3u8",
+     "url": "https://maystreaming.cloudecast.com/alphachannel/tracks-v1a1/mono.m3u8",
+     "id": "c072",
+     "visible": true
+    },
+    {
+     "name": "Rede UTV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://utvsoultv.acessaradios.com.br/utvsoultv/utvsoultv.stream/chunklist_w169959336.m3u8",
+     "id": "c073",
+     "visible": true
+    },
+    {
+     "name": "RS Sports 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video07-logicahost-com-br.smartbit.co/rssports01/rssports01/playlist.m3u8",
+     "id": "c074",
+     "visible": true
+    },
+    {
+     "name": "Carioca TV Intl 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video03-logicahost-com-br.smartbit.co/cariocainternacional1/cariocainternacional1/playlist.m3u8",
+     "id": "c075",
+     "visible": true
+    },
+    {
+     "name": "ISTV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video10-logicahost-com-br.smartbit.co/redeistv/redeistv/playlist.m3u8",
+     "id": "c076",
+     "visible": true
+    },
+    {
+     "name": "Play TV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-maystreaming-cloudecast-com.smartbit.co/playtv/tracks-v1a1/mono.m3u8",
+     "id": "c077",
+     "visible": true
+    },
+    {
+     "name": "Series Classic 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video10-logicahost-com-br.smartbit.co/serieclassic/serieclassic/playlist.m3u8",
+     "id": "c078",
+     "visible": true
+    },
+    {
+     "name": "TV Estilo 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-stmv8-samcast-com-br.smartbit.co/tvestilo/tvestilo/playlist.m3u8",
+     "id": "c079",
+     "visible": true
+    },
+    {
+     "name": "TV Grande Natal 🇧🇷",
+     "type": "m3u8",
+     "url": "https://tvgrandenatalhdtv.duckdns.org:3334/hls/live.m3u8",
+     "id": "c080",
+     "visible": true
+    },
+    {
+     "name": "Play TV Horse 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video04-logicahost-com-br.smartbit.co/playtvhorse/playtvhorse/chunklist_w569336794.m3u8",
+     "id": "c081",
+     "visible": true
+    },
+    {
+     "name": "Rede QDM 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv1.transmissaodigital.com/redeqdm/redeqdm/chunklist_w384920276.m3u8",
+     "id": "c082",
+     "visible": true
+    },
+    {
+     "name": "TV A Folha 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video01-logicahost-com-br.smartbit.co/tvafolha/tvafolha/playlist.m3u8",
+     "id": "c083",
+     "visible": true
+    },
+    {
+     "name": "Com Brasil 🇧🇷",
+     "type": "m3u8",
+     "url": "https://br5093.streamingdevideo.com.br/abc/abc/playlist.m3u8",
+     "id": "c084",
+     "visible": true
+    },
+    {
+     "name": "TV Sonata 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video04-logicahost-com-br.smartbit.co/isonata/isonata/chunklist_w284164311.m3u8",
+     "id": "c085",
+     "visible": true
+    },
+    {
+     "name": "TV Mon 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-video10-logicahost-com-br.smartbit.co/tvmon/tvmon/chunklist_w357946024.m3u8",
+     "id": "c086",
+     "visible": true
+    },
+    {
+     "name": "TV Marataizes 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stream-247788.castr.net/68ad1a7c724a6928f050ebba/live_c67f6fc057df11f182b1a9753cb65ff7/tracks-v1a1/mono.ts.m3u8",
+     "id": "c087",
+     "visible": true
+    },
+    {
+     "name": "Amazon Sat 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn-tiva-amazonsat-brasilstream-com-br.smartbit.co/hls/amazonsat/index.m3u8",
+     "id": "c088",
+     "visible": true
+    },
+    {
+     "name": "TV Judaica 🇧🇷",
+     "type": "m3u8",
+     "url": "https://br5093.streamingdevideo.com.br/tvjudaica/tvjudaica/chunklist_w843805359.m3u8",
+     "id": "c089",
+     "visible": true
+    },
+    {
+     "name": "SBT SP 🇧🇷",
+     "type": "m3u8",
+     "url": "https://cdn.live.br1.jmvstream.com/w/LVW-10801/LVW10801_Xvg4R0u57n/chunklist.m3u8",
+     "id": "c090",
+     "visible": true
+    },
+    {
+     "name": "Retro Cartoons 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv1.video.brstream.com.br/retrotv/retrotv/chunklist_w2123171764.m3u8",
+     "id": "c091",
+     "visible": true
+    },
+    {
+     "name": "Lucas TV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv1.srvif.com/lucastv/lucastv/playlist.m3u8",
+     "id": "c092",
+     "visible": true
+    },
+    {
+     "name": "TV História 🇧🇷",
+     "type": "m3u8",
+     "url": "https://video10.logicahost.com.br/tvhistoria/tvhistoria/chunklist_w232165329.m3u8",
+     "id": "c093",
+     "visible": true
+    },
+    {
+     "name": "Cine Kids 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv4.voxtvhd.com.br/1990/1990/playlist.m3u8?hls_ctx=96y0h080",
+     "id": "c094",
+     "visible": true
+    },
+    {
+     "name": "Cine ISTV 🇧🇷",
+     "type": "m3u8",
+     "url": "https://stmv1.srvstm.com/sistema7933/sistema7933/playlist.m3u8",
+     "id": "c095",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "latam-1",
+   "kind": "tv",
+   "title": "🌎 LATAM",
+   "items": [
+    {
+     "name": "ESPN 3",
+     "id": "latam_espn3",
+     "url": "https://embed.saohgdasregions.fun/embed2/espn3.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "ESPN 4",
+     "id": "latam_espn4",
+     "url": "https://embed.saohgdasregions.fun/embed2/espn4.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "ESPN Premium",
+     "id": "latam_espnpremium",
+     "url": "https://embed.saohgdasregions.fun/embed2/espnpremium.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TNT Sports",
+     "id": "latam_tntsports",
+     "url": "https://embed.saohgdasregions.fun/embed2/tntsports.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports",
+     "id": "latam_foxsports",
+     "url": "https://embed.saohgdasregions.fun/embed2/foxsports.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports 2",
+     "id": "latam_foxsports2",
+     "url": "https://embed.saohgdasregions.fun/embed2/foxsports2.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports 3",
+     "id": "latam_foxsports3",
+     "url": "https://embed.saohgdasregions.fun/embed2/foxsports3.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "DirecTV Sports",
+     "id": "latam_directvsports",
+     "url": "https://embed.saohgdasregions.fun/embed2/directvsports.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "DirecTV Sports 2",
+     "id": "latam_directvsports2",
+     "url": "https://embed.saohgdasregions.fun/embed2/directvsports2.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "TyC Sports",
+     "id": "latam_tycsports",
+     "url": "https://embed.saohgdasregions.fun/embed2/tycsports.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "DAZN F1",
+     "id": "latam_daznf1",
+     "url": "https://embed.saohgdasregions.fun/embed2/daznf1.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Nat Geo",
+     "id": "latam_natgeo",
+     "url": "https://embed.saohgdasregions.fun/embed2/natgeo.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Discovery",
+     "id": "latam_discovery",
+     "url": "https://embed.saohgdasregions.fun/embed2/discoverychannel.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "History",
+     "id": "latam_history",
+     "url": "https://embed.saohgdasregions.fun/embed2/history.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "History 2",
+     "id": "latam_history2",
+     "url": "https://embed.saohgdasregions.fun/embed2/history2.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Animal Planet",
+     "id": "latam_animalplanet",
+     "url": "https://embed.saohgdasregions.fun/embed2/animalplanet.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Disney Channel",
+     "id": "latam_disney",
+     "url": "https://embed.saohgdasregions.fun/embed2/disneychannel.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Cartoon Network",
+     "id": "latam_cartoon",
+     "url": "https://embed.saohgdasregions.fun/embed2/cartoonnetwork.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "CNN",
+     "id": "latam_cnn",
+     "url": "https://embed.saohgdasregions.fun/embed2/cnn.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "RCN",
+     "id": "latam_rcn",
+     "url": "https://embed.saohgdasregions.fun/embed2/rcn.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Caracol",
+     "id": "latam_caracol",
+     "url": "https://embed.saohgdasregions.fun/embed2/caracol.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "América TV",
+     "id": "latam_americatv",
+     "url": "https://embed.saohgdasregions.fun/embed2/americatv.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Univision",
+     "id": "latam_univision",
+     "url": "https://embed.saohgdasregions.fun/embed2/univision.php",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Simpsons Latino 🇪🇸",
+     "id": "latam_simpsonslatino",
+     "url": "https://lbgo.bozztv.com/ssh101/ssh101/simptestnews/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "El Financiero",
+     "id": "latam_elfinanciero",
+     "url": "https://www.dailymotion.com/embed/video/x90qe0k?autoplay=1",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Cinecanal 🎬",
+     "type": "m3u8",
+     "url": "http://138.121.15.230:9002/CINECANAL/index.m3u8",
+     "id": "c096",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "latam-2",
+   "kind": "tv",
+   "title": "🇧🇴 Bolivia & Uruguay",
+   "items": [
+    {
+     "name": "BTV Bolivia",
+     "id": "btv_bolivia",
+     "url": "https://www.dailymotion.com/embed/video/x9ny70y?autoplay=1",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "La Costa TV",
+     "id": "lacosta_uy",
+     "url": "https://hostingservicios.info/hls/tv-la-costa.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Prattel TV 🇵🇪",
+     "id": "prattel_pe",
+     "url": "https://lbgo.bozztv.com/ssh101/ssh101/pratteltvperu/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Canal 23 🇳🇮",
+     "id": "canal23_ni",
+     "url": "https://lbgo.bozztv.com/ssh101/ssh101/canal23cdnn/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Italia 9",
+     "id": "italia9",
+     "url": "https://lbgo.bozztv.com/ssh101/ssh101/italia9network/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Bolivisión",
+     "id": "bolivision",
+     "url": "https://alba-bo-bolivision-bolivision.stream.mediatiquestream.com/original.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "FTV Bolivia",
+     "id": "ftv_bolivia",
+     "url": "https://master.tucableip.com/ftvhd/tracks-v1a1/mono.ts.m3u8",
+     "type": "auto",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "latam-3",
+   "kind": "tv",
+   "title": "🇨🇴 Colombia",
+   "items": [
+    {
+     "name": "TV Colombia",
+     "type": "m3u8",
+     "url": "https://cloud6.livescast.com:3900/live/tevecolombialive.m3u8",
+     "id": "c097",
+     "visible": true
+    },
+    {
+     "name": "TDI Colombia",
+     "type": "m3u8",
+     "url": "https://live.amelbatv.co:81/tdicolombiatv/index.m3u8",
+     "id": "c098",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "latam-4",
+   "kind": "tv",
+   "title": "🇵🇷 Puerto Rico",
+   "items": [
+    {
+     "name": "Triunfo TV",
+     "type": "m3u8",
+     "url": "https://59825a54e4454.streamlock.net:8443/william652/william652/playlist.m3u8",
+     "id": "c099",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "latam-5",
+   "kind": "tv",
+   "title": "🇨🇱 Chile",
+   "items": [
+    {
+     "name": "TeVex",
+     "id": "cl_tevex",
+     "url": "https://v4.tustreaming.cl/tevexinter/tracks-v1a1/mono.ts.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Chile Channel",
+     "id": "cl_chilechannel",
+     "url": "https://v2.tustreaming.cl/chilechannel/tracks-v1a1/mono.ts.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Click TV",
+     "id": "cl_clicktv",
+     "url": "https://v2.tustreaming.cl/clicktv/tracks-v1a1/mono.ts.m3u8",
+     "type": "auto",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "latam-6",
+   "kind": "tv",
+   "title": "🌏 Asia & Europa",
+   "items": [
+    {
+     "name": "Baicheng TV",
+     "id": "cn_baichengtv",
+     "url": "https://stream2.jlntv.cn/baicheng1/sd/live.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "CGNTV Japan",
+     "id": "jp_cgntv",
+     "url": "https://d2p4mrcwl6ly4.cloudfront.net/out/v1/8d50f69fdbbf411a8d302743e4263716/CGNWebLiveJP_4.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Eveo",
+     "id": "fi_eveo",
+     "url": "https://live-fi.tvkaista.net/eveo/live.m3u8?hd=true",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "World of Freesports",
+     "id": "de_freesports",
+     "url": "https://rakutenaa-mainstreammediafreesportsintl-rakuten-t7dc0.amagi.tv/playlist/rakutenAA-mainstreammediafreesportsintl-rakuten/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "RIC TV",
+     "id": "de_rictv",
+     "url": "https://rictv.iptv-playoutcenter.de/rictv/rictv-web/playlist.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "Grjngo Western",
+     "id": "de_grjngo",
+     "url": "https://amogonetworx-grjngo-3-dk.samsung.wurl.tv/1200.m3u8",
+     "type": "auto",
+     "visible": true
+    },
+    {
+     "name": "DW Español",
+     "type": "m3u8",
+     "url": "https://dwamdstream104.akamaized.net/hls/live/2015530/dwstream104/master.m3u8",
+     "id": "c100",
+     "visible": true
+    },
+    {
+     "name": "France 24 ES",
+     "type": "m3u8",
+     "url": "https://live.france24.com/hls/live/2037220-b/F24_ES_HI_HLS/master_5000.m3u8",
+     "id": "c101",
+     "visible": true
+    },
+    {
+     "name": "RT Español",
+     "type": "m3u8",
+     "url": "https://rt-esp.rttv.com/live/rtesp/playlist.m3u8",
+     "id": "c102",
+     "visible": true
+    },
+    {
+     "name": "TeleSUR",
+     "type": "m3u8",
+     "url": "https://mblesmain01.telesur.ultrabase.net/mbliveMain/hd/chunklist.m3u8",
+     "id": "c103",
+     "visible": true
+    },
+    {
+     "name": "Cine Premium Latino 🎬",
+     "type": "m3u8",
+     "url": "http://181.78.197.59:8000/play/a084/index.m3u8",
+     "id": "c104",
+     "visible": true
+    },
+    {
+     "name": "Canal D Drama 🎭",
+     "type": "m3u8",
+     "url": "http://181.78.197.59:8000/play/a07x/index.m3u8",
+     "id": "c105",
+     "visible": true
+    },
+    {
+     "name": "Nat Geo USA",
+     "type": "m3u8",
+     "url": "http://181.78.197.59:8000/play/a083/index.m3u8",
+     "id": "c106",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "deportes-1",
+   "kind": "tv",
+   "title": null,
+   "items": [
+    {
+     "name": "ESPN USA 🇺🇸 ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=944688&extension=m3u8",
+     "id": "c107",
+     "visible": true
+    },
+    {
+     "name": "ESPN 2 USA 🇺🇸 ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=944689&extension=m3u8",
+     "id": "c108",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports USA 🇺🇸 ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=944690&extension=m3u8",
+     "id": "c109",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports 2 USA 🇺🇸 ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=944691&extension=m3u8",
+     "id": "c110",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports 3 USA 🇺🇸 ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=944692&extension=m3u8",
+     "id": "c111",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports 4 USA 🇺🇸 ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=944693&extension=m3u8",
+     "id": "c112",
+     "visible": true
+    },
+    {
+     "name": "DSports ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=1090674&extension=m3u8",
+     "id": "c113",
+     "visible": true
+    },
+    {
+     "name": "DSports 2 ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=1090675&extension=m3u8",
+     "id": "c114",
+     "visible": true
+    },
+    {
+     "name": "DSports Latino ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=1090676&extension=m3u8",
+     "id": "c115",
+     "visible": true
+    },
+    {
+     "name": "Fox Sports Latino ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=1090677&extension=m3u8",
+     "id": "c116",
+     "visible": true
+    },
+    {
+     "name": "Sport TV 2 🇧🇷 ⚽",
+     "type": "m3u8",
+     "url": "http://line.watchtivo-8k.com:80/play/live.php?mac=00:1A:79:3F:0C:96&stream=959345&extension=m3u8",
+     "id": "c117",
+     "visible": true
+    },
+    {
+     "name": "ESPN Latino ⚽",
+     "type": "m3u8",
+     "url": "http://181.78.197.59:8000/play/a07z/index.m3u8",
+     "id": "c118",
+     "visible": true
+    },
+    {
+     "name": "ESPN 3 Latino ⚽",
+     "type": "m3u8",
+     "url": "http://181.78.197.59:8000/play/a081/index.m3u8",
+     "id": "c119",
+     "visible": true
+    },
+    {
+     "name": "Sky Sports F1 🏎️",
+     "type": "m3u8",
+     "url": "http://line.tivi-one.net:80/play/live.php?mac=00:1A:79:3B:4A:A8&stream=1312181&extension=m3u8",
+     "id": "c120",
+     "visible": true
+    },
+    {
+     "name": "Sky Sports Action ⚽",
+     "type": "m3u8",
+     "url": "http://line.tivi-one.net:80/play/live.php?mac=00:1A:79:3B:4A:A8&stream=1312180&extension=m3u8",
+     "id": "c121",
+     "visible": true
+    },
+    {
+     "name": "Sky Sports Racing 🏇",
+     "type": "m3u8",
+     "url": "http://line.tivi-one.net:80/play/live.php?mac=00:1A:79:3B:4A:A8&stream=1312182&extension=m3u8",
+     "id": "c122",
+     "visible": true
+    },
+    {
+     "name": "Sky Sports Golf ⛳",
+     "type": "m3u8",
+     "url": "http://line.tivi-one.net:80/play/live.php?mac=00:1A:79:3B:4A:A8&stream=1312183&extension=m3u8",
+     "id": "c123",
+     "visible": true
+    },
+    {
+     "name": "Sky Sports Cricket 🏏",
+     "type": "m3u8",
+     "url": "http://line.tivi-one.net:80/play/live.php?mac=00:1A:79:3B:4A:A8&stream=1312184&extension=m3u8",
+     "id": "c124",
+     "visible": true
+    },
+    {
+     "name": "Sky Sports Más ⚽",
+     "type": "m3u8",
+     "url": "http://line.tivi-one.net:80/play/live.php?mac=00:1A:79:3B:4A:A8&stream=1312185&extension=m3u8",
+     "id": "c125",
+     "visible": true
+    },
+    {
+     "name": "Sky Sports Mix ⚽",
+     "type": "m3u8",
+     "url": "http://line.tivi-one.net:80/play/live.php?mac=00:1A:79:3B:4A:A8&stream=1312179&extension=m3u8",
+     "id": "c126",
+     "visible": true
+    },
+    {
+     "name": "Sky Sports Football ⚽",
+     "type": "m3u8",
+     "url": "http://line.tivi-one.net:80/play/live.php?mac=00:1A:79:3B:4A:A8&stream=1312178&extension=m3u8",
+     "id": "c127",
+     "visible": true
+    },
+    {
+     "name": "Tigo Sports ⚽",
+     "type": "m3u8",
+     "url": "/tigo-sports/a04k/index.m3u8",
+     "id": "c128",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "247-1",
+   "kind": "247",
+   "title": "🍿 Series, Animados & Eventos en Vivo",
+   "items": [
+    {
+     "name": "History 24/7",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUVvwbez-BNlWvbxtpOx0MGQ&autoplay=1&loop=1",
+     "id": "c129",
+     "visible": true
+    },
+    {
+     "name": "NASA TV 24/7",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUaG0IHN1RMOZ4-U3wDXAkwA&autoplay=1&loop=1",
+     "id": "c130",
+     "visible": true
+    },
+    {
+     "name": "WB Kids 24/7",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UU9trsD1jCTXXtN3xIOIU8gg&autoplay=1&loop=1",
+     "id": "c131",
+     "visible": true
+    },
+    {
+     "name": "Discovery LATAM",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCcP6Vtkc2DtQ0IV9r_x6pCQ&autoplay=1",
+     "live": true,
+     "id": "c132",
+     "visible": true
+    },
+    {
+     "name": "Monstruos Río",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/B8iN51ZzogA?autoplay=1",
+     "live": true,
+     "id": "c133",
+     "visible": true
+    },
+    {
+     "name": "Sapukai Musical",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUoGTHLwEGhqYu15LpluRuCA&autoplay=1&loop=1",
+     "id": "c134",
+     "visible": true
+    },
+    {
+     "name": "Cerro Cora",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUojKtIlK2QCf7SVgRkgm5og&autoplay=1&loop=1",
+     "id": "c135",
+     "visible": true
+    },
+    {
+     "name": "Oscar Perez y F. N",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUPE3vJgBitk7WM3npkqDg_g&autoplay=1&loop=1",
+     "id": "c136",
+     "visible": true
+    },
+    {
+     "name": "Odilio Roman",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUUJzyMAyVv-_xHseNQzOmOA&autoplay=1&loop=1",
+     "id": "c137",
+     "visible": true
+    },
+    {
+     "name": "Popeye el Marino",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUEFiNNJBrgLL3Lw_mUvp9Ew&autoplay=1&loop=1",
+     "id": "c138",
+     "visible": true
+    },
+    {
+     "name": "Pájaro Loco",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUHtZ2_7hd1zy9aCqrrcaqcQ&autoplay=1&loop=1",
+     "id": "c139",
+     "visible": true
+    },
+    {
+     "name": "Sombras en la Noche",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUDjZ2Hx33f8zFDYhvHtonlg&autoplay=1&loop=1",
+     "id": "c140",
+     "visible": true
+    },
+    {
+     "name": "CNN Español",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/Qr61waJ6AZg?autoplay=1",
+     "live": true,
+     "id": "c141",
+     "visible": true
+    },
+    {
+     "name": "Warner Clásicos",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCU0rIMU3k_AsVA8d6N1B03w&autoplay=1",
+     "live": true,
+     "id": "c142",
+     "visible": true
+    },
+    {
+     "name": "Tortugas Ninjas",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/g2vG-TGXlY8?autoplay=1",
+     "id": "c143",
+     "visible": true
+    },
+    {
+     "name": "Series & Animados 🎬",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUQiz6n60G-2Q4OOQ1TkAl4A&autoplay=1&loop=1",
+     "id": "c144",
+     "visible": true
+    },
+    {
+     "name": "Tostenes 🎬",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUxzktjq16CQk5M1gNXdVdyw&autoplay=1&loop=1",
+     "id": "c145",
+     "visible": true
+    },
+    {
+     "name": "Casados con Hijos AR",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCelDKJm4D-a8OcI1Obe787g&autoplay=1",
+     "live": true,
+     "id": "c146",
+     "visible": true
+    },
+    {
+     "name": "Familia Pluche 🎬",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUms2rIXwmMvIpDUU69X0PoQ&autoplay=1&loop=1",
+     "id": "c147",
+     "visible": true
+    },
+    {
+     "name": "El Chavo del 8",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCh5MQwi8K56I453DeQ3erDw&autoplay=1",
+     "live": true,
+     "id": "c148",
+     "visible": true
+    },
+    {
+     "name": "Dragon Ball Película 🎬",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/8Brk78k0yAY?autoplay=1",
+     "id": "c149",
+     "visible": true
+    },
+    {
+     "name": "Cinetel Multimedia 🎬",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UURAFplJ4UGiN86otx8BS7EA&autoplay=1&loop=1",
+     "id": "c150",
+     "visible": true
+    },
+    {
+     "name": "Caso Cerrado",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCGbofRROopWrumVob5w61OA&autoplay=1",
+     "live": true,
+     "id": "c151",
+     "visible": true
+    },
+    {
+     "name": "Discovery Turbo 🚗",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UClTDogLGNB4vl9b9mGe0XRA&autoplay=1",
+     "id": "c152",
+     "visible": true
+    },
+    {
+     "name": "Senado TV PY 🇵🇾",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCMXLvWR4z1Z4P4JvubxMQtg&autoplay=1",
+     "id": "c153",
+     "visible": true
+    },
+    {
+     "name": "Evento 1",
+     "id": "evento1",
+     "url": "https://streamxhd.sbs/live1.php?stream=tigo1",
+     "type": "nosandbox",
+     "live": true,
+     "visible": true
+    },
+    {
+     "name": "Evento 2",
+     "id": "evento2",
+     "url": "https://streamxhd.sbs/live1.php?stream=espn",
+     "type": "nosandbox",
+     "live": true,
+     "visible": true
+    },
+    {
+     "name": "Evento 3",
+     "id": "evento3",
+     "url": "https://streamxhd.sbs/live1.php?stream=dsports",
+     "type": "nosandbox",
+     "live": true,
+     "visible": true
+    },
+    {
+     "name": "Evento 4",
+     "id": "evento4",
+     "url": "https://streamxhd.sbs/live1.php?stream=tntsports",
+     "type": "nosandbox",
+     "live": true,
+     "visible": true
+    },
+    {
+     "name": "Evento 5",
+     "id": "evento5",
+     "url": "https://streamxhd.sbs/live1.php?stream=appletv3",
+     "type": "nosandbox",
+     "live": true,
+     "visible": true
+    },
+    {
+     "name": "Evento 6",
+     "id": "evento6",
+     "url": "https://streamxhd.sbs/live1.php?stream=daznf1",
+     "type": "nosandbox",
+     "live": true,
+     "visible": true
+    },
+    {
+     "name": "LUZU TV",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCTHaNTsP7hsVgBxARZTuajw&autoplay=1",
+     "live": true,
+     "id": "c154",
+     "visible": true
+    },
+    {
+     "name": "Vatican News",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UC7E-LYc1wivk33iyt5bR5zQ&autoplay=1",
+     "live": true,
+     "id": "c155",
+     "visible": true
+    },
+    {
+     "name": "Gramado TV 🇧🇷",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UClkczhHdkCogS9eXg2E5s0w&autoplay=1",
+     "live": true,
+     "id": "c156",
+     "visible": true
+    },
+    {
+     "name": "Porto Alegre - Lago Guaíba 🇧🇷",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/live_stream?channel=UCqI8nU3-dstxAS3YCXhKuPg&autoplay=1",
+     "live": true,
+     "id": "c157",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "cam-1",
+   "kind": "cam",
+   "title": "🌎 Cámaras Globales",
+   "items": [
+    {
+     "name": "🎥 Web Cam Global 24/7",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/videoseries?list=UUrlqY1M1yxakXvK9iBIiz-A&autoplay=1&loop=1",
+     "id": "c158",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "cam-2",
+   "kind": "cam",
+   "title": "🇵🇾 Cámaras Paraguay",
+   "items": [
+    {
+     "name": "🎥 Costanera Encarnación",
+     "type": "m3u8",
+     "url": "https://mia.rtsp.me/Ox-OyIeILvrILZ_iwrmCcg/1773664486/hls/3NsfyZGe.m3u8",
+     "id": "c159",
+     "visible": true
+    },
+    {
+     "name": "🎥 San Alberto",
+     "type": "iframe",
+     "url": "https://rtsp.me/embed/zD4asYhR/",
+     "id": "c160",
+     "visible": true
+    },
+    {
+     "name": "🎥 Pte. Franco Noreste",
+     "type": "m3u8",
+     "url": "https://www.gibarra.com.py/v2_0/cam.m3u8",
+     "id": "c161",
+     "visible": true
+    },
+    {
+     "name": "🎥 Pte. Franco SurOeste",
+     "type": "m3u8",
+     "url": "https://www.gibarra.com.py/v1_0/cam.m3u8",
+     "id": "c162",
+     "visible": true
+    },
+    {
+     "name": "🎥 Costanera Posadas 🇦🇷",
+     "type": "iframe",
+     "url": "https://www.dailymotion.com/embed/video/x9x6vqm?autoplay=1",
+     "id": "c163",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "cam-3",
+   "kind": "cam",
+   "title": "🚦 Puente de la Amistad — Foz do Iguaçu",
+   "items": [
+    {
+     "name": "🎥 Atacado Connect",
+     "type": "iframe",
+     "url": "https://izidisplay.com/AoVivo/Ponte",
+     "id": "c164",
+     "visible": true
+    },
+    {
+     "name": "🎥 Sentido Paraguay",
+     "type": "iframe",
+     "url": "https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/V2tjeGMyRXhjRmhQU0dSUFVYcFdlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/V1ZWb1UwMUhUa2xVVkZwTlpWUm5PUT09K1I=/fozpontedaamizadesentidoparaguai.stream/",
+     "id": "c165",
+     "visible": true
+    },
+    {
+     "name": "🎥 Sentido Brasil",
+     "type": "iframe",
+     "url": "https://playerv.logicahost.com.br/video-ip-camera/portovelhomamore//false/false/V2tjeGMyRXhjRmhQU0dSUFVYcFdlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/V1ZWb1UwMUhUa2xVVkZwTlpWUm5PUT09K1I=/fozpontedaamizadesentidobrasil.stream/",
+     "id": "c166",
+     "visible": true
+    },
+    {
+     "name": "🎥 Aduana BR-277",
+     "type": "m3u8",
+     "url": "https://video04.logicahost.com.br/portovelhomamore/fozaduanapontedaamizade.stream/chunklist_w450042140.m3u8",
+     "id": "c167",
+     "visible": true
+    },
+    {
+     "name": "🎥 BR-277 Sent. Ponte",
+     "type": "iframe",
+     "url": "https://playerv.logicahost.com.br/video-ip-camera/portaldacidade//false/false/V2tjeGMyRXhjRmhQU0dST1lWUldlbGxxU210alJtdDVVbTA1YVUwd05IZFVSekZQWkcxS1ZFNVhiR3BhZWpBNStS/16:9/aHR0cHM6Ly8rMQ==/fozsentidopontedaamizade01.stream/",
+     "id": "c168",
+     "visible": true
+    },
+    {
+     "name": "🎥 Ponte da Integracao - Sentido Paraguai",
+     "type": "m3u8",
+     "url": "https://video02.logicahost.com.br/portaldacidade/fozpontedaintegracao.stream/chunklist_w989251719.m3u8",
+     "id": "c169",
+     "visible": true
+    },
+    {
+     "name": "🎥 Ponte Tancredo Neves - Sentido Argentina",
+     "type": "m3u8",
+     "url": "https://video02.logicahost.com.br/portaldacidade/fozpontetancredoneves.stream/chunklist_w1092168057.m3u8",
+     "id": "c170",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "cam-4",
+   "kind": "cam",
+   "title": "🇧🇷 Cámaras Brasil",
+   "items": [
+    {
+     "name": "🎥 Itapoa",
+     "type": "m3u8",
+     "url": "https://tv.itapoaaovivo.com.br/memfs/10260afe-05e7-4ea7-a5ac-0d309d6a33f6_output_0.m3u8?session=o53a8mehxky43wMxw5rys7",
+     "id": "c171",
+     "visible": true
+    },
+    {
+     "name": "🎥 Guaratuba",
+     "type": "m3u8",
+     "url": "https://video02.logicahost.com.br/camlitoranea/praiadocristo1.stream/playlist.m3u8",
+     "id": "c172",
+     "visible": true
+    },
+    {
+     "name": "🎥 Araucaria Xisto",
+     "type": "m3u8",
+     "url": "https://video02.logicahost.com.br/wensky5/wensky5/playlist.m3u8",
+     "id": "c173",
+     "visible": true
+    },
+    {
+     "name": "🎥 San Mateus Do Sul",
+     "type": "m3u8",
+     "url": "https://video02.logicahost.com.br/portalrdx/teralink.stream/playlist.m3u8",
+     "id": "c174",
+     "visible": true
+    },
+    {
+     "name": "🎥 Joaçaba 1",
+     "type": "m3u8",
+     "url": "https://connect-120.servicestream.io:8050/a30aad36c415.m3u8",
+     "id": "c175",
+     "visible": true
+    },
+    {
+     "name": "🎥 Joaçaba 2",
+     "type": "m3u8",
+     "url": "https://connect-120.servicestream.io:8050/c9e9f1613ddc.m3u8",
+     "id": "c176",
+     "visible": true
+    },
+    {
+     "name": "🎥 Marechal C. Rondon",
+     "type": "m3u8",
+     "url": "https://5b33b873179a2.streamlock.net:1443/cameramcr/cameramcr.stream/playlist.m3u8",
+     "id": "c177",
+     "visible": true
+    },
+    {
+     "name": "🎥 Foz Centro",
+     "type": "m3u8",
+     "url": "https://5b33b873179a2.streamlock.net:1443/regiaocentralfoz/regiaocentralfoz.stream/playlist.m3u8",
+     "id": "c178",
+     "visible": true
+    },
+    {
+     "name": "🎥 Cascavel Trevo",
+     "type": "m3u8",
+     "url": "https://5b33b873179a2.streamlock.net:1443/cameratrevo/cameratrevocat.stream/playlist.m3u8",
+     "id": "c179",
+     "visible": true
+    },
+    {
+     "name": "🎥 Cascavel Discolandia",
+     "type": "m3u8",
+     "url": "https://5b33b873179a2.streamlock.net:1443/cameradiscolandia/cameradiscolandia.stream/playlist.m3u8",
+     "id": "c180",
+     "visible": true
+    },
+    {
+     "name": "🎥 Cascavel Av Brasil",
+     "type": "m3u8",
+     "url": "https://5b33b873179a2.streamlock.net:1443/cameraavbrasil/avbrasil.stream/playlist.m3u8",
+     "id": "c181",
+     "visible": true
+    },
+    {
+     "name": "🎥 Cascavel Aeropuerto",
+     "type": "m3u8",
+     "url": "https://5b33b873179a2.streamlock.net:1443/aeroportocascavel/aeroportocascavel.stream/playlist.m3u8",
+     "id": "c182",
+     "visible": true
+    },
+    {
+     "name": "🎥 Londrina 1",
+     "type": "m3u8",
+     "url": "https://5b33b873179a2.streamlock.net:1443/cameralondrina/cameralondrina.stream/playlist.m3u8",
+     "id": "c183",
+     "visible": true
+    },
+    {
+     "name": "🎥 Londrina 2",
+     "type": "m3u8",
+     "url": "https://5b33b873179a2.streamlock.net:1443/cameralondrina2/cameralondrina2.stream/playlist.m3u8",
+     "id": "c184",
+     "visible": true
+    },
+    {
+     "name": "🎥 Praça Santos Dumont - Gela Boca",
+     "type": "m3u8",
+     "url": "https://video04.logicahost.com.br/portovelhomamore/santahelenasantosdumont.stream/chunklist_w869060253.m3u8",
+     "id": "c185",
+     "visible": true
+    },
+    {
+     "name": "🎥 Gramado 1",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/SslC46sVyoo?autoplay=1",
+     "id": "c186",
+     "visible": true
+    },
+    {
+     "name": "🎥 Gramado 2",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/qoAd9U-8Cic?autoplay=1",
+     "id": "c187",
+     "visible": true
+    },
+    {
+     "name": "🎥 Cascata do Caracol",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/F0fcZNbvRGg?autoplay=1",
+     "id": "c188",
+     "visible": true
+    },
+    {
+     "name": "🎥 Aeroporto de Viracopos",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/4pUpwUhISCk?autoplay=1",
+     "id": "c189",
+     "visible": true
+    },
+    {
+     "name": "🎥 Praia de Porto de Galinhas",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/wwLPOjLHVO4?autoplay=1",
+     "id": "c190",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "cam-5",
+   "kind": "cam",
+   "title": "🇨🇱 Cámaras Chile",
+   "items": [
+    {
+     "name": "🎥 Tobalaba, MUT, Av. Providencia",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/ErUOGtBXhgY?autoplay=1",
+     "id": "c191",
+     "visible": true
+    },
+    {
+     "name": "🎥 Los Leones, Santiago",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/vXKn4qUQFMA?autoplay=1",
+     "id": "c192",
+     "visible": true
+    },
+    {
+     "name": "🎥 Costanera Center, Sanhattan",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/UpHOS_enhjI?autoplay=1",
+     "id": "c193",
+     "visible": true
+    },
+    {
+     "name": "🎥 Av. Perú, Viña del Mar",
+     "type": "iframe",
+     "url": "https://www.youtube.com/embed/PRqKjpMiruo?autoplay=1",
+     "id": "c194",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-asuncion-central",
+   "kind": "radio",
+   "title": "📻 Asunción y Central",
+   "items": [
+    {
+     "name": "Montecarlo",
+     "freq": "100.9 FM",
+     "url": "https://cast1.asurahosting.com/proxy/montecarlonew/stream",
+     "type": "radio",
+     "id": "c195",
+     "visible": true
+    },
+    {
+     "name": "Farra",
+     "freq": "101.3 FM",
+     "url": "https://rfs1.farra.com.py:9433/stream",
+     "type": "radio",
+     "id": "c196",
+     "visible": true
+    },
+    {
+     "name": "Radio ANR",
+     "freq": "Online",
+     "url": "https://zn1radios.desdeparaguay.net/transanr/transanr/playlist.m3u8",
+     "type": "radio",
+     "id": "c197",
+     "visible": true
+    },
+    {
+     "name": "RNP",
+     "freq": "920 AM",
+     "url": "https://zn1radios.desdeparaguay.net/trans920/trans920/playlist.m3u8",
+     "type": "radio",
+     "id": "c198",
+     "visible": true
+    },
+    {
+     "name": "Radio Cámara",
+     "freq": "104.1 FM",
+     "url": "https://www.desde-paraguay.com/transcamara/transcamara/playlist.m3u8",
+     "type": "radio",
+     "id": "c199",
+     "visible": true
+    },
+    {
+     "name": "Emisoras PY",
+     "freq": "106.1 FM",
+     "url": "https://rds3.desdeparaguay.net/movemisoras/movemisoras.stream/playlist.m3u8",
+     "type": "radio",
+     "id": "c200",
+     "visible": true
+    },
+    {
+     "name": "Radio 1000",
+     "freq": "1000 AM",
+     "url": "https://1000noticias.live:8000/radio.mp3",
+     "type": "radio",
+     "id": "c201",
+     "visible": true
+    },
+    {
+     "name": "ABC Cardinal",
+     "freq": "730 AM",
+     "url": "https://media.streambrothers.com:8342/stream",
+     "type": "radio",
+     "id": "c202",
+     "visible": true
+    },
+    {
+     "name": "1ro de Marzo",
+     "freq": "780 AM",
+     "url": "https://rds3.desdeparaguay.net/mov780/mov780.stream/playlist.m3u8",
+     "type": "radio",
+     "id": "c203",
+     "visible": true
+    },
+    {
+     "name": "Exclusiva",
+     "freq": "103.7 FM",
+     "url": "https://www.desde-paraguay.com/movexclusiva/movexclusiva.stream/chunks.m3u8?sessionid=21653478&exp=1781564834&k=2b9b1c0835f86bd8def54e4b2761b8d05c66f498fbf0c80ce3737ddd44df7045",
+     "type": "radio",
+     "id": "c204",
+     "visible": true
+    },
+    {
+     "name": "Corazón",
+     "freq": "99.1 FM",
+     "url": "https://cast1.asurahosting.com/proxy/corazonnew/stream",
+     "type": "radio",
+     "id": "c205",
+     "visible": true
+    },
+    {
+     "name": "Universo",
+     "freq": "970 AM",
+     "url": "https://cast1.asurahosting.com/proxy/universonew/stream",
+     "type": "radio",
+     "id": "c206",
+     "visible": true
+    },
+    {
+     "name": "Nacional del Paraguay",
+     "freq": "920 AM",
+     "url": "https://audio.radionacional.gov.py/920",
+     "type": "radio",
+     "id": "c207",
+     "visible": true
+    },
+    {
+     "name": "Nacional del Paraguay",
+     "freq": "95.1 FM",
+     "url": "https://audio2.radionacional.gov.py/951fm",
+     "type": "radio",
+     "id": "c208",
+     "visible": true
+    },
+    {
+     "name": "Disney",
+     "freq": "96.5 FM",
+     "url": "https://rds1.radiomagic.com.py:9433/stream",
+     "type": "radio",
+     "id": "c209",
+     "visible": true
+    },
+    {
+     "name": "E40",
+     "freq": "91.1 FM",
+     "url": "https://mdstrm.com/audio/62d81cfbbfbcee0837ba1b60/icecast.audio",
+     "type": "radio",
+     "id": "c210",
+     "visible": true
+    },
+    {
+     "name": "Palma",
+     "freq": "106.5 FM",
+     "url": "https://mdstrm.com/audio/62d81d48f5ef320830c8becf/icecast.audio",
+     "type": "radio",
+     "id": "c211",
+     "visible": true
+    },
+    {
+     "name": "RQP",
+     "freq": "94.3 FM",
+     "url": "https://d3oxmo2nf2or5p.cloudfront.net/ts:abr.m3u8",
+     "type": "radio",
+     "id": "c212",
+     "visible": true
+    },
+    {
+     "name": "Urbana",
+     "freq": "106.9 FM",
+     "url": "https://mdstrm.com/audio/62d81cdabff0bc082f8f1a24/icecast.audio",
+     "type": "radio",
+     "id": "c213",
+     "visible": true
+    },
+    {
+     "name": "Vibras",
+     "freq": "92.7 FM",
+     "url": "https://rds3.desdeparaguay.net/movvibras/movvibras.stream/chunklist_w1004122698.m3u8?exp=1726670561&k=4e5672e9d29dca635c8dd9a6aac874db836209cd91b220d89e5504a702e81fca",
+     "type": "radio",
+     "id": "c214",
+     "visible": true
+    },
+    {
+     "name": "Popular",
+     "freq": "103.1 FM",
+     "url": "https://cast1.asurahosting.com/proxy/popularnew/stream",
+     "type": "radio",
+     "id": "c215",
+     "visible": true
+    },
+    {
+     "name": "Canal 100",
+     "freq": "100.1 FM",
+     "url": "https://rds3.desdeparaguay.net/movcanal100/movcanal100.stream/playlist.m3u8",
+     "type": "radio",
+     "id": "c216",
+     "visible": true
+    },
+    {
+     "name": "Romance FM",
+     "freq": "104.5 FM",
+     "url": "https://rds3.desdeparaguay.net/movromance/movromance.stream/playlist.m3u8",
+     "type": "radio",
+     "id": "c217",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-santarita",
+   "kind": "radio",
+   "title": "📍 Santa Rita & Naranjal",
+   "items": [
+    {
+     "name": "Máxima FM",
+     "freq": "99.9 FM",
+     "url": "https://stm01.dialpy.com:8020/radiomaxima",
+     "type": "radio",
+     "id": "c218",
+     "visible": true
+    },
+    {
+     "name": "Radio Viva",
+     "freq": "102.3 FM",
+     "url": "https://stm01.dialpy.com:8010/radio102",
+     "type": "radio",
+     "id": "c219",
+     "visible": true
+    },
+    {
+     "name": "Radio Progreso (Sta. Rita)",
+     "freq": "98.8 FM",
+     "url": "https://radio.host.com.py/9882/stream/1/",
+     "type": "radio",
+     "pname": "Radio Progreso",
+     "id": "c220",
+     "visible": true
+    },
+    {
+     "name": "Radio Santa Rita",
+     "freq": "FM",
+     "url": "https://stm14.voxhd.com.br:11674/stream",
+     "type": "radio",
+     "id": "c221",
+     "visible": true
+    },
+    {
+     "name": "Radio Naranjaty",
+     "freq": "Naranjal",
+     "url": "https://naranjaty.com/hls/radio_naranjaty/aac_hifi.m3u8",
+     "type": "radio",
+     "id": "c222",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-cde",
+   "kind": "radio",
+   "title": "📍 CDE & Minga Guazú",
+   "items": [
+    {
+     "name": "Radio Itapiru AM",
+     "freq": "660 AM",
+     "url": "https://proxy01.servidorenlinea.net/cdehosting/8004/",
+     "type": "radio",
+     "id": "c223",
+     "visible": true
+    },
+    {
+     "name": "Radio Itapiru FM",
+     "freq": "FM",
+     "url": "https://proxy01.servidorenlinea.net/cdehosting/8002/",
+     "type": "radio",
+     "id": "c224",
+     "visible": true
+    },
+    {
+     "name": "Integración CDE",
+     "freq": "FM",
+     "url": "https://proxy01.servidorenlinea.net/cdehosting/8022/",
+     "type": "radio",
+     "pname": "Radio Integración CDE",
+     "id": "c225",
+     "visible": true
+    },
+    {
+     "name": "Kokuê Poty (María Auxiliadora)",
+     "freq": "FM",
+     "url": "https://radio.host.com.py:7089/;",
+     "type": "radio",
+     "pname": "Radio Kokuê Poty",
+     "id": "c226",
+     "visible": true
+    },
+    {
+     "name": "Radio Naranjaty",
+     "freq": "FM",
+     "url": "https://naranjaty.com/listen/radio_naranjaty/player.mp3",
+     "type": "radio",
+     "id": "c227",
+     "visible": true
+    },
+    {
+     "name": "FM del Este",
+     "freq": "FM",
+     "url": "https://proxy01.servidorenlinea.net/cdehosting/8040/",
+     "type": "radio",
+     "id": "c228",
+     "visible": true
+    },
+    {
+     "name": "Radio Educación CDE",
+     "freq": "FM",
+     "url": "https://proxy01.servidorenlinea.net/cdehosting/8050/",
+     "type": "radio",
+     "id": "c229",
+     "visible": true
+    },
+    {
+     "name": "América FM PJC",
+     "freq": "FM",
+     "url": "https://stream.hostipar.com/proxy/america/stream",
+     "type": "radio",
+     "id": "c230",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-natalio",
+   "kind": "radio",
+   "title": "📍 Itapúa — Natalio",
+   "items": [
+    {
+     "name": "Libertad (San Ignacio, Misiones)",
+     "freq": "96.3 FM",
+     "url": "https://streampy.radiosparaguay.com/8042/stream",
+     "type": "radio",
+     "pname": "Radio Libertad",
+     "id": "c231",
+     "visible": true
+    },
+    {
+     "name": "Radio Original",
+     "freq": "Online",
+     "url": "https://stream.radiosenpy.net/8126/;",
+     "type": "radio",
+     "id": "c232",
+     "visible": true
+    },
+    {
+     "name": "Radio Triunfo",
+     "freq": "Online",
+     "url": "https://panel.wilhost.com:8078/stream",
+     "type": "radio",
+     "id": "c233",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-caaguazu-otras",
+   "kind": "radio",
+   "title": "📍 Santaní & Caazapá",
+   "items": [
+    {
+     "name": "Radio Tapiracuai",
+     "freq": "Online",
+     "url": "https://stream.radiosenpy.net:7021/;",
+     "type": "radio",
+     "pname": "Radio Tapiracuaí FM",
+     "pfreq": "88.7 FM",
+     "id": "c234",
+     "visible": true
+    },
+    {
+     "name": "Radio Yeruti (Caazapá)",
+     "freq": "FM",
+     "url": "https://stream.radiosenpy.net/10390/;",
+     "type": "radio",
+     "pname": "Radio Yeruti",
+     "id": "c235",
+     "visible": true
+    },
+    {
+     "name": "Radio Suseso (San Juan Nepomuceno)",
+     "freq": "FM",
+     "url": "https://stm15.voxhd.com.br:11234/stream",
+     "type": "radio",
+     "pname": "Radio Suseso",
+     "id": "c236",
+     "visible": true
+    },
+    {
+     "name": "Radio Caaguazú FM",
+     "freq": "FM",
+     "url": "https://a5.asurahosting.com:6820/radio.mp3",
+     "type": "radio",
+     "id": "c237",
+     "visible": true
+    },
+    {
+     "name": "Radio Mas (Caaguazú)",
+     "freq": "FM",
+     "url": "https://stream.radiosenpy.net/8002/;",
+     "type": "radio",
+     "pname": "Radio Mas",
+     "id": "c238",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-cordillera",
+   "kind": "radio",
+   "title": "📍 Cordillera",
+   "items": [
+    {
+     "name": "Caacupé FM",
+     "freq": "FM",
+     "url": "https://radio.host.com.py/8040/stream",
+     "type": "radio",
+     "id": "c239",
+     "visible": true
+    },
+    {
+     "name": "Radio Portal (Itacurubí)",
+     "freq": "93.5 FM",
+     "url": "https://stream.radiosenpy.net/8140/;",
+     "type": "radio",
+     "pname": "Radio Portal",
+     "id": "c240",
+     "visible": true
+    },
+    {
+     "name": "Radio Piribebuy",
+     "freq": "FM",
+     "url": "https://rds3.desdeparaguay.net/movpiribebuy/movpiribebuy.stream/playlist.m3u8",
+     "type": "radio",
+     "id": "c241",
+     "visible": true
+    },
+    {
+     "name": "La Voz Cordillera",
+     "freq": "FM",
+     "url": "https://streamsoymedios.com/8032/stream",
+     "type": "radio",
+     "pname": "La Voz de la Cordillera",
+     "id": "c242",
+     "visible": true
+    },
+    {
+     "name": "Yvytyroké (Sapukai)",
+     "freq": "FM",
+     "url": "https://v.orlandohugo.com:10905/;",
+     "type": "radio",
+     "pname": "Radio Yvytyroké",
+     "id": "c243",
+     "visible": true
+    },
+    {
+     "name": "Radio Caraguatay",
+     "freq": "FM",
+     "url": "https://rds3.desdeparaguay.net/movcaraguatay/movcaraguatay.stream/playlist.m3u8",
+     "type": "radio",
+     "id": "c244",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-guaira",
+   "kind": "radio",
+   "title": "📍 Villarrica & Guairá",
+   "items": [
+    {
+     "name": "Colmenar FM (La Colmena)",
+     "freq": "FM",
+     "url": "https://server5.hostipy.com:8018/stream",
+     "type": "radio",
+     "pname": "Colmenar FM",
+     "id": "c245",
+     "visible": true
+    },
+    {
+     "name": "Radio Satelital (Villarrica)",
+     "freq": "FM",
+     "url": "https://radio.host.com.py/8102/stream",
+     "type": "radio",
+     "pname": "Radio Satelital",
+     "id": "c246",
+     "visible": true
+    },
+    {
+     "name": "Radio Guairá AM",
+     "freq": "AM",
+     "url": "https://tvdatta.com:3991/live/guairatvlive.m3u8",
+     "type": "radio",
+     "id": "c247",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-san-alberto",
+   "kind": "radio",
+   "title": "📍 San Alberto & Alto Paraná",
+   "items": [
+    {
+     "name": "Radio Meridional (San Alberto)",
+     "freq": "FM",
+     "url": "https://radio.host.com.py:7082/;",
+     "type": "radio",
+     "pname": "Radio Meridional",
+     "id": "c248",
+     "visible": true
+    },
+    {
+     "name": "Espíritu Santo (J.L. Mallorquín)",
+     "freq": "FM",
+     "url": "https://radio.host.com.py:7110/;",
+     "type": "radio",
+     "pname": "Radio Espíritu Santo",
+     "id": "c249",
+     "visible": true
+    },
+    {
+     "name": "Radio Cedroty (Los Cedrales)",
+     "freq": "FM",
+     "url": "https://radio.host.com.py:7127/;",
+     "type": "radio",
+     "pname": "Radio Cedroty",
+     "id": "c250",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-amambay",
+   "kind": "radio",
+   "title": "📍 Amambay",
+   "items": [
+    {
+     "name": "Radio Amambay AM",
+     "freq": "570 AM",
+     "url": "https://stream.hostipar.com/proxy/amambay570/stream",
+     "type": "radio",
+     "id": "c251",
+     "visible": true
+    },
+    {
+     "name": "Amambay FM",
+     "freq": "FM",
+     "url": "https://cp9.serverse.com/proxy/fmamambay?mp=/stream",
+     "type": "radio",
+     "id": "c252",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "radio-itapua",
+   "kind": "radio",
+   "title": "📍 Itapúa",
+   "items": [
+    {
+     "name": "OH Radio (Carlos A. López)",
+     "freq": "FM",
+     "url": "https://v.orlandohugo.com:10900/;stream.nsv",
+     "type": "radio",
+     "pname": "OH Radio",
+     "id": "c253",
+     "visible": true
+    },
+    {
+     "name": "Radio Estación (Mayor Otaño)",
+     "freq": "FM",
+     "url": "https://v.orlandohugo.com:10939/;",
+     "type": "radio",
+     "pname": "Radio Estación FM",
+     "id": "c254",
+     "visible": true
+    },
+    {
+     "name": "Okarapoty (San Rafael del Paraná)",
+     "freq": "FM",
+     "url": "https://cdn.streaming.com.py:7092/stream",
+     "type": "radio",
+     "pname": "Radio Okarapoty",
+     "id": "c255",
+     "visible": true
+    },
+    {
+     "name": "Marangatu (Coronel Bogado)",
+     "freq": "FM",
+     "url": "https://radio.host.com.py:7006/;",
+     "type": "radio",
+     "pname": "Radio Marangatu",
+     "id": "c256",
+     "visible": true
+    },
+    {
+     "name": "Radio Pirapey (Edelira)",
+     "freq": "FM",
+     "url": "https://stream.magiadigitalpy.com/8188/stream",
+     "type": "radio",
+     "pname": "Radio Pirapey",
+     "id": "c257",
+     "visible": true
+    },
+    {
+     "name": "Radio Encarnación FM",
+     "freq": "FM",
+     "url": "https://radioencarnacion.opentechla.com/stream",
+     "type": "radio",
+     "id": "c258",
+     "visible": true
+    },
+    {
+     "name": "Kokuê Poty (María Auxiliadora)",
+     "freq": "FM",
+     "url": "https://radio.host.com.py:7089/;",
+     "type": "radio",
+     "pname": "Radio Kokuê Poty",
+     "id": "c259",
+     "visible": true
+    },
+    {
+     "name": "Radio Pop FM (Encarnación)",
+     "freq": "FM",
+     "url": "https://rps1.radiopop.com.py:9433/stream",
+     "type": "radio",
+     "pname": "Radio Pop FM",
+     "id": "c260",
+     "visible": true
+    },
+    {
+     "name": "Radio Itapúa FM (Encarnación)",
+     "freq": "FM",
+     "url": "https://aire.itacom.com.py:8443/itapuafm",
+     "type": "radio",
+     "pname": "Radio Itapúa FM",
+     "id": "c261",
+     "visible": true
+    }
+   ]
+  },
+  {
+   "id": "reserva",
+   "kind": "reserva",
+   "title": "Reserva (no se muestra en la app)",
+   "items": [
+    {
+     "id": "a24",
+     "name": "📺 A24",
+     "url": "http://45.170.130.224:8000/play/a02o/index.m3u8?hls",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "fmtriunfo",
+     "name": "🎵 FM Triunfo PY",
+     "url": "https://lbgo.bozztv.com/ssh101/ssh101/fmtriunfo/chunks.m3u8?lb_backend_hint=7",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "colosaltv",
+     "name": "📺 Colosal TV",
+     "url": "http://tv.ticosmedia.com:1935/COLOSAL/COLOSAL/chunklist_w2104890955.m3u8",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "interior_telequince",
+     "name": "📺 Telequince",
+     "url": "https://video.hostingcaaguazu.com:19360/telequince/telequince.m3u8",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "interior_eventosonline",
+     "name": "📺 Eventos Online",
+     "url": "https://video.wilohosting.com:19360/prueba/prueba.m3u8",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "ar_telefe",
+     "name": "📺 Telefe",
+     "url": "http://45.134.141.161:2200/ARG/TELEFE_HD/index.m3u8",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_globosp",
+     "name": "🌐 Globo SP",
+     "url": "https://cors-proxy.cooks.fyi/http://hls1.sua.tv/live/globotvbahiafhdbr2/s.m3u8",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_globorj",
+     "name": "🌐 Globo RJ",
+     "url": "https://w1.embedtv.live/globorj",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_sbt",
+     "name": "📺 SBT SP",
+     "url": "https://cdn.jmvstream.com/w/LVW-10801/LVW10801_Xvg4R0u57n/playlist.m3u8",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_hbo",
+     "name": "🎬 HBO",
+     "url": "https://w1.embedtv.live/hbo",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_hbofamily",
+     "name": "🎬 HBO Family",
+     "url": "https://w1.embedtv.live/hbofamily",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_cinemax",
+     "name": "🎬 Cinemax BR",
+     "url": "https://w1.embedtv.live/cinemax",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_universaltv",
+     "name": "📺 Universal TV",
+     "url": "https://w1.embedtv.live/universaltv",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_tcm",
+     "name": "🎬 TCM",
+     "url": "https://w1.embedtv.live/tcm",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_megapix",
+     "name": "🎬 Megapix",
+     "url": "https://w1.embedtv.live/megapix",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_paramount",
+     "name": "🎬 Paramount",
+     "url": "https://2embeddecanais.xyz/paramountnetwork/",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_tnt",
+     "name": "🎬 TNT BR",
+     "url": "https://w1.embedtv.live/tnt",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_telecinepipoca",
+     "name": "🍿 Telecine Pipoca",
+     "url": "https://w1.embedtv.live/telecinepipoca",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_telecinepremium",
+     "name": "🍿 Telecine Premium",
+     "url": "https://w1.embedtv.live/telecinepremium",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_cnnbrasil",
+     "name": "📰 CNN Brasil",
+     "url": "https://w1.embedtv.live/cnnbrasil",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_bandnews",
+     "name": "📰 Band News",
+     "url": "https://w1.embedtv.live/bandnews",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_recordnews2",
+     "name": "📰 Record News 2",
+     "url": "https://2embeddecanais.xyz/recordnews/",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_discovery",
+     "name": "🔬 Discovery BR",
+     "url": "https://2embeddecanais.xyz/discoverychannel/",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_history",
+     "name": "📜 History BR",
+     "url": "https://w1.embedtv.live/history",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_animalplanet",
+     "name": "🐾 Animal Planet BR",
+     "url": "https://w1.embedtv.live/animalplanet",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_dazn",
+     "name": "⚽ DAZN BR",
+     "url": "https://2embeddecanais.xyz/dazn/",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_bandsports",
+     "name": "⚽ Band Sports",
+     "url": "https://w1.embedtv.live/bandsports",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_tooncast",
+     "name": "🧸 Tooncast BR",
+     "url": "https://2embeddecanais.xyz/tooncast/",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_disneyplus",
+     "name": "🧸 Disney+ 1",
+     "url": "https://w1.embedtv.live/disneyplus1",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_simpsons",
+     "name": "📺 Os Simpsons",
+     "url": "https://w1.embedtv.live/24h_simpsons",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_chaves",
+     "name": "📺 Chaves BR",
+     "url": "https://w1.embedtv.live/24h_chaves?r=https://embedtv.live/",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "br_sbtsinop",
+     "name": "📺 SBT Sinop",
+     "url": "https://video09.logicahost.com.br/sbtsinop/sbtsinop/chunklist_w1174950706.m3u8",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_tnt",
+     "name": "🎬 TNT LATAM",
+     "url": "https://embed.saohgdasregions.fun/embed2/tnt.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_warner",
+     "name": "🎬 Warner LATAM",
+     "url": "https://embed.saohgdasregions.fun/embed2/warnerchannel.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_tntseries",
+     "name": "🎬 TNT Series",
+     "url": "https://embed.saohgdasregions.fun/embed2/tntseries.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_axn",
+     "name": "🎬 AXN",
+     "url": "https://embed.saohgdasregions.fun/embed2/axn.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_sony",
+     "name": "🎬 Sony",
+     "url": "https://embed.saohgdasregions.fun/embed2/sony.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_universal",
+     "name": "🎬 Universal",
+     "url": "https://embed.saohgdasregions.fun/embed2/universalchannel.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_studiouniversal",
+     "name": "🎬 Studio Universal",
+     "url": "https://embed.saohgdasregions.fun/embed2/studiouniversal.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_space",
+     "name": "🎬 Space",
+     "url": "https://embed.saohgdasregions.fun/embed2/space.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_fx",
+     "name": "🎬 FX",
+     "url": "https://embed.saohgdasregions.fun/embed2/fx.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_pasiones",
+     "name": "🎬 Pasiones",
+     "url": "https://embed.saohgdasregions.fun/embed2/pasiones.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_cinemax",
+     "name": "🎬 Cinemax",
+     "url": "https://embed.saohgdasregions.fun/embed2/cinemax.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_starchannel",
+     "name": "🎬 Star Channel",
+     "url": "https://embed.saohgdasregions.fun/embed2/starchannel.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_amc",
+     "name": "🎬 AMC LATAM",
+     "url": "https://embed.saohgdasregions.fun/embed2/amc.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_syfy",
+     "name": "🎬 SyFy",
+     "url": "https://embed.saohgdasregions.fun/embed2/syfy.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_espn",
+     "name": "⚽ ESPN LATAM",
+     "url": "https://embed.saohgdasregions.fun/embed2/espn.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    },
+    {
+     "id": "latam_espn2",
+     "name": "⚽ ESPN 2",
+     "url": "https://embed.saohgdasregions.fun/embed2/espn2.php",
+     "type": "auto",
+     "visible": false,
+     "note": "Sin botón en la app (reserva)"
+    }
+   ]
+  }
+ ],
+ "updated": "2026-11-23T14:52:00.883Z"
+}
