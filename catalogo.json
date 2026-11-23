@@ -1,5 +1,5 @@
 {
- "version": 18,
+ "version": 19,
  "groups": [
   {
    "id": "py-1",
@@ -2609,7 +2609,7 @@
    "items": [
     {
      "name": "🎥 Atacado Connect",
-     "type": "auto",
+     "type": "m3u8",
      "url": "https://video02.logicahost.com.br/brimostech/camatg01.stream/main_stream.m3u8",
      "id": "c164",
      "visible": true
@@ -3863,5 +3863,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T19:27:53.422Z"
+ "updated": "2026-11-23T19:31:14.136Z"
 }
