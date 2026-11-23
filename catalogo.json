@@ -1,5 +1,5 @@
 {
- "version": 2,
+ "version": 3,
  "groups": [
   {
    "id": "py-1",
@@ -25,7 +25,8 @@
      "id": "telefuturo_alt",
      "url": "https://zn1tf.desdeparaguay.net/telefuturo/telefuturo_py_alta/playlist.m3u8?k=8adac7dfcac19533c681aafe28ce1bfc65ba7953d3da3e2f9f1a97aac55763e8&exp=1784217830",
      "type": "auto",
-     "visible": true
+     "visible": false,
+     "note": "temporalmente fuera de servicio"
     },
     {
      "name": "LaTele",
@@ -3822,5 +3823,5 @@
    ]
   }
  ],
- "updated": "2026-11-23T14:52:00.883Z"
+ "updated": "2026-11-23T15:10:50.903Z"
 }
